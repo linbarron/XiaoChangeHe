@@ -1,0 +1,111 @@
+﻿@{
+    ViewBag.Title = "Book";
+    Layout = null;
+}
+
+@using WitBird.XiaoChangHe.Models.Info;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
+    <title>填写预定信息</title>
+    <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
+    <link href="~/Content/bookinfo.css" rel="stylesheet" />
+    <link href="~/Content/public.css" rel="stylesheet" />
+       <script src="/Scripts/jquery-1.7.1.min.js"></script>
+    <script>
+    </script>
+</head>
+<body>
+    <form id="payment">
+        <div>
+            <span>请你按照如下要求填写。以便我们留位</span>
+            @if (ViewBag.orderInfo != null)
+            {
+                foreach (Order item in ViewBag.orderInfo as List<Order>)
+                {
+                <ol style="-webkit-padding-start: 0px;">
+                    <li>
+                        <label for="date" >预约时间:</label>
+                        <span id="date" style="color:black">@(item != null &&item.DiningDate!=Convert.ToDateTime("0001-01-01")? item.DiningDate.ToString("yyyy-MM-dd ") : DateTime.Now.ToString("yyyy-MM-dd"))  @(item.DiningDate.ToString("HH").Equals("09") ?"午餐":"晚餐")  </span>
+                  @* <span id="date" style="color:black">@(item != null &&item.DiningDate!=Convert.ToDateTime("0001-01-01")? item.DiningDate.ToString("yyyy-MM-dd ") : DateTime.Now.ToString("yyyy-MM-dd")) </span>
+                         <input id="time" type="time" style="width:90px"value="@(item != null &&item.DiningDate!=Convert.ToDateTime("0001-01-01")? item.DiningDate.ToString("HH:mm:ss") : DateTime.Now.ToString("HH:mm:ss"))"/>
+
+                    < <input id="date" name="date" type="datetime-local" required autofocus 
+                         value="@(item != null &&item.DiningDate!=Convert.ToDateTime("0001-01-01")? item.DiningDate.ToString("yyyy-MM-ddTHH:mm:ss") : DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"))"/>*@
+                    </li>
+                     
+                    <li>
+                        <label for="peoCount">预约人数:</label>
+                        <input id="peoCount" name="peoCount" type="number" 
+                        step="1" min="0" max="100"  value="@(item != null ? item.PersonCount : null)" autofocus />
+                    </li>
+                    <li>
+                        <label>预约座位：</label>
+                        <input id="hall" name="seat" type="radio" class="seat" value="0" />
+                        <label for="women">大厅</label>
+                        <input id="room" name="seat" type="radio" class="seat" value="1"/>
+                        <label for="room">包间</label>
+                    </li>
+                    <li>
+                        <label for="name">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名:</label>
+                        <input id="name" name="name" type="text" placeholder="您的姓名" 
+                        value="@(item != null ? item.ContactName : "")" required autofocus />
+                    </li>
+                    <li>
+                        <label>性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别：</label>
+                        <input id="women" name="sex" type="radio"  class="sex"  value="false" 
+                                @(item != null && item.Sex == false ? string.Format("checked='checked'") : "")/>
+                        <label for="women">女士</label>
+
+                        <input id="man" name="sex" type="radio" class="sex" value="true" 
+                                @(item != null && item.Sex == true ? string.Format("checked='checked'") : "")/>
+                        <label for="man">先生</label>
+                    </li>
+
+                    <li>
+                        <label for="phone">电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话:</label>
+                        <input id="phone" name="phone" type="tel" 
+                        value="@(item != null ? item.ContactPhone : "")"
+                        required autofocus/>
+                    </li>
+                    @*  <li>
+                    <label for="time">预约时间</label>
+                    <input id="time" name="time" type="time" required autofocus />
+                </li>*@
+                    <li id="remark1">
+                        <label for="remark">备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注:</label>
+                        <textarea id="remark" name="remark" rows="5">@(item != null ? item.Remark : "")</textarea>
+                    </li>
+                </ol>
+                }
+            }
+        </div>
+        <button class="button" type="button" onclick="save();">完成预定</button>
+    </form>
+</body>
+
+</html>
+<script>
+    function save() {
+        $.ajaxSetup({ cache: false });
+        var orderid = '@ViewBag.orderId ';
+        var MemberCardNo = '@ViewBag.MemberCardNo';
+        var SourceAccountId = '@ViewBag.SourceAccountId';
+       // var date = $("#date").html();
+       // var time = $("#time").val();
+       // alert(date);
+        var peoCount = $("#peoCount").val();
+        var seat = $(".seat").val();
+        var name = $("#name").val();
+        var phone = $("#phone").val();
+        var sex = $(".sex:checked").val();
+        var remark = $("#remark").val();
+        alert("预定成功");
+        window.location.href = "/book/SaveOrders?SourceAccountId=" + SourceAccountId + "&MemberCardNo=" + MemberCardNo + "&orderid=" + orderid +"&peoCount=" + peoCount + "&seat=" + seat + "&name=" + name + "&phone=" + phone + "&sex=" + sex + "&remark=" + remark;
+        //$.post("/book/SaveOrders", { SourceAccountId:SourceAccountId,MemberCardNo: MemberCardNo, orderid: orderid, date: date, peoCount: peoCount, seat: seat, name: name, phone: phone, sex: sex, remark: remark }, function (msg) {    
+        //});
+    }
+
+</script>

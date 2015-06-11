@@ -1,0 +1,4 @@
+﻿nav#order ol li nav {border-bottom:1px solid #ccc;}
+nav#order {color:#666;font-size:1em;overflow:hidden;}
+nav#order ol {border:1px solid #ccc;background:#FFF;-webkit-padding-start:5px;-webkit-padding-end:0;float:left;margin-right:5px;width:100%;}
+nav#order ol li {list-style:none;line-height:2em;}

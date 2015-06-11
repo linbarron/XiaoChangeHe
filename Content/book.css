@@ -1,0 +1,24 @@
+﻿html,body,h1,form,fieldset,legend,ol,li {margin:0;padding:0;}
+body {background:#f2f2f2;color:#111;-webkit-overflow-scrolling:touch;}
+form#payment {-webkit-overflow-scrolling:touch;background:#f2f2f2;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;padding:5px;}
+input[type=\"search\"] {color:#1da507;box-shadow:inset 3px 3px 3px #fdfdfd;background:url(images/seach1.png) no-repeat;background-size:1.3em;background-position:1em .6em;-moz-border-radius:90px;-webkit-border-radius:90px;-khtml-border-radius:90px;border-radius:90px;width:90%;height:2.5em;text-align:center;font-size:1em;border:none;background-color:#FFF;margin:9px;}
+form#payment fieldset {border:none;margin-bottom:10px;}
+form#payment fieldset:last-of-type {margin-bottom:0;}
+form#payment fieldset fieldset legend {float:left;font-size:13px;width:110px;}
+form#payment ol li {background:#fff;border:1px solid #ccc;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;list-style:none;margin-bottom:2px;padding:5px 10px;}
+form#payment fieldset fieldset label {background:none no-repeat left 50%;line-height:20px;width:auto;padding:0 0 0 30px;}
+form#payment input:not([type=radio]),form#payment textarea {background:#fff;border:none;-moz-border-radius:3px;-webkit-border-radius:3px;-khtml-border-radius:3px;border-radius:3px;font-size:13px;outline:none;width:200px;padding:5px;}
+form#payment input:not([type=submit]):focus,form#payment textarea:focus {background:#eaeaea;}
+form#payment input[type=radio] {float:left;margin-right:5px;}
+form#payment span#RstName {color:#111;font-size:1.2em;}
+form#payment nav#bottom span {font-size:1em;color:#1da507;border-right:1px solid #ccc;padding:1px 5% 1px 1px;}
+form#payment nav#bottom img {width:22px;}
+form#payment img#Rstimg {height:6em;width:5.5em;}
+.MyMenuBut1 {font-size:1em;line-height:2em;text-decoration:none;color:#1da507;border-right:1px solid #ccc;padding:1px 5% 1px 1px;}
+.but {color:#fff;border:0;cursor:pointer;background-color:#beb3b3;border-radius:2px;line-height:45px;box-shadow:0 0 5px #969c9b;font-size:13px;margin:10px;padding:8px 9px;}
+form#payment label,form#payment span {font-size:.8em;color:#666;}
+form#payment fieldset fieldset label:hover,.MyMenuBut1:hover {cursor:pointer;}
+*::selection {
+        background-color: #1B7774;
+        color: #FFF;
+}

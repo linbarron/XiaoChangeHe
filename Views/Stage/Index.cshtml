@@ -1,0 +1,128 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "";
+}
+
+@using WitBird.XiaoChangHe.Models.Info;
+@model IEnumerable<RandomProduct>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+	<title>Untitled</title>
+<!--Adobe Edge Runtime-->
+   
+    <script src="/Scripts/jquery-1.7.1.min.js"></script>
+     <script src="/Scripts/Untitled-1_edgePreload.js" charset="utf-8"></script>
+    <style>
+        .edgeLoad-EDGE-4027969 { visibility:hidden; }
+    </style>
+<!--Adobe Edge Runtime End-->
+
+</head>
+
+    
+<body style="margin:0;padding:0;">
+	<div id="Stage" class="EDGE-4027969">
+	</div>
+
+    <button onclick="a();">变换阵法</button>
+     <button onclick="saveOrder();">战</button>
+    <div id="c"></div>
+</body>
+</html>
+
+
+<script>
+    var arr = new Array();
+    var ids = new Array();
+    var prices = new Array();
+    $(function () {
+       
+        load();
+        
+       
+    })
+   
+   
+    function load() {
+        $.getJSON("/Stage/getRandomProduct", function (msg) {
+            $.each(msg, function (idx, item) {
+                idx = ++idx;
+                arr[idx] = item.ProductName;
+                ids[idx] = item.Id;
+                prices[idx] = item.price;
+                $("#Stage_Text" + idx).html(item.ProductName);
+                $("#Stage_Text" + idx).attr("ids", item.Id);
+                
+            });
+        });
+        
+    }
+
+    function afterLoad() {
+      
+        for (var i = 1; i < ids.length+1; i++) {
+            $("#Stage_Text" + i).attr("ids", ids[i]);
+
+        }
+
+    }
+
+</script>
+
+
+<script>
+
+   
+    function a() {
+        //alert(1);
+       
+        $.ajaxSetup({ cache: false });
+        $.getJSON("/Stage/getRandomProduct", function (msg) {
+            $.each(msg, function (idx, item) {
+                idx = ++idx;
+               
+                $("#Stage_Text" + idx).html(item.ProductName);
+                $("#Stage_Text" + idx).attr("ids", item.Id);
+                arr[idx] = item.ProductName;
+                ids[idx] = item.Id;
+                prices[idx] = item.price;
+              
+            });
+        });
+    }
+       
+    
+   
+
+
+    var orderid;
+    var SourceAccountId = '@ViewBag.SourceAccountId';
+    var myDate = new Date();
+    var bookTime = myDate.toLocaleTimeString();
+    
+    function saveOrder() {
+            $.post("/Order/SaveOrders", { type: "Insert", SourceAccountId: SourceAccountId, bookTime: bookTime, isQuick: null }, function (msg) {
+                orderid = msg;
+                if (msg != "00000000-0000-0000-0000-000000000000") {
+
+                    for (var i = 1; i < ids.length ; i++) {
+                        var productId = ids[i];
+                        alert(productId);
+                        var num1 = 1;
+                        var price = prices[i];
+                        $.post("/Order/SaveOrderDetails", { type: "Insert", productId: productId, unitPrice: price, orderId: msg, productCount: num1 }, function (msg1) {
+                            if (msg1 == 1) {
+
+                            }
+
+                        });
+                    }
+                }
+
+            });
+        }
+       
+</script>

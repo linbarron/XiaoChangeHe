@@ -1,0 +1,76 @@
+﻿@{
+    ViewBag.Title = "RechargeRecord";
+    Layout = "";
+}
+
+
+@using WitBird.XiaoChangHe.Models.Info
+@model IEnumerable<PrepayRecord>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
+        <title>充值记录</title>
+        <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
+        <link href="~/Content/public.css" rel="stylesheet" />
+         <link href="~/Content/member.css" rel="stylesheet" />
+         <script src="/Scripts/jquery-1.7.1.min.js"></script>
+    </head>
+    <body>
+
+        <form id="payment">
+            <div>
+                 @if (Model != null)
+                 {
+                        <nav id="img">
+                     <span id="uid"><span style="font-size:15px;margin-right: -10px;" >NO.</span> @(ViewBag.Uid)</span>
+                     @if (ViewBag.PrepayAccount == 0)
+                     {
+                     @* <img src="~/Content/images/vipw.png" />*@
+                    <img src="~/Content/images/@(ViewBag.CompanyId)w.png" />
+                     }
+                     else
+                     {
+                          <img src="~/Content/images/@(ViewBag.CompanyId)h.png" />@*
+                     <img src="~/Content/images/viph.png" />*@
+                     }
+                       
+                  
+                </nav>
+                     foreach (PrepayRecord info in Model)
+                     {
+               
+           
+                    <ol style="padding: 0px; border:1px solid #808080">
+                         
+                        <li>
+                            <label for="name">实际增加金额:</label>
+                            <span id="AddMoney" style="color:#d32502" > ¥@(info != null ? info.AddMoney : 0 )</span>
+                        </li>
+                        <li>
+                            <label for="PrepayMoney">付款金额:</label>
+                             <span id="PrepayMoney" style="color:#d32502"> ¥@(info != null ? info.PrepayMoney : 0)</span>
+                        </li>
+                         <li>
+                            <label for="PresentMoney">赠送金额:</label>
+                              <span id="PresentMoney" style="color:#d32502" > ¥@(info != null ? info.PresentMoney : 0)</span>               
+                        </li>
+                    
+                        <li>
+                            <label for="PrepayDate">消费时间:</label>
+                             <span id="PrepayDate" style="color:#d32502">@(info != null ? info.PrepayDate : new DateTime())</span>               
+                        </li>
+                          
+                    </ol>
+               
+                
+                     }
+                 }
+            </div>
+        </form>
+        
+    </body>
+
+    </html>
+   

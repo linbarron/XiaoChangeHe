@@ -1,0 +1,61 @@
+﻿@{
+    ViewBag.Title = "getMemProducts";
+    Layout = "";
+}
+
+@using WitBird.XiaoChangHe.Models.Info
+@model IEnumerable<MemProduct>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
+        <title>储值会员优惠</title>
+        <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
+        <link href="~/Content/public.css" rel="stylesheet" />
+         <link href="~/Content/member.css" rel="stylesheet" />
+         <script src="/Scripts/jquery-1.7.1.min.js"></script>
+    </head>
+    <body>
+
+        <form id="payment">
+            <div>
+                 @if (Model != null)
+                 {
+                       <nav id="img">
+                       <span id="uid"><span style="font-size:15px;margin-right: -10px;" >NO.</span> @(ViewBag.Uid)</span>
+                    @*  <img src="~/Content/images/vipw.png" /> *@
+                    @if(ViewBag.PrepayAccount == 0)
+                   {
+                       <img src="~/Content/images/@(ViewBag.CompanyId)w.png" />
+                   }else{
+                       <img src="~/Content/images/@(ViewBag.CompanyId)h.png" />
+                 
+                   }
+                  
+                </nav>
+                  <ol style="-webkit-padding-start: 0px; border:1px solid #808080">
+                     @foreach (MemProduct item in Model)
+                     {
+                        <li style="height:100px">
+                     <img src="/Product/getImageProductMenu/@(item.Id)" style="height: 5.5em; width: 5.5em; margin-top: 6px;-webkit-border-radius: 5px;border-radius: 5px; float:left" />
+                          <nav class="memProductLeft">@item.ProductName</nav>  
+                             <nav class="memProductLeft" style="color:#d32502;">会员特价：@(Convert.ToInt32(item.MemberPrice)) 元/@item.CodeTypeListName</nav>
+                            <nav class="memProductLeft" ><del>原价：@(Convert.ToInt32(item.Price)) 元/@item.CodeTypeListName</del></nav>
+                        </li>
+                    
+                          
+                   
+                     }
+                       </ol>
+                 }
+            
+            </div>
+        </form>
+        
+    </body>
+
+    </html>
+   
+
+

@@ -1,0 +1,361 @@
+﻿@{
+    ViewBag.Title = "开始点菜";
+    Layout = "";
+}
+@using WitBird.XiaoChangHe.Models.Info;
+
+@{
+    
+    string menu1 = "";
+    string menu2 = "";
+    string mformat="";
+    string mymenubtn = " <div class=\"MyMenuBut\" >" +
+         " <a href=\"javascript:void(0);\" onclick=\"myMenu();\">已点菜单</a></div>";
+   
+     mformat = "<li class=\"result-li\">" +
+                        "<nav class=\"food-image\">"+
+                        "<img src=\"/Order/GetImages/{2}\" / style=\"height: 5.5em;width: 5.5em;margin-top: 6px;\">" +
+                        " <span class=\"hot\"></span></nav>" +
+                    "<nav class=\"food-name\"><span>{0}</span> </nav><nav class=\"people-count\">" +
+                    
+                        "<img onclick=jian(\"{2}\") id=\"pic{2}\" src=\"" + Url.Content("~/Content/images/jian1.png") + "\" style=\"display:{4}\"/>" +
+                        "<input type=\"text\" id =\"{2}\"  value= {3} style=\"display:{4}\" " +
+                        "class=\"container\">" +
+                        "<img onclick=add(\"{2}\") src=\"" + Url.Content("~/Content/images/jia1.png") + "\" /></nav>" +
+                       
+                    "<nav class=\"RMB\" ><div id=\"rmb{2}\">￥{1}</div></nav>" +
+                     "<nav class=\"meta\"><font color='blue;'>{5}</font>人点过 "+
+                    " <img src=\"" + Url.Content("~/Content/images/love.png") + "\" style=\"float: right;width: 1.7em;\" onclick=addLove(\"{2}\")><span id=\"love{2}\"  style=\"float: right\">{6}</span></nav>" +
+                    "<nav style=\"clear: left\"></nav></li>";
+     if (ViewBag.Status != null && ViewBag.Status == "0")
+     {
+         mformat = "<li class=\"result-li\">" +
+                          "<nav class=\"food-image\">" +
+                          "<img src=\"/Order/GetImages/{2}\" / style=\"height: 5.5em;width: 5.5em;margin-top: 6px;\">" +
+                          " <span class=\"hot\"></span></nav>" +
+                      "<nav class=\"food-name\"><span>{0}</span> </nav>" +
+                      "<nav class=\"RMB\" ><div  id=\"rmb{2}\">￥{1}</div></nav>" +
+                      //"<div style='display:none;' >{3}{4}</div>"+
+                      //"<nav class=\"meta\">{5}人点过 <span style=\"float: right;\">{6}人已赞</span></nav>" +
+                      "<nav style=\"clear: left\"></nav></li>";
+         mymenubtn = "";
+     }
+    if (ViewBag.ProductListData != null)
+    {
+
+       
+        string  data1 = "";
+        int itabe = 1;
+        int a = 1;
+        foreach (Product item in ViewBag.ProductListData as List<Product>)
+        {
+           
+            //if (string.IsNullOrEmpty(data0))
+            //{
+            //    data0 = item.ProductTypeName1;
+            //    title1 += "<a  id=\"title" + itabe + "\" class=\"title\">" + item.ProductTypeName1 + "</a>";
+            //}
+            //else if (!data0.Equals(item.ProductTypeName1))
+            //{
+            //    a = itabe;
+            //    title1 += "<a id=\"title" + itabe + "\" class=\"title\">" + item.ProductTypeName1 + "</a>";
+            //    data0 = item.ProductTypeName1;
+            //}
+            if (string.IsNullOrEmpty(data1))
+            {
+                int ProductCount = 0;
+                string display = "none";
+                data1 = item.ProductTypeName2;
+                menu2 += "<div class=\"tab" + itabe + " tabsContent\"><ul class=\"result-ul\">";
+               if (ViewBag.MyMenuListData != null)
+                {
+                   
+                    foreach (MyMenu item1 in ViewBag.MyMenuListData as List<MyMenu>)
+                    {
+                        if (item.Id.Equals(item1.ProductId))
+                        {
+
+                            ProductCount = item1.ProductCount;
+                        }
+                    }
+                }
+               if (ProductCount > 0)
+               {
+                   display = "inline";
+               }
+               Random rand = new Random();
+               int i = rand.Next(2000, 10000);
+               int j = rand.Next(300, 1900);
+               menu2 += string.Format(mformat, item.ProductName, item.Price, item.Id, ProductCount, display,item.OrderCount,item.FavCount);
+                menu1 += "<li class=\"title" + a + " tab" + itabe + "\"><a class=\"tab" + itabe + " tab\" href=\"#\">" + item.ProductTypeName2 + "</a>";
+                if (ProductCount > 0)
+                {
+                   // menu1 += " <span  class=\"shangSpan\">" + ProductCount + "</span>";
+                }
+               
+                menu1 += "</li>";
+                continue;
+            }
+            if (data1.Equals(item.ProductTypeName2))
+            {
+                int ProductCount = 0;
+                string display = "none";
+                if (ViewBag.MyMenuListData != null)
+                {
+                    foreach (MyMenu item1 in ViewBag.MyMenuListData as List<MyMenu>)
+                    {
+                        if (item.Id.Equals(item1.ProductId))
+                        {
+
+                            ProductCount = item1.ProductCount;
+                        }
+                    }
+                }
+                if (ProductCount > 0)
+                {
+                    display = "inline";
+                }
+                menu2 += string.Format(mformat, item.ProductName, item.Price, item.Id, ProductCount, display, item.OrderCount, item.FavCount);
+              //  menu2 += string.Format(mformat, item.ProductName, item.Price, item.Id, ProductCount);
+                continue;
+            }
+            else
+            {
+                int ProductCount = 0;
+                string display = "none";
+                data1 = item.ProductTypeName2;
+                itabe++;
+                menu2 += "</ul></div>";
+                menu2 += "<div class=\"tab" + itabe + " tabsContent\"><ul class=\"result-ul\">";
+                if (ViewBag.MyMenuListData != null)
+                {
+                    foreach (MyMenu item1 in ViewBag.MyMenuListData as List<MyMenu>)
+                    {
+                        if (item.Id.Equals(item1.ProductId))
+                        {
+
+                            ProductCount = item1.ProductCount;
+                        }
+                    }
+                }
+                if (ProductCount > 0)
+                {
+                    display = "inline";
+                }
+                menu2 += string.Format(mformat, item.ProductName, item.Price, item.Id, ProductCount, display, item.OrderCount, item.FavCount);
+               // menu2 += string.Format(mformat, item.ProductName, item.Price, item.Id, ProductCount);
+
+               
+
+                menu1 += "<li class=\"title" + a + " tab" + itabe + "\"><a class=\"tab" + itabe + " tab\" href=\"#\">" + item.ProductTypeName2 + "</a>";
+                if (ProductCount > 0)
+                {
+                   // menu1 += " <span  class=\"shangSpan\">" + ProductCount + "</span>";
+                }
+
+                menu1 += "</li>";
+                continue;
+            }
+
+        }
+        menu2 += "</ul></div>";
+
+    }
+}
+        
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
+    <title>开始点菜</title>
+    <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
+   
+    <link href="~/Content/public.css" rel="stylesheet" />
+    <link href="~/Content/tab.css" rel="stylesheet" />
+  @*  <link rel="stylesheet" href="~/Content/jquery.mobile-1.1.0.css">*@
+    <script src="/Scripts/jquery-1.7.1.min.js"></script>
+    @*<script src="~/Scripts/jquery-1.7.1.js"></script>
+    <script src="~/Scripts/jquery.mobile-1.1.0.js"></script>*@
+    <script>
+        $(document).ready(function () {
+            $('div.htmltabs div.tabsContent').hide();
+            $('div.tab1').show();
+            $('div.htmltabs ul.tabs li.tab1 a').addClass('tab-current');
+            $('div.htmltabs ul li a').click(function () {
+                var thisClass = this.className.slice(0, 4);
+                $('div.htmltabs div.tabsContent').hide();
+                $('div.' + thisClass).show();
+                $('div.htmltabs ul.tabs li a').removeClass('tab-current');
+
+                $(this).addClass('tab-current');
+            });
+
+        });
+    </script>
+
+  @*  <script>
+        $(document).ready(function () {
+            $('div.htmltabs ul.tabs li').hide();
+            $('div.htmltabs div.tabsContent').hide();
+            $('ul.tabs li.title1').show();
+            $('div.tab1').show();
+            $('nav #title1').addClass('title-current');
+            $('#navtitle a').click(function () {
+                var thisClass = this.id;
+                $('div.htmltabs ul.tabs li').hide();
+                $('div.htmltabs ul.tabs li.' + thisClass).show();
+                $('#navtitle a.title').removeClass('title-current');
+                $(this).addClass('title-current');
+            });
+
+        });
+    </script>*@
+     
+</head>
+<body>
+    @*<nav id="navtitle" style="margin: 0.7em 0.5em;" >@Html.Raw(title1)</nav>*@
+    <div class="htmltabs" style="width: 100%; min-width: 300px;-webkit-overflow-scrolling: touch;overflow-y: scroll;">
+        <div id="tab" >
+            <!-- the header and navigation -->
+            <header>
+                <nav class="mainnav">
+                    <ul class="tabs">
+                     
+                          @Html.Raw(menu1)
+                     
+                   
+                    </ul>
+                </nav>
+            </header>
+        </div>
+        <!-- the content -->
+        <section id="Content" @*style="width: 63%; height: 607px; float: left;"*@  class="section">
+           
+            @Html.Raw(menu2)
+                
+        </section>
+         <div style="clear:both"></div>
+    </div>
+  @Html.Raw(mymenubtn)
+    @*<footer id="footer">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</footer>
+   <input  type="hidden" value="@(ViewBag.OrderId)" id="saveorderid"/>*@
+    
+</body>
+
+</html>
+<script>
+    var orderid = '@ViewBag.OrderId';
+    var SourceAccountId = '@ViewBag.SourceAccountId';
+    var bookTime ='@ViewBag.BookTime';
+    function myMenu() {
+        // href="/MyMenu/MyMenu?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(ViewBag.OrderId)&SourceAccountId=@(ViewBag.SourceAccountId)
+        //var OrderId = $("#saveorderid").val();
+       
+        var MemberCardNo = '@ViewBag.MemberCardNo';
+        window.location.href = "/MyMenu/MyMenu?MemberCardNo="+MemberCardNo+"&OrderId="+orderid+"&SourceAccountId="+SourceAccountId+"";
+    }
+    function add(id) {
+        var num = $("#" + id).val();
+        $("#" + id).val(parseInt(num) + 1);
+        $.ajaxSetup({ cache: false });
+        var productId = id;
+        var num1 = $("#" + id).val();
+        if (num1 > 0) {
+            $("#" + id).css("display", "inline");
+            $("#" + "pic"+id).css("display", "inline");
+        }
+        var price = $("#rmb" + id).html().replace('￥', '');
+        if (orderid == null || orderid=='') {
+            $.post("/Order/SaveOrders", { type: "Insert", SourceAccountId: SourceAccountId, bookTime: bookTime }, function (msg) {
+                //$("#saveorderid").val(msg);
+                orderid = msg;
+                if (msg != "00000000-0000-0000-0000-000000000000") {
+                  
+                    
+                    $.post("/Order/SaveOrderDetails", { type: "Insert", productId: productId, unitPrice: price, orderId: msg, productCount: num1 }, function (msg1) {
+                        if (msg1 == 1) {
+
+                        }
+
+                    });
+                }
+
+            });
+        }
+        else {
+            if (orderid != "00000000-0000-0000-0000-000000000000") {
+                var num1 = $("#" + id).val();
+                $.post("/Order/SaveOrderDetails", { type: "Insert", productId: productId, unitPrice: price, orderId: orderid, productCount: num1 }, function (msg1) {
+                    if (msg1 == 1) {
+
+                    }
+
+                });
+            }
+        }
+    }
+    function jian(id) {   
+        var num = $("#" + id).val();
+        $("#" + id).val(parseInt(num) - 1);
+        $.ajaxSetup({ cache: false });
+        var num1 = $("#" + id).val();
+        if (num1 == 0) {
+            $("#" + id).css("display", "none");
+            $("#" + "pic" + id).css("display", "none");
+        }
+        var productId = id;
+        var price = $("#rmb" + id).html().replace('￥', '');
+        if (orderid != null&&orderid!='') {
+            if (orderid != "00000000-0000-0000-0000-000000000000") {
+              
+                if (num1 > 0) {
+                    $.post("/Order/SaveOrderDetails", { type: "Insert", productId: productId, unitPrice: price, orderId: orderid, productCount: num1 }, function (msg1) {
+                        if (msg1 == 1) {
+
+                        }
+
+                    });
+                } else if (num1 == 0) {
+                    var num1 = $("#" + id).val();
+                    $.post("/Order/DelOrderDetails", { productId: productId, orderId: orderid }, function (msg1) {
+                        if (msg1 == 1) {
+
+                        }
+                        else {
+
+                        }
+                    });
+                }
+            }
+        }
+        //$.post("/Order/SaveOrders", { type: "Insert", SourceAccountId: SourceAccountId }, function (msg) {
+           
+        //    if (msg != "00000000-0000-0000-0000-000000000000") {
+        //        var num1 = $("#" + id).val();
+        //        if (num1 > 0) {
+        //            $.post("/Order/SaveOrderDetails", { type: "Insert", productId: productId, unitPrice: price, orderId: msg, productCount: num1 }, function (msg1) {
+        //                if (msg1 == 1) {
+
+        //                }
+
+        //            });
+        //        } else if (num1 == 0) {
+        //            var num1 = $("#" + id).val();
+        //            $.post("/Order/DelOrderDetails", { productId: productId,  orderId: msg }, function (msg1) {
+        //                if (msg1 == 1) {
+
+        //                }
+
+        //            });
+        //        }
+        //    }
+
+        //});
+    }
+    function addLove(id) {
+        var num = $("#love" + id).html();
+        $("#love" + id).html(parseInt(num) + 1);
+
+    }
+</script>

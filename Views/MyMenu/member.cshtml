@@ -1,0 +1,86 @@
+﻿@{
+    ViewBag.Title = "VIP";
+    Layout = "";
+}
+@using WitBird.XiaoChangHe.Models.Info
+@model IEnumerable<CrmMember>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
+        <title>会员信息</title>
+        <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
+    <link href="~/Content/public.css" rel="stylesheet" />
+    <link href="~/Content/member.css" rel="stylesheet" />
+    </head>
+    <body>
+       
+        <form id="payment">
+            <div>
+                  @if (Model != null)
+                  {
+                      foreach (CrmMember info in Model)
+                      {
+                    <nav id="img">
+                        <img src="~/Content/images/vip.png" />
+                     <span id="uid"> @(info != null ? info.Uid : "")</span>
+                    </nav>
+              
+                 <a href="/Member/editMemberInfo/@(ViewBag.SourceAccountId)" style="padding:0px">
+                <ol style="-webkit-padding-start: 0px;">
+                    <li>
+                        <label for="name">姓名</label>
+                        @*<input id="name" name="name" type="text" readonly="readonly" value="@(info != null ? info.MemberName : "")"/>*@
+                        <span>@(info != null ? info.MemberName : "")</span>
+                    </li>
+                    <li>
+                        <label for="phone">电话</label>
+                        @*<input id="phone" name="phone" type="tel"  readonly="readonly" value="@(info != null ? info.Tel : "")"/>*@
+                        <span>@(info != null ? info.Tel : "")</span>
+                    </li>
+                    <li>
+                        <label for="sex">性别</label>
+                        @*<input id="sex" name="sex" type="text"  readonly="readonly" value="@(info != null ? info.Sex : false)"/>*@
+                        <span>
+
+                            @{if (info != null)
+                              {
+                                  switch (info.Sex)
+                                  {
+                                      case true: @(string.Format("先生")); break;
+                                      case false: @(string.Format("女士")); break;
+                                      default: @(string.Format("")); break;
+                                  }
+                              }
+                            }
+                        </span>
+                    </li>
+                    <li>
+                        <label for="bir">生日</label>
+                        @*<input id="bir" name="bir" type="datetime"  readonly="readonly" value="@(info != null ? info.Birthday : null)"/>*@
+                        <span>@(info != null && info.Birthday != Convert.ToDateTime("0001-01-01") ? info.Birthday.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"))</span>
+                    </li>
+                    <li>
+                        <label for="addr">地址</label>
+                       @* <input id="addr" name="addr" type="text"  readonly="readonly" value="@(info != null ? info.Addr : "")"/>*@
+                        <span>@(info != null ? info.Addr : "")</span>
+                    </li>
+                    <li>
+                        <label for="ma">我的二维码</label>
+                       @* <input id="ma" name="ma" type="datetime" readonly="readonly" value="xxxx-xx-xx" />*@
+                        <span></span>
+                    </li>
+                    
+                </ol>
+                       <nav style="clear:both;"></nav>
+                      </a>
+            </div>
+                      }
+                  }}
+        </form>
+           
+    </body>
+
+    </html>
+     

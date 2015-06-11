@@ -1,0 +1,11 @@
+﻿nav#info{color: #666;font-size: 1.1em;overflow: hidden; width: 100%;}
+nav#info a{display: block; margin: 0px;padding: 0px;}
+nav#info ul {border:1px solid #ccc;background:#FFF;-webkit-padding-start:0;-webkit-padding-end:0;width:47%;float:left;margin-right:7px;-moz-border-radius:5px;-webkit-border-radius:5px;-khtml-border-radius:5px;border-radius:5px;-webkit-margin-before:.1em;-webkit-margin-after:.5em;}
+nav#info ul li {list-style:none;line-height:2em;color:#666;}
+nav#info ul li nav {border-bottom:1px solid #ccc;padding-left:10px;}
+nav#info span {color:#333;}
+nav#info nav:first-child {background:url(/Content/images/title_bgbg.png);}
+nav#info img {vertical-align:middle;padding-bottom:5px;width:20px;height:21px;}
+nav#info div {color:#666;width:120px;border:1px solid #ccc;padding-left:10px;padding-right:0;background:url(/Content/images/quxiao_bg3.png);margin:5%;}
+nav#info div img {width:17px;}
+.but {color:#fff;border:0;cursor:pointer;background-color:#beb3b3;border-radius:2px;line-height:45px;box-shadow:0 0 5px #969c9b;font-size:13px;margin:10px;padding:8px 9px;}

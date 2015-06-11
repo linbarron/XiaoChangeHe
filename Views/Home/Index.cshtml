@@ -1,0 +1,377 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
+    <title>And the winner isn't...</title>
+    <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
+    <link href="css/main.css" rel="stylesheet" />
+    <link href="~/Content/book.css" rel="stylesheet" />
+    <link href="~/Content/tab.css" rel="stylesheet" />
+      <script  src="/Scripts/jquery-1.7.1.min.js" ></script>
+    <script>
+        $(document).ready(function () {
+            $('div.htmltabs div.tabsContent').hide();
+            $('div.tab1').show();
+            $('div.htmltabs ul.tabs li.tab1 a').addClass('tab-current');
+            $('div.htmltabs ul li a').click(function () {
+                var thisClass = this.className.slice(0, 4);
+                $('div.htmltabs div.tabsContent').hide();
+                $('div.' + thisClass).show();
+                $('div.htmltabs ul.tabs li a').removeClass('tab-current');
+
+                $(this).addClass('tab-current');
+            });
+            fixDiv();
+        });
+       
+    </script>
+</head>
+<body>
+    <nav style="margin:0.7em 0.5em;"> <a class="title">酒水</a> <a class="title">热菜</a></nav>
+    <div class="htmltabs" style="width: 100%;min-width:300px">
+        <div id="tab" style="width:6.9%;min-width:5.7em;height: 100%; float: left; overflow: hidden;">
+            <!-- the header and navigation -->
+            <header>
+                @* <div id="logo">And the winner is<span>n't...</span></div>*@
+                <nav>
+                    <ul class="tabs">
+                        <li class="tab1"><a class="tab1 tab" href="#">新湘记蔬菜</a></li>
+                        <li class="tab2"><a class="tab2 tab" href="#">新湘记煲汤</a></li>
+                        <li class="tab3"><a class="tab3 tab" href="#">新湘记小吃</a></li>
+                        <li class="tab4"><a class="tab4 tab" href="#">新湘记干锅</a></li>
+                        <li class="tab5"><a class="tab5 tab" href="#">特  色   菜</a></li>
+                        <li class="tab6"><a class="tab6 tab" href="#">新湘记凉菜</a></li>
+                        <li class="tab7"><a class="tab7 tab" href="#">新湘记蒸菜</a></li>
+                        <li class="tab8"><a class="tab8 tab" href="#">新湘记热菜</a></li>
+
+                    </ul>
+                </nav>
+            </header>
+        </div>
+        <!-- the content -->
+        <div id="Content" style="width: 63%; height: 100%; float: left; "class="section">
+            <!-- tab 1 -->
+            <div class="tab1 tabsContent">
+                <ul class="result-ul">
+                    <li class="result-li">
+                        <nav class="food-image">
+                        <img src="http://www.opentable.com/img/restimages/x6/105217.jpg" />
+                    </nav>
+                    <nav class="food-name">
+                        <span>新湘记蔬菜</span>
+                    </nav>
+                    <nav class="people-count">
+                        <img src="~/Content/images/jian.png" />
+                        <input type="text" style="width: 1.5em" />
+                        <img src="~/Content/images/jia.png" />
+                    </nav>
+                    <nav class="meta">
+                        xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+                    </nav>
+                    <nav class="RMB">
+                        <nav style="float: left;">￥16</nav>
+                    </nav>
+
+                    <nav style="clear: left"></nav>
+                    </li>
+                    <li class="result-li">
+                        <nav class="food-image">
+                        <img src="http://www.opentable.com/img/restimages/x6/105217.jpg" />
+                    </nav>
+                    <nav class="food-name">
+                        <span>新湘记蔬菜</span>
+                    </nav>
+                    <nav class="people-count">
+                        <img src="~/Content/images/jian.png" />
+                        <input type="text" style="width: 1.5em" />
+                        <img src="~/Content/images/jia.png" />
+                    </nav>
+                    <nav class="meta">
+                        xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+                    </nav>
+                    <nav class="RMB">
+                        <nav style="float: left;">￥16</nav>
+                    </nav>
+
+                    <nav style="clear: left"></nav>
+
+                    </li>
+                    <li class="result-li">
+                        <nav class="food-image">
+                        <img src="http://www.opentable.com/img/restimages/x6/105217.jpg" />
+                    </nav>
+                    <nav class="food-name">
+                        <span>新湘记蔬菜</span>
+                    </nav>
+                    <nav class="people-count">
+                        <img src="~/Content/images/jian.png" />
+                        <input type="text" style="width: 1.5em" />
+                        <img src="~/Content/images/jia.png" />
+                    </nav>
+                    <nav class="meta">
+                        xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+                    </nav>
+                    <nav class="RMB">
+                        <nav style="float: left;">￥16</nav>
+                    </nav>
+
+                    <nav style="clear: left"></nav>
+                    </li>
+                    <li class="result-li">
+                         <nav class="food-image">
+                        <img src="http://www.opentable.com/img/restimages/x6/105217.jpg" />
+                    </nav>
+                    <nav class="food-name">
+                        <span>新湘记蔬菜</span>
+                    </nav>
+                    <nav class="people-count">
+                        <img src="~/Content/images/jian.png" />
+                        <input type="text" style="width: 1.5em" />
+                        <img src="~/Content/images/jia.png" />
+                    </nav>
+                    <nav class="meta">
+                        xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+                    </nav>
+                    <nav class="RMB">
+                        <nav style="float: left;">￥16</nav>
+                    </nav>
+
+                    <nav style="clear: left"></nav>
+                    </li>
+
+                </ul>
+                
+            </div>
+        
+            <!-- end of t1 -->
+            <!-- tab 2 -->
+            <div class="tab2 tabsContent">
+                <ul class="result-ul">
+                    <li class="result-li">
+                        <div>新湘记煲汤!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                    <li class="result-li">
+                        <div>新湘记煲汤!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                    <li class="result-li">
+                        <div>新湘记煲汤!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                    <li class="result-li">
+                        <div>新湘记煲汤!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                </ul>
+            </div>
+            <!-- end of t2 -->
+
+            <!-- tab 3 -->
+            <div class="tab3 tabsContent">
+                <ul class="result-ul">
+                    <li class="result-li">
+                        <div>新湘记小吃!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                    <li class="result-li">
+                        <div>新湘记小吃!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                    <li class="result-li">
+                        <div>新湘记小吃!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                    <li class="result-li">
+                        <div>新湘记小吃!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                </ul>
+            </div>
+            <!-- end of t3 -->
+            <!-- tab 4 -->
+            <div class="tab4 tabsContent">
+                <ul class="result-ul">
+                    <li class="result-li">
+                        <div>新湘记干锅!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                    <li class="result-li">
+                        <div>新湘记干锅!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                    <li class="result-li">
+                        <div>新湘记干锅!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                    <li class="result-li">
+                        <div>新湘记干锅!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                </ul>
+
+            </div>
+            <!-- end of t4 -->
+            <!-- tab 5 -->
+            <div class="tab5 tabsContent">
+                <ul class="result-ul">
+                    <li class="result-li">
+                        <div>特色菜!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                    <li class="result-li">
+                        <div>特色菜!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                    <li class="result-li">
+                        <div>特色菜!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                    <li class="result-li">
+                        <div>特色菜!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                </ul>
+            </div>
+            <!-- end of t5 -->
+            <!-- tab 6 -->
+            <div class="tab6 tabsContent">
+                <ul class="result-ul">
+                    <li class="result-li">
+                        <div>新湘记凉菜!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                    <li class="result-li">
+                        <div>新湘记凉菜!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                    <li class="result-li">
+                        <div>新湘记凉菜!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                    <li class="result-li">
+                        <div>新湘记凉菜!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                </ul>
+            </div>
+            <!-- end of t6 -->
+            <!-- tab 7 -->
+            <div class="tab7 tabsContent">
+                <ul class="result-ul">
+                    <li class="result-li">
+                        <div>新湘记蒸菜!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                    <li class="result-li">
+                        <div>新湘记蒸菜!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                    <li class="result-li">
+                        <div>新湘记蒸菜!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                    <li class="result-li">
+                        <div>新湘记蒸菜!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                </ul>
+            </div>
+            <!-- end of t7 -->
+            <!-- tab 8-->
+          
+            <div class="tab8 tabsContent">
+                <ul class="result-ul">
+                    <li class="result-li">
+                        <div>新湘记热菜!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                    <li class="result-li">
+                        <div>新湘记热菜!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                    <li class="result-li">
+                        <div>新湘记热菜!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                    <li class="result-li">
+                        <div>新湘记热菜!<img src="x" /></div>
+                        <br />
+                        <br />
+                        <div class="RMB">￥16</div>
+                    </li>
+                </ul>
+
+            </div>
+
+            <!-- end of t8-->
+
+        </div>
+
+
+      
+    </div>
+    <div class="MyMenuBut">我的菜单</div>
+</body>
+     
+</html>

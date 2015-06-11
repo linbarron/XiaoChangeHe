@@ -1,0 +1,123 @@
+﻿@using WitBird.XiaoChangHe.Models.Info;
+@model IEnumerable<ProductNew>
+
+@{
+    Layout = null;
+    int i = 0;
+}
+<!-- the content start -->
+
+<ul class="result-ul">
+    @if (Model != null)
+    {
+        foreach (ProductNew item in Model)
+        {
+            i++;
+            string name = "#bigImg" + i;
+            string name1 = "bigImg" + i;
+            //new File(item.OriginalImage, "jpg", "1");
+        <li class="result-li">
+
+
+           @* <nav class="food-image">
+                <a href="@name" style="padding:0">
+
+                    <img src="/Order/GetImages/@(item.Id)" style="height: 5.5em; width: 5.5em; margin-top: 6px;-webkit-border-radius: 5px;border-radius: 5px;" />
+                </a>*@
+                @* <span class="hot"></span>*@
+           @* </nav>
+            <!-- 要放大显示的div -->
+            <nav id="@name1" style="display:none;">
+                <img src="/Order/GetBigImages/@(item.Id)"  />
+
+            </nav>
+            *@
+
+             <nav class="food-image" onclick="dialog('@item.Id')" style="cursor:pointer">
+                <a style="padding:0" >
+
+                    <img src="/Order/GetImages/@(item.Id)" style="height: 4.6em; width: 5em; margin-top: 6px;-webkit-border-radius: 5px;border-radius: 5px;" />
+                </a>
+                 @if(item.Popular==true){
+                   <span class="popular"></span>
+                 }
+            </nav>
+          
+            <nav class="food-name"><span>@Html.DisplayFor(modelItem => item.ProductName)</span> </nav>
+
+            @if (ViewBag.Status != null && ViewBag.Status == "1")
+            { 
+                <nav class="people-count">
+
+                    @if (ViewBag.MyMenuListData != null)
+                    {
+
+                        foreach (MyMenu item1 in ViewBag.MyMenuListData as List<MyMenu>)
+                        {
+                            if (item.Id.Equals(item1.ProductId))
+                            {
+                        <input type="hidden"  value="@item1.totalcount" class="totalcount"/>
+                        <img onclick="jian('@item.Id')" id="pic@(item.Id)" src="~/Content/images/jian1.png"style="width:21px;height:21px;margin-right: -4px;" @(item1.ProductCount > 0 ? string.Format("style=display: inline;") : string.Format("style=display: none;")) />
+                        <input type="text" id="@item.Id" value="@item1.ProductCount"  class="container"  @(item1.ProductCount > 0 ? string.Format("style=display: inline;") : string.Format("style=display: none;"))/>
+                 
+                            }
+                        }
+                    }
+                    <img onclick="jian('@item.Id')" id="pic@(item.Id)" src="~/Content/images/jian1.png" style="display:none;width:21px;height:21px;margin-right: -4px;"/>
+                    <input type="text" id="@item.Id" value="0"  class="container" style="display:none" />
+                    <img onclick="add('@item.Id')" src="~/Content/images/jia1.png" style="width:21px;height:21px;margin-left: -4px;"/>
+                </nav>
+            }
+            <nav class="RMB">
+                <span id="rmb@(item.Id)">@(item.Price)</span>元/@(Html.DisplayFor(modelItem => item.CodeTypeListName))
+                @if (item.MemberPrice != null && item.MemberPrice != item.Price)
+                {
+                    <nav style="line-height: 8px; margin-top: 5px;">
+                        <span style="color: #d32502;">会员价：@(item.MemberPrice)</span>元
+                    </nav>   
+                }
+                 <nav>
+                        @if(item.Hot!=null&&item.Hot!=0){
+                       <nav style="font-size:0.7em; font-weight:100;margin-top: 3px;">麻辣指数:
+                         @for (int j = 0; j < item.Hot;j++ )
+                         {
+                           <img src="~/Content/images/lajiao.png" style="width: 16px;vertical-align: sub;"/>
+                         }
+                       </nav>
+                        }
+                    </nav>
+@*  @if (item.MemberPrice == item.Price)
+                {
+                    <span>
+                        <span id="rmb@(item.Id)">@(Convert.ToInt32(item.MemberPrice))</span>
+                        元/@(Html.DisplayFor(modelItem => item.CodeTypeListName))
+                    </span>
+                }
+                else
+                {
+                    <nav style="line-height: 15px">
+                        <span style="text-decoration: line-through; color: red">
+                            <span style="color: #aeaeae; font-style: oblique">@(Convert.ToInt32(item.Price))元</span>
+                        </span>
+                    </nav>
+                    <span>
+                        <span id="rmb@(item.Id)">@(Convert.ToInt32(item.MemberPrice))</span>
+                        元/@(Html.DisplayFor(modelItem => item.CodeTypeListName))
+                    </span>
+                }*@
+            </nav>
+            @* <nav class="meta">
+                <span style="color: red" id="DianCount@(item.Id)">@item.Count</span>人点过 
+                    <img src="~/Content/images/love.png" style="float: right; width: 1.7em;height:18px;" onclick="addLove('@item.Id')" />
+                <span id="love@(item.Id)" style="float: right">@item.LoveCount</span>
+            </nav>*@
+            <nav style="clear: left"></nav>
+        </li>
+        }
+    }
+</ul>
+<input  type="hidden" value="@ViewBag.OrderId" id="OrderId"/>
+<input type="hidden" value="@ViewBag.MemberCardNo" id="MemberCardNo"/>
+
+<!-- the content end -->
+

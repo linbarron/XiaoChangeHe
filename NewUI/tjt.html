@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>数据统计</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta name="format-detection" content="email=no">
+<link href="style/tjt.css" rel="stylesheet" type="text/css">
+ <script src="js/jquery.js"></script>
+ <script src="js/tjt.js"></script>
+</head>
+<body>
+<div class="container">
+ <div class="header"><span class="header_l"><返回</span>数据统计<span class="header_r"><img src="images/5.png" height="20"></span></div>
+ <div class="title"><center> "最有缘分嘉宾" 统计图</center></div>
+ <div class="content">
+ <div class="tou">
+  <div class="tou_l"></div>
+  <div class="tou_r"></div>
+ </div>
+ <div class="name">
+ <div class="name1">魏恒</div><div class="name2">周德政</div>
+ </div>
+<div class="title-center"> <center>菜品相同率:63%(共计13中相同菜品)</center></div>
+
+<div style="width:90%;margin-left:3%;border-radius:5px;height:25px;background:#3d3d3d;float:left;margin-top:10px;padding-right:5px;padding-left:5px;">
+<div style="width:63%;background:#65aa29;height:20px;margin-top:2.5px;font-size:12px;text-align:right;line-height:20px;">63%</div>
+
+</div>
+
+ </div>
+ <div class="title"><center>"最受欢迎十大菜品" 统计图：</center></div>
+ <div class="content2">
+    <div id="show"></div>
+
+<script>
+var data = [];
+data[0] = ['功夫土豆','30'];
+data[1] = ['澳洲肥牛','10'];
+data[2] = ['极品鸭舌','22'];
+data[3] = ['风味火腿','11'];
+data[4] = ['金针菇','10'];
+data[5] = ['鸭肠','20'];
+data[6] = ['猪脑','30'];
+data[7] = ['老肉片','40'];
+data[8] = ['黄喉','20'];
+data[9] = ['撒尿牛丸','90'];
+var title = '调查问卷';
+var bar1 = new bar();
+bar1.id = 'show';
+
+bar1.data = data;
+bar1.show();
+</script>
+    
+ </div>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

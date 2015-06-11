@@ -1,0 +1,125 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "";
+    int i = 1;
+}
+
+@using WitBird.XiaoChangHe.Models.Info;
+@model IEnumerable<ProductType>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
+    <title>排兵布阵</title>
+    <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
+
+
+    <script src="/Scripts/jquery-1.7.1.min.js"></script>
+    <link href="~/Content/stage.css" rel="stylesheet" />
+</head>
+<body >
+       @* <nav  class="stage">
+            <nav >
+
+                @if (Model != null)
+                {
+                    foreach (ProductType item in Model)
+                    {
+                    <nav style="float: left; margin-left: 1em; margin-top:3px ;cursor:pointer;" onclick="disMenuDetal('@item.TypeId','@item.TypeName')">
+                        <img src="~/Content/images/people1.jpg"  class="img" id="@item.TypeId"/>
+                        <nav style="text-align: center">@item.TypeName</nav>
+                    </nav>
+                    }
+                }
+                <nav style="clear:left"></nav>
+            </nav>
+        </nav>
+   
+    <nav id="sss"></nav>*@
+     <nav style="position:absolute;overflow:hidden;width: 100%" id="navbg"> 
+          <img src="~/Content/images/erji_index.jpg" id="bg" style="width:100%"/> 
+      </nav>
+        <nav id="top"  style="position:absolute;left: 25%;">
+         <img class="topImglogo" src="~/Content/images/dj_logo.png" />
+        </nav>
+       <nav class="content" style="position:absolute;width: 98%;">
+            <img src="~/Content/images/caidan_bg.png" class="contentImg" />
+        </nav>
+         <span class="title">排兵布阵</span>
+       <nav class="menus" style="top:22%;width: 98%;">          
+       @if (Model != null)
+       {
+           foreach (ProductType item in Model)
+           {
+                    <nav id="img" style="cursor:pointer;" onclick="disMenuDetal('@item.TypeId','@item.TypeName','@(i)')">
+                        <img src="~/Content/images/touxiang@(i).jpg"  class="touxiangImg" id="@item.TypeId" />
+                        <img src="~/Content/images/touxiang_name.png" style="width:110px;height:30px;display: block;margin-top: -34px;margin-left: 2px;"/>
+                        <span class="typeName" style="margin-left:0px">
+                          @if (item.TypeName == "前锋哨探"){
+                            <span> @(item.TypeName)<span style="font-size:10px">(凉菜)</span></span> 
+                          }
+                          else if (item.TypeName == "五虎上将" || item.TypeName == "八大金刚" || item.TypeName == "十三太保" || item.TypeName == "草木皆兵")
+                          {
+                            <span> @(item.TypeName)<span style="font-size:10px">(热菜)</span> </span>
+                          }
+                          else if (item.TypeName == "虾兵蟹将")
+                          {
+                            <span> @(item.TypeName)<span style="font-size:10px">(小吃)</span> </span>
+                          }
+                          else if (item.TypeName == "水门提督")
+                          {
+                            <span>@(item.TypeName)<span style="font-size:10px">(汤品)</span> </span>
+                          }
+                        </span>
+                      </nav>@*  
+                        <nav id="touxiang_nameBG@(i)"><img src="~/Content/images/touxiang_name.png" style="width:95px;height:30px"/></nav>
+                        <nav id="touxiang_name@(i)">@item.TypeName</nav>*@
+               if (i == 7) { break; }
+               i++;
+               
+           }
+                }
+    </nav>
+           <img src="~/Content/images/zhan_btn.png" style="width: 25%;position: absolute;bottom:0;right: 0%; cursor:pointer" onclick="myAutoMenus()"; />
+
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        var height = document.documentElement.clientHeight;
+        var width=document.documentElement.clientWidth;
+        $('#bg').css("height", height);
+        $('#navbg').css("height", height);
+        $('.contentImg').css("height", height - height / 6.5);
+        $('.menus').css("height", height - height / 3.8);
+    });
+    var SourceAccountId = '@ViewBag.SourceAccountId';
+    var RestaurantId = '@ViewBag.RestaurantId ';
+    var Type = '@ViewBag.Type';
+    var peopleCount = '@ViewBag.peopleCount';
+    var MemberCardNo='@ViewBag.MemberCardNo';
+    var orderid = '@ViewBag.orderid';
+    var RstType = "FastFood";
+    function disMenuDetal(typeId,typeName,imgid) {
+        $.ajaxSetup({ sync: true });
+       // var RestaurantId = '3F5A7C2E-0B48-4738-B4D0-3848FE943913';
+      //  window.location.href = "/ProductMenuType/stage2/RestaurantId=RestaurantId&ProductTypeId=typeId&SourceAccountId=''&Status=''&Type=''";
+        window.location.href = "/ProductMenuType/stage2?RestaurantId=" + RestaurantId + "&ProductTypeId=" + typeId + "&TypeName=" + typeName + "&SourceAccountId=" + SourceAccountId + "&Status=null=&Type=" + Type + "&imgid=" + imgid + "&peopleCount=" + peopleCount + "";
+    }
+    function myOrder() {
+        window.location.href = "/MyMenu/MyOrderDetail?MemberCardNo=" + MemberCardNo + "&OrderId=" + orderid + "&SourceAccountId=" + SourceAccountId + "&RstType=" + RstType + "";
+    }
+
+    function myAutoMenus() {
+            if (orderid == "00000000-0000-0000-0000-000000000000" || orderid == "" || orderid == null) {
+                alert("你还未点菜");
+                return;
+            }
+        window.location.href = "/MyMenu/MyAutoMenus?MemberCardNo=" + MemberCardNo + "&OrderId=" + orderid + "&SourceAccountId=" + SourceAccountId + "&RstType=" + RstType + "&Type=" + Type + "&peopleCount=" + peopleCount + "";
+    }
+</script>
+
+
+

@@ -1,0 +1,10 @@
+﻿body {background:#f2f2f2;-webkit-overflow-scrolling:touch;}
+.button {background:#4dba34;border:none;-moz-border-radius:20px;-webkit-border-radius:20px;-khtml-border-radius:20px;border-radius:20px;color:#fff;display:block;font-size:18px;letter-spacing:1px;text-shadow:0 1px 1px #000;text-transform:uppercase;width:80%;margin:1em auto auto;padding:7px 25px;}
+.button:hover {background:#44aa2d;cursor:pointer;}
+.MyMenuBut {background:#4dba34;border:none;-moz-border-radius:20px;-webkit-border-radius:20px;-khtml-border-radius:20px;border-radius:20px;display:block;font-size:12px;letter-spacing:1px;text-shadow:0 1px 1px #000;text-transform:uppercase;line-height:30px;position:fixed;top:90%;right:2%;text-align:center;padding:0 4px;}
+a {text-decoration:none;color:#FFF;padding:.2em .4em;}
+.meta {display:block;color:#ada3a1;font-size:.7em;line-height:1.5em;margin-top:10px;text-overflow:ellipsis;white-space:nowrap;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;}
+.food-image {vertical-align:middle;border:0;float:left;margin:0 8px 0 5px;}
+.food-name {display:block;margin-top:3px ;font-weight:700;/*line-height:1.8em;*/overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#d32502;font-size: 0.875em;}
+.people-count {float:right;margin-right: 7px;margin-top: 2px;}
+.RMB {color:#666;font-weight:700;margin-left:6em;font-size:.6em;}

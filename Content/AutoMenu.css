@@ -1,0 +1,10 @@
+﻿nav#frame nav#title {position:relative;}
+nav#frame nav#title img {width:100%;}
+nav#frame div#count {top:10%;left:45%;position:absolute;font-size:5em;font-weight:700;color:#33b14a;text-shadow:1px 0 1px #FFF, 0 1px 1px #FFF, 0 -1px 1px #FFF, -1px 0 1px #FFF;}
+nav#frame nav#jia {background-image:url(images/jiajian_bg.png);width:49%;border-right:1px solid #ccc;float:right;}
+nav#frame nav#jia img {width:2.7em;height:2.5em;margin:15px 40%;}
+nav#frame nav#jian {background-image:url(images/jiajian_bg.png);width:49%;float:right;border-left:1px solid #ccc;}
+nav#frame nav#jian img {width:2.3em;height:2em;margin:18px 40%;}
+div#auto ol {-webkit-padding-start:0;}
+div#auto ol li {list-style:none;border:1px solid #ccc;}
+.meta1 {display:block;color:#ada3a1;font-size:.7em;line-height:1.5em;margin-top:40px;text-overflow:ellipsis;white-space:nowrap;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;}

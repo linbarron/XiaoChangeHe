@@ -1,0 +1,71 @@
+﻿@{
+    ViewBag.Title = "SelTabelInfo";
+    Layout = "";
+    }
+@using WitBird.XiaoChangHe.Models.Info;
+@model IEnumerable<SelTableInfo>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
+    <title>就餐时间</title>
+    <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
+    <link href="~/Content/public.css" rel="stylesheet" />
+    <link href="~/Content/SelTableInfo.css" rel="stylesheet" />
+    <script>
+      //  ViewBag.TableInfo
+    </script>
+</head>
+<body>
+    <nav id="info">
+            @if (Model != null)
+            {
+                string a="";
+                string a1=" </a>";
+                 foreach (SelTableInfo item in Model)
+          
+                {
+                    if (ViewBag.Type == "Quick")
+                    {
+                        a = "<a href=\"/Order/QuickOrder?SourceAccountId=" + ViewBag.SourceAccountId + "&RestaurantId=" + ViewBag.RestaurantId + "&Date=" + item.DiningDate + "&Time=" + item.Times + "\">";
+
+                    }
+                    else
+                    {
+                        a = "<a href=\"/ProductType/Index?SourceAccountId=" + ViewBag.SourceAccountId + "&RestaurantId=" + ViewBag.RestaurantId + "&Status=" + ViewBag.Status + "&Date=" + item.DiningDate + "&Time=" + item.Times + "\">";
+
+                    }
+
+                    if (item.DiningDate.AddHours(item.Times.Equals("0")?15:21) > DateTime.Now)
+                    {
+                  
+                  @Html.Raw(a)
+
+              }
+              
+               <ul>
+                <li>
+                    <nav   @Html.Raw((item.DiningDate.AddHours(item.Times.Equals("0")?15:21) > DateTime.Now)?"":"style='background:gray;'")>
+                        <img src="~/Content/images/ico_data.png"/>
+                        <span>@item.DiningDate.ToString("yyyy-MM-dd")</span>
+                    </nav>
+                    <nav><span>餐点：@(item.Times.Equals("0") ?"午餐":"晚餐")</span></nav>
+                    <nav style="border:none"><span>剩余桌位：@item.Counts</span></nav>
+                     <nav style="border:none"><span>剩余包间：5</span></nav>
+                </li>
+            </ul>
+                    if (item.DiningDate.AddHours(item.Times.Equals("0") ? 15 : 21) > DateTime.Now)
+                    {
+                       
+                @Html.Raw(a1)
+            }
+                }
+            }
+    </nav>
+
+</body>
+</html>
+
+  
+

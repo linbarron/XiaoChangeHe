@@ -1,0 +1,6 @@
+﻿form#payment ol li {border-bottom:1px solid #ccc;line-height:30px;list-style:none;margin-bottom:1px;margin-right:.5em;}
+nav#label {color:#d32502;font-size:1.2em;display:block;list-style-type:decimal;-webkit-margin-before:1em;-webkit-margin-after:1em;-webkit-margin-start:0;-webkit-margin-end:0;-webkit-padding-start:10px;}
+nav#label button#add {background:#4dba34;border:none;-moz-border-radius:5px;-webkit-border-radius:5px;-khtml-border-radius:5px;border-radius:5px;color:#fff;float:right;font-size:.9em;letter-spacing:1px;text-shadow:0 1px 1px #000;text-transform:uppercase;width:4em;margin:auto .5em auto auto;padding:4px 5px;}
+nav#label button#add:hover {background:#44aa2d;cursor:pointer;}
+nav#label nav#del {background:#ccc;border:none;-moz-border-radius:5px;-webkit-border-radius:5px;-khtml-border-radius:5px;border-radius:5px;color:#fff;float:right;font-size:.9em;letter-spacing:1px;text-shadow:0 1px 1px #000;text-transform:uppercase;width:3.5em;margin:auto .5em auto auto;padding:4px 5px;}
+nav#label nav#del:hover {background:gray;cursor:pointer;}

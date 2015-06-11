@@ -1,0 +1,353 @@
+﻿@{
+    ViewBag.Title = "Index2";
+    Layout = "";
+   // int i = 1;
+}
+
+@using WitBird.XiaoChangHe.Models.Info;
+@model IEnumerable<AutoMenuAndProduct>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
+    <title>推荐阵法</title>
+    <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
+
+
+    <script src="/Scripts/jquery-1.7.1.min.js"></script>
+    <link href="~/Content/stage.css" rel="stylesheet" />
+</head>
+<body class="greenBG" >
+    <nav id="stage1" style="overflow:hidden">
+    <nav id="top"><img class="topImg" src="~/Content/images/top.png"/></nav>
+    <img src="~/Content/images/back.png" class="homeImg"/>
+        <nav id="title">
+            <img  src="~/Content/images/index_tit.png" class="titleImg"/>
+            <span class="titleFont">推荐阵法</span>
+        </nav>
+             
+            <nav id="Stage" class="EDGE-9027059" style="top: 25%;left:5px;position:absolute;" ></nav>
+           
+     
+         @* <nav id="changeBtn" class="changeBtn" onclick="change();">
+                 
+                <img src="~/Content/images/btn_bhzf.jpg"style=" width:50%;" onclick="change();" />
+                
+               <span class="changeFont">变换阵法</span>
+         </nav>   *@
+       <nav id="bottom" style="position:absolute;bottom:0;" >
+         @*<nav id="changeBtn" class="changeBtn" >*@
+@*             <img src="~/Content/images/btn_ctdc.jpg" id="ctdc1" style=" margin-bottom: 20px; margin-left:5px; cursor:pointer;" onclick="ctdc();"/>*@
+             
+         
+                <img src="~/Content/images/btn_bhzf.jpg"id="bhzf1" style=" margin-bottom:20px;cursor:pointer;margin-left: 20%;" onclick="change();"/>
+                 
+              
+             <img src="~/Content/images/btn_zjbz.jpg" id="zjbz1" style=" margin-bottom:20px;cursor:pointer;" onclick="zjbz();"/>
+                     
+                @*<span class="changeFont">变换阵法</span>*@
+            
+           <nav class="buttomImg"><img src="~/Content/images/bottom.png" id="bottomimg"style="height:50px; display: block;"/></nav>
+             <nav class="zhanImg" onclick="saveOrder();"> <img src="~/Content/images/zhan_btn.png" style="width:71px;cursor: pointer;" /></nav>
+
+     </nav>
+  
+</body>
+</html>
+<script>
+    $.ajaxSetup({ async: false, });
+    var index_paibingHeight;
+    var peopleCount = '@ViewBag.peopleCount';
+
+    $(document).ready(function () {
+        var height = document.documentElement.clientHeight;
+        var width = document.documentElement.clientWidth;
+        index_paibingHeight = height - height / 2 - 15;
+        $('#Stage').css("height", height - height / 2 - 15);
+        $('#middle').css("height", height - height / 2 - 15);
+        $('#stage1').css("height", height);
+        $('#bottomimg').css("width", width);
+        // alert(width / 3);
+       // $('#ctdc1').css("width", Math.floor(width / 3.3));
+        $('#bhzf1').css("width", Math.floor(width / 3.3));
+        $('#zjbz1').css("width", Math.floor(width / 3.3));
+
+
+    });
+</script>
+
+
+<script>
+    $.ajaxSetup({ async: false, });
+    var arr = new Array();
+    ids = new Array();
+    var prices = new Array();
+    var hots = new Array();
+    var populars = new Array();
+    var ADescriptions = new Array();
+    var orderid;
+    var SourceAccountId = '@ViewBag.SourceAccountId';
+    var MemberCardNo = '@ViewBag.MemberCardNo';
+    var CompanyId = '@ViewBag.CompanyId';
+    var type = '@ViewBag.Type';
+    var RestaurantId = '@ViewBag.RestaurantId';
+    var RstType = '@ViewBag.RstType';
+    var type1 = "FastFood";
+    $(function () {
+
+        load();
+
+
+    });
+
+
+    // productLength;
+    function load() {
+        $.ajaxSetup({ async: false, });
+        // $.getJSON("/Stage/getRandomProduct", { RestaurantId: RestaurantId, peopleCount: peopleCount }, function (msg) {
+        $.getJSON("/Stage/getNextAutoProducts", { CompanyId: CompanyId, peopleCount: peopleCount }, function (msg) {
+            productLength = msg.length;
+            $.each(msg, function (idx, item) {
+                idx = ++idx;
+                arr[idx] = item.ProductName;
+                ids[idx] = item.ProductId;
+                prices[idx] = item.Price;
+                
+                if (item.Description == null)
+                {
+                    ADescriptions[idx] = "";
+                } else { ADescriptions[idx] = item.Description }
+                //var objs = document.getElementsByTagName("img");
+                // populars[idx] = item.Popular;
+                // hots[idx] = item.Hot;
+                //  ADescriptions[idx] = item.ADescription;
+                // $("#Stage_Text" + idx).html(item.ProductName);
+                //$("#Stage_Text" + idx).attr("ids", item.Id);
+
+            });
+
+
+        });
+
+    }
+
+    function afterLoad() {
+
+        for (var i = 1; i < ids.length + 1; i++) {
+            $("#pn" + i).attr("ids", ids[i]);
+
+        }
+
+    }
+
+    function ctdc() {
+        window.location.href = "/Order/Begin/" + CompanyId + "/" + SourceAccountId + "?&type=Quick";
+
+    }
+
+    function zjbz() {
+        window.location.href = "/ProductMenuType/Index?name=" + SourceAccountId + "&id=" + RestaurantId + "&type=" + type + "&peopleCount=" + peopleCount + "";
+
+        // window.location.href = "/ProductMenuType/stage2?RestaurantId=" + RestaurantId + "&ProductTypeId=" + typeId + "&TypeName=" + typeName + "&SourceAccountId=" + SourceAccountId + "&Status=null=&Type=" + Type + "&imgid=" + imgid + "&peopleCount=" + peopleCount + "";
+
+    }
+
+    function change() {
+
+
+        $.ajaxSetup({ cache: false });
+        //  $.getJSON("/Stage/getRandomProduct", { RestaurantId: RestaurantId, peopleCount: peopleCount }, function (msg) {
+        $.getJSON("/Stage/getNextAutoProducts", { CompanyId: CompanyId, peopleCount: peopleCount }, function (msg) {
+            $.each(msg, function (idx, item) {
+                idx = ++idx;
+
+                $("#Stage_Text" + idx).html(item.ProductName);
+                $("#Stage_Text" + idx).attr("ids", item.Id);
+                arr[idx] = item.ProductName;
+                ids[idx] = item.ProductId;
+                prices[idx] = item.Price;
+                if(item.Description==null){ADescriptions[idx] ="";}else{ADescriptions[idx] =item.Description}
+                var objs = $("#Stage_wujiang" + idx);
+                $(objs).unbind("click");
+                for (var i = 0; i < objs.length; i++) {
+
+                    objs[i].onclick = function () {
+                        dialog(ids[idx], ADescriptions[idx],arr[idx]);
+
+                    }
+
+                }
+                // populars[idx] = item.Popular;
+                // hots[idx] = item.Hot;
+                // ADescriptions[idx] = item.ADescription;
+
+            });
+        });
+    }
+
+
+
+
+
+
+    //  var myDate = new Date();
+    // var bookTime = myDate.toLocaleTimeString();
+
+    function saveOrder() {
+        $.ajaxSetup({ cache: false });
+        $.ajaxSetup({ async: false });
+        $.post("/Order/SaveOrders", { type: "Insert", SourceAccountId: SourceAccountId, bookTime: null, isQuick: type, peopleCont: peopleCount }, function (msg) {
+            orderid = msg;
+
+            if (msg != "00000000-0000-0000-0000-000000000000") {
+
+                for (var i = 1; i < ids.length ; i++) {
+                    var productId = ids[i];
+                    var num1 = 1;
+                    var price = prices[i];
+                    $.post("/Order/SaveOrderDetails", { type: "Insert", productId: productId, unitPrice: price, orderId: msg, productCount: num1 }, function (msg1) {
+                        if (msg1 == 1) {
+
+                        }
+
+                    });
+                }
+                myAutoMenus();
+            }
+
+
+        });
+
+
+    }
+
+    function myAutoMenus() {
+        window.location.href = "/MyMenu/MyAutoMenus?MemberCardNo=" + MemberCardNo + "&OrderId=" + orderid + "&SourceAccountId=" + SourceAccountId + "&RstType=" + type1 + "&Type=" + type + "&peopleCount=" + peopleCount + "";
+    }
+    function myOrder() {
+
+        window.location.href = "/MyMenu/MyOrderDetail?MemberCardNo=" + MemberCardNo + "&OrderId=" + orderid + "&SourceAccountI=" + SourceAccountId + "&RstType=" + type1 + "";
+
+        // window.location.href = "/book/book?MemberCardNo=" + MemberCardNo + "&OrderId=" + orderid + "&SourceAccountId=" + SourceAccountId + "";
+
+        //window.location.href = "/MyMenu/MyMenu?MemberCardNo=" + MemberCardNo + "&OrderId=" + orderid + "&SourceAccountId=" + SourceAccountId + "";
+    }
+</script>
+
+
+
+<script>
+    $.ajaxSetup({ async: false, });
+    function dialog(id,des,proName) {
+       
+        var str = "<nav  style=\" color:#763a10 ;margin-top: -17px; margin-bottom: 7px;font-size: 1em;  font-weight: 700;\">" + proName + "</nav>" +
+            "<nav><img src=\"/Order/GetBigImages/" + id + "\" style=\"width: 80%;height: 16em; border-image: url(/Content/images/cai_bg.jpg) 2 7 8 5 round; margin-top: 5px; left: 10px; \"/> </nav>";
+          
+          //  "<span style=\"position: absolute;  right: 20px; color:#763a10 \">热门程度：" +
+       // "<img src=\'/Content/images/huo.png\' style=\"width: 20px;\"/></span>" +
+       // "<span style=\"position: absolute;  right: 20px; top: 30%; color:#763a10\">麻辣指数：" +
+       // "<img src=\'/Content/images/lajiao.png\' style=\"width: 20px;\"/></span> " +
+        //  "  <span style=\"position: absolute;  bottom: 10px; left: 10px;color:#763a10\">" + des + " </span>";
+        var unit = "%";
+        sAlert(str, 90, unit);
+
+    }
+
+    function sAlert(str, msgw, unit) {
+        var msgw, msgh, bordercolor;
+        msgw = msgw;//提示窗口的宽度
+        msgh = msgh;//提示窗口的高度
+        // bordercolor = "#1da507";//提示窗口的边框颜色
+        //  titlecolor = "#1da507";//提示窗口的标题颜色
+
+        var sWidth, sHeight;
+        sWidth = document.body.offsetWidth;
+        sHeight = document.body.offsetHeight;
+
+        var bgObj = document.createElement("div");
+        bgObj.setAttribute('id', 'bgDiv');
+        bgObj.style.position = "absolute";
+        bgObj.style.top = "0";
+        bgObj.style.background = "#777";
+        bgObj.style.filter = "progid:DXImageTransform.Microsoft.Alpha(style=3,opacity=25,finishOpacity=75";
+        bgObj.style.opacity = "0.6";
+        bgObj.style.left = "0";
+        bgObj.style.width = sWidth + "px";
+        bgObj.style.height = sHeight + "px";
+        document.body.appendChild(bgObj);
+        var msgObj = document.createElement("div")
+        msgObj.setAttribute("id", "msgDiv");
+        msgObj.setAttribute("align", "center");
+        msgObj.style.position = "absolute";
+        msgObj.style.background = "white";
+        msgObj.style.font = "12px/1.6em Verdana, Geneva, Arial, Helvetica, sans-serif";
+        msgObj.style.border = "1px solid " + bordercolor;
+        msgObj.style.width = msgw + unit;
+      //  msgObj.style.height = msgh + unit;
+        //  msgObj.style.top = (document.documentElement.scrollTop + (sHeight - msgh) / 2) + "px";
+        //  msgObj.style.left = (sWidth - msgw) / 2 + "px";
+        msgObj.style.top = "30" + unit;
+        msgObj.style.left = "4" + unit;
+
+        var title = document.createElement("h4");
+        title.setAttribute("id", "msgTitle");
+        title.setAttribute("align", "right");
+        title.style.margin = "0";
+        title.style.padding = "3px";
+        title.style.background = bordercolor;
+        title.style.filter = "progid:DXImageTransform.Microsoft.Alpha(startX=20, startY=20, finishX=100, finishY=100,style=1,opacity=75,finishOpacity=100);";
+        title.style.opacity = "0.75";
+        title.style.border = "1px solid " + bordercolor;
+        title.style.height = "18px";
+        title.style.font = "12px Verdana, Geneva, Arial, Helvetica, sans-serif";
+        title.style.color = "white";
+        title.style.cursor = "pointer";
+        //  title.innerHTML = "关闭";
+        title.innerHTML = "<img src='/Content/images/close.png' style='position: absolute; right: -6%;   top: -8%;  width: 40px;'/>  ";
+        title.onclick = function () {
+            document.body.removeChild(bgObj);
+            document.getElementById("msgDiv").removeChild(title);
+            document.body.removeChild(msgObj);
+        }
+        document.body.appendChild(msgObj);
+        document.getElementById("msgDiv").appendChild(title);
+        var txt = document.createElement("span");
+        txt.style.margin = "1em 0"
+        txt.setAttribute("id", "msgTxt");
+        txt.innerHTML = str;
+        document.getElementById("msgDiv").appendChild(txt);
+        var strs = document.createElement("span");
+        strs.style.margin = "1em 0"
+        strs.setAttribute("id", "msgTxts");
+        strs.innerHTML = "";
+        document.getElementById("msgDiv").appendChild(strs);
+
+    }
+
+
+</script>
+ <script  src="/Scripts/Untitled-3_edgePreload.js"></script>
+
+    <style>
+        .edgeLoad-EDGE-9027059 { visibility:hidden; }
+    </style>
+
+
+<script>
+    setTimeout('bindClick()', 3000);
+    function bindClick() {
+        var k = 1;
+        for (k = 1; k < ids.length; k++) {
+            var objs = $("#Stage_wujiang" + k);
+            (function () {
+                var p = k;
+                objs.click(function () {
+                    dialog(ids[p], ADescriptions[p],arr[p]);
+                });
+            })();
+        }
+       
+    }
+</script>

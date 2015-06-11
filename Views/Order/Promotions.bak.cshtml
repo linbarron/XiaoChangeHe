@@ -1,0 +1,194 @@
+﻿@{
+    ViewBag.Title = "Promotions";
+    Layout = "";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
+    <title>优惠活动</title>
+    <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
+    <style type="text/css">
+        body
+        {font-weight: 700;background: #f2f2f2;
+        }
+        #main  nav
+        {
+           border-bottom:dashed 1px red; height:6.2em;        }
+         #main img
+        {
+           width:5em; height:5em; padding: 10px 5px;float:left; 
+        }
+       
+        #main #one nav div
+        {
+         padding: 10px 5px 0px 5px;font-size:0.8em;  
+        }
+         .banjia
+        {
+            color :red;
+        }
+         #main #one nav span
+        {
+       
+        padding: 2.5em 5px 0px 0px;
+        }
+         #main  legend
+        {color: red; font-size: 1.5em;
+        }
+        #main #two span
+        {
+            padding:10px;
+            display:block;
+            
+        }
+         #main #two div
+        {
+            padding: 12px 5px 0px 5px;
+line-height:15px;
+font-size:0.8em;
+
+            
+        }
+         #main #one h4 label
+        {
+            color:red;
+           
+        }
+        #main #two div h4 label
+        {
+            color:red;
+           
+        }
+         #main #two div h4 
+        {
+           line-height: 1.5em;
+            letter-spacing: 1px;
+            -webkit-margin-before: 0.5em;
+             font-size:1.3em;
+        }
+        a {text-decoration:none;color:#FFF;padding:.2em .4em;}
+         .MyMenuBut {background:#4dba34;border:none; margin-top: 20px;
+                     -moz-border-radius:5px;-webkit-border-radius:5px;
+                     -khtml-border-radius:5px;border-radius:5px;
+                     display:block;font-size:1em;letter-spacing:1px;
+                     text-shadow:0 1px 1px #000;text-transform:uppercase;
+                     line-height:30px;right:2%;text-align:center;padding:0 4px;}
+
+   </style>
+</head>
+
+<body>
+    <img src="~/Content/images/xchlogo.jpg" style="width: 100%;height: 230px;border: solid 1px gray;" />
+    @if (ViewBag.Rstid == "0E71D411-EFE0-4964-8E3D-2901E0823815")
+    {
+        <h1 style="color:green;text-align:center">更多优惠敬请期待。。。</h1>
+    }else{
+    <div id="main">
+        <fieldset id="one" style="margin-top:20px">
+            <legend>扫码惊喜两重奏：</legend>
+            <h4><label>第一重奏：</label><span>扫二维码可享受半价菜品</span></h4>
+            <nav style=" border-top:dashed 1px red;">
+                <span style="float:left">周一、二</span>
+                <img  src="~/Content/images/jiezi.jpg"/>
+                <div>石锅鲜椒擂茄子</div>
+                <div>原价：19.9</div>
+                <div class="banjia">半价：9.9</div>
+            </nav>
+             <nav >
+                <span style="float:left">周三、四</span>
+                <img src="~/Content/images/ya.jpg"/>
+                 <div>特色酱鸭</div>
+                <div>原价：29.9</div>
+                <div class="banjia">半价：14.9</div>
+            </nav>
+     
+            
+              <nav >
+                <span style="float:left">周五&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <img src="~/Content/images/dagu.jpg"/>
+                <div>紫砂粗粮炖大骨</div>
+                <div>原价：39.9</div>
+                <div class="banjia">半价：19.9</div>
+            </nav>
+             <nav >
+                <span style="float:left">周六、日</span>
+                <img src="~/Content/images/caitou.jpg"/>
+                <div>家常菜头</div>
+                <div>原价：19</div>
+                <div class="banjia">半价：9</div>
+            </nav>
+             <h4><label>第二重奏：</label><span>扫二维码可享受核桃花生汁</span></h4>
+             <nav style=" border-top:dashed 1px red;">
+           
+                <img src="~/Content/images/huahe.jpg"/>
+                <div style="margin-top: 2.5em;">核桃花生汁<span style="font-size:12px;color:red;">（每桌限一杯）</span></div>
+             
+            </nav>
+        </fieldset>
+      @*  <fieldset id="two" style="margin-top: 20px;">
+            <legend>入伙即享六重大礼：</legend>
+           <div  style="border-bottom:dashed 2px orange;">
+               <h4><label>一重大礼：</label><span>入伙充值1000元即送100元，即卡内金额1100元</span></h4>
+            </div>
+
+            <h4><label style="color:red">二重大礼:</label><span>入伙即刻享受会员特价</span></h4>
+               
+                <nav style=" border-top:dashed 1px red;">
+               <img src="~/Content/images/liangfen.jpg"/>
+                <div >映象旋子凉粉</div>
+                <div class="banjia">会员特价：1.9元/碗</div>
+                <div >原价：4.9元/碗</div>
+               </nav>
+                 <nav>
+               <img src="~/Content/images/egg.jpg"/>
+                <div>绍子蒸土鸡蛋</div>
+                <div class="banjia">会员特价：5.9元/碗</div>
+                <div >原价：7.9元/碗</div>
+               </nav>
+                 <nav>
+               <img src="~/Content/images/guapian.jpg"/>
+                <div>开胃瓜片</div>
+                <div class="banjia">会员特价：8.9元/碗</div>
+                <div >原价：11.9元/碗</div>
+               </nav>
+                 <nav>
+               <img src="~/Content/images/doufu.jpg"/>
+                <div>经典麻婆豆腐</div>
+                <div class="banjia">会员特价：9.9元/碗</div>
+                <div >原价：18.9元/碗</div>
+               </nav>
+                 <nav>
+               <img src="~/Content/images/jiezi.jpg"/>
+                <div>石锅鲜椒擂茄子</div>
+                <div class="banjia">会员特价：11.9元/碗</div>
+                <div >原价：19.9元/碗</div>
+                <div style="color: green;margin-top: 10px;text-align: center;">......</div>
+
+               </nav>
+                
+
+             <div style="border-bottom:dashed 2px orange;border-top:dashed 2px orange;margin-top: 10%;">
+                  <img style="float: right; padding: 20px 5px;"src="~/Content/images/huahe.jpg"/>
+               <h4><label>三重大礼:</label><span>入伙即刻送原价88.9元的核桃花生汁1份</span></h4>
+                 
+            </div>
+            <div style=" border-bottom:dashed 2px orange;">
+               <h4><label>四重大礼:</label><span>储值卡会员每刷卡消费10元积1分，1分即抵现金1元（满100积分使用）</span></h4>
+            </div>
+            <div style=" border-bottom:dashed 2px orange;">
+               <h4><label>五重大礼：</label><span>入伙即享受茶位费会员 0.9元/元(非会员1.9元/位含湿巾、茶水)，自带酒水服务费--免费！</span></h4>
+            </div>
+            <div style=" border-bottom:dashed 2px orange;">
+               <h4><label>六重大礼：</label><span>入伙即享受下午茶时段所有饮品7折优惠（14：00--17：00）</span> </h4>
+            </div>
+        </fieldset>*@
+       
+         <div class="MyMenuBut">
+          <a href="javascript:void(0);" onclick="alert('已确认享受优惠')">确定</a>
+         </div>
+    </div>
+    }
+</body>
+</html>

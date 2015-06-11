@@ -1,0 +1,124 @@
+body{
+  padding:0;
+  margin:0;	
+  font-family:"微软雅黑";
+	background:#eee;
+	}
+	
+.header{
+ width:100%;
+ height:40px;
+ background:#0A0A0A;
+ color:#fff;	
+ text-align:center;
+ font-size:18px;
+ line-height:40px;
+	}
+.header_l{
+ float:left;	
+ font-size:18px;
+ position:absolute;
+ left:10px;
+	}	
+.header_r{
+  margin-top:5px;
+ position:absolute;
+ right:0px;
+	}	
+.title{
+ font-size:16px;
+ margin-top:20px;
+	}	
+.content{
+ width:90%;
+ height:200px;
+ background:#fff;	
+ margin:0 auto;
+ border-radius:5px;
+ margin-top:10px;
+ border:1px solid #ccc;
+	}	
+ .tou_l{
+	 height:80px;
+	 width:80px;
+	 background:blue;
+	 border-radius:50% 50%; 
+	 background:url(../images/tou1.png) no-repeat;
+	 float:left;
+	 margin-top:20px;
+	 }
+.tou_r{
+	margin-top:20px;
+	 height:80px;
+	 width:80px;
+	  background:url(../images/tou2.png) no-repeat;
+	 
+	 border-radius:50% 50%; 
+	 margin-left:10%;
+	 float:left;
+	} 
+	 
+.tou{
+  margin:0 auto;	
+  width:200px;
+	} 
+.title-center{
+	float:left;
+	margin-top:10px;
+	text-align:center;
+	width:100%;
+	font-size:15px;
+	}
+.content2{
+ width:90%;
+ height:270px;
+ background:#fff;	
+ margin:0 auto;
+ border-radius:5px;
+ margin-top:10px;
+ border:1px solid #ccc;
+ padding-top:20px;;
+	}	 
+.content2-list1{
+    width:90%;
+	height:30px;
+	float:left;
+	margin-left:5%;
+	font-size:14px;
+	float:left;
+	}	 
+.name1{
+    float:left;	
+    width:80px;
+	height:20px;
+	text-indent:10px;
+ 	}	 
+.name2{
+	float:left;
+     width:80px;
+	 height:20px;
+	text-align:center;
+	}	 
+.name{
+   width:170px;
+   height:20px;
+   margin:0 auto;	
+   font-size:13px;
+	}	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 

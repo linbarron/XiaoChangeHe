@@ -1,0 +1,18 @@
+﻿body {margin:5px;}
+form#payment ol a {display:block;margin:0;padding:0;}
+form#payment ol li {list-style:none;height:2.5em;background-color:#FFF;margin-bottom:2px;-moz-border-radius:5px;-webkit-border-radius:5px;-khtml-border-radius:5px;border-radius:5px;line-height:2.5em;padding-left:1em;}
+form#payment label {font-size:1.2em;color:#666;}
+form#payment nav#img {display:block;list-style-type:decimal;-webkit-margin-before:1em;-webkit-margin-after:1em;-webkit-margin-start:0;-webkit-margin-end:0;text-align:center;}
+form#payment span#uid {float:left;position:absolute;margin-left:1.5em;margin-top:125px;font-weight:700;color:#fff;font-size:12px;padding:40px -40px;}
+form#payment nav img {height:10em;}
+form#payment ol li span {font-size:1.1em;color:#666;outline:none;text-align:right;padding:0;}
+form#payment ol li input:not([type=radio]) {font-size:1.2em;color:#333;outline:none;border:none;padding:0;}
+.img_right {float:right;padding:.5em;}
+#mCopyright.footFix {margin-top:0;}
+#mCopyright {height:33px;line-height:33px;margin-top:30px;margin-bottom:30px;z-index:1;}
+#mCopyright .mcrInn {position:relative;}
+.footFix {width:100%;text-align:center;left:0;bottom:0;z-index:99;}
+#mCopyright h1,#mCopyright h2 {position:absolute;top:95%;height:inherit;line-height:inherit;font-size:10px;margin:0;padding:0;}
+#mCopyright h1 {color:#5F5F5F;text-indent:25px;left:35%;margin-left:-30px;width:64px;white-space:nowrap;background:url(/Content/images/logon.png) no-repeat 0 48%;-webkit-background-size:25px 26.5px;}
+#mCopyright h2 {left: 48%;color:rgba(84,88,99,.3);font-weight:400;}
+.memProductLeft{font-size:.9em;margin-left: 120px;height: 30px;}

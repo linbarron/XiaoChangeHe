@@ -1,0 +1,119 @@
+﻿@{
+    ViewBag.Title = "editMemberInfo";
+    Layout = "";
+}
+
+
+@using WitBird.XiaoChangHe.Models.Info
+@model IEnumerable<CrmMember>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
+        <title>更新会员信息</title>
+        <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
+        <link href="~/Content/public.css" rel="stylesheet" />
+         <link href="~/Content/member.css" rel="stylesheet" />
+         <script src="/Scripts/jquery-1.7.1.min.js"></script>
+        <script src="/Scripts/laydate.js"></script>
+      
+    </head>
+    <body>
+
+        <form id="payment">
+            <div>
+                 @if (Model != null)
+                 {
+                     foreach (CrmMember info in Model)
+                     {
+                <nav id="img">
+                    <span id="uid"><span style="font-size:15px;margin-right: -8px;" >NO.</span> @(info != null ? info.Uid : "")</span>
+                     @if(ViewBag.PrepayAccount == 0)
+                   {
+                     @* <img src="~/Content/images/vipw.png" />*@
+                      <img src="~/Content/images/@(ViewBag.CompanyId)w.png" />
+                   
+                   }else{
+                    @* <img src="~/Content/images/viph.png" />*@
+                     <img src="~/Content/images/@(ViewBag.CompanyId)h.png" />
+                   }
+                      
+                  
+                </nav>
+               
+                    <ol style="padding: 0px;">
+                        <li>
+                            <label for="name">姓名:</label>
+                            <input id="name" name="name" type="text"   value="@(info != null ? info.MemberName : "")" @(info.MemberName!=null ? string.Format("readonly='readonly'") : string.Format("style=display: inline;"))/>
+                            <input id="id" name="id" type="hidden" value="@(info != null ? info.Uid : "")"/>
+                        </li>
+                        <li>
+                            <label for="phone">电话:</label>
+                            <input id="phone" name="phone" type="tel"  value="@(info != null ? info.Tel : "")" @(info.Tel!=null ? string.Format("readonly='readonly'") : string.Format("style=display: inline;"))/>
+                            @*<span>@(info != null ? info.Tel : "")</span>*@
+                        </li>
+
+                        <li>
+                            
+                            <label for="sex">性别：</label>
+                         
+                            <input id="women" name="sex" type="radio"  class="sex"  value="false" 
+                               @(info != null && info.Sex == false ? string.Format("checked='checked'") : "")/>
+                            <label for="women">女士</label>
+
+                            <input id="man" name="sex" type="radio" class="sex" value="true" 
+                               @(info != null && info.Sex == true ? string.Format("checked='checked'") : "")/>
+                            <label for="man">先生</label>
+                        </li>
+                        
+                        <li>
+                        
+                            <label for="bir">生日:</label>
+                          
+@*                            <input id="bir" name="bir" value="@(info != null && info.Birthday != Convert.ToDateTime("0001-01-01") ? info.Birthday.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"))" type="date"   />*@
+                           <span onclick="laydate({ istime: true, format: 'YYYY-MM-DD' })"  id="bir" >
+                 @(info != null && info.Birthday != Convert.ToDateTime("0001-01-01") ? info.Birthday.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"))</span>
+                            
+                         
+                        </li>
+                        <li>
+                            <label for="addr">地址:</label>
+                            <input id="addr" name="addr" type="text"   value="@(info != null ? info.Addr : "")"/>
+                            @*  <span>@(info != null ? info.Addr : "")</span>*@
+                        </li>
+
+                    </ol>
+               
+                 <button class="button" onclick="save();" type="button">确定</button>
+                     }
+                 }
+            </div>
+        </form>
+        
+    </body>
+
+    </html>
+   
+<script>
+    function save() {
+        $.ajaxSetup({ cache: false });
+        var id = $("#id").val();
+
+        var SourceAccountId = '@ViewBag.SourceAccountId';
+        var CompanyId = '@ViewBag.CompanyId';
+        var name = $("#name").val();
+        var phone = $("#phone").val();
+        var sex = $(".sex:checked").val();
+        var bir = $("#bir").html();
+        var addr = $("#addr").val();
+     //   alert("/Member/Save?SourceAccountId=" + SourceAccountId + "&id=" + id + "&name=" + escape(name) + "&phone=" + phone + "&sex=" + sex + "&bir=" + bir + "&addr=" + escape(addr));
+        window.location.href = "/Member/SaveMem?CompanyId=" + CompanyId + "&SourceAccountId=" + SourceAccountId + "&id=" + id + "&name=" + escape(name) + "&phone=" + phone + "&sex=" + sex + "&bir=" + bir + "&addr=" + escape(addr);
+    }
+        //$.post("/Member/Save", {SourceAccountId:SourceAccountId, id:id,name:name,phone:phone,sex:sex,bir:bir,addr:addr}, function (msg) {
+           
+
+        //});
+    //}
+
+</script>

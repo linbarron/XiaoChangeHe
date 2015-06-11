@@ -1,0 +1,9 @@
+﻿body {background:#f2f2f2;}
+form#payment ol li:not(#remark1) {list-style:none;height:3em;}
+form#payment ol li#remark1 {list-style:none;}
+form#payment label {font-size:1em;width:110px;color:#333;background:none no-repeat left 50%;line-height:20px;}
+form#payment span {font-size:1em;width:110px;color:red;font-style:oblique;}
+form#payment input:not([type=radio]),form#payment textarea,form#payment datetime-local {font-size:1.2em;color:#999;-moz-border-radius:5px;-webkit-border-radius:5px;-khtml-border-radius:5px;border-radius:5px;border:1px solid;width:10.1em;outline:none;padding:2px 1px;}
+form#payment textarea:focus {background:#eaeaea;}
+input[type=\"radio\"] {background-image:url(images/radio1.png);margin-left:5px;}
+input[type=\"radio\"]:checked {background-image:url(images/radio2.png);}

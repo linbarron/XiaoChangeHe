@@ -1,0 +1,51 @@
+body{
+  padding:0;
+  margin:0;	
+  font-family:"微软雅黑";
+  background:#eee;
+	}
+.header{
+ width:100%;
+ height:40px;
+ background:#0A0A0A;
+ color:#fff;	
+ text-align:center;
+ font-size:18px;
+ line-height:40px;
+	}
+.header_l{
+ float:left;	
+ font-size:18px;
+ position:absolute;
+ left:10px;
+	}	
+.header_r{
+  margin-top:5px;
+ position:absolute;
+ right:0px;
+	}	
+ .content{
+	width:90%;
+	height:150px;
+      font-size:18px;
+	margin:15px; 
+	 }
+.fenx{
+  width:60%;
+  height:40px;
+   line-height:40px;
+   margin-left:20%;	
+   background:#d22525;
+   text-align:center;
+   color:#fff;
+   border-radius:5px;
+	} 
+.num{
+   color:red;	
+	}
+.content-center{
+	color:red;
+	font-size:14px;
+ 
+	 margin-left:10%;
+	}	

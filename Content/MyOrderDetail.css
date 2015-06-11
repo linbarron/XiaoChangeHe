@@ -1,0 +1,4 @@
+﻿nav#rst,#mem span,nav#rst span {font-size:1.1em;color:#333;line-height:1.8em;background:#FFF;margin:5px;padding:5px;}
+nav#info nav#rst,#mem,#pro {font-size:1.1em;border:1px solid #ccc;color:#ccc;line-height:1.8em;background:#FFF;margin:5px;padding:5px;}
+nav#info img {height:4em;width:4.5em;vertical-align:middle;}
+nav#pro span {font-weight:700;line-height:1.8em;overflow:hidden;text-overflow:ellipsis;color:#d32502;font-size:1em;}

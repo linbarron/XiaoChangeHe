@@ -1,0 +1,103 @@
+﻿@{
+    ViewBag.Title = "AutoMenuIndex";
+    Layout = "";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
+    <title>智能点餐--选人数</title>
+    <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
+    @* <link href="css/main.css" rel="stylesheet" />*@
+     <script src="/Scripts/jquery-1.7.1.min.js"></script>
+    <link href="~/Content/AutoMenu.css" rel="stylesheet" />
+    <link href="~/Content/public.css" rel="stylesheet" />
+    <script>
+    </script>
+</head>
+<body>
+    @*<div>
+    <div style="margin:2em 3em 2em 3em;height: 5em; width: 60em; ">
+        <div style="float: left; width: 2em; margin-top: 0.3em">
+            <img src="~/Content/images/jian.png" />
+        </div>
+        <div style="float: left; width: 5em;">
+            <input type="text" />
+        </div>
+        <div style="float: left; width: 2.9em; text-align: right; margin-top: 0.3em">
+            <img src="~/Content/images/jia.png" />
+        </div>
+        <div style="clear: both;"></div>
+         
+    </div>
+    <div>
+        <button  type="submit" >开始点餐</button>
+    </div>
+        </div>*@
+    <nav id="frame">
+        <nav id="title">
+            <img src="~/Content/images/img.png" />
+            
+        </nav>
+        <div id="count">2</div>
+        <nav >
+            <nav id="jian" onclick=" Add();">
+                <img src="~/Content/images/jia2.png" />
+            </nav>
+            <nav id="jia" onclick="Minus();">
+                <img src="~/Content/images/jian2.png" />
+                
+            </nav>
+            <nav style="clear:right"></nav>
+        </nav>
+    </nav>
+    <button class="button" type="button" onclick="begin();">开始点餐</button>
+    <nav>
+    <nav style="text-indent:2em;letter-spacing: 2px;margin-top: 3%;">
+        <span style="font-size:14px; ">    茶位费:
+     <span style="color:#d32502;font-weight:800;">  会员4元/位</span>  非会员<b>6</b>元/位</span></nav>
+        <nav style="text-indent:2em;"> <span style="font-size:10px;color:#666">(含自选饮料、普洱茶、粗粮饭、泡菜)</span></nav>
+        
+    <nav style="text-indent:2em;margin-top: 5%; color:#666" ><span style="font-size:12px ">    注：单项消费自选饮料6元/位、普洱茶3元/位、粗粮饭3元/位、泡菜5元/份</span>
+    </nav>
+     </nav>
+</body>
+</html>
+<script>
+    function Minus() {
+        var i = $("#count").html();
+        $("#count").html(i - 1);
+        if ($("#count").html() < 2) {
+            alert("就餐人数不能少于2人");
+            $("#count").html(2);
+            return;
+        }
+        
+      
+    }
+    function Add() {
+       
+        var i = $("#count").html();
+        $("#count").html(parseInt(i) + 1);
+        if ($("#count").html() > 9) {
+            alert("就餐人数最多为9人");
+            $("#count").html(9);
+            return;
+        }
+    }
+
+    function begin() {
+        var SourceAccountId = '@ViewBag.SourceAccountId';
+        var RestaurantId = '@ViewBag.RestaurantId';
+        var Type = '@ViewBag.Type';
+        var CompanyId = '@ViewBag.CompanyId';
+        var RstType = '@ViewBag.RstType';
+        var IsOrder = '@ViewBag.IsOrder';
+        var count = $("#count").html();
+        window.location.href = "/Stage/Index2/" + RestaurantId + "/" + SourceAccountId + "?peopleCount=" + count + "&Type=" + Type + "&CompanyId=" + CompanyId + "&RstType=" + RstType + "&IsOrder=" + IsOrder + "";
+
+    }
+
+</script>

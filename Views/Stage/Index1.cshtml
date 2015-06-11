@@ -1,0 +1,298 @@
+﻿@{
+    ViewBag.Title = "Index1";
+    Layout = "";
+    int i = 1;
+}
+
+@using WitBird.XiaoChangHe.Models.Info;
+@model IEnumerable<AutoMenuAndProduct>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
+    <title>index1</title>
+    <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
+
+
+    <script src="/Scripts/jquery-1.7.1.min.js"></script>
+    <link href="~/Content/stage.css" rel="stylesheet" />
+</head>
+<body class="greenBG" >
+    <nav id="stage" style="overflow:hidden">
+    <nav id="top"><img class="topImg" src="~/Content/images/top.png"/></nav>
+    <img src="~/Content/images/back.png" class="homeImg"/>
+        <nav id="title">
+            <img  src="~/Content/images/index_tit.png" class="titleImg"/>
+            <span class="titleFont">推荐阵法</span>
+        </nav>
+        <nav id="middle" class="middle" >
+           <nav id="middleBG"> <img src="~/Content/images/index_paibing.png" style="width: 98%;" id="middleImg"/></nav>
+           @*<nav id="pic1"><img src="~/Content/images/wujiang4.png"  /></nav>
+              <nav id="pic2"><img src="~/Content/images/wujiang1.png"  /></nav>
+              <nav id="pic3"><img src="~/Content/images/wujiang2.png"  /></nav>
+              <nav id="pic4"><img src="~/Content/images/wujiang3.png"  /></nav>
+              <nav id="pic5"><img src="~/Content/images/wujiang7.png"  /></nav>
+              <nav id="pic6"><img src="~/Content/images/wujiang5.png"  /></nav>
+              <nav id="pic7"><img src="~/Content/images/wujiang6.png"  /></nav>*@
+
+             @if (Model != null)
+              {
+                  foreach (AutoMenuAndProduct item in Model)
+                  { 
+                     <nav id="pic@(i)">
+                         <img src="~/Content/images/wujiang@(i).png" onclick="dialog('@(i)','@item.Hot','@item.Popular');"  style="cursor:pointer"/>
+
+                     </nav>
+                     
+                      <span id="pn@(i)">@item.ProductName</span>
+                      i++;
+                  }
+              }
+        </nav>
+        
+      @*  <nav id="bottom" >
+         <nav id="changeBtn">
+                <img src="~/Content/images/index_btn.png" class="changeBtn"/>
+                <span class="changeFont">变换阵法</span>
+            </nav>
+           <nav><img src="~/Content/images/bottom.png" class="buttomImg"/></nav>
+             <nav> <img src="~/Content/images/zhan_btn.png" class="zhanImg"/></nav>
+
+     </nav>*@
+
+       <nav id="bottom" style="position:absolute;bottom:0" >
+         <nav id="changeBtn" class="changeBtn" >
+             <img src="~/Content/images/btn_ctdc.jpg"style=" width:30%;" onclick="change();"/>
+                <img src="~/Content/images/btn_bhzf.jpg"style=" width:30%;" onclick="change();"/>
+             <img src="~/Content/images/btn_zjbz.jpg"style=" width:30%;" onclick="change();"/>
+                @*<span class="changeFont">变换阵法</span>*@
+            </nav>
+           <nav class="buttomImg"><img src="~/Content/images/bottom.png" style="width: 100%; height:50px; display: block;"/></nav>
+             <nav class="zhanImg" onclick="saveOrder();"> <img src="~/Content/images/zhan_btn.png" style="width:50%;" /></nav>
+
+     </nav>
+   </nav>    
+</body>
+</html>
+
+
+
+<script>
+    var arr = new Array();
+    var ids = new Array();
+    var prices = new Array();
+    var hots = new Array();
+    var populars = new Array();
+    var ADescriptions = new Array();
+    var orderid;
+    var SourceAccountId = '@ViewBag.SourceAccountId';
+       var MemberCardNo = '@ViewBag.MemberCardNo';
+    var peopleCount = '@ViewBag.peopleCount';
+    var type = '@ViewBag.Type';
+    var RestaurantId = '@ViewBag.RestaurantId';
+    $(function () {
+
+        load();
+
+
+    })
+
+    function load() {
+        $.getJSON("/Stage/getRandomProduct", { RestaurantId: RestaurantId, peopleCount: peopleCount }, function (msg) {
+            $.each(msg, function (idx, item) {
+               
+                idx = ++idx;
+                arr[idx] = item.ProductName;
+                ids[idx] = item.Id;
+                prices[idx] = item.Price;
+                populars[idx] = item.Popular;
+                hots[idx] = item.Hot;
+                ADescriptions[idx] = item.ADescription;
+                $("#pn" + idx).html(item.ProductName);
+                $("#pn" + idx).attr("ids", item.Id);
+
+            });
+        });
+
+    }
+
+    function afterLoad() {
+
+        for (var i = 1; i < ids.length + 1; i++) {
+            $("#pn" + i).attr("ids", ids[i]);
+
+        }
+
+    }
+
+
+
+
+    function change() {
+        //alert(1);
+      
+        $.ajaxSetup({ cache: false });
+        $.getJSON("/Stage/getRandomProduct", { RestaurantId: RestaurantId, peopleCount: peopleCount }, function (msg) {
+            $.each(msg, function (idx, item) {
+                idx = ++idx;
+               
+                $("#pn" + idx).html(item.ProductName);
+                $("#pn" + idx).attr("ids", item.Id);
+                arr[idx] = item.ProductName;
+                ids[idx] = item.Id;
+                prices[idx] = item.Price;
+                populars[idx] = item.Popular;
+                hots[idx] = item.Hot;
+                ADescriptions[idx] = item.ADescription;
+
+            });
+        });
+    }
+
+
+
+
+
+ 
+  //  var myDate = new Date();
+   // var bookTime = myDate.toLocaleTimeString();
+
+    function saveOrder() {
+        $.ajaxSetup({ cache: false });
+        $.ajaxSetup({ sync: true });
+        $.post("/Order/SaveOrders", { type: "Insert", SourceAccountId: SourceAccountId, bookTime: null, isQuick: type, peopleCont: peopleCount }, function (msg) {
+            orderid = msg;
+
+            if (msg != "00000000-0000-0000-0000-000000000000") {
+
+                for (var i = 1; i < ids.length ; i++) {
+                    var productId = ids[i];
+                    var num1 = 1;
+                    var price = prices[i];
+                    $.post("/Order/SaveOrderDetails", { type: "Insert", productId: productId, unitPrice: price, orderId: msg, productCount: num1 }, function (msg1) {
+                        if (msg1 == 1) {
+
+                        }
+
+                    });
+                }
+                myMenu();
+            }
+
+
+        });
+       
+       
+    }
+
+
+    function myMenu() {
+        window.location.href = "/book/book?MemberCardNo=" + MemberCardNo + "&OrderId=" + orderid + "&SourceAccountId=" + SourceAccountId + "";
+
+        //window.location.href = "/MyMenu/MyMenu?MemberCardNo=" + MemberCardNo + "&OrderId=" + orderid + "&SourceAccountId=" + SourceAccountId + "";
+    }
+</script>
+<script>
+
+    $(document).ready(function () {
+        var height = document.documentElement.clientHeight;
+       
+       
+        $('#middleImg').css("height", height - height/2-15);
+        $('#middle').css("height", height - height / 2-15);
+        $('#stage').css("height", height);
+      
+
+    });
+</script>
+
+
+<script>
+
+    function dialog(id) {
+        var str = "<nav><img src=\"/Order/GetBigImages/" + ids[id] + "\" style=\"width: 50%;  height: 8em; border-image: url(/Content/images/cai_bg.jpg) 2 7 8 5 round; margin-top: 5px;position: absolute; left: 10px;  top: 10px;\"/> </nav>"+
+        "<span style=\"position: absolute;  right: 20px; color:#763a10 \">热门程度："+
+        "<img src=\'/Content/images/huo.png\' style=\"width: 20px;\"/></span>" +
+        "<span style=\"position: absolute;  right: 20px; top: 25%; color:#763a10\">麻辣指数："+
+        "<img src=\'/Content/images/lajiao.png\' style=\"width: 20px;\"/></span> " +
+          "  <span style=\"position: absolute;  bottom: 10px; left: 10px;color:#763a10\">" + ADescriptions[id] + " </span>";
+        var unit = "%";
+        sAlert(str, 80, 37, unit);
+
+    }
+
+    function sAlert(str, msgw, msgh, unit) {
+        var msgw, msgh, bordercolor;
+        msgw = msgw;//提示窗口的宽度
+        msgh = msgh;//提示窗口的高度
+       // bordercolor = "#1da507";//提示窗口的边框颜色
+      //  titlecolor = "#1da507";//提示窗口的标题颜色
+
+        var sWidth, sHeight;
+        sWidth = document.body.offsetWidth;
+        sHeight = document.body.offsetHeight;
+
+        var bgObj = document.createElement("div");
+        bgObj.setAttribute('id', 'bgDiv');
+        bgObj.style.position = "absolute";
+        bgObj.style.top = "0";
+        bgObj.style.background = "#777";
+        bgObj.style.filter = "progid:DXImageTransform.Microsoft.Alpha(style=3,opacity=25,finishOpacity=75";
+        bgObj.style.opacity = "0.6";
+        bgObj.style.left = "0";
+        bgObj.style.width = sWidth + "px";
+        bgObj.style.height = sHeight + "px";
+        document.body.appendChild(bgObj);
+        var msgObj = document.createElement("div")
+        msgObj.setAttribute("id", "msgDiv");
+        msgObj.setAttribute("align", "center");
+        msgObj.style.position = "absolute";
+        msgObj.style.background = "white";
+        msgObj.style.font = "12px/1.6em Verdana, Geneva, Arial, Helvetica, sans-serif";
+        msgObj.style.border = "1px solid " + bordercolor;
+        msgObj.style.width = msgw + unit;
+        msgObj.style.height = msgh + unit;
+        //  msgObj.style.top = (document.documentElement.scrollTop + (sHeight - msgh) / 2) + "px";
+        //  msgObj.style.left = (sWidth - msgw) / 2 + "px";
+        msgObj.style.top = "30" + unit;
+        msgObj.style.left = "8" + unit;
+
+        var title = document.createElement("h4");
+        title.setAttribute("id", "msgTitle");
+        title.setAttribute("align", "right");
+        title.style.margin = "0";
+        title.style.padding = "3px";
+        title.style.background = bordercolor;
+        title.style.filter = "progid:DXImageTransform.Microsoft.Alpha(startX=20, startY=20, finishX=100, finishY=100,style=1,opacity=75,finishOpacity=100);";
+        title.style.opacity = "0.75";
+        title.style.border = "1px solid " + bordercolor;
+        title.style.height = "18px";
+        title.style.font = "12px Verdana, Geneva, Arial, Helvetica, sans-serif";
+        title.style.color = "white";
+        title.style.cursor = "pointer";
+        //  title.innerHTML = "关闭";
+        title.innerHTML = "<img src='/Content/images/close.png' style='position: absolute; right: -6%;   top: -8%;  width: 40px;'/>  ";
+        title.onclick = function () {
+            document.body.removeChild(bgObj);
+            document.getElementById("msgDiv").removeChild(title);
+            document.body.removeChild(msgObj);
+        }
+        document.body.appendChild(msgObj);
+        document.getElementById("msgDiv").appendChild(title);
+        var txt = document.createElement("span");
+        txt.style.margin = "1em 0"
+        txt.setAttribute("id", "msgTxt");
+        txt.innerHTML = str;
+        document.getElementById("msgDiv").appendChild(txt);
+        var strs = document.createElement("span");
+        strs.style.margin = "1em 0"
+        strs.setAttribute("id", "msgTxts");
+        strs.innerHTML = "";
+        document.getElementById("msgDiv").appendChild(strs);
+
+    }
+
+
+</script>

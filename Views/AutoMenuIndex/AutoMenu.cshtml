@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "AutoMenu";
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
+    <title>智能点菜</title>
+    <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
+    <link href="css/main.css" rel="stylesheet" />
+   <link href="~/Content/AutoMenu.css" rel="stylesheet" />
+    <link href="~/Content/public.css" rel="stylesheet" />
+    <script>
+    </script>
+</head>
+<body style="-webkit-padding-start: 10px;">
+     <nav>
+            <label for="count">就餐人数：xxx</label>
+         <label for="sum">共</label>
+         <input type="text"/>
+           <label for="sum">元</label>
+      </nav>
+    <div id="auto">
+        <nav>
+            
+            <ol>
+                <li>川菜</li>
+              <li>
+                    <nav class="food-image" style="height: 5.5em;width: 5.5em;margin-top: 6px;">
+                        <img src="http://www.opentable.com/img/restimages/x6/105217.jpg" />
+                    </nav>
+                    <nav class="food-name">
+                        <span>新湘记蔬菜</span>
+                    </nav>
+                    <nav class="RMB">
+                        <nav style="float: left;">￥16</nav>
+                    </nav>
+                    <nav class="meta1">
+                        0人已点
+                    </nav>
+                  
+                    <nav style="clear: left"></nav>
+                </li>
+            </ol>
+        </nav>
+       
+        <nav>
+             <button type="submit">换一桌</button>
+             <button  type="submit">加入菜单</button>
+        </nav>
+       
+    </div>
+</body>
+
+</html>

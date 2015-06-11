@@ -1,0 +1,32 @@
+czhy.html   充值会员页面
+czhy2.html  非充值会员(提醒)页面
+cz.html     充值页面 
+hdlb.html    活动列表页面
+hdxq.html    活动详情页面
+vip.html     充值vip页面
+sb.html      充值vip失败页面
+tg.html      充值vip通过页面
+index2.html    店铺首页
+
+yddm.html    预定店面页面
+ksdc.html    开始点菜页面
+ydxx.html    预定信息页面
+ddxq(yfk).html 订单详情（已付款）页面   “（点击修改订单弹出遮罩层）”
+sqtk.html    申请退款页面
+
+wddd.html    我的订单页面
+tjt.html     统计图页面
+
+操作
+1.打开czhy.html或者czhy2.html点击充值按钮，进行跳转
+
+2.打开hdlb.html点击上方大图，查看活动详情，再点击地步立即加入按钮，调到会员页面，再点击立即验证，跳到成功（失败）页面
+
+3.打开yddm.html,点击立即点菜，跳到开始点菜页面，点击底部“选好了”，跳到预定信息页面，
+ 3-1:再点击底部确认付款，跳到订单详情已付款页面，此时可以点击底部左右按钮
+ 3-2点击头部店面地址，跳到店铺首页
+
+4.wddd.html  单独展示（没法跳到）
+
+
+

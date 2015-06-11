@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "";
+}
+
+
+@using WitBird.XiaoChangHe.Models.Info;
+@model IEnumerable<Extension>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
+    <title>index</title>
+    <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
+
+
+    <script src="/Scripts/jquery-1.7.1.min.js"></script>
+    <link href="~/Content/stage.css" rel="stylesheet" />
+</head>
+<body>
+      <nav>
+           @if (Model != null)
+                {
+                    foreach (Extension item in Model)
+                    {
+                    <nav><span style="font-size:20px;font-weight:800;margin-left:10px" >@item.Title  </span></nav>
+                     <nav> <span style="font-size:10px ;color:#808080 ;margin-left:10px">@(item.Datetime.ToString("yyyy-MM-dd"))   @item.Name</span></nav>
+                     <nav> <img style="margin:10px;width:95%;" src="/Subscribe/Images/@(item.EId)" /></nav>
+                    <nav style="font-size:15px; color:#808080;margin-left:10px">@item.Econtent</nav>
+           }
+           }
+      </nav>
+       
+</body>
+</html>
+<script>
+</script>
+
+
+

@@ -1,0 +1,188 @@
+﻿@{
+    ViewBag.Title = "MyMenu";
+    Layout = "";
+}
+ @using WitBird.XiaoChangHe.Models.Info;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
+    <title>我的菜单</title>
+    <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
+    <link href="~/Content/public.css" rel="stylesheet" />
+    <link href="~/Content/tab.css" rel="stylesheet" />
+     <link href="~/Content/myMenu.css" rel="stylesheet" />
+     <script src="/Scripts/jquery-1.7.1.min.js"></script>
+  
+</head>
+<body>
+    <nav id="label">
+        <label for="sum">共 @(ViewBag.total)</label>
+        <label for="sum">元</label>
+       
+@*       // <a href="/MyMenu/EmptyMyMenu?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(ViewBag.OrderId)&SourceAccountId=@(ViewBag.SourceAccountId)"><nav id="del"><b>-</b>&nbsp;清空</nav></a>*@
+              <a href="javascript:void(0)" onclick="empty('@(ViewBag.OrderId)')"><nav id="del"><b>-</b>&nbsp;清空</nav></a>
+          @if (ViewBag.RstType == "FastFood")
+          { 
+    <a href="/ProductType//Index?SourceAccountId=@(ViewBag.SourceAccountId)&RestaurantId=@(ViewBag.RestaurantId)&Status=1&Type=@(ViewBag.RstType)"><button id="add" ><b>+</b>&nbsp;加菜</button></a>
+
+          }else{
+         <a href="/ProductType//Index?SourceAccountId=@(ViewBag.SourceAccountId)&RestaurantId=@(ViewBag.RestaurantId)&Status=1"><button id="add" ><b>+</b>&nbsp;加菜</button></a>
+          }
+               </nav>
+    <form id="payment">
+        <div>
+            
+            <ol style="-webkit-padding-start: 10px;">
+                      @if (ViewBag.MyMenuListData != null)
+                      {
+                          foreach (MyMenu item in ViewBag.MyMenuListData as List<MyMenu>)
+                          {
+                <li>
+                    <nav class="food-image">
+                        <img src="~/Order/GetImages/@(item.ProductId)"style=" height: 5.5em;width: 6em; padding-top: 5px;"/>
+                        @*<span class="hot"></span>*@
+                    </nav>
+                    <nav class="food-name">
+                        <span>@(item.ProductName)</span>
+                    </nav>
+                    <nav class="people-count">
+                        <img src="~/Content/images/jian1.png"  onclick="jian('@(item.ProductId)')" id="pic@(item.ProductId)"/>
+                        <input type="text" class="container" id="@(item.ProductId)" value="@(item.ProductCount)"/>
+                        <img src="~/Content/images/jia1.png" onclick="add('@(item.ProductId)') "/>
+                    </nav>
+                   
+                    <nav class="RMB">
+                        <div style="float: left;" id="rmb@(item.ProductId)">￥@(item.UnitPrice)</div>
+                    </nav>
+
+                    <nav style="clear: left"></nav>
+                </li>
+                          }
+                      }
+            </ol>
+             <nav style="clear: left"></nav>
+            <label for="remark">备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注:</label>
+            <textarea id="remark" name="remark" rows="5"></textarea>
+        </div>
+    </form>
+    @if (ViewBag.RstType=="FastFood")
+    {
+     <nav class="MyMenuBut">
+          <a href="javascript:void(0);" onclick="myMenu()">确定</a>
+@*        <a href="/MyMenu/MyOrderDetail?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(ViewBag.OrderId)&SourceAccountId=@(ViewBag.SourceAccountId)&ComypanyId=@(ViewBag.ComypanyId)&RstType=@(ViewBag.RstType)">确定 </a>*@
+    </nav>
+       // window.location.href = "/MyMenu/MyOrderDetail?MemberCardNo=" + MemberCardNo + "&OrderId=" + orderid + "&SourceAccountI=" + SourceAccountId + "&ComypanyId =" + CompanyId + "&RstType=" + Type + "";
+
+    }else{
+   <nav class="MyMenuBut">
+     <a href="/book/book?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(ViewBag.OrderId)&SourceAccountId=@(ViewBag.SourceAccountId)"> 填写预定信息 </a>
+    </nav>
+    }
+</body>
+
+</html>
+    <script>
+         var orderid = '@ViewBag.OrderId';
+        function add(id) {
+            var num = $("#" + id).val();
+            $("#" + id).val(parseInt(num) + 1);
+            $.ajaxSetup({ cache: false });
+            var num1 = $("#" + id).val();
+            if (num1 > 0) {
+                $("#" + id).css("display", "inline");
+                $("#" + "pic" + id).css("display", "inline");
+            }
+            var SourceAccountId = '@ViewBag.SourceAccountId';
+        var productId = id;
+        var price = $("#rmb" + id).html().replace('￥', '');
+       // $.post("/Order/SaveOrders", { type: "Insert", SourceAccountId: SourceAccountId }, function (msg) {
+        
+           // if (msg != "00000000-0000-0000-0000-000000000000") {
+             
+        $.post("/Order/SaveOrderDetails", { type: "Insert", productId: productId, unitPrice: price, orderId: orderid, productCount: num1 }, function (msg1) {
+                    if (msg1 == 1) {
+                      
+                        window.location.reload();
+                    }
+
+                });
+           // }
+
+        //});
+    }
+    function jian(id) {
+
+        var num = $("#" + id).val();
+        $("#" + id).val(parseInt(num) - 1);
+        $.ajaxSetup({ cache: false });
+        var num1 = $("#" + id).val();
+        if (num1 == 0) {
+            $("#" + id).css("display", "none");
+            $("#" + "pic" + id).css("display", "none");
+        }
+        var SourceAccountId = '@ViewBag.SourceAccountId';
+        var productId = id;
+        var price = $("#rmb" + id).html().replace('￥', '');
+        //$.post("/Order/SaveOrders", { type: "Insert", SourceAccountId: SourceAccountId }, function (msg) {
+           
+        //    if (msg != "00000000-0000-0000-0000-000000000000") {
+              
+                if (num1 > 0) {
+                    $.post("/Order/SaveOrderDetails", { type: "Insert", productId: productId, unitPrice: price, orderId: orderid, productCount: num1 }, function (msg1) {
+                       
+                        if (msg1 == 1) {
+                          
+                            window.location.reload();
+                        }
+
+                    });
+                } else if (num1 == 0) {
+                    var num1 = $("#" + id).val();
+                    $.post("/Order/DelOrderDetails", { productId: productId, orderId: orderid }, function (msg1) {
+                        if (msg1 == 1) {
+                          
+                            window.location.reload();
+                        }
+
+                    });
+                    //  }
+           }
+
+        //});
+    }
+
+        function empty(OrderId) {
+
+            $.ajaxSetup({ cache: false });
+            $.get("/MyMenu/EmptyMyMenu", { MemberCardNo: '@(ViewBag.MemberCardNo)', OrderId: OrderId, SourceAccountId: '@(ViewBag.SourceAccountId)',type:"emptyOrdersDetail" }, function (msg) {
+                if (msg == 1) {
+                    alert("清空成功");
+                    window.location.reload();
+
+                }
+            });
+
+         }
+
+        function myMenu() {
+
+            $.ajaxSetup({ async: false });
+            var SourceAccountId = '@ViewBag.SourceAccountId';
+            var ComypanyId = '@(ViewBag.ComypanyId)';
+            var MemberCardNo = '@ViewBag.MemberCardNo';
+            var RstType = '@(ViewBag.RstType)';
+            var  remark = $("#remark").val();
+            $.post("/Order/SaveOrders", { type: "Update", SourceAccountId: SourceAccountId, isQuick: RstType, Remark: remark, orderId: orderid }, function (msg) {
+            
+             });
+            
+            window.location.href = "/MyMenu/MyOrderDetail?MemberCardNo=" + MemberCardNo + "&OrderId=" + orderid + "&SourceAccountId=" + SourceAccountId + "&ComypanyId =" + ComypanyId + "&RstType=" + RstType + "";
+
+        }
+
+
+
+</script>
+  

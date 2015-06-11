@@ -1,0 +1,223 @@
+﻿@{
+    ViewBag.Title = "stage2";
+    Layout = "";
+    int i = 1;
+}
+
+@using WitBird.XiaoChangHe.Models.Info;
+@model IEnumerable<ProductNew>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
+    <title>@ViewBag.TypeName</title>
+    <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
+    <script src="/Scripts/jquery-1.7.1.min.js"></script>
+    <link href="~/Content/stage.css" rel="stylesheet" />
+     <style>
+         .dask
+         {
+             width: 6.4em;
+             height: 4.9em;
+             background: #000;
+            opacity: 0;
+             position: absolute;
+         }
+     </style>
+</head>
+    <body >
+      <nav style="position:absolute;overflow:hidden;width: 100%" id="navbg"> 
+          <img src="~/Content/images/erji_index.jpg" id="bg" style="width:100%"/> 
+      </nav>
+    
+        <nav id="top"  style="position:absolute;width: 100%;">
+         <img class="topImg" src="~/Content/images/top.png" style="width:100%" />
+        </nav>
+       <nav class="content" style="position:absolute;width: 98%;">
+            <img src="~/Content/images/caidan_bg.png" class="contentImg" />
+        </nav>
+       <img src="~/Content/images/back.png" class="homeImg" onclick="back();" style="cursor:pointer"/>
+          <nav class="sup">
+            <img src="~/Content/images/touxiang@(ViewBag.imgid).jpg" class="supImg" /></nav>
+        <span class="title">@ViewBag.TypeName</span>
+       <nav class="menus">        
+       @if (Model != null)
+       {
+
+           foreach (ProductNew item in Model)
+           {
+               string itemid = "/Order/GetImages/" + item.Id;
+            @* <nav  id="img" class="imgs" onclick="dialog('@item.Id','@item.Price','@item.Hot','@item.Description','@item.LoveCount');" style="cursor:pointer">*@
+                   <nav  id="img" class="imgs"  style="cursor:pointer;width: 36%;"   onclick="imgClick('@item.Id','@item.Price');" >
+             @if (ViewBag.MyAutoMenuListData != null)
+             {
+                 List<MyMenu> myAutoMenus=ViewBag.MyAutoMenuListData as List<MyMenu>;
+                 if (myAutoMenus != null && myAutoMenus.Count > 0)
+                 {
+                     foreach (MyMenu item1 in myAutoMenus)
+                 {
+                     if (item.Id.Equals(item1.ProductId))
+                     {
+                      <nav class="dask" id="@item.Id" style="opacity:0.8;">
+				      <input type="checkbox" checked="checked"/>		
+                        
+		         </nav>
+               } else {
+                     <nav class="dask" id="@item.Id">
+				       <input type="checkbox" checked="checked"/>				
+		             </nav>
+                     }
+                 }
+                 }else
+                 {
+                  <nav class="dask" id="@item.Id">
+				   <input type="checkbox" checked="checked"/>					
+		          </nav>
+                 }
+             } else {
+                  <nav class="dask" id="@item.Id">
+				   <input type="checkbox" checked="checked"/>					
+		          </nav>
+             }
+                 <img src="@itemid"  class="img" id="img@(i)" />
+              
+                <nav class="font" >@item.ProductName</nav>
+                <nav class="font" style="color:#da9545;font-size:0.8em"> <span style="font-size:11px">原价：</span>@(item.Price)</nav>
+                <nav class="font" style="font-size:1em "><span style="font-size:8px">储值会员价：</span>@(item.MemberPrice)</nav>
+            </nav>
+            
+             i++;
+           }
+       }
+    </nav>
+
+ 
+</body>
+</html>
+
+
+<script>
+
+    $(document).ready(function () {
+        var height = document.documentElement.clientHeight;
+        $('#bg').css("height", height);
+        $('#navbg').css("height", height);
+        $('.contentImg').css("height", height - height / 6.5);
+        $('.menus').css("height", height - height / 3.2);
+
+        //$(this).find(".dask").stop().animate({ opacity: 0 }, 300)
+        // imgdblClick();
+
+    });
+    var orderid;
+    if ('@ViewBag.OrderId'!='null') { orderid = '@ViewBag.OrderId' }
+    var MemberCardNo = '@ViewBag.MemberCardNo';
+    var SourceAccountId = '@ViewBag.SourceAccountId';
+    var RestaurantId = '@ViewBag.RestaurantId ';
+    var Type = '@ViewBag.Type';
+    var peopleCount = '@ViewBag.peopleCount';
+
+
+    function back() {
+        window.location.href = "/ProductMenuType/Index?name=" + SourceAccountId + "&id=" + RestaurantId + "&type=" + Type + "&peopleCount=" + peopleCount + "&orderid=" + orderid + "&MemberCardNo=" + MemberCardNo + "";
+
+
+    }
+
+    function Add(id, price) {
+        $.ajaxSetup({ cache: false });
+        var productId = id;
+        var price = price;
+        var num1 = 1;
+        if (orderid == null || orderid == '') {
+            $.post("/Order/SaveOrders", { type: "Insert", SourceAccountId: SourceAccountId, bookTime: null, isQuick: Type, peopleCont: peopleCount }, function (msg) {
+                orderid = msg;
+                if (msg != "00000000-0000-0000-0000-000000000000") {
+                    $.post("/Order/SaveOrderDetails", { type: "Insert", productId: productId, unitPrice: price, orderId: msg, productCount: num1 }, function (msg1) {
+                        if (msg1 == 1) {
+                            // alert("成功加入菜单");
+                            // close();
+                        }
+
+                    });
+                }
+
+            });
+        } else {
+            if (orderid != "00000000-0000-0000-0000-000000000000") {
+              //  var num1 = $("#" + id).val();
+                $.post("/Order/SaveOrderDetails", { type: "Insert", productId: productId, unitPrice: price, orderId: orderid, productCount: num1 }, function (msg1) {
+                    if (msg1 == 1) {
+                        // alert("成功加入菜单");
+                    }
+
+                });
+            }
+        }
+    }
+
+    function Cancel(id) {
+
+        if (orderid != null & orderid != '') {
+            $.post("/Order/DelOrderDetails", { productId: id, orderId: orderid }, function (msg1) {
+                if (msg1 == 1) {
+                    //alert("取消成功");
+                    //  close();
+                }
+                else {
+
+                }
+            });
+        } else { }
+
+    }
+
+    //双击选中再双击取消 Add(id, price)  Cancel(id)
+    function imgClick(id, price) {
+        // $(".imgs").dblclick(function () {     
+        var op = $("#" + id).css("opacity");
+        if (op == 0) {
+            $("#" + id).stop().delay(5).animate({ opacity: 0.8 }, 300, Add(id, price))
+        } else {
+            $("#" + id).stop().animate({ opacity: 0 }, 300, Cancel(id))
+        }
+        //  });
+    }
+
+</script>
+
+<script>
+
+    //$(function () {
+    //    $(".imgs").hover(
+    //        function () {
+    //            $(this).find(".dask").stop().delay(50).animate({  opacity: 0.8 }, 300)
+    //        },
+    //        function () {
+    //            $(this).find(".dask").stop().animate({  opacity: 0 }, 300)
+    //        }
+
+    //    )
+    //})
+    ////如果已经选中单击取消
+    // function imgClick() {
+    //     $(".imgs").click(function () {
+    //         var op = $(this).find(".dask").css("opacity");
+
+    //         if (op == 0.8) {
+    //             $(this).find(".dask").stop().animate({ opacity: 0 }, 600)
+    //         } 
+    //     });
+    // }
+
+
+
+
+
+</script>
+
+
+
+

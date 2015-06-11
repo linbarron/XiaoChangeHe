@@ -1,0 +1,64 @@
+﻿body {
+    
+  
+}
+
+li
+{
+    list-style:none;
+}
+.addMenuBut
+{
+  background: white;
+border: none;
+-moz-border-radius: 20px;
+-webkit-border-radius: 5px;
+-khtml-border-radius: 20px;
+border-radius: 5px;
+display: block;
+letter-spacing: 1px;
+text-shadow: 0 1px 1px ghostwhite;
+text-transform: uppercase;
+line-height: 30px;
+position: fixed;
+right: 8%;
+text-align: center;
+padding: 0 4px;
+font-weight: 700;
+color: orange;
+top: 22%;
+cursor:pointer;
+}
+.menuName {
+    color:#da9545;
+    margin-top:1%;
+    margin-bottom: 1.5%;
+   
+}
+
+.productImg {
+    width: 6em;
+    height: 5.5em;
+    border-image: url(/Content/images/cai_bg.jpg) 2 7 19 5 round;
+}
+
+.RMB {
+    margin-bottom: 1.5%;
+    color:#da9545;
+}
+
+.productCount {
+    width: 2em;
+    text-align: center;
+    border: 0;
+    vertical-align: top;
+    line-height: 22px;
+    color: #da9545;
+    margin: 0 3px;
+}
+.zsFont {
+    
+    color:#da9545;
+   
+
+}

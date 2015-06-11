@@ -1,0 +1,68 @@
+﻿
+<script src="/Scripts/jquery-1.7.1.min.js"></script>
+<link href="~/Content/AboutUsandNews.css" rel="stylesheet" />
+
+@{
+    Layout = null;
+    List<WitBird.XiaoChangHe.Models.Info.AboutUs> list = null;
+    List<WitBird.XiaoChangHe.Models.Info.AboutUs> list1 = null;
+    try
+    {
+        list =ViewBag.AboutUs as List<WitBird.XiaoChangHe.Models.Info.AboutUs>;
+        if (list != null && list.Count > 0)
+        {
+            WitBird.XiaoChangHe.Models.Info.AboutUs info = list.First();
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
+        <title>@(ViewBag.Title)</title>
+        <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
+        <link href="~/Content/public.css" rel="stylesheet" />
+        <script>
+        </script>
+    </head>
+    <body>
+        
+         <nav class="atitle"> @Html.Raw(info.Title)</nav>
+         <nav class="acontent"> @Html.Raw(info.Contents)</nav>
+           
+    </body>
+    </html>
+    
+        }
+        list1 = ViewBag.Promotion as List<WitBird.XiaoChangHe.Models.Info.AboutUs>;
+        if (list1 != null && list1.Count > 0)
+        {
+            WitBird.XiaoChangHe.Models.Info.AboutUs info1 = list1.First();
+            
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
+        <title>@(ViewBag.Title)</title>
+        <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
+      
+        <link href="~/Content/public.css" rel="stylesheet" />
+        <script>
+        </script>
+    </head>
+    <body>
+       
+          <nav class="atitle"> @Html.Raw(info1.Title)</nav>
+          <nav class="acontent"> @Html.Raw(info1.Contents)</nav>
+            
+    </body>
+    </html>
+        }
+    }
+    catch (Exception)
+    {
+
+    }
+    
+    
+}
+

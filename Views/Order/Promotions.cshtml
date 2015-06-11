@@ -1,0 +1,289 @@
+﻿
+@{
+    ViewBag.Title = "Promotions";
+    Layout = "";
+  
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
+    <title>优惠活动</title>
+    <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
+        <script src="/Scripts/jquery-1.7.1.min.js"></script>
+    <style>
+      /*#main {
+            background-image:url(../../Content/images/youHuiBg.png)  ;
+        }*/
+        body
+        {
+            color:#513e0f;
+            margin: 0px;
+        }
+        #bg{
+            width:100%;
+        }
+        #main nav span {
+            position:absolute;
+           left:45%;
+             border-bottom:1px  dashed  ;
+              width:40%;
+             text-align:center;
+             /*padding-bottom: 3px ;*/
+             padding-top: 2px;
+
+        }
+         #main #content   img {
+            position:absolute;
+          /*width: 20%;*/
+          border-radius:0.5em;
+           left:20%;
+           border: solid 2px #facd89;
+        }
+        #title1,#title2 {
+            position:absolute;
+              left:15%;
+              width: 80%;
+        }
+        .name,.price, .banjia {
+             position:absolute;
+             left:45%;
+             border-bottom:1px  dashed  ;
+             width:40%;
+             text-align:center;
+             /*padding-bottom: 3px;*/
+        }
+        
+        .huaheImg {
+           position:absolute;
+          left:40%;
+          width: 20%;
+          border-radius:0.5em;
+          border: solid 2px #facd89;
+          
+        }
+        
+         .MyMenuBut {text-decoration:none; font-weight:700;
+                    color: #503E0F;border:none; 
+                     font-size:1em;letter-spacing:1px;
+                      position:absolute;right:3%; bottom:7%;
+}
+    </style>
+</head>
+<body  >
+    <div id="main">
+        <img src="~/Content/images/youHuiBg.png"  id="bg"/>
+        <nav id="title1">活动一：扫码可享优惠半价</nav>
+            @if (DateTime.Now.DayOfWeek.ToString() == "Monday" || DateTime.Now.DayOfWeek.ToString() == "Tuesday")
+            {
+            <nav id="content" >
+                <span>周一、二</span>
+                <img  src="~/Content/images/jiezi.jpg"/>
+                <div class="name">石锅鲜椒擂茄子</div>
+                <div class="price"><del>19.9</del> 9.9</div>
+               @* <div class="banjia">半价：9.9</div>*@
+            </nav>
+           }
+              @if (DateTime.Now.DayOfWeek.ToString() == "Wednesday" || DateTime.Now.DayOfWeek.ToString() == "Thursday")
+            {
+             <nav id="content" >
+                <span>周三、四</span>
+                <img src="~/Content/images/ya.jpg"/>
+                 <div class="name">特色酱鸭</div>
+                <div  class="price"><del>29.9</del> 14.9 </div>
+               @* <div class="banjia">半价：14.9</div>*@
+            </nav>
+              }
+               @if (DateTime.Now.DayOfWeek.ToString() == "Friday")
+            {
+              <nav id="content">
+                <span>周五</span>
+                <img src="~/Content/images/dagu.jpg"/>
+                <div class="name">紫砂粗粮炖大骨</div>
+                <div class="price"><del>39.9</del>19.9</div>
+               @* <div class="banjia">半价：19.9</div>*@
+            </nav>
+               }
+             @if (DateTime.Now.DayOfWeek.ToString() == "Saturday" || DateTime.Now.DayOfWeek.ToString() == "Sunday")
+            {
+             <nav  id="content">
+                <span>周六、日</span>
+                <img src="~/Content/images/caitou.jpg" />
+                <div class="name">家常菜头</div>
+                <div class="price"><del>19</del>9</div>
+               @* <div>半价：9</div>*@
+            </nav>
+            }
+        <span id="title2">活动二：扫码送核桃花生汁（每桌限一杯）</span>
+          <img src="~/Content/images/huahe.jpg" class="huaheImg"/>
+          <a href="javascript:void(0);" onclick="alert('已确认享受优惠')" class="MyMenuBut">确定</a>
+    </div>
+</body>
+</html>
+
+<script>
+
+    $(document).ready(function () {
+        var height = document.documentElement.clientHeight;
+       // var width = document.documentElement.clientWidth;
+        $('#main nav img').css("top", height / 2.35);
+        $('#title1').css("top", height / 2.65);
+        //$('#title1').css("left", height / 13);
+        $('#bg').css("height", height);
+        $('.name').css("top", height / 2.3);
+        $('#main nav span').css("top", height / 2.05);
+        $('.price').css("top", height / 1.8);
+        //$('.banjia').css("top", height / 1.75);
+        $('#title2').css("top", height / 1.6);
+        //$('#title2').css("left", height / 13);
+        $('.huaheImg').css("top", height / 1.45);
+        $('#main #content   img').css("width", height / 9.5);
+        $('.huaheImg').css("width", height / 8.5);
+      
+    });
+</script>
+
+
+
+
+
+
+
+
+@*@{
+    ViewBag.Title = "Promotions";
+    Layout = "";
+  
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
+    <title>优惠活动</title>
+    <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
+        <script src="/Scripts/jquery-1.7.1.min.js"></script>
+    <style type="text/css">
+        body{font-weight: 700;background: #f2f2f2;  }
+        #main  nav{border-bottom:dashed 1px red; height:5.8em;border-top:dashed 1px red; }
+        #main img{/*width:5em; height:5em;*/ height: 85%; padding: 5px;float:left; -moz-border-radius:1em;-webkit-border-radius:1em;
+                     -khtml-border-radius:1em;border-radius:1em;}
+        #main #one nav div{padding: 10px 5px 0px 5px;font-size:0.8em; }
+        .banjia{color :red;}
+        #main #one nav span { padding: 2.5em 5px 0px 0px;}
+        #main legend{color: red; font-size: 2em;text-shadow: 0 1px 0 red, 
+                    0 2px 0 #c9c9c9, 
+                    0 3px 0 #bbb, 
+                    0 4px 0 #b9b9b9, 
+                    0 5px 0 #aaa, 
+                    0 6px 1px rgba(0,0,0,.1), 
+                    0 0 5px rgba(0,0,0,.1), 
+                    0 1px 3px rgba(0,0,0,.3), 
+                    0 3px 5px rgba(0,0,0,.2), 
+                    0 5px 10px rgba(0,0,0,.25), 
+                    0 10px 10px rgba(0,0,0,.2), 
+                    0 20px 20px rgba(0,0,0,.15); 
+ }
+     
+        #main #one h4 label{ color:red; }
+         a {text-decoration:none;color:#FFF;padding:.2em .4em;}
+         .MyMenuBut {background:#4dba34;border:none; margin-top: 5px;
+                     -moz-border-radius:5px;-webkit-border-radius:5px;
+                     -khtml-border-radius:5px;border-radius:5px;
+                     display:block;font-size:1em;letter-spacing:1px;
+                     text-shadow:0 1px 1px #000;text-transform:uppercase;
+                     line-height:30px;right:2%;text-align:center;padding:0 4px;width: 50%;margin-left: 25%;
+}
+   </style>
+</head>
+<body>
+   
+    @if (ViewBag.Rstid == "0E71D411-EFE0-4964-8E3D-2901E0823815")
+    {
+        <h1 style="color:green;text-align:center">更多优惠敬请期待。。。</h1>
+    }else{
+        
+    <div id="main">
+        <fieldset id="one" style="margin-top:20px;border-radius: 10px;">
+            <legend>扫码惊喜两重奏</legend>
+            <h4><label>第一重奏:</label><span>扫二维码可享受半价菜品</span></h4>
+         
+            @if (DateTime.Now.DayOfWeek.ToString() == "Monday" || DateTime.Now.DayOfWeek.ToString() == "Tuesday")
+            {
+            <nav >
+                <span style="float:left">周一、二</span>
+                <img  src="~/Content/images/jiezi.jpg"/>
+                <div>石锅鲜椒擂茄子</div>
+                <div>原价：19.9</div>
+                <div class="banjia">半价：9.9</div>
+            </nav>
+           }
+              @if (DateTime.Now.DayOfWeek.ToString() == "Wednesday" || DateTime.Now.DayOfWeek.ToString() == "Thursday")
+            {
+             <nav >
+                <span style="float:left">周三、四</span>
+                <img src="~/Content/images/ya.jpg"/>
+                 <div>特色酱鸭</div>
+                <div>原价：29.9</div>
+                <div class="banjia">半价：14.9</div>
+            </nav>
+              }
+               @if (DateTime.Now.DayOfWeek.ToString() == "Friday")
+            {
+              <nav >
+                <span style="float:left">周五&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <img src="~/Content/images/dagu.jpg"/>
+                <div>紫砂粗粮炖大骨</div>
+                <div>原价：39.9</div>
+                <div class="banjia">半价：19.9</div>
+            </nav>
+               }
+             @if (DateTime.Now.DayOfWeek.ToString() == "Saturday" || DateTime.Now.DayOfWeek.ToString() == "Sunday")
+            {
+             <nav >
+                <span style="float:left">周六、日</span>
+                <img src="~/Content/images/caitou.jpg" style="width:7.5em" />
+                <div>家常菜头</div>
+                <div>原价：19</div>
+                <div class="banjia">半价：9</div>
+            </nav>
+            }
+             <h4><label>第二重奏:</label><span>扫二维码可享受核桃花生汁</span></h4>
+             <nav>
+                <img src="~/Content/images/huahe.jpg" style="border-radius:50%"/>
+                <div style="margin-top: 2.5em;">核桃花生汁<span style="font-size:12px;color:red;">（每桌限一杯）</span></div>
+            </nav>
+        </fieldset>
+          <div class="MyMenuBut">
+          <a href="javascript:void(0);" onclick="alert('已确认享受优惠')">确定</a>
+         </div>
+    </div>
+    }
+</body>
+</html>
+
+<script>
+
+    $(document).ready(function () {
+        var height = document.documentElement.clientHeight;
+        $('#main #one  h4').css("-webkit-margin-before", height/40);
+        $('#main #one  h4').css("-webkit-margin-after", height / 40);
+        $('#main nav').css("height", height / 5);
+       
+    });
+</script>*@
+
+
+
+
+
+
+
+
+
+
+
+
+

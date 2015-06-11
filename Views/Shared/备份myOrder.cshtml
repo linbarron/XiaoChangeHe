@@ -1,0 +1,230 @@
+﻿@{
+    ViewBag.Title = "myOrder";
+    Layout = "";
+}
+@using WitBird.XiaoChangHe.Models.Info;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
+    <title>我的订单</title>
+    <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
+    <link href="~/Content/public.css" rel="stylesheet" />
+    <link href="~/Content/SelTableInfo.css" rel="stylesheet" />
+    <script src="/Scripts/jquery-1.7.1.min.js"></script>
+
+</head>
+<body>
+
+    @if (ViewBag.MyOrderListData != null)
+    {
+        
+        <nav id="info">
+
+            @foreach (MyOrder item in ViewBag.MyOrderListData as List<MyOrder>)
+            {
+                <ul style="width: 95%;">
+                    <li>
+                        <a href="/MyMenu/MyOrderDetail?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(item.OrderId)&SourceAccountId= @(ViewBag.SourceAccountId)&type='detail'&ComypanyId=@( ViewBag.ComypanyId)" style="color:#ccc">
+                            <nav>
+                                <img src="~/Content/images/ico_dian.png" />
+                                <span style="color: white">@item.name</span>
+
+                            </nav>
+                          
+                            @if (item.RstType!="01"&&item.DiningDate != null )
+                            {    
+                                <nav>
+                                    订餐时段：<span>
+                                        @if (item.DiningDate.ToString("hh").Equals("09"))
+                                        {
+                                            string.Format("午餐");
+
+                                        }  else if (item.DiningDate.ToString("hh").Equals("16"))
+                                        {
+                                            string.Format("晚餐");
+                                        }
+                                    </span>
+                                </nav>
+                                <nav>订餐时间：<span>@(item.DiningDate.ToString("yyyy-MM-dd HH:mm"))</span></nav>
+                                 
+                            }
+                            @if (item.PersonCount != null && item.PersonCount != 0)
+                            { 
+                                <nav>人数：<span>@item.PersonCount</span></nav>
+                            }
+                        </a>
+                        <div  style="margin:5% 30%; text-align: center; cursor: pointer;" onclick="cancel('@item.OrderId');">
+                            <img src="~/Content/images/ico_quxiao.png" />
+                            <span>取消订单</span>
+
+                        </div>
+
+
+                    </li>
+                </ul>
+            }
+        </nav>
+    }
+    else if (ViewBag.MyQuickOrderListData != null)
+    {
+        <nav id="info">
+
+            @foreach (MyOrder item in ViewBag.MyQuickOrderListData as List<MyOrder>)
+            {
+                <ul style="width: 95%;">
+                    <li>
+                        <a href="/MyMenu/MyOrderDetail?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(item.OrderId)&SourceAccountId= @(ViewBag.SourceAccountId)&type='detail'&ComypanyId=@( ViewBag.ComypanyId)&RstType=FastFood" style="color:#ccc">
+                            <nav>
+                                <img src="~/Content/images/ico_dian.png" />
+                                <span style="color: white">@item.name</span>
+
+                            </nav>
+                          @* <nav>订单号：<span>@(ViewBag.MemberCardNo)@(item.DiningDate)</span></nav>*@
+                            <nav>会员编号：<span>@(ViewBag.MemberCardNo)</span></nav>
+                             <nav>用餐人数:<span>@(item.PersonCount)</span></nav>
+                            <nav>订餐时间:<span>@(item.DiningDate)</span></nav>
+                           @* @if (item.RstType!="01"&&item.DiningDate != null )
+                            {      
+                                <nav>
+                                    订餐时段：<span>
+                                        @if (item.DiningDate.ToString("hh").Equals("09"))
+                                        {
+                                            string.Format("午餐");
+
+                                        }
+                                        
+                                        else if (item.DiningDate.ToString("hh").Equals("16"))
+                                        {
+                                            string.Format("晚餐");
+
+                                        }
+                                    </span>
+                                </nav>}
+                            @if (item.PersonCount != null && item.PersonCount != 0)
+                            { 
+                                <nav>人数：<span>@item.PersonCount</span></nav>
+                            }*@
+                        </a>
+                        <div  style="margin:5% 30%; text-align: center; cursor: pointer;" onclick="cancel('@item.OrderId');">
+                            <img src="~/Content/images/ico_quxiao.png" />
+                            <span>取消订单</span>
+
+                        </div>
+
+
+                    </li>
+                </ul>
+            }
+        </nav>
+
+    }
+    else
+    {
+            
+        <script type="text/javascript">
+            $(function () {
+                sAlert();
+            })
+        </script>
+              
+    }
+</body>
+
+</html>
+
+<script>
+    function cancel(OrderId) {
+
+        $.ajaxSetup({ cache: false });
+        $.get("/MyMenu/EmptyMyMenu", { MemberCardNo: '@(ViewBag.MemberCardNo)', OrderId: OrderId, SourceAccountId: '@(ViewBag.SourceAccountId)' }, function (msg) {
+            if (msg == 1) {
+                alert("订单取消成功");
+                window.location.reload();
+                @*   $.get("/Order/MY", { MemberCardNo: '@(ViewBag.MemberCardNo)', SourceAccountId: '@(ViewBag.SourceAccountId)' }, function (msg) {
+                    if (msg == 1) {
+                        if ('@( ViewBag.MyOrderListData)' != null) {
+
+
+                        }
+
+                    }
+                })*@
+            }
+        })
+
+        //  window.location.href = "/MyMenu/EmptyMyMenu?MemberCardNo=" +'@(ViewBag.MemberCardNo)' + "&OrderId=" + OrderId + "&SourceAccountId=" + '@(ViewBag.SourceAccountId)' + "";
+    }
+
+
+    function sAlert() {
+        str = "<a href=\"/Order/Begin/@(ViewBag.ComypanyId)/@(ViewBag.SourceAccountId)\" class=\"but\">你还没下单，去点餐</a>";
+        var msgw, msgh, bordercolor;
+        msgw = 80;//提示窗口的宽度
+        msgh = 20;//提示窗口的高度
+        bordercolor = "#1da507";//提示窗口的边框颜色
+        titlecolor = "#1da507";//提示窗口的标题颜色
+
+        var sWidth, sHeight;
+        sWidth = document.body.offsetWidth;
+        sHeight = document.body.offsetHeight;
+
+        var bgObj = document.createElement("div");
+        bgObj.setAttribute('id', 'bgDiv');
+        bgObj.style.position = "absolute";
+        bgObj.style.top = "0";
+        bgObj.style.background = "#777";
+        bgObj.style.filter = "progid:DXImageTransform.Microsoft.Alpha(style=3,opacity=25,finishOpacity=75";
+        bgObj.style.opacity = "0.6";
+        bgObj.style.left = "0";
+        bgObj.style.width = sWidth + "px";
+        bgObj.style.height = sHeight + "px";
+        document.body.appendChild(bgObj);
+        var msgObj = document.createElement("div")
+        msgObj.setAttribute("id", "msgDiv");
+        msgObj.setAttribute("align", "center");
+        msgObj.style.position = "absolute";
+        msgObj.style.background = "white";
+        msgObj.style.font = "12px/1.6em Verdana, Geneva, Arial, Helvetica, sans-serif";
+        msgObj.style.border = "1px solid " + bordercolor;
+        msgObj.style.width = msgw + "%";
+        msgObj.style.height = msgh + "%";
+        //  msgObj.style.top = (document.documentElement.scrollTop + (sHeight - msgh) / 2) + "px";
+        //  msgObj.style.left = (sWidth - msgw) / 2 + "px";
+        msgObj.style.top = "30%";
+        msgObj.style.left = "12%";
+        var title = document.createElement("h4");
+        title.setAttribute("id", "msgTitle");
+        title.setAttribute("align", "right");
+        title.style.margin = "0";
+        title.style.padding = "3px";
+        title.style.background = bordercolor;
+        title.style.filter = "progid:DXImageTransform.Microsoft.Alpha(startX=20, startY=20, finishX=100, finishY=100,style=1,opacity=75,finishOpacity=100);";
+        title.style.opacity = "0.75";
+        title.style.border = "1px solid " + bordercolor;
+        title.style.height = "18px";
+        title.style.font = "12px Verdana, Geneva, Arial, Helvetica, sans-serif";
+        title.style.color = "white";
+        title.style.cursor = "pointer";
+        title.innerHTML = "关闭";
+        title.onclick = function () {
+            document.body.removeChild(bgObj);
+            document.getElementById("msgDiv").removeChild(title);
+            document.body.removeChild(msgObj);
+        }
+        document.body.appendChild(msgObj);
+        document.getElementById("msgDiv").appendChild(title);
+        var txt = document.createElement("p");
+        txt.style.margin = "1em 0"
+        txt.setAttribute("id", "msgTxt");
+        txt.innerHTML = str;
+        document.getElementById("msgDiv").appendChild(txt);
+    }
+
+
+</script>
+
+
+
+

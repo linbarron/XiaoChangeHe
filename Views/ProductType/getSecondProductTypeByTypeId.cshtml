@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.Title = "getSecondProductTypeByTypeId";
+}
+@using WitBird.XiaoChangHe.Models.Info;
+@model IEnumerable<ProductType>
+
+@{
+    Layout = null;
+    int i = 1;
+}
+
+  @if (Model != null){
+                        foreach (ProductType item in Model)
+                        {
+                            <li class="tab@(i)">
+                                <a class="tab@(i) tab" href="javascript:void(0)" tid="@item.TypeId" rid="@item.RestaurantId" onclick="DisplayContent('@item.TypeId','@item.RestaurantId')">
+                                    @Html.DisplayFor(modelItem => item.TypeName)</a>
+
+                            </li>
+                            i++;
+                        }
+                        }

@@ -1,0 +1,118 @@
+﻿@{
+    ViewBag.Title = "Quick";
+    Layout = null;
+}
+
+@using WitBird.XiaoChangHe.Models.Info;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
+    <title>填写预定信息</title>
+    <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
+    @*  <link href="css/main.css" rel="stylesheet" />*@
+    <link href="~/Content/bookinfo.css" rel="stylesheet" />
+    <link href="~/Content/public.css" rel="stylesheet" />
+       <script src="/Scripts/jquery-1.7.1.min.js"></script>
+    <script>
+    </script>
+</head>
+<body>
+    <form id="payment">
+        <div>
+            <span>请你按照如下要求填写。以便我们留位</span>
+           
+                <ol style="-webkit-padding-start: 0px;">
+                    <li>
+                        <label for="date">预约时间:</label>
+                   
+                        <input id="date" name="date" type="datetime-local" required autofocus />
+        
+                    </li>
+                     <br/>
+                    <li>
+                       
+                        <label for="peoCount">预约人数:</label>
+                        <input id="peoCount" name="peoCount" type="number" 
+                        step="1" min="0" max="100"  " autofocus />
+                    </li>
+                    <li>
+
+                        <label>预约座位：</label>
+
+                        <input id="hall" name="seat" type="radio" class="seat" value="0" 
+                            
+                            />
+                        <label for="women">大厅</label>
+
+                        <input id="room" name="seat" type="radio" class="seat" value="1"/>
+                        <label for="room">包间</label>
+
+                    </li>
+                    <li>
+                        <label for="name">姓&nbsp;&nbsp;&nbsp;&nbsp;名:</label>
+                        <input id="name" name="name" type="text" placeholder="你的姓名" 
+                        required autofocus />
+                    </li>
+                    <li>
+                        <label>性&nbsp;&nbsp;&nbsp;&nbsp;别：</label>
+                        <input id="women" name="sex" type="radio"  class="sex"  value="false" 
+                               />
+                        <label for="women">女士</label>
+
+                        <input id="man" name="sex" type="radio" class="sex" value="true" 
+                                />
+                        <label for="man">先生</label>
+                    </li>
+
+                    <li>
+                        <label for="phone">电&nbsp;&nbsp;&nbsp;&nbsp;话:</label>
+                        <input id="phone" name="phone" type="tel" placeholder="Eg. +447500000000" 
+                       
+                        required autofocus/>
+                    </li>
+
+
+                    @*  <li>
+                    <label for="time">预约时间</label>
+                    <input id="time" name="time" type="time" required autofocus />
+                </li>*@
+
+                    <li id="remark1">
+
+                        <label for="remark">备&nbsp;&nbsp;&nbsp;&nbsp;注:</label>
+                        <textarea id="remark" name="remark" rows="5"></textarea>
+
+                    </li>
+
+                </ol>
+            
+        </div>
+        <button class="button" type="button" onclick="save();">完成预定</button>
+    </form>
+</body>
+
+</html>
+<script>
+    function save() {
+        $.ajaxSetup({ cache: false });
+      
+      
+        var SourceAccountId = '@ViewBag.SourceAccountId';
+        var date = $("#date").val();
+        var peoCount = $("#peoCount").val();
+        var seat = $(".seat").val();
+        var name = $("#name").val();
+        var phone = $("#phone").val();
+        var sex = $(".sex:checked").val();
+        var remark = $("#remark").val();
+       
+        window.location.href = "/book/SaveQuickOrders?SourceAccountId=" + SourceAccountId + "&date=" + date + "&peoCount=" + peoCount + "&seat=" + seat + "&name=" + name + "&phone=" + phone + "&sex=" + sex + "&remark=" + remark;
+        //$.post("/book/SaveOrders", { SourceAccountId:SourceAccountId,MemberCardNo: MemberCardNo, orderid: orderid, date: date, peoCount: peoCount, seat: seat, name: name, phone: phone, sex: sex, remark: remark }, function (msg) {
+
+            
+        //});
+    }
+
+</script>

@@ -1,0 +1,70 @@
+﻿@{
+    ViewBag.Title = "Addr";
+    Layout = "";
+}
+@using WitBird.XiaoChangHe.Models.Info;
+@model IEnumerable<Restaurant>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
+    <title>店面信息</title>
+    <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
+    
+    <link href="~/Content/book.css" rel="stylesheet" />
+    <link href="~/Content/public.css" rel="stylesheet" />
+    <script>
+    </script>
+</head>
+<body style="-webkit-padding-end: 0px;
+-webkit-padding-start: 0px;">
+     @* <nav style="background: #ddd">
+        <input type="search" placeholder="搜索店面、地址" />
+
+    </nav>*@
+    <form id="payment">
+       @foreach (Restaurant item in Model)
+       {
+        <fieldset>
+            <legend></legend>
+            <ol>
+                <li>
+                      <nav style="border-bottom: 1px solid #ccc;  margin-bottom: 5px; height: 6.5em; margin-top: 5px;">
+                    <nav class="food-image">
+                        <img id="Rstimg" src="http://www.opentable.com/img/restimages/x6/105217.jpg" />
+                    </nav>
+                            <nav style="margin-left: 90px;">
+                                <span id="RstName">@(item != null ? item.Name : "")</span>
+                            </nav>
+                    <nav style="margin-left: 90px;">
+                        <span>地址：</span>
+                        <span>@(item != null ? item.Address : "")</span>
+                       
+                    </nav>
+                     <nav style="margin-left: 90px;">
+                        <span>营业时间：</span>
+                        <span>@(item.BusinessStartDate != null ? item.BusinessStartDate.ToString("hh:mm:ss") : "")--@(item.BusinessEndtDate != null ? item.BusinessEndtDate.ToString("hh:mm:ss") : "")</span>
+                    </nav>
+                          </nav>
+                     <nav id="bottom">
+                        <img src="~/Content/images/55e_07.png" />
+                        <span>@(item != null ? item.ContactPhone : "")</span>
+
+                         <img src="~/Content/images/55e_09.png" />
+                         <span >导航</span>
+                         <img  src="~/Content/images/55e_12.png"/>
+                         <span id="end">实景</span>
+                    </nav>
+                    <div style="clear: left"></div>
+                </li>
+            </ol>
+        </fieldset>
+       }
+         
+    </form>
+</body>
+
+</html>
+   

@@ -1,0 +1,243 @@
+﻿@{
+    ViewBag.Title = "MyAutoMenus";
+    Layout = "";
+    int i = 1;
+    int temp = 0;
+}
+
+@using WitBird.XiaoChangHe.Models.Info;
+@model IEnumerable<MyMenu>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
+    <title>我的菜单</title>
+    <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
+    <script src="/Scripts/jquery-1.7.1.min.js"></script>
+     <link href="~/Content/stage.css" rel="stylesheet" /> 
+    <link href="~/Content/myAutoMenus.css" rel="stylesheet" /> 
+</head>
+<body >
+      
+     <nav style="position:absolute;overflow:hidden;width: 100%" id="navbg"> 
+          <img src="~/Content/images/erji_index.jpg" id="bg" style="width:100%"/> 
+      </nav>
+        <nav id="top"  style="position:absolute;left: 25%;">
+         <img class="topImglogo" src="~/Content/images/dj_logo.png" />
+        </nav>
+       <nav class="content" style="position:absolute;width: 98%;">
+            <img src="~/Content/images/caidan_bg.png" class="contentImg" />
+
+        </nav>
+
+         <span class="title">我的菜单</span>
+       <nav class="menus" style="top:22%;width: 88%;left:20px">   
+            <nav id="label">              
+        <label for="sum" style="font-size:0.7em;color:orange ;font-weight:900;margin-left:10px">总原价：@(ViewBag.total)元</label>
+        <label for="sum" style="font-size:0.7em;color:orange ;font-weight:900;margin-left:10px">储值会员价：@(ViewBag.mTotal)元</label>
+
+       @* <a href="javascript:void(0)" onclick="empty('@(ViewBag.OrderId)')"  style="color: #FFF;">
+            <nav id="del" class="MyMenuBut"><b>-</b>&nbsp;清空</nav>
+        </a>*@
+        <nav onclick="addMenus();"class="addMenuBut"><span style="font-weight:900; color:black;font-size: 1.2em">+</span>加菜</nav>
+    </nav>
+            <ol style="-webkit-padding-start: 10px;">
+                  @if (Model != null)
+                  {
+                      foreach (MyMenu item in Model)
+                      {
+                <li style="list-style: none;">
+                  <nav style="float:left;margin-right:15px;margin-bottom: 15px;">
+                   <img src="~/Order/GetImages/@(item.ProductId)" class="productImg"/>
+                        @*<span class="hot"></span>*@
+                    </nav>
+                    <nav class="menuName">
+                        <span>@(item.ProductName)</span>
+                    </nav>
+                     <nav class="RMB" >
+                        <span style="font-size:11px">原价:</span><span  id="rmb@(item.ProductId)">￥@(item.UnitPrice)</span>
+                    </nav>
+                    <nav  class="RMB" style="font-size:18px; color:#e4ff00; ">
+                       <span style="font-size:7px">储值会员价:</span> <span  id="mrmb@(item.ProductId)">￥@(item.MemberPrice)</span>
+                    </nav>
+                    <nav style="margin-top:2%">
+                        <img src="~/Content/images/jian1.png"  onclick="jian('@(item.ProductId)')" id="pic@(item.ProductId)"/>
+                        <input type="text" class="productCount" id="@(item.ProductId)" value="@(item.ProductCount)"/>
+                        <img src="~/Content/images/jia1.png" onclick="add('@(item.ProductId)') "/>
+                    </nav>
+                   
+                   
+
+                    <nav style="clear: left"></nav>
+                </li>
+                      }
+                  }   
+                <li>
+                <label for="zs" style="color:#e4ff00 ;font-weight:900;font-size:1em;letter-spacing:3px; margin-bottom: 4%">app点餐惊喜赠送：</label>
+                    
+                      @if (ViewBag.presentProducts != null)
+                      {
+                          List<PresentProduct> lists = ViewBag.presentProducts as List<PresentProduct>;
+
+                          if (lists != null && lists.Count > 0)
+                          {
+                              foreach (PresentProduct item1 in lists)
+                              {
+
+                                  if (Model != null)
+                                  {
+                                      foreach (MyMenu item in Model)
+                                      {
+                                          if (item.ProductId.Equals(item1.ProductId) && item.UseState == "04")
+                                          {
+                                              temp = 1;
+                                       <nav style="margin-bottom: 4%;">
+                                    <input  name="zs" type="radio"   value='@item1.ProductId' checked="checked"/>   
+                                    <label for="cb" class="zsFont" >@item1.ProductName@item1.ProductCount@item1.CodeTypeListName</label>
+                                   </nav>
+                                              break;
+                                          }
+                                          else
+                                          {
+                                              temp = 0;
+                                          }
+                                      }
+                                  }
+                                  if (temp==0)
+                                  { 
+                                    <nav style="margin-bottom: 4%;">
+                                    <input  name="zs" type="radio"   value='@item1.ProductId'/>   
+                                    <label for="cb" class="zsFont" >@item1.ProductName@item1.ProductCount@item1.CodeTypeListName</label>
+                                   </nav>
+                                  }
+                              }
+                          }
+                      }5
+                     </li>
+                   
+                      @*
+                     <nav style="margin-bottom: 4%;">
+                            <input id="df" name="zs" type="radio"  value="65BEB841-6A03-4C3F-81DF-D0D4E74B3407" />   
+                            <label for="df" class="zsFont">脆脆豆腐脑1位</label>
+                     </nav>
+                      <nav style="margin-bottom: 4%;">
+                           <input id="man" name="zs" type="radio"  value="1FB5F7DD-6CE2-4732-852B-1248B5D55E18" />    
+                            <label for="fan" class="zsFont">饭锅焖茄子1份</label>
+                  </nav>*@
+          
+            </ol>
+             <nav style="clear: left"></nav>
+           
+    </nav>
+           <img src="~/Content/images/zhan_btn.png" style="width: 25%;position: absolute;bottom:0;right: 0%; cursor:pointer" onclick="myOrder()"; />
+
+</body>
+</html>
+<script>
+
+    $(document).ready(function () {
+        var height = document.documentElement.clientHeight;
+        var width = document.documentElement.clientWidth;
+        $('#bg').css("height", height);
+        $('#navbg').css("height", height);
+        $('.contentImg').css("height", height - height / 6.5);
+        $('.menus').css("height", height - height / 3.8);
+    });
+
+    var SourceAccountId = '@ViewBag.SourceAccountId';
+    var RestaurantId = '@ViewBag.RestaurantId ';
+    var Type = '@ViewBag.Type';
+    var peopleCount = '@ViewBag.peopleCount';
+    var MemberCardNo = '@ViewBag.MemberCardNo';
+    //var orderid = '@ViewBag.orderid';
+    var RstType = "FastFood";
+    var orderid = '@ViewBag.OrderId';
+
+    function add(id) {
+
+        var num = $("#" + id).val();
+        $("#" + id).val(parseInt(num) + 1);
+        $.ajaxSetup({ cache: false });
+        var num1 = $("#" + id).val();
+        if (num1 > 0) {
+            $("#" + id).css("display", "inline");
+            $("#" + "pic" + id).css("display", "inline");
+        }
+        var SourceAccountId = '@ViewBag.SourceAccountId';
+        var productId = id;
+        var price = $("#rmb" + id).html().replace('￥', '');
+        $.post("/Order/SaveOrderDetails", { type: "Insert", productId: productId, unitPrice: price, orderId: orderid, productCount: num1 }, function (msg1) {
+            if (msg1 == 1) {
+                window.location.reload();
+            }
+        });
+    }
+    function jian(id) {
+        var num = $("#" + id).val();
+        $("#" + id).val(parseInt(num) - 1);
+        $.ajaxSetup({ cache: false });
+        var num1 = $("#" + id).val();
+        if (num1 == 0) {
+            $("#" + id).css("display", "none");
+            $("#" + "pic" + id).css("display", "none");
+        }
+        var SourceAccountId = '@ViewBag.SourceAccountId';
+        var productId = id;
+        var price = $("#rmb" + id).html().replace('￥', '');
+        if (num1 > 0) {
+            $.post("/Order/SaveOrderDetails", { type: "Insert", productId: productId, unitPrice: price, orderId: orderid, productCount: num1 }, function (msg1) {
+                if (msg1 == 1) {
+                    window.location.reload();
+                }
+            });
+        } else if (num1 == 0) {
+            var num1 = $("#" + id).val();
+            $.post("/Order/DelOrderDetails", { productId: productId, orderId: orderid }, function (msg1) {
+                if (msg1 == 1) {
+                    window.location.reload();
+                }
+            });
+        }
+    }
+
+    function empty(OrderId) {
+        $.ajaxSetup({ cache: false });
+        $.get("/MyMenu/EmptyMyMenu", { MemberCardNo: '@(ViewBag.MemberCardNo)', OrderId: OrderId, SourceAccountId: '@(ViewBag.SourceAccountId)', type: "emptyOrdersDetail" }, function (msg) {
+            if (msg == 1) {
+                alert("清空成功");
+                window.location.reload();
+            }
+        });
+    }
+
+    function addMenus() {
+        window.location.href = "/ProductMenuType/Index?name=" + SourceAccountId + "&id=" + RestaurantId + "&type=" + Type + "&peopleCount=" + peopleCount + "";
+    }
+    function myOrder() {
+        $.ajaxSetup({ sync: true });
+        var productId;
+        var price = 0;
+        var useStatus = '04';
+        var obj = document.getElementsByTagName("input");
+        for (var i = 0; i < obj.length; i++) {
+            if (obj[i].checked) {
+                productId = obj[i].value;
+                $.post("/Order/SaveOrderDetails", { type: "Insert", productId: productId, unitPrice: price, orderId: orderid, productCount: 1, useStatus: useStatus, MemberCardNo: MemberCardNo, RstType: RstType }, function (msg1) {
+                    if (msg1 == 1) {
+                        // window.location.reload();
+                    }
+                });
+
+            }
+        }
+
+
+        window.location.href = "/MyMenu/MyOrderDetail?MemberCardNo=" + MemberCardNo + "&OrderId=" + orderid + "&SourceAccountId=" + SourceAccountId + "&RstType=" + RstType + "";
+    }
+</script>
+
+
+
+

@@ -1,0 +1,25 @@
+﻿img
+{
+    -moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;
+}
+li
+{   line-height: 50px;
+    list-style:none;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+}
+ul
+{   border: 1px solid #666;
+    -webkit-padding-start: 0px;
+    padding: 10px;
+     -moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;
+}
+span
+{
+    letter-spacing:1px;
+    clear:left;
+    font-size:1em;
+}
+body
+{background: #f2f2f2;
+}
