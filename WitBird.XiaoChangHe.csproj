@@ -179,6 +179,8 @@
     <Compile Include="Controllers\MemberController.cs" />
     <Compile Include="Controllers\MyMenuController.cs" />
     <Compile Include="Controllers\MyOrderController.cs" />
+    <Compile Include="Controllers\NewBookController.cs" />
+    <Compile Include="Controllers\NewOrderController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ProductConfigureController.cs" />
@@ -558,6 +560,7 @@
     <Content Include="NewUI\yddm.html" />
     <Content Include="NewUI\ydxx.html" />
     <Content Include="NewUI\说明.txt" />
+    <Content Include="ReadMe.txt" />
     <Content Include="Scripts\content_zoom.js" />
     <Content Include="Scripts\edge.1.5.0.min.js" />
     <Content Include="Scripts\jquery-1.2.6.pack.js" />
@@ -643,6 +646,11 @@
     <Content Include="Views\Shared\备份myOrder.cshtml" />
     <Content Include="Views\Order\Promotions.cshtml" />
     <Content Include="Views\ProductType\getSecondProductTypeByTypeId.cshtml" />
+    <Content Include="Views\NewOrder\Detail.cshtml" />
+    <Content Include="Views\NewOrder\MoneyBack.cshtml" />
+    <Content Include="Views\NewOrder\My.cshtml" />
+    <Content Include="Views\NewBook\Mall.cshtml" />
+    <Content Include="Views\NewBook\Info.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
