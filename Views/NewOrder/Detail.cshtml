@@ -1,5 +1,83 @@
 ﻿@{
-    ViewBag.Title = "Detail";
+    Layout = null;
 }
 
-<h2>Detail</h2>
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>订单详情</title>
+    <link href="http://css.savory.cn/wedinner/index2.css" rel="stylesheet" type="text/css">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+    <link href="http://css.savory.cn/wedinner/ddxq(yfk).css" rel="stylesheet" type="text/css">
+    <script type="text/javascript">
+        //弹出隐藏层
+        function ShowDiv(show_div, bg_div) {
+            document.getElementById(show_div).style.display = 'block';
+            document.getElementById(bg_div).style.display = 'block';
+            var bgdiv = document.getElementById(bg_div);
+            bgdiv.style.width = document.body.scrollWidth;
+            // bgdiv.style.height = $(document).height();
+            $("#" + bg_div).height($(document).height());
+        };
+        //关闭弹出层
+        function CloseDiv(show_div, bg_div) {
+            document.getElementById(show_div).style.display = 'none';
+            document.getElementById(bg_div).style.display = 'none';
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+
+        <div class="header2"><span class="jine">订单金额：　<span class="money">100元</span></span> <span class="yifu">已付款</span></div>
+        <div class="info">　姓　　名：周德政先生<br />　电　　话：13981798782<br />　订单编号：123445<br />　备　　注：无</div>
+        <div class="san"><span class="san_l">散桌1-10人桌</span><span class="san_r"> 2015-05-22 周五 12:30</span></div>
+
+        <div class="content-header"><span>|</span>  菜品清单</div>
+        <div class="content">
+            <div class="content-img"><img src="http://img.savory.cn/wedinner/8.png"></div>
+            <div class="content-content">
+                <span class="s_z">花香醉兔肉</span><br /><span class="x_z">25.00<span style="font-size:14px"> 元</span></span><span class="x_y">x1</span>
+            </div>
+        </div>
+        <div class="content">
+            <div class="content-img"><img src="http://img.savory.cn/wedinner/8.png"></div>
+            <div class="content-content">
+                <span class="s_z">花香醉兔肉</span><br /><span class="x_z">25.00<span style="font-size:14px"> 元</span></span><span class="x_y">x1</span>
+            </div>
+        </div>
+        <div class="content">
+            <div class="content-img"><img src="http://img.savory.cn/wedinner/8.png"></div>
+            <div class="content-content">
+                <span class="s_z">花香醉兔肉</span><br /><span class="x_z">25.00<span style="font-size:14px"> 元</span></span><span class="x_y">x1</span>
+            </div>
+        </div>
+        <div class="time">创建时间 2015-05-21 14:29:42</div>
+
+        <div class="footer">
+            <a href="#shang"><div class="footer_l" onclick="ShowDiv('MyDiv','fade')">修改订单</div> </a><a href="sqtk.html">
+                <div class="footer_r">申请退款</div>
+            </a>
+        </div>
+    </div>
+    <!--弹出层时背景层DIV-->
+    <div id="fade" class="black_overlay">
+    </div>
+    <div id="MyDiv" class="white_content">
+        <div style="  cursor: default; height: 40px;color:#666;">
+
+            订单为已支付状态，若此时修改订单，本次订单将作废，金额会在24小时内退回你的账户，点击“确认修改”回到之前点菜状态进行订单修改。
+            <div style="border-top:1px solid #ccc;margin-top:6%;">
+                <div class="queren">确认修改</div>
+                <div class="quxiao" style="font-size: 16px;" onclick="CloseDiv('MyDiv','fade')">取消</div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+</body>
+</html>

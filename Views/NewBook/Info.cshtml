@@ -1,5 +1,108 @@
 ﻿@{
-    ViewBag.Title = "Info";
+    Layout = null;
 }
 
-<h2>Info</h2>
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>填写预定信息</title>
+    <link href="http://css.savory.cn/wedinner/index2.css" rel="stylesheet" type="text/css">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+    <link href="http://css.savory.cn/wedinner/common.css" rel="stylesheet" type="text/css" />
+    <link href="http://css.savory.cn/wedinner/ydxx.css" rel="stylesheet" type="text/css">
+    <script src="http://js.savory.cn/wedinner/jquery.js"></script>
+    <script src="http://js.savory.cn/wedinner/ydxx.js"></script>
+    <script type="text/javascript" src="http://js.savory.cn/wedinner/date.js"></script>
+    <script type="text/javascript" src="http://js.savory.cn/wedinner/iscroll.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#beginTime').date();
+            $('#endTime').date({ theme: "datetime" });
+
+            $(".kbtn").click(function () {
+
+                $("input.kbtn").css({ "background-image": "none" });
+            });
+            $("#endTime").click(function () {
+                $(this).css({ "opacity": "1" });
+            });
+            $("input").focus(function () {
+                $(this).val("");
+            }).blur(function () {
+                if ($(this).val() == "")
+                    $(this).val(this.defaultValue);
+            });
+
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <a href="index2.html"> <div class="header2">成都铁狮门晶融汇店<span class="header_r">></span></div></a>
+
+        <div class="header3" style="position:relative;">选择用餐时间<input id="endTime" /><span class="header_r">></span></div>
+        <div class="header3">
+            <span style="color:#999;"><input type="text" value="请输入姓名" style="width:24%;" /></span>
+            <div class="sex"><img class="img1" src="http://img.savory.cn/wedinner/11.png" height="30">　<img class="img2" src="http://img.savory.cn/wedinner/10.png" height="30"> </div>
+        </div>
+
+        <div class="header3" style="color:#999;"><input type="text" value="输入预定手机号码" /></div>
+        <div class="header3" style="color:#999;line-height:50px;height:50px;"><input type="text" value="填写用餐人数" /><span style="color:#000;"> 人</span></div>
+        <div class="huise"></div>
+        <div class="header3" style="font-weight:bold;margin-bottom:10px;"><span style="color:red;font-size:15px;">|</span> 菜品清单</div>
+        <div class="content2">
+            <img src="http://img.savory.cn/wedinner/11 (2).png" style="width:30%;" />
+            <span class="sz">绝味鲜椒蹄花</span> <span class="xz">
+                <span style="font-size:18px;">25.00</span>
+                <span style="font-size:13px;"> 元</span>
+            </span> <span class="xy"> x1</span>
+        </div>
+
+        <div class="content2">
+            <img src="http://img.savory.cn/wedinner/11 (2).png" style="width:30%;" />
+            <span class="sz">绝味鲜椒蹄花</span> <span class="xz">
+                <span style="font-size:18px;">25.00</span>
+                <span style="font-size:13px;"> 元</span>
+            </span> <span class="xy"> x1</span>
+        </div>
+
+        <div class="content2">
+            <img src="http://img.savory.cn/wedinner/11 (2).png" style="width:30%;" />
+            <span class="sz">绝味鲜椒蹄花</span> <span class="xz">
+                <span style="font-size:18px;">25.00</span>
+                <span style="font-size:13px;"> 元</span>
+            </span> <span class="xy"> x1</span>
+        </div>
+
+        <div class="content2">
+            <img src="http://img.savory.cn/wedinner/11 (2).png" style="width:30%;" />
+            <span class="sz">绝味鲜椒蹄花</span> <span class="xz">
+                <span style="font-size:18px;">25.00</span>
+                <span style="font-size:13px;"> 元</span>
+            </span> <span class="xy"> x1</span>
+        </div>
+
+
+        <div class="footer">
+            <div class="zhe">
+                <span style="opacity:1;">如升级为储值微会员，当前可优惠30元且可享受 ( 充1000再送300 ) 的优惠！</span>
+            </div>合计：238 ¥ <a href="ddxq(yfk).html">
+                <div class="fukuan">确认付款</div>
+            </a>
+        </div>
+
+        <div id="datePlugin"></div>
+        <!--效果html结束-->
+        <div class="clear"></div>
+
+        <div id="datePlugin"></div>
+        <!--效果html结束-->
+        <div class="clear"></div>
+
+    </div>
+</body>
+</html>
