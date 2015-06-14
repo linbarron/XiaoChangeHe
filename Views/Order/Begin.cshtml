@@ -19,7 +19,7 @@
     <style>
         a {
             text-decoration: none;
-            color: #fff;
+            color: #666;
         }
     </style>
 
@@ -36,12 +36,11 @@
             {
                 foreach (RestaurantAbstract item in Model)
                 {
-                    var clickEvent = "load('@(item.Id)');";
+                    var clickEvent = string.Format("load('{0}');",item.Id);
                     //饭店类型 “01”--快餐店  “02”---正常店
                     if (item.RstType == "01")
                     {
-                        clickEvent = "loadQuick('@(item.Id)', '@(item.RstType)'); ";
-
+                        clickEvent = string.Format("loadQuick('{0}', '{1}'); ",item.Id,item.RstType);
                     }
                 <div class="content">
                     <a  href="javascript:void(0);" onclick="@clickEvent">
@@ -50,27 +49,21 @@
                         </div>
 
                         <div class="content-content">
-                            <span class="content-l" ">@(item != null ? item.Name : "")</span><span class="content-r">
-                                <img src="/newscontent/images/dw.png" width="10">1.3km</span>
-                            <br />
-                            联系电话：@(item != null ? item.ContactPhone : "")<br />
-                            地址：@(item != null ? item.Address : "")
+                            <span class="content-l">@(item != null ? item.Name : "")</span><span class="content-r">
+                                <img src="~/NewContent/images/dw.png" width="10">1.3km</span>
+                            <br />联系电话：@(item != null ? item.ContactPhone : "")<br />地址：@(item != null ? item.Address : "")
                         </div>
-
                         <div class="footer">
-                            <a href="javascript:void(0);" onclick=" load('@(item.Id)'); ">
+                            <a href="javascript:void(0);" onclick=" @clickEvent ">
                                 <div class="footer1">
-                                    <img src="/newscontent/images/dc.png" width="15">立即点菜
-                                </div>
+                                    <img src="~/NewContent/images/dc.png" width="15">立即点菜</div>
                             </a><a href="ksdc.html">
                                 <div class="footer2">
-                                    <img src="/newscontent/images/yh.png" width="15">今日特惠
-                                </div>
+                                    <img src="~/NewContent/images/yh.png" width="15">今日特惠</div>
                             </a>
                             <a href="@(item.MapUrl)">
                                 <div class="footer3">
-                                    <img src="/newscontent/images/dh.png" width="15">导航到店
-                                </div>
+                                    <img src="~/NewContent/images/dh.png" width="15">导航到店</div>
                             </a>
                         </div>
 
@@ -92,13 +85,13 @@
         } else if ('@(ViewBag.isCurTime)' != null && '@(ViewBag.isCurTime)' == 1) {
             str = "<a href=\"/SelTableInfo/SelTableInfo?SourceAccountId=@(ViewBag.SourceAccountId)&RestaurantId=" + id + "&Status=1\" class=\"but\">新预定</a>" +
                     "<a href=\"/Order/MY/@( ViewBag.CompanyId)/@(ViewBag.SourceAccountId)\"  class=\"but\">查看订单</a>";
-                var unit = "%";
-                sAlert(str, 80, 20, unit);
-            }
+            var unit = "%";
+            sAlert(str, 80, 20, unit);
+        }
 
-    }
-    function loadAuto(Id, RstType) {
-        if ('@(ViewBag.AutoOrderCount)' != null && '@(ViewBag.AutoOrderCount)' == 0) {
+}
+function loadAuto(Id, RstType) {
+    if ('@(ViewBag.AutoOrderCount)' != null && '@(ViewBag.AutoOrderCount)' == 0) {
             window.location.href = "/AutoMenuIndex/AutoMenuIndex/" + Id + "/@(ViewBag.SourceAccountId)?Status=1&Type=Auto&CompanyId=@(ViewBag.CompanyId)&RstType=" + RstType + "&IsOrder=@(ViewBag.AutoOrderCount)";
         } else if ('@(ViewBag.AutoOrderCount)' != null && '@(ViewBag.AutoOrderCount)' == 1) {
             str = "<p style=\"float: left;  margin-top: -20px; margin-left: 10px;  color: red;margin-bottom: 0px;\">您已有未消费的订单</p>" +
@@ -112,9 +105,9 @@
 function loadQuick(Id, RstType) {
 
     if ('@(ViewBag.AutoOrderCount)' != null && '@(ViewBag.AutoOrderCount)' == 0) {
-            window.location.href = "/ProductType/Index?SourceAccountId=@(ViewBag.SourceAccountId)&RestaurantId=" + Id + "&Status=1&Type=FastFood&IsOrder=@(ViewBag.AutoOrderCount)&MemberCardNo=@(ViewBag.MemberCardNo)&Orderid=@(ViewBag.OrderId)";
-        } else if ('@(ViewBag.AutoOrderCount)' != null && '@(ViewBag.AutoOrderCount)' == 1) {
-            str = "<p style=\"float: left;  margin-top: -20px; margin-left: 10px;  color: red;margin-bottom: 0px;\">您已有未消费的订单</p>" +
+        window.location.href = "/ProductType/Index?SourceAccountId=@(ViewBag.SourceAccountId)&RestaurantId=" + Id + "&Status=1&Type=FastFood&IsOrder=@(ViewBag.AutoOrderCount)&MemberCardNo=@(ViewBag.MemberCardNo)&Orderid=@(ViewBag.OrderId)";
+    } else if ('@(ViewBag.AutoOrderCount)' != null && '@(ViewBag.AutoOrderCount)' == 1) {
+        str = "<p style=\"float: left;  margin-top: -20px; margin-left: 10px;  color: red;margin-bottom: 0px;\">您已有未消费的订单</p>" +
 "  <a href=\"/ProductType/Index?SourceAccountId=@(ViewBag.SourceAccountId)&RestaurantId=" + Id + "&Status=1&Type=FastFood&IsOrder=@(ViewBag.AutoOrderCount)&MemberCardNo=@(ViewBag.MemberCardNo)&Orderid=@(ViewBag.OrderId)\" class=\"but\">新预定</a>  " +
 "<a href=\"/MyMenu/MyOrderDetail/?Orderid=@(ViewBag.OrderId)&SourceAccountI=@(ViewBag.SourceAccountId)&MemberCardNo=@(ViewBag.MemberCardNo)&RstType=FastFood\"  class=\"but\">查看订单</a> ";
             var unit = "%";
