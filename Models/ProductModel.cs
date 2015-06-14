@@ -66,7 +66,7 @@ namespace WitBird.XiaoChangHe.Models.Info
                         left join ProductConfigure pf on pf.ProductId=b.Id, S_CodeList cl
                         where 1=1 and b.Status=1 and  b.IsPause=0 and cl.CodeTypeListValue=b.Unit and cl.CodeType='ProductUnit'
                         and not exists(select 1 from productsisbook pb where b.id=pb.Productid and pb.isbook=0 )
-                        and b.RestaurantId=@RestaurantId and  b.ProductType=@ProductTypeId order by b.OrderId asc";
+                        and b.RestaurantId=@RestaurantId and  b.ProductType=@ProductTypeId order by b.IsDiscount asc";
                 tableAccessor = db.CreateSqlStringAccessor(strSql, ipmapper, MapBuilder<ProductNew>.
                     MapAllProperties().Build());
                 list = tableAccessor.Execute(new string[] { RestaurantId, ProductTypeId }).ToList();
