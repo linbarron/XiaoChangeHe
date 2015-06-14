@@ -11,376 +11,388 @@
 
 <html lang="en">
 <head>
-    <meta charset="utf-8"  http-equiv="expires" content="800000" >
-    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
     <title>开始点菜</title>
     <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
-
-    <link href="~/Content/public.css" rel="stylesheet" />
-    <link href="~/Content/tab.css?id=2" rel="stylesheet" />
-    <script src="/Scripts/jquery-1.7.1.min.js"></script>
-    <script src="/Scripts/jquery-1.2.6.pack.js"></script>
-<script  src="/Scripts/content_zoom.js"></script>
-    <style type="text/css">
-/*自适应圆角投影*/
-.round_shade_box{
-    width:1px; height:1px; font-size:0; display:none; _background:white; _border:1px solid #cccccc;   
-   -moz-opacity: 0.9; opacity:.90; filter: alpha(opacity=90);
-}
-.round_shade_center {font-size:14px;background:#FFF;letter-spacing:1px;line-height:1.5;margin:0 12px 0 10px;padding:10px;}
-</style>
+    <meta charset="utf-8"  http-equiv="expires" content="800000" >
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+    <link href="~/NewContent/style/ksdc.css" rel="stylesheet" type="text/css">
+    <script src="~/NewContent/js/jquery.js"></script>
+    <script src="~/NewContent/js/ksdc.js"></script>
+    <style>
+        a {
+            text-decoration: none;
+            color: #fff;
+        }
+    </style>
 
 </head>
 <body>
-         
+    <div class="container">
         @if (ViewBag.FirstMenus != null)
-          {<div class="ribbon" >
-
-              @foreach (ProductType item1 in ViewBag.FirstMenus as List<ProductType>)
-              {    @*class="title" 
-                  *@
-                    <a href="javascript:void(0)" onclick="DisplaySecondMenus('@item1.TypeId','@item1.RestaurantId')" class="m@(m)" >
-                      <span class="FirstTypeName m@(m) ">@item1.TypeName</span>
-                    </a>
-            m++;
-              }
-               </div>
-          }
-
-   
-    <div class="htmltabs" style="width: 100%; min-width: 300px; -webkit-overflow-scrolling: touch; overflow-y: scroll;">
-        <div id="tab">
-            <!-- the navigation  start-->
-            <header>
-                <nav class="mainnav" id="mainnav">
-                    <ul class="tabs">
-                         @if (Model != null){
-                        foreach (ProductType item in Model)
+        {
+            <div class="left_top">今日特价</div>
+            <div class="top_list">
+                <ul>
+                    @foreach (ProductType item1 in ViewBag.FirstMenus as List<ProductType>)
+                    {
+                        if (m == 1)
                         {
-                            <li class="tab@(i)">
-                                <a class="tab@(i) tab" href="javascript:void(0)" tid="@item.TypeId" rid="@item.RestaurantId" onclick="DisplayContent('@item.TypeId','@item.RestaurantId')">
-                                    @Html.DisplayFor(modelItem => item.TypeName)</a>
-
-                            </li>
-                            i++;
-                        }
-                        }
-                    </ul>
-                </nav>
-            </header>
-        </div>
-         <!-- the navigation  end-->
-          <section  class="section" id="section">
-            <div class="tab tabsContent" id="Content">
+                        <li class="r_bor bg1" onclick=" DisplaySecondMenus('@item1.TypeId', '@item1.RestaurantId') ">@item1.TypeName</li>
+                     }
+                     else if (m == 2)
+                     {
+                        <li class="r_bor" onclick=" DisplaySecondMenus('@item1.TypeId', '@item1.RestaurantId') ">@item1.TypeName</li>
+                     }
+                     else
+                     {
+                        <li onclick=" DisplaySecondMenus('@item1.TypeId', '@item1.RestaurantId') ">@item1.TypeName</li>
+                     }
+                     m++;
+                 }
+                </ul>
             </div>
-           </section>
-      
-        <div style="clear: both"></div>
+    }
+        <div class="left_list" style="margin-top: 0px;">
+            <ol>
+                @if (Model != null)
+                {
+
+                    foreach (ProductType item in Model)
+                    {
+                        if (i == 1)
+                        {
+                    <li class="bg2" tid="@item.TypeId" rid="@item.RestaurantId" onclick=" DisplayContent('@item.TypeId', '@item.RestaurantId') ">
+                        @Html.DisplayFor(modelItem => item.TypeName)
+                        <span class="shu">@i</span>
+                    </li>
+                }
+                else
+                {
+                    <li tid="@item.TypeId" rid="@item.RestaurantId" onclick=" DisplayContent('@item.TypeId', '@item.RestaurantId') ">
+                        @Html.DisplayFor(modelItem => item.TypeName)
+                        <span class="shu">@i</span>
+                    </li>
+                }
+                i++;
+            }
+        }
+            </ol>
+        </div>
+
+        <div class="htmltabs" style="width: 100%; min-width: 300px; -webkit-overflow-scrolling: touch; overflow-y: scroll;">
+            <div id="tab">
+                <!-- the navigation  start-->
+                <header>
+                    <nav class="mainnav" id="mainnav">
+                        <ul class="tabs">
+                        </ul>
+                    </nav>
+                </header>
+            </div>
+            <!-- the navigation  end-->
+            <section class="section" id="section">
+                <div class="tab tabsContent" id="Content">
+                </div>
+            </section>
+
+            <div style="clear: both"></div>
+        </div>
+        <div id="BigImg"></div>
+
+        <div class="MyMenuBut">
+
+            <a href="javascript:void(0);" onclick="myMenu()">已点菜单
+ <span id="totalcount" style="position: absolute; font-weight: bold; color: #E82E05; font-size: 0.8em; top: -20px; right: 12px; display: block"></span>
+
+            </a>
+        </div>
     </div>
-      <div id ="BigImg"></div>
-    
-  @*  @if (ViewBag.FastFood != null && ViewBag.FastFood == "FastFood")
-    {
-        <div class="MyMenuBut" >
-         <a href="javascript:void(0);" onclick="myOrder()">确定
-              <span id="totalcount" style="position: absolute;font-weight: bold;color: #E82E05;font-size: 0.8em;top: -20px;right: 12px;display:block"></span>
-         </a></div>
-    }
-    else
-    {
-        *@<div class="MyMenuBut" >
-
-         <a href="javascript:void(0);" onclick="myMenu()">已点菜单
- <span id="totalcount" style="position: absolute;font-weight: bold;color: #E82E05;font-size: 0.8em;top: -20px;right: 12px;display:block"></span>
-
-         </a></div>
-    @*}*@
-
     <input  type="hidden" value="@(Session["CompanyId"] != null ? Session["CompanyId"].ToString() : "")"  id="CompanyId"/>
-</body>
-</html>
-
-  <script>
-      $(document).ready(function () {
-          var height = document.documentElement.clientHeight;
-          $('#mainnav').css("height", height-20+"px");
-          $('#section').css("height", height-20+"px");
-          load(); FirstLoad(); loadContent();
-      });
-     
-      
-      function load() {
-          $('div.htmltabs ul.tabs li.tab1 a').addClass('tab-current');
-          $('div.htmltabs ul li a').click(function () {
-              var thisClass = this.className.slice(0, 4);
-              $('div.htmltabs ul.tabs li a').removeClass('tab-current');
-              $(this).addClass('tab-current');
-          });
-         
-      }
-      function FirstLoad() {
-          $('div.ribbon a.m1 span').addClass('firstMenus-current');
-          $('div.ribbon a span').click(function () {
-           
-              var thisClass = this.className.slice(0, 1);
-              $('div.ribbon a span').removeClass('firstMenus-current');
-              $(this).addClass('firstMenus-current');
-          });
-      }
-      var orderid;
-      var MemberCardNo;
-      var SourceAccountId = '@ViewBag.SourceAccountId';
-      var bookTime = '@ViewBag.BookTime'
-      var Type = '@ViewBag.FastFood';
-      var CompanyId = $("#CompanyId").val();
-    </script>
-<script>
-
-    function DisplaySecondMenus(TypeId, RestaurantId) {
-        $.ajaxSetup({ async: false });
-        $.post("/ProductType/getSecondProductTypeByTypeId", { RestaurantId: RestaurantId, TypeId: TypeId }, function (msg) {
-            $(".tabs").html(msg);
+    <script>
+        $(document).ready(function () {
+            var height = document.documentElement.clientHeight;
+            $('#mainnav').css("height", height - 20 + "px");
+            $('#section').css("height", height - 20 + "px");
+            load(); FirstLoad(); loadContent();
         });
-        load();loadContent();
-    }
-</script>
-<script>
-   function loadContent(){
-        
-        var TypeId = $(".mainnav .tabs li:first a").attr("tid");
-        var RestaurantId = $(".mainnav .tabs li:first a").attr("rid");
-        DisplayContent(TypeId, RestaurantId);
-    }
 
-    function DisplayContent(TypeId, RestaurantId) {
-        $.ajaxSetup({ async: false });
-        var Status = '@ViewBag.Status';
-            $.post("/Product/getProductByProductTypeId", { RestaurantId: RestaurantId, ProductTypeId: TypeId, SourceAccountId: SourceAccountId, Status:Status,Type:Type}, function (msg) {
-            
-                $("#Content").html(msg);
-                orderid = $("#OrderId").val();
-                MemberCardNo = $("#MemberCardNo").val();
-                var t = $(".totalcount").val();
-                //显示用户已点菜数量
-                if (t != null || t != 0 || t != ""||t!=undefined) {
-                    $("#totalcount").html(t);
-                }
-               
-                $('.food-image a').fancyZoom({ scaleImg: true, closeOnClick: true });
-               
+
+        function load() {
+            $('div.htmltabs ul.tabs li.tab1 a').addClass('tab-current');
+            $('div.htmltabs ul li a').click(function () {
+                var thisClass = this.className.slice(0, 4);
+                $('div.htmltabs ul.tabs li a').removeClass('tab-current');
+                $(this).addClass('tab-current');
             });
-           
+
+        }
+        function FirstLoad() {
+            $('div.ribbon a.m1 span').addClass('firstMenus-current');
+            $('div.ribbon a span').click(function () {
+
+                var thisClass = this.className.slice(0, 1);
+                $('div.ribbon a span').removeClass('firstMenus-current');
+                $(this).addClass('firstMenus-current');
+            });
+        }
+        var orderid;
+        var MemberCardNo;
+        var SourceAccountId = '@ViewBag.SourceAccountId';
+    var bookTime = '@ViewBag.BookTime'
+        var Type = '@ViewBag.FastFood';
+        var CompanyId = $("#CompanyId").val();
+    </script>
+    <script>
+
+        function DisplaySecondMenus(TypeId, RestaurantId) {
+            $.ajaxSetup({ async: false });
+            $.post("/ProductType/getSecondProductTypeByTypeId", { RestaurantId: RestaurantId, TypeId: TypeId }, function (msg) {
+                $(".tabs").html(msg);
+            });
+            load(); loadContent();
+        }
+    </script>
+    <script>
+        function loadContent() {
+
+            var TypeId = $(".mainnav .tabs li:first a").attr("tid");
+            var RestaurantId = $(".mainnav .tabs li:first a").attr("rid");
+            DisplayContent(TypeId, RestaurantId);
+        }
+
+        function DisplayContent(TypeId, RestaurantId) {
+            $.ajaxSetup({ async: false });
+            var Status = '@ViewBag.Status';
+        $.post("/Product/getProductByProductTypeId", { RestaurantId: RestaurantId, ProductTypeId: TypeId, SourceAccountId: SourceAccountId, Status: Status, Type: Type }, function (msg) {
+
+            $("#Content").html(msg);
+            orderid = $("#OrderId").val();
+            MemberCardNo = $("#MemberCardNo").val();
+            var t = $(".totalcount").val();
+            //显示用户已点菜数量
+            if (t != null || t != 0 || t != "" || t != undefined) {
+                $("#totalcount").html(t);
+            }
+
+            $('.food-image a').fancyZoom({ scaleImg: true, closeOnClick: true });
+
+        });
+
     }
 
-  
-</script>
+
+    </script>
+    <script>
 
 
+        function myMenu() {
+            $.ajaxSetup({ async: false });
+            if (orderid == null || orderid == '') {
 
-<script>
-   
-  
-    function myMenu() {
-        $.ajaxSetup({ async: false });
-        if (orderid == null || orderid == '') {
+                alert("你还未点菜！");
+                return;
+            }
+            window.location.href = "/MyMenu/MyMenu?MemberCardNo=" + MemberCardNo + "&OrderId=" + orderid + "&SourceAccountId=" + SourceAccountId + "&RstType=" + Type + "&ComypanyId =" + CompanyId + "";
 
-            alert("你还未点菜！");
-            return;
-        } 
-        window.location.href = "/MyMenu/MyMenu?MemberCardNo=" + MemberCardNo + "&OrderId=" + orderid + "&SourceAccountId=" + SourceAccountId + "&RstType=" + Type + "&ComypanyId =" + CompanyId + "";
-      
-    }
+        }
 
 
-    function myOrder() {
-        $.ajaxSetup({ async: false });
-          if (orderid == null || orderid == '') {
+        function myOrder() {
+            $.ajaxSetup({ async: false });
+            if (orderid == null || orderid == '') {
 
-              alert("你还未点菜！");
-        return;
-         } 
+                alert("你还未点菜！");
+                return;
+            }
             window.location.href = "/MyMenu/MyOrderDetail?MemberCardNo=" + MemberCardNo + "&OrderId=" + orderid + "&SourceAccountI=" + SourceAccountId + "&ComypanyId =" + CompanyId + "&RstType=" + Type + "";
-      
-    }
-    function add(id) {
-        var num = $("#" + id).val();
-        $("#" + id).val(parseInt(num) + 1);
-        $.ajaxSetup({ cache: false });
-        var productId = id;
-        var num1 = $("#" + id).val();
-        if (num1 > 0) {
-            $("#" + id).css("display", "inline");
-            $("#" + "pic" + id).css("display", "inline");
+
         }
-        //用户已点菜数量
-        var total = $("#totalcount").html();
-        if (total == null || total == "" || total == undefined) {
-            total = 0;
-        }
-       
-        $("#totalcount").html(parseInt(total) + 1);
-        
-        ////好多人点过此菜
-        //if (num1 == 1) {
-        //    var num = $("#DianCount" + id).html();
-            
-        //    $("#DianCount" + id).html(parseInt(num) + 1);
-        //    var num2 = $("#DianCount" + id).html();
-        //    $.post("/ProductConfigure/save", { id: id, Count: num2 }, function (msg1) {
-        //    });
-        //}
-        var price = $("#rmb" + id).html();//.replace('￥', '');
-        if (orderid == null || orderid == '') {
-            $.post("/Order/SaveOrders", { type: "Insert", SourceAccountId: SourceAccountId, bookTime: bookTime, isQuick: Type }, function (msg) {
-                //$("#saveorderid").val(msg);
-                orderid = msg;
-                if (msg != "00000000-0000-0000-0000-000000000000") {
+        function add(id) {
+            var num = $("#" + id).val();
+            $("#" + id).val(parseInt(num) + 1);
+            $.ajaxSetup({ cache: false });
+            var productId = id;
+            var num1 = $("#" + id).val();
+            if (num1 > 0) {
+                $("#" + id).css("display", "inline");
+                $("#" + "pic" + id).css("display", "inline");
+            }
+            //用户已点菜数量
+            var total = $("#totalcount").html();
+            if (total == null || total == "" || total == undefined) {
+                total = 0;
+            }
+
+            $("#totalcount").html(parseInt(total) + 1);
+
+            ////好多人点过此菜
+            //if (num1 == 1) {
+            //    var num = $("#DianCount" + id).html();
+
+            //    $("#DianCount" + id).html(parseInt(num) + 1);
+            //    var num2 = $("#DianCount" + id).html();
+            //    $.post("/ProductConfigure/save", { id: id, Count: num2 }, function (msg1) {
+            //    });
+            //}
+            var price = $("#rmb" + id).html();//.replace('￥', '');
+            if (orderid == null || orderid == '') {
+                $.post("/Order/SaveOrders", { type: "Insert", SourceAccountId: SourceAccountId, bookTime: bookTime, isQuick: Type }, function (msg) {
+                    //$("#saveorderid").val(msg);
+                    orderid = msg;
+                    if (msg != "00000000-0000-0000-0000-000000000000") {
 
 
-                    $.post("/Order/SaveOrderDetails", { type: "Insert", productId: productId, unitPrice: price, orderId: msg, productCount: num1 }, function (msg1) {
-                        if (msg1 == 1) {
+                        $.post("/Order/SaveOrderDetails", { type: "Insert", productId: productId, unitPrice: price, orderId: msg, productCount: num1 }, function (msg1) {
+                            if (msg1 == 1) {
 
-                        }
+                            }
 
-                    });
-                }
-
-            });
-        }
-        else {
-            if (orderid != "00000000-0000-0000-0000-000000000000") {
-                var num1 = $("#" + id).val();
-                $.post("/Order/SaveOrderDetails", { type: "Insert", productId: productId, unitPrice: price, orderId: orderid, productCount: num1 }, function (msg1) {
-                    if (msg1 == 1) {
-
+                        });
                     }
 
                 });
             }
-        }
-    }
-    function jian(id) {
-        var num = $("#" + id).val();
-        if (num > 0) {
-            $("#" + id).val(parseInt(num) - 1);
-        }
-        $.ajaxSetup({ cache: false });
-        var num1 = $("#" + id).val();
-        if (num1 == 0) {
-            $("#" + id).css("display", "none");
-            $("#" + "pic" + id).css("display", "none");
-        }
-        //用户已点菜数量
-        var total = $("#totalcount").html();
-        if (total > 0) {
-            $("#totalcount").html(parseInt(total) - 1);
-        }
-        ////好多人点过此菜
-        //if (num1 == 0) {
-        //    var num = $("#DianCount" + id).html();
-        //    if (num > 0) {
-        //        $("#DianCount" + id).html(parseInt(num) - 1);
-        //        var num2 = $("#DianCount" + id).html();
-        //        $.post("/ProductConfigure/save", { id: id, Count: num2 }, function (msg1) {
-        //        });
-        //    }
-        //}
-        var productId = id;
-        var price = $("#rmb" + id).html();//.replace('￥', '');
-        if (orderid != null && orderid != '') {
-            if (orderid != "00000000-0000-0000-0000-000000000000") {
-
-                if (num1 > 0) {
+            else {
+                if (orderid != "00000000-0000-0000-0000-000000000000") {
+                    var num1 = $("#" + id).val();
                     $.post("/Order/SaveOrderDetails", { type: "Insert", productId: productId, unitPrice: price, orderId: orderid, productCount: num1 }, function (msg1) {
                         if (msg1 == 1) {
 
                         }
 
                     });
-                } else if (num1 == 0) {
-                    var num1 = $("#" + id).val();
-                    $.post("/Order/DelOrderDetails", { productId: productId, orderId: orderid }, function (msg1) {
-                        if (msg1 == 1) {
-
-                        }
-                        else {
-
-                        }
-                    });
                 }
             }
         }
-       
-    }
-    function addLove(id) {
-        var num = $("#love" + id).html();
-        $("#love" + id).html(parseInt(num) + 1);
-        var num1 = $("#love" + id).html();
-        $.post("/ProductConfigure/save", { id: id, LoveCount: num1 }, function (msg1) {
-           
-        });
-    }
+        function jian(id) {
+            var num = $("#" + id).val();
+            if (num > 0) {
+                $("#" + id).val(parseInt(num) - 1);
+            }
+            $.ajaxSetup({ cache: false });
+            var num1 = $("#" + id).val();
+            if (num1 == 0) {
+                $("#" + id).css("display", "none");
+                $("#" + "pic" + id).css("display", "none");
+            }
+            //用户已点菜数量
+            var total = $("#totalcount").html();
+            if (total > 0) {
+                $("#totalcount").html(parseInt(total) - 1);
+            }
+            ////好多人点过此菜
+            //if (num1 == 0) {
+            //    var num = $("#DianCount" + id).html();
+            //    if (num > 0) {
+            //        $("#DianCount" + id).html(parseInt(num) - 1);
+            //        var num2 = $("#DianCount" + id).html();
+            //        $.post("/ProductConfigure/save", { id: id, Count: num2 }, function (msg1) {
+            //        });
+            //    }
+            //}
+            var productId = id;
+            var price = $("#rmb" + id).html();//.replace('￥', '');
+            if (orderid != null && orderid != '') {
+                if (orderid != "00000000-0000-0000-0000-000000000000") {
 
+                    if (num1 > 0) {
+                        $.post("/Order/SaveOrderDetails", { type: "Insert", productId: productId, unitPrice: price, orderId: orderid, productCount: num1 }, function (msg1) {
+                            if (msg1 == 1) {
 
+                            }
 
-    function dialog(id) {
-        var str = "<nav><img src=\"/Order/GetBigImages/" + id + "\" style=\"width: 85%;height: 100%;margin: 10px;-webkit-border-radius: 5px;border-radius: 5px;max-width: 300px; max-height: 300px;-webkit-border-radius: 5px;border-radius: 5px;\"/> </nav>";
-        var unit = "%";
-        sAlert(str, 90, 40, unit);
-    }
+                        });
+                    } else if (num1 == 0) {
+                        var num1 = $("#" + id).val();
+                        $.post("/Order/DelOrderDetails", { productId: productId, orderId: orderid }, function (msg1) {
+                            if (msg1 == 1) {
 
+                            }
+                            else {
 
-    function sAlert(str, msgw, msgh, unit) {
-        var msgw, msgh, bordercolor;
-        msgw = msgw;//提示窗口的宽度
-        msgh = msgh;//提示窗口的高度
-        bordercolor = "#1da507";//提示窗口的边框颜色
-        titlecolor = "#1da507";//提示窗口的标题颜色
+                            }
+                        });
+                    }
+                }
+            }
 
-        var sWidth, sHeight;
-        sWidth = document.body.offsetWidth;
-        sHeight = document.body.offsetHeight;
-
-        var bgObj = document.createElement("div");
-        bgObj.setAttribute('id', 'bgDiv');
-        bgObj.style.position = "absolute";
-        bgObj.style.top = "0";
-        bgObj.style.background = "#777";
-        bgObj.style.filter = "progid:DXImageTransform.Microsoft.Alpha(style=3,opacity=25,finishOpacity=75";
-        bgObj.style.opacity = "0.6";
-        bgObj.style.left = "0";
-        bgObj.style.width = sWidth + "px";
-        bgObj.style.height = sHeight + "px";
-        document.body.appendChild(bgObj);
-        var msgObj = document.createElement("div")
-        msgObj.setAttribute("id", "msgDiv");
-        msgObj.setAttribute("align", "center");
-        msgObj.style.position = "absolute";
-        //msgObj.style.background = "white";
-        msgObj.style.font = "12px/1.6em Verdana, Geneva, Arial, Helvetica, sans-serif";
-        //msgObj.style.border = "1px solid " + bordercolor;
-        msgObj.style.width = msgw + unit;
-       // msgObj.style.height = msgh + unit;
-        msgObj.style.top = "25" + unit;
-         msgObj.style.left = "5" + unit;
-         msgObj.onclick = function () {
-            document.body.removeChild(bgObj);
-          
-            document.body.removeChild(msgObj);
         }
-        document.body.appendChild(msgObj);
-        var txt = document.createElement("span");
-        txt.style.margin = "1em 0"
-        txt.setAttribute("id", "msgTxt");
-        txt.innerHTML = str;
-        document.getElementById("msgDiv").appendChild(txt);
-        var strs = document.createElement("span");
-        strs.style.margin = "1em 0"
-        strs.setAttribute("id", "msgTxts");
-        strs.innerHTML = "";
-        document.getElementById("msgDiv").appendChild(strs);
+        function addLove(id) {
+            var num = $("#love" + id).html();
+            $("#love" + id).html(parseInt(num) + 1);
+            var num1 = $("#love" + id).html();
+            $.post("/ProductConfigure/save", { id: id, LoveCount: num1 }, function (msg1) {
 
-    }
+            });
+        }
 
 
-</script>
+
+        function dialog(id) {
+            var str = "<nav><img src=\"/Order/GetBigImages/" + id + "\" style=\"width: 85%;height: 100%;margin: 10px;-webkit-border-radius: 5px;border-radius: 5px;max-width: 300px; max-height: 300px;-webkit-border-radius: 5px;border-radius: 5px;\"/> </nav>";
+            var unit = "%";
+            sAlert(str, 90, 40, unit);
+        }
+
+
+        function sAlert(str, msgw, msgh, unit) {
+            var msgw, msgh, bordercolor;
+            msgw = msgw;//提示窗口的宽度
+            msgh = msgh;//提示窗口的高度
+            bordercolor = "#1da507";//提示窗口的边框颜色
+            titlecolor = "#1da507";//提示窗口的标题颜色
+
+            var sWidth, sHeight;
+            sWidth = document.body.offsetWidth;
+            sHeight = document.body.offsetHeight;
+
+            var bgObj = document.createElement("div");
+            bgObj.setAttribute('id', 'bgDiv');
+            bgObj.style.position = "absolute";
+            bgObj.style.top = "0";
+            bgObj.style.background = "#777";
+            bgObj.style.filter = "progid:DXImageTransform.Microsoft.Alpha(style=3,opacity=25,finishOpacity=75";
+            bgObj.style.opacity = "0.6";
+            bgObj.style.left = "0";
+            bgObj.style.width = sWidth + "px";
+            bgObj.style.height = sHeight + "px";
+            document.body.appendChild(bgObj);
+            var msgObj = document.createElement("div")
+            msgObj.setAttribute("id", "msgDiv");
+            msgObj.setAttribute("align", "center");
+            msgObj.style.position = "absolute";
+            //msgObj.style.background = "white";
+            msgObj.style.font = "12px/1.6em Verdana, Geneva, Arial, Helvetica, sans-serif";
+            //msgObj.style.border = "1px solid " + bordercolor;
+            msgObj.style.width = msgw + unit;
+            // msgObj.style.height = msgh + unit;
+            msgObj.style.top = "25" + unit;
+            msgObj.style.left = "5" + unit;
+            msgObj.onclick = function () {
+                document.body.removeChild(bgObj);
+
+                document.body.removeChild(msgObj);
+            }
+            document.body.appendChild(msgObj);
+            var txt = document.createElement("span");
+            txt.style.margin = "1em 0"
+            txt.setAttribute("id", "msgTxt");
+            txt.innerHTML = str;
+            document.getElementById("msgDiv").appendChild(txt);
+            var strs = document.createElement("span");
+            strs.style.margin = "1em 0"
+            strs.setAttribute("id", "msgTxts");
+            strs.innerHTML = "";
+            document.getElementById("msgDiv").appendChild(strs);
+
+        }
+
+
+    </script>
+</body>
+</html>
+
+
