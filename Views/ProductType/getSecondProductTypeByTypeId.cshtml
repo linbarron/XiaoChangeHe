@@ -9,14 +9,25 @@
     int i = 1;
 }
 
-  @if (Model != null){
-                        foreach (ProductType item in Model)
-                        {
-                            <li class="tab@(i)">
-                                <a class="tab@(i) tab" href="javascript:void(0)" tid="@item.TypeId" rid="@item.RestaurantId" onclick="DisplayContent('@item.TypeId','@item.RestaurantId')">
-                                    @Html.DisplayFor(modelItem => item.TypeName)</a>
+                @if (Model != null)
+                {
 
-                            </li>
-                            i++;
-                        }
-                        }
+                    foreach (ProductType item in Model)
+                    {
+                        if (i == 1)
+                        {
+                    <li class="bg2" tid="@item.TypeId" rid="@item.RestaurantId" onclick=" DisplayContent('@item.TypeId', '@item.RestaurantId') ">
+                        @Html.DisplayFor(modelItem => item.TypeName)
+                        <span class="shu">@i</span>
+                    </li>
+                }
+                else
+                {
+                    <li tid="@item.TypeId" rid="@item.RestaurantId" onclick=" DisplayContent('@item.TypeId', '@item.RestaurantId') ">
+                        @Html.DisplayFor(modelItem => item.TypeName)
+                        <span class="shu">@i</span>
+                    </li>
+                }
+                i++;
+            }
+        }

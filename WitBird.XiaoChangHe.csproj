@@ -452,6 +452,7 @@
     <Content Include="NewContent\js\jquery-1.9.1.js" />
     <Content Include="NewContent\js\jquery.js" />
     <Content Include="NewContent\js\ksdc.js" />
+    <Content Include="NewContent\js\template.js" />
     <Content Include="NewContent\js\tjt.js" />
     <Content Include="NewContent\js\ydxx.js" />
     <Content Include="NewContent\style\cz.css" />
