@@ -88,9 +88,9 @@
 
         <div class="footer">
             <div class="footer_left">
-                <img src="images/4.png" onclick="myMenu()"><span class="shu2" id="totalcount">2</span><span class="money">|　45.00元</span></div>
+                <img src="/NewContent/images/4.png" onclick="myMenu()"><span class="shu2" id="totalcount">2</span><span class="money">|　45.00元</span></div>
 
-            <a href="ydxx.html">
+            <a href="/NewUI/ydxx.html">
                 <div class="footer_right">选好了</div>
             </a>
         </div>
@@ -119,8 +119,8 @@
     <script>
         function loadContent() {
 
-            var TypeId = $(".mainnav .tabs li:first a").attr("tid");
-            var RestaurantId = $(".mainnav .tabs li:first a").attr("rid");
+            var TypeId = $("#left_list li:first").attr("tid");
+            var RestaurantId = $("#left_list li:first").attr("rid");
             DisplayContent(TypeId, RestaurantId);
         }
 
