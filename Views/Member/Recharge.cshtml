@@ -1,0 +1,65 @@
+﻿@{
+    Layout = null;
+}
+@model WitBird.XiaoChangHe.Models.Info.CrmMember
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>充值</title>
+    <link href="/newcontent/style/cz.css" rel="stylesheet" type="text/css">
+    <script src="~/NewContent/js/jquery.js"></script>
+    <script src="~/NewContent/js/cz.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+</head>
+<body>
+    <div class="container">
+        <div class="content1">会员号 <span>NO.@Model.Uid</span></div>
+        <div class="content1">姓名 <span>
+            <input type="text" value="@Model.MemberName" placeholder="请输入真实姓名" />
+            ></span></div>
+        <div class="content1">电话 <span>
+            <input type="text" value="@Model.Tel " placeholder="请输入联系电话" />
+            ></span></div>
+        <div class="content1" style="position: relative;">
+            选择充值金额 <span class="sc">首冲1000元起 　></span>
+            <select name="" class="sel">
+                <option>首充</option>
+                <option value="1000">1000</option>
+                <option>再次充值</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+            </select>
+        </div>
+        <div class="content">
+            1、  充值1000再送300，续充500再送100。<br />
+            2、 部分菜品享受会员折扣价且优惠可与特价菜同享<br />
+            3、 普洱茶免费。<br />
+            <br />
+
+
+            免责声明：<br />
+            1、在该"服务号"的系统发生故障影响到所提供服务的正常运行时，"成都映象小场合餐饮有限公司"承诺在第一时间内配合处理事故。但用户由此产生的经济损失，本公司不承担责任。
+ <br />
+            <br />
+            2、有关该"服务号"在使用过程中的最终解释权归"成都映象小场合餐饮有限公司"所有。<br />
+        </div>
+        <div class="footer">
+            <div class="footer-submit" onclick="">确认充值</div>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

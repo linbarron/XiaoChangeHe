@@ -441,6 +441,7 @@
     <Content Include="NewContent\images\tou1.png" />
     <Content Include="NewContent\images\tou2.png" />
     <Content Include="NewContent\images\yh.png" />
+    <Content Include="NewContent\js\cz.js" />
     <Content Include="NewContent\js\date.js" />
     <Content Include="NewContent\js\ddxq.js" />
     <Content Include="NewContent\js\hdlb.js" />
@@ -651,6 +652,7 @@
     <Content Include="Views\NewOrder\My.cshtml" />
     <Content Include="Views\NewBook\Mall.cshtml" />
     <Content Include="Views\NewBook\Info.cshtml" />
+    <Content Include="Views\Member\Recharge.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
