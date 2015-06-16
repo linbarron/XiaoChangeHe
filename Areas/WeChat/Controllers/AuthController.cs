@@ -1,16 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 using System.Web.Security;
+using Senparc.Weixin.MP.MvcExtension;
+using Senparc.Weixin.MP.Entities.Request;
+using WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler;
+using Senparc.Weixin.MP.CommonAPIs;
+using Senparc.Weixin.MP;
+using Senparc.Weixin.MP.Entities;
+using Senparc.Weixin.MP.Entities.Menu;
 
 namespace WitBird.XiaoChangHe.Areas.WeChat.Controllers
 {
     public class AuthController : Controller
     {
-        private static readonly string Token =
-            System.Configuration.ConfigurationManager.AppSettings["Token"];
+        public static readonly string Token = WebConfigurationManager.AppSettings["WeixinToken"];
+        public static readonly string EncodingAESKey = WebConfigurationManager.AppSettings["WeixinEncodingAESKey"];
+        public static readonly string AppId = WebConfigurationManager.AppSettings["WeixinAppId"];
+        public static readonly string AppSecret = WebConfigurationManager.AppSettings["WeixinAppSecret"];
 
         /// <summary>
         /// 微信后台验证地址（使用Get）
@@ -20,7 +31,8 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.Controllers
         {
             if (CheckSignature.Check(signature, timestamp, nonce, Token))
             {
-                return Content(echostr);//返回随机字符串则表示验证通过
+                //返回随机字符串则表示验证通过
+                return Content(echostr);
             }
             else
             {
@@ -28,5 +40,113 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.Controllers
             }
         }
 
+        /// <summary>
+        /// 微信交互接口
+        /// </summary>
+        [HttpPost]
+        public ActionResult Index(PostModel postModel)
+        {
+            if (!CheckSignature.Check(postModel.Signature, postModel.Timestamp, postModel.Nonce, Token))
+            {
+                return Content("参数错误！");
+            }
+
+            postModel.Token = Token;
+            postModel.EncodingAESKey = EncodingAESKey;
+            postModel.AppId = AppId;
+
+            var maxRecordCount = 10;
+
+            var logPath = Server.MapPath(string.Format("~/App_Data/MP/{0}/", DateTime.Now.ToString("yyyy-MM-dd")));
+            if (!Directory.Exists(logPath))
+            {
+                Directory.CreateDirectory(logPath);
+            }
+            var messageHandler = new CustomMessageHandler(Request.InputStream, postModel, maxRecordCount);
+            try
+            {
+                messageHandler.RequestDocument.Save(Path.Combine(logPath, string.Format("{0}_Request_{1}.txt", DateTime.Now.Ticks, messageHandler.RequestMessage.FromUserName)));
+                if (messageHandler.UsingEcryptMessage)
+                {
+                    messageHandler.EcryptRequestDocument.Save(Path.Combine(logPath, string.Format("{0}_Request_Ecrypt_{1}.txt", DateTime.Now.Ticks, messageHandler.RequestMessage.FromUserName)));
+                }
+                messageHandler.Execute();
+                return new FixWeixinBugWeixinResult(messageHandler);
+            }
+            catch (Exception ex)
+            {
+                #region LogException
+                using (TextWriter tw = new StreamWriter(Server.MapPath("~/App_Data/Error_" + DateTime.Now.Ticks + ".txt")))
+                {
+                    tw.WriteLine("ExecptionMessage:" + ex.Message);
+                    tw.WriteLine(ex.Source);
+                    tw.WriteLine(ex.StackTrace);
+                    //tw.WriteLine("InnerExecptionMessage:" + ex.InnerException.Message);
+
+                    if (messageHandler.ResponseDocument != null)
+                    {
+                        tw.WriteLine(messageHandler.ResponseDocument.ToString());
+                    }
+
+                    if (ex.InnerException != null)
+                    {
+                        tw.WriteLine("========= InnerException =========");
+                        tw.WriteLine(ex.InnerException.Message);
+                        tw.WriteLine(ex.InnerException.Source);
+                        tw.WriteLine(ex.InnerException.StackTrace);
+                    }
+
+                    tw.Flush();
+                    tw.Close();
+                }
+                #endregion
+
+                return Content("");
+            }
+        }
+
+        public ActionResult CreateMenu()
+        {
+            GetMenuResult result = new GetMenuResult();
+
+            //初始化
+            for (int i = 0; i < 3; i++)
+            {
+                var subButton = new SubButton();
+                for (int j = 0; j < 5; j++)
+                {
+                    var singleButton = new SingleClickButton();
+                    subButton.sub_button.Add(singleButton);
+                }
+            }
+
+            return View(result);
+        }
+
+        public ActionResult CreateMenu(GetMenuResultFull resultFull)
+        {
+            WxJsonResult result = null;
+            try
+            {
+                var accessToken = AccessTokenContainer.TryGetToken(AppId, AppSecret);
+                var bg = CommonApi.GetMenuFromJsonResult(resultFull).menu;
+                result = CommonApi.CreateMenu(accessToken, bg);
+            }
+            catch (Exception)
+            {
+                //TODO
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetMenu(string token)
+        {
+            var result = CommonApi.GetMenu(token);
+            if (result == null)
+            {
+                return Json(new { error = "菜单不存在或验证失败！" }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }
