@@ -174,6 +174,9 @@
     <Content Include="Content\images\egg.jpg" />
     <Content Include="Content\images\youHuiBg.png" />
     <Content Include="Content\News.css" />
+    <Compile Include="Areas\WeChat\CheckSignature.cs" />
+    <Compile Include="Areas\WeChat\Controllers\AuthController.cs" />
+    <Compile Include="Areas\WeChat\WeChatAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AutoMenuIndexController.cs" />
     <Compile Include="Controllers\BookController.cs" />
@@ -471,6 +474,7 @@
     <Content Include="NewContent\style\yddm.css" />
     <Content Include="NewContent\style\ydxx.css" />
     <Content Include="NewUI\_notes\ydxx.html.mno" />
+    <Content Include="Areas\WeChat\Views\Web.config" />
     <None Include="Properties\PublishProfiles\HarrisServer.pubxml" />
     <None Include="Properties\PublishProfiles\mobile.pubxml" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
@@ -661,6 +665,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\WeChat\Models\" />
+    <Folder Include="Areas\WeChat\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
