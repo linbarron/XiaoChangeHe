@@ -1,5 +1,9 @@
-﻿@{
+﻿@using WitBird.XiaoChangHe.Models.Info;
+@{
     Layout = null;
+    var myOrders = ViewBag.MyOrders;
+    var myQuickOrders = ViewBag.MyQuickOrders;
+    var hasOrder = myOrders != null || myQuickOrders != null;
 }
 
 <!doctype html>
@@ -17,38 +21,146 @@
 </head>
 <body>
     <div class="container">
-        <div class="content">
-            <div class="content_header">
-                创建时间 2015-05-21 14:25:51
-                <div class="content_content">
-                    <div class="content_img"><img src="http://img.savory.cn/wedinner/1.png"></div>
-                    <div class="content_title">
-                        <span class="title_l">味蜀吾老火锅(金牛万达)</span><span class="title_r">未付款</span><br />散座（8人）
-                        <br />2015-05-22 周五 12:30
+        @if (hasOrder)
+        {
+            if (myOrders != null)
+            {
+                foreach (var myOrder in (List<MyOrder>)myOrders)
+                {
+                    <div class="content">
+                        <div class="content_header">
+                            创建时间 @myOrder.DiningDate.ToString("yyyy-MM-dd hh:mm:ss")
+                            <div class="content_content">
+                                <div class="content_img"><img src="http://img.savory.cn/wedinner/1.png"></div>
+                                <div class="content_title">
+                                    <span class="title_l">味蜀吾老火锅(金牛万达)</span><span class="title_r">@myOrder.status</span><br />散座（8人）
+                                    <br />2015-05-22 周五 12:30
+                                </div>
+                            </div>
+                        </div>
+                        <div class="footer">
+                            <span>订单金额：<span class="money">238元</span></span>
+                            <div class="fuk">确认付款</div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="footer">
-                <span>订单金额：<span class="money">238元</span></span>
-                <div class="fuk">确认付款</div>
-            </div>
-        </div>
-        <div class="content">
-            <div class="content_header">
-                创建时间 2015-05-21 14:25:51
-                <div class="content_content">
-                    <div class="content_img"><img src="http://img.savory.cn/wedinner/1.png"></div>
-                    <div class="content_title">
-                        <span class="title_l">味蜀吾老火锅(金牛万达)</span><span class="title_r">未付款</span><br />散座（8人）
-                        <br />2015-05-22 周五 12:30
+                }
+            }
+            if (myQuickOrders != null)
+            {
+                foreach (var myOrder in (List<MyOrder>)myQuickOrders)
+                {
+                    <div class="content">
+                        <div class="content_header">
+                            创建时间 @myOrder.DiningDate.ToString("yyyy-MM-dd hh:mm:ss")
+                            <div class="content_content">
+                                <div class="content_img"><img src="http://img.savory.cn/wedinner/1.png"></div>
+                                <div class="content_title">
+                                    <span class="title_l">味蜀吾老火锅(金牛万达)</span><span class="title_r">未付款</span><br />散座（8人）
+                                    <br />2015-05-22 周五 12:30
+                                </div>
+                            </div>
+                        </div>
+                        <div class="footer">
+                            <span>订单金额：<span class="money">238元</span></span>
+                            <div class="fuk">确认付款</div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="footer">
-                <span>订单金额：<span class="money">238元</span></span>
-                <div class="fuk">申请退款</div>
-            </div>
-        </div>
+                }
+            }
+        }
+        else
+        {
+            <script type="text/javascript">
+                $(function () {
+                    sAlert();
+                })
+            </script>
+        }
     </div>
+    <script>
+        function cancel(OrderId) {
+            $.ajaxSetup({ cache: false });
+            $.get("/MyMenu/EmptyMyMenu", { MemberCardNo: '@(ViewBag.MemberCardNo)', OrderId: OrderId, SourceAccountId: '@(ViewBag.SourceAccountId)' }, function (msg) {
+                if (msg == 1) {
+                    alert("订单取消成功");
+                    window.location.reload();
+                    @*   $.get("/Order/MY", { MemberCardNo: '@(ViewBag.MemberCardNo)', SourceAccountId: '@(ViewBag.SourceAccountId)' }, function (msg) {
+                        if (msg == 1) {
+                            if ('@( ViewBag.MyOrderListData)' != null) {
+
+
+                            }
+
+                        }
+                    })*@
+                }
+            })
+
+            //  window.location.href = "/MyMenu/EmptyMyMenu?MemberCardNo=" +'@(ViewBag.MemberCardNo)' + "&OrderId=" + OrderId + "&SourceAccountId=" + '@(ViewBag.SourceAccountId)' + "";
+        }
+        function sAlert() {
+            str = "<a href=\"/Order/Begin/@(ViewBag.ComypanyId)/@(ViewBag.SourceAccountId)\" class=\"but\">你还没下单，去点餐</a>";
+            var msgw, msgh, bordercolor;
+            msgw = 80;//提示窗口的宽度
+            msgh = 20;//提示窗口的高度
+            bordercolor = "#1da507";//提示窗口的边框颜色
+            titlecolor = "#1da507";//提示窗口的标题颜色
+
+            var sWidth, sHeight;
+            sWidth = document.body.offsetWidth;
+            sHeight = document.body.offsetHeight;
+
+            var bgObj = document.createElement("div");
+            bgObj.setAttribute('id', 'bgDiv');
+            bgObj.style.position = "absolute";
+            bgObj.style.top = "0";
+            bgObj.style.background = "#777";
+            bgObj.style.filter = "progid:DXImageTransform.Microsoft.Alpha(style=3,opacity=25,finishOpacity=75";
+            bgObj.style.opacity = "0.6";
+            bgObj.style.left = "0";
+            bgObj.style.width = sWidth + "px";
+            bgObj.style.height = sHeight + "px";
+            document.body.appendChild(bgObj);
+            var msgObj = document.createElement("div")
+            msgObj.setAttribute("id", "msgDiv");
+            msgObj.setAttribute("align", "center");
+            msgObj.style.position = "absolute";
+            msgObj.style.background = "white";
+            msgObj.style.font = "12px/1.6em Verdana, Geneva, Arial, Helvetica, sans-serif";
+            msgObj.style.border = "1px solid " + bordercolor;
+            msgObj.style.width = msgw + "%";
+            msgObj.style.height = msgh + "%";
+            //  msgObj.style.top = (document.documentElement.scrollTop + (sHeight - msgh) / 2) + "px";
+            //  msgObj.style.left = (sWidth - msgw) / 2 + "px";
+            msgObj.style.top = "30%";
+            msgObj.style.left = "12%";
+            var title = document.createElement("h4");
+            title.setAttribute("id", "msgTitle");
+            title.setAttribute("align", "right");
+            title.style.margin = "0";
+            title.style.padding = "3px";
+            title.style.background = bordercolor;
+            title.style.filter = "progid:DXImageTransform.Microsoft.Alpha(startX=20, startY=20, finishX=100, finishY=100,style=1,opacity=75,finishOpacity=100);";
+            title.style.opacity = "0.75";
+            title.style.border = "1px solid " + bordercolor;
+            title.style.height = "18px";
+            title.style.font = "12px Verdana, Geneva, Arial, Helvetica, sans-serif";
+            title.style.color = "white";
+            title.style.cursor = "pointer";
+            title.innerHTML = "关闭";
+            title.onclick = function () {
+                document.body.removeChild(bgObj);
+                document.getElementById("msgDiv").removeChild(title);
+                document.body.removeChild(msgObj);
+            }
+            document.body.appendChild(msgObj);
+            document.getElementById("msgDiv").appendChild(title);
+            var txt = document.createElement("p");
+            txt.style.margin = "1em 0"
+            txt.setAttribute("id", "msgTxt");
+            txt.innerHTML = str;
+            document.getElementById("msgDiv").appendChild(txt);
+        }
+    </script>
 </body>
 </html>

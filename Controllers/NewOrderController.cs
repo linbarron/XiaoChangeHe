@@ -58,8 +58,14 @@ namespace WitBird.XiaoChangHe.Controllers
                     var myOrders = menuManager.getMyOrderListData(memberCardNo);
                     var myQuickOrders = menuManager.getMyOrderListData(memberCardNo, "FastFood");
 
-                    ViewBag.MyOrders = myOrders;
-                    ViewBag.MyQuickOrders = myQuickOrders;
+                    if (myOrders != null && myOrders.Count > 0)
+                    {
+                        ViewBag.MyOrders = myOrders;
+                    }
+                    if (myQuickOrders != null && myQuickOrders.Count > 0)
+                    {
+                        ViewBag.MyQuickOrders = myQuickOrders;
+                    }
 
                     return View();
                 }
