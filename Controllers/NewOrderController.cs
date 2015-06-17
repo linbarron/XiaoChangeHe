@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using WitBird.XiaoChangHe.Models;
 
 namespace WitBird.XiaoChangHe.Controllers
 {
@@ -32,10 +33,46 @@ namespace WitBird.XiaoChangHe.Controllers
 
         /// <summary>
         /// 我的订单页面
+        /// 重写OrderController/My
         /// </summary>
         /// <returns></returns>
-        public ActionResult My()
+        public ActionResult My(string id, string name)
         {
+            ViewBag.CompanyId = id;
+            ViewBag.SourceAccountId = name;
+
+            OrderModel orderManager = new OrderModel();
+            CrmMemberModel crmManager = new CrmMemberModel();
+            MyMenuModel menuManager = new MyMenuModel();
+
+            var members = crmManager.getCrmMemberListInfoData(name);
+
+            if (members != null && members.Count > 0)
+            {
+                var currentMember = members.FirstOrDefault();
+                if (currentMember != null)
+                {
+                    var memberCardNo = currentMember.Uid;
+                    ViewBag.MemberCardNo = currentMember.Uid;
+
+                    var myOrders = menuManager.getMyOrderListData(memberCardNo);
+                    var myQuickOrders = menuManager.getMyOrderListData(memberCardNo, "FastFood");
+
+                    ViewBag.MyOrders = myOrders;
+                    ViewBag.MyQuickOrders = myQuickOrders;
+
+                    return View();
+                }
+                else
+                {
+                    Redirect("/");
+                }
+            }
+            else
+            {
+                Redirect("/");
+            }
+
             return View();
         }
     }
