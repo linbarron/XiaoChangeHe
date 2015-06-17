@@ -57,26 +57,16 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.Controllers
 
             var maxRecordCount = 10;
 
-            var logPath = Server.MapPath(string.Format("~/App_Data/MP/{0}/", DateTime.Now.ToString("yyyy-MM-dd")));
-            if (!Directory.Exists(logPath))
-            {
-                Directory.CreateDirectory(logPath);
-            }
             var messageHandler = new CustomMessageHandler(Request.InputStream, postModel, maxRecordCount);
             try
             {
-                messageHandler.RequestDocument.Save(Path.Combine(logPath, string.Format("{0}_Request_{1}.txt", DateTime.Now.Ticks, messageHandler.RequestMessage.FromUserName)));
-                if (messageHandler.UsingEcryptMessage)
-                {
-                    messageHandler.EcryptRequestDocument.Save(Path.Combine(logPath, string.Format("{0}_Request_Ecrypt_{1}.txt", DateTime.Now.Ticks, messageHandler.RequestMessage.FromUserName)));
-                }
                 messageHandler.Execute();
                 return new FixWeixinBugWeixinResult(messageHandler);
             }
             catch (Exception ex)
             {
                 #region LogException
-                using (TextWriter tw = new StreamWriter(Server.MapPath("~/App_Data/Error_" + DateTime.Now.Ticks + ".txt")))
+                using (TextWriter tw = new StreamWriter(Server.MapPath("~/Applog/Error.txt")))
                 {
                     tw.WriteLine("ExecptionMessage:" + ex.Message);
                     tw.WriteLine(ex.Source);

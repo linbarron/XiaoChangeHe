@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
@@ -23,6 +24,36 @@ namespace WitBird.XiaoChangHe
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             RouteTable.Routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             
-        }    
+        }
+
+        protected void Application_Error()
+        {
+            var error = Server.GetLastError();
+            var code = (error is HttpException) ? (error as HttpException).GetHttpCode() : 500;
+            string path = Request.Path;
+            #region LogException
+            using (TextWriter tw = new StreamWriter(Server.MapPath("~/Applog/Error.txt")))
+            {
+                tw.WriteLine("Path:" + path);
+                tw.WriteLine("Code:" + code);
+                tw.WriteLine("ExecptionMessage:" + error.Message);
+                tw.WriteLine(error.Source);
+                tw.WriteLine(error.StackTrace);
+                //tw.WriteLine("InnerExecptionMessage:" + ex.InnerException.Message);
+
+                if (error.InnerException != null)
+                {
+                    tw.WriteLine("========= InnerException =========");
+                    tw.WriteLine(error.InnerException.Message);
+                    tw.WriteLine(error.InnerException.Source);
+                    tw.WriteLine(error.InnerException.StackTrace);
+                }
+
+                tw.Flush();
+                tw.Close();
+            }
+            #endregion
+
+        }
     }
 }
