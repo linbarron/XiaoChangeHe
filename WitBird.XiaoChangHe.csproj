@@ -271,7 +271,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
     <Compile Include="Controllers\MyMenuController.cs" />
-    <Compile Include="Controllers\MyOrderController.cs" />
     <Compile Include="Controllers\NewBookController.cs" />
     <Compile Include="Controllers\NewOrderController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
@@ -724,7 +723,6 @@
     <Content Include="Views\SelTableInfo\SelTableInfo.cshtml" />
     <Content Include="Views\Company\Message.cshtml" />
     <Content Include="Views\Shared\myOrder.cshtml" />
-    <Content Include="Views\MyOrder\Index.cshtml" />
     <Content Include="Views\MyMenu\MyOrderDetail.cshtml" />
     <Content Include="Views\Order\QuickOrder.cshtml" />
     <Content Include="Views\ProductType\Index.cshtml" />
