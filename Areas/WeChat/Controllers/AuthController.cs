@@ -123,6 +123,7 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.Controllers
             return View(result);
         }
 
+        [HttpPost]
         public ActionResult CreateMenu(GetMenuResultFull resultFull)
         {
             WxJsonResult result = null;
@@ -139,9 +140,28 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetMenu(string token)
+        public ActionResult GetToken(string appId, string appSecret)
         {
-            var result = CommonApi.GetMenu(token);
+            try
+            {
+                if (!AccessTokenContainer.CheckRegistered(appId))
+                {
+                    AccessTokenContainer.Register(appId, appSecret);
+                }
+                var result = AccessTokenContainer.GetTokenResult(appId);
+
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                return Json(new { error = "执行过程发生错误！" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult GetMenu()
+        {
+            var accessToken = AccessTokenContainer.TryGetToken(AppId, AppSecret);
+            var result = CommonApi.GetMenu(accessToken);
             if (result == null)
             {
                 return Json(new { error = "菜单不存在或验证失败！" }, JsonRequestBehavior.AllowGet);

@@ -181,6 +181,7 @@
     <Content Include="Areas\WeChat\Content\danktooltip\css\darktooltip.min.css" />
     <Content Include="Areas\WeChat\Content\danktooltip\js\jquery.darktooltip.min.js" />
     <Content Include="Areas\WeChat\Content\darktooltip.min.css" />
+    <Content Include="Areas\WeChat\Content\jquery.form.js" />
     <Content Include="Areas\WeChat\Content\reset.css" />
     <Content Include="Areas\WeChat\Content\senparc.menu.js" />
     <Content Include="Areas\WeChat\Content\Site.css" />
@@ -261,7 +262,6 @@
     <Compile Include="Areas\WeChat\MessageHandlers\CustomMessageHandler\CustomMessageContext.cs" />
     <Compile Include="Areas\WeChat\MessageHandlers\CustomMessageHandler\CustomMessageHandler.cs" />
     <Compile Include="Areas\WeChat\MessageHandlers\CustomMessageHandler\CustomMessageHandler_Events.cs" />
-    <Compile Include="Areas\WeChat\MessageHandlers\CustomThirdPartyMessageHandlers\CustomThirdPartyMessageHandler.cs" />
     <Compile Include="Areas\WeChat\Utilities\Server.cs" />
     <Compile Include="Areas\WeChat\WeChatAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />

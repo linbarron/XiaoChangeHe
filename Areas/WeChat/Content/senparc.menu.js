@@ -49,24 +49,13 @@ senparc.menu = {
             });
         });
 
-        $('#menuLogin_Submit').click(function () {
-            $.getJSON('/Menu/GetToken?t=' + Math.random(), { appId: $('#menuLogin_AppId').val(), appSecret: $('#menuLogin_AppSecret').val() },
-                function (json) {
-                    if (json.access_token) {
-                        senparc.menu.setToken(json.access_token);
-                    } else {
-                        alert(json.error || '执行过程有错误，请检查！');
-                    }
-                });
-        });
-
         $('#menuLogin_SubmitOldToken').click(function () {
             senparc.menu.setToken($('#menuLogin_OldToken').val());
         });
 
         $('#btnGetMenu').click(function () {
             menuState.html('获取菜单中...');
-            $.getJSON('/Menu/GetMenu?t=' + Math.random(), { token: senparc.menu.token }, function (json) {
+            $.getJSON('GetMenu?t=' + Math.random(), {  }, function (json) {
                 if (json.menu) {
                     $(':input[id^=menu_button]:not([id$=_type])').val('');
                     $('#buttonDetails:input').val('');
@@ -98,21 +87,6 @@ senparc.menu = {
                     menuState.html('已完成');
                 } else {
                     menuState.html(json.error || '执行过程有错误，请检查！');
-                }
-            });
-        });
-
-        $('#btnDeleteMenu').click(function () {
-            if (!confirm('确定要删除菜单吗？此操作无法撤销！')) {
-                return;
-            }
-
-            menuState.html('删除菜单中...');
-            $.getJSON('/Menu/DeleteMenu?t=' + Math.random(), { token: senparc.menu.token }, function (json) {
-                if (json.Success) {
-                    menuState.html('删除成功，如果是误删，并且界面上有最新的菜单状态，可以立即点击【更新到服务器】按钮。');
-                } else {
-                    menuState.html(json.Message);
                 }
             });
         });

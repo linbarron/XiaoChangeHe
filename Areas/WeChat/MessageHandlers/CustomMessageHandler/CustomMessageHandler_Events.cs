@@ -32,71 +32,50 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
             IResponseMessageBase reponseMessage = null;
             switch (requestMessage.EventKey)
             {
-                case "OneClick":
+                case "BeginOrderClick":
                     {
                         var strongResponseMessage = CreateResponseMessage<ResponseMessageText>();
                         reponseMessage = strongResponseMessage;
-                        strongResponseMessage.Content = "您点击了底部按钮。\r\n为了测试微信软件换行bug的应对措施，这里做了一个——\r\n换行";
+                        strongResponseMessage.Content = "开始点菜";
                     }
                     break;
-                case "SubClickRoot_Text":
+                case "ActivityClick":
                     {
                         var strongResponseMessage = CreateResponseMessage<ResponseMessageText>();
                         reponseMessage = strongResponseMessage;
-                        strongResponseMessage.Content = "您点击了子菜单按钮。";
+                        strongResponseMessage.Content = "小场合活动";
                     }
                     break;
-                case "SubClickRoot_News":
+                case "AccountInfoClick":
                     {
-                        var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
+                        var strongResponseMessage = CreateResponseMessage<ResponseMessageText>();
                         reponseMessage = strongResponseMessage;
-                        strongResponseMessage.Articles.Add(new Article()
-                        {
-                            Title = "您点击了子菜单图文按钮",
-                            Description = "您点击了子菜单图文按钮，这是一条图文信息。",
-                            PicUrl = "http://www.xgdg.cn/uploadfiles/images/2015/05/21/20150521005812505.jpg",
-                            Url = "http://www.xgdg.cn/damimi/4201.html"
-                        });
+                        strongResponseMessage.Content = "会员信息";
                     }
                     break;
-                case "SubClickRoot_Music":
+                case "VipPay":
                     {
-                        //TODO
-                    }
-                    break;
-                case "SubClickRoot_Image"://上传图片
-                    {
-                        //TODO
-                    }
-                    break;
-                case "SubClickRoot_Agent"://代理消息
-                    {
-                        //TODO
-                    }
-                    break;
-                case "Member"://托管代理会员信息
-                    {
-                        //TODO
-                    }
-                    break;
-                case "OAuth"://OAuth授权测试
-                    {
-                        //TODO
-                    }
-                    break;
-                case "Description":
-                    {
-                        var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
-                        strongResponseMessage.Articles.Add(GetWelcomeInfo());
+                        var strongResponseMessage = CreateResponseMessage<ResponseMessageText>();
                         reponseMessage = strongResponseMessage;
+                        strongResponseMessage.Content = "会员支付";
                     }
                     break;
-                case "SubClickRoot_PicPhotoOrAlbum":
+                case "MyOrder"://我的订单
                     {
                         //TODO
                     }
                     break;
-                case "SubClickRoot_ScancodePush":
+                case "CompanyInfo"://成都印象餐饮有限公司
+                    {
+                        //TODO
+                    }
+                    break;
+                case "Xiaochanghe"://成都印象小场合
+                    {
+                        //TODO
+                    }
+                    break;
+                case "Culture"://小场合文化
                     {
                         //TODO
                     }
