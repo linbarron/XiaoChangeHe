@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WitBird.XiaoChangHe.Models;
+using WitBird.XiaoChangHe.Models.Info;
 
 namespace WitBird.XiaoChangHe.Controllers
 {
@@ -17,10 +18,51 @@ namespace WitBird.XiaoChangHe.Controllers
         /// </summary>
         /// <returns></returns>
 
-        public ActionResult Detail()
+        public ActionResult Detail(string MemberCardNo, string OrderId, string SourceAccountId, string ComypanyId = null, string Type = null, string RstType = null)
         {
-            return View();
+            ViewBag.SourceAccountId = SourceAccountId;
+            ViewBag.OrderId = OrderId;
+            ViewBag.MemberCardNo = MemberCardNo;
+            CrmMemberModel cdb1 = new CrmMemberModel();
+            ViewBag.PrepayAccount = 0;
+            decimal dec = cdb1.getPrepayAccount(MemberCardNo).First().AccountMoney;
+            ViewBag.PrepayAccount = dec;
+            string RestaurantId = Session["begindm"] != null ? Session["begindm"].ToString() : "";
+            ViewBag.RestaurantId = RestaurantId;
+            MyMenuModel odb = new MyMenuModel();
+
+            List<MyOrderDetail> detail = odb.getMyOrderDetailListData(MemberCardNo, OrderId, RstType);
+            // ViewBag.MyOrderDetail = detail;
+
+            if (OrderId != null && OrderId != "")
+            {
+                MyMenuModel odb1 = new MyMenuModel();
+
+                // List<MyMenu> mymenu = odb1.getMyMenuListData(MemberCardNo, OrderId);
+
+                // ViewBag.MyMenuListData = mymenu;
+                decimal sum = 0;
+                if (detail.Count > 0)
+                {
+                    for (int i = 0; i < detail.Count; i++)
+                    {
+                        if (detail[i].UnitPrice != 0)
+                        {
+                            sum += detail[i].MemberPrice * detail[i].ProductCount;
+                        }
+                    }
+                }
+                ViewBag.MemberPriceTotal = sum;
+
+            }
+            //获取该店面的就餐时间
+            ViewBag.Explain = "";
+            ReceiveOrderModel m = new ReceiveOrderModel();
+            List<ReceiveOrder2> list = m.SelReceiveOrder2Info(RestaurantId);
+            if (list != null && list.Count > 0) { ViewBag.Explain = list.First().Explain; }
+            return View(detail);
         }
+
 
         /// <summary>
         /// 申请退款页面

@@ -1,4 +1,6 @@
-﻿@{
+﻿@using WitBird.XiaoChangHe.Models.Info
+@model IEnumerable<MyOrderDetail>
+@{
     Layout = null;
 }
 
@@ -78,6 +80,145 @@
         </div>
     </div>
 
-    </div>
+    <script>
+        function add(id) {
+            var num = $("#" + id).val();
+            $("#" + id).val(parseInt(num) + 1);
+            $.ajaxSetup({ cache: false });
+            var SourceAccountId = '@ViewBag.SourceAccountId';
+            var productId = id;
+            var price = $("#rmb" + id).html().replace('￥', '');
+            $.post("/Order/SaveOrders", { type: "Insert", SourceAccountId: SourceAccountId }, function (msg) {
+                alert(msg);
+                if (msg != "00000000-0000-0000-0000-000000000000") {
+                    var num1 = $("#" + id).val();
+                    $.post("/Order/SaveOrderDetails", { type: "Insert", productId: productId, unitPrice: price, orderId: msg, productCount: num1 }, function (msg1) {
+                        if (msg1 == 1) {
+
+                        }
+
+                    });
+                }
+
+            });
+        }
+        function jian(id) {
+
+            var num = $("#" + id).val();
+            $("#" + id).val(parseInt(num) - 1);
+            $.ajaxSetup({ cache: false });
+            var SourceAccountId = '@ViewBag.SourceAccountId';
+            var productId = id;
+            var price = $("#rmb" + id).html().replace('￥', '');
+            $.post("/Order/SaveOrders", { type: "Insert", SourceAccountId: SourceAccountId }, function (msg) {
+                alert(msg);
+                if (msg != "00000000-0000-0000-0000-000000000000") {
+                    var num1 = $("#" + id).val();
+                    if (num1 > 0) {
+                        $.post("/Order/SaveOrderDetails", { type: "Insert", productId: productId, unitPrice: price, orderId: msg, productCount: num1 }, function (msg1) {
+                            if (msg1 == 1) {
+
+                            }
+
+                        });
+                    } else if (num1 == 0) {
+                        var num1 = $("#" + id).val();
+                        $.post("/Order/DelOrderDetails", { productId: productId, orderId: msg }, function (msg1) {
+                            if (msg1 == 1) {
+
+                            }
+
+                        });
+                    }
+                }
+
+            });
+        }
+    </script>
 </body>
 </html>
+
+
+@if (Model != null)
+{
+
+    string orderid = "";
+    foreach (MyOrderDetail item in Model)
+    {
+
+        if (string.IsNullOrEmpty(orderid))
+        {
+            orderid = item.OrderId.ToString();
+            <nav id="rst">
+                <nav>店名：<span>@item.RstName</span></nav>
+                <nav>电话：<span><a href="tel://@item.RstPhone" style="color:#1da507;">@item.RstPhone</a></span></nav>
+                <nav>地址：<span>@item.address</span></nav>
+                @if (ViewBag.Explain != null && ViewBag.Explain != "")
+                {
+                    <span style="font-size: 0.8em;color: royalblue">@ViewBag.Explain</span>
+                }
+            </nav>
+            <nav id="mem">
+                <nav>用户名：<span>@item.ContactName</span></nav>
+                <nav>电话：<span><a href="tel://@item.ContactPhone" style="color:#1da507;">@item.ContactPhone</a></span></nav>
+                @if (item.RstType != "01" && item.DiningDate != null)
+                {
+                    <nav>订餐时间:<span>@(item.DiningDate.ToString("yyyy-MM-dd"))</span></nav>
+                    <nav>
+                        订餐时段：<span>
+                            @if (item.DiningDate.ToString("hh").Equals("09"))
+                            {
+                                string.Format("午餐");
+                            }
+                            else if (item.DiningDate.ToString("hh").Equals("16"))
+                            {
+                                string.Format("晚餐");
+                            }
+                        </span>
+                    </nav>
+                }
+
+                @if (item.PersonCount != null && item.PersonCount != 0)
+                {
+                    <nav>人数：<span>@item.PersonCount</span></nav>}
+
+                @if (item.Remark != null && item.Remark != "")
+                {
+                    <nav>备注：<span>@item.Remark</span></nav>}
+                <nav style="color: #d32502;">总原价：<span>@item.total</span></nav>
+                <nav style="color: #d32502;">储值会员价：<span>@(ViewBag.MemberPriceTotal)</span></nav>
+                @if (ViewBag.PrepayAccount == 0)
+                {
+                    <span style="font-size:12px; color:#ffa631">* 如果升级为储值会员可优惠<span style="font-size:18px ;color:#d32502"> @(item.total - (ViewBag.MemberPriceTotal)) </span>元</span>
+                }
+            </nav>
+        }
+
+        if (orderid.Equals(item.OrderId.ToString()))
+        {
+            if (item.proId != null && item.proId != new Guid("00000000-0000-0000-0000-000000000000"))
+            {
+                <nav id="pro" style="line-height: 50px">
+                    <nav class="food-image" style="-webkit-border-radius:5px;border-radius:5px;">
+                        <img src="/Order/GetImages/@item.proId" />
+                    </nav>
+                    <nav style="display: block; font-weight: 700; line-height: 1.8em; overflow: hidden; color: #d32502; font-size: 0.9em;">
+                        <span>@item.ProductName</span>&nbsp;
+                    </nav>
+                    <nav class="people-count" style="font-size: 0.7em">@item.ProductCount @item.CodeTypeListName </nav>
+                    <nav>
+                        @if (item.UseState == "04")
+                        {
+                            <nav class="RMB" style="font-size: 0.7em"> <span style="color:#1da507">赠送</span></nav>
+                        }
+                        else
+                        {
+                            <nav class="RMB" style="font-size: 0.6em;line-height: 20px;">  <span style="color:#666;">原价：￥</span>@(item.UnitPrice * item.ProductCount);</nav>
+                            <nav class="RMB" style="font-size: 0.7em;line-height: 20px;">  <span style="color:#666;">储值会员价：￥</span>@(item.MemberPrice * item.ProductCount); </nav>
+                        }
+                    </nav>
+                </nav>
+            }
+        }
+    }
+}
