@@ -11,16 +11,6 @@ namespace WitBird.XiaoChangHe.Controllers
     /// </summary>
     public class NewBookController : Controller
     {
-
-        /// <summary>
-        /// 预定店面页面
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult Mall()
-        {
-            return View();
-        }
-
         /// <summary>
         /// 预定信息页面
         /// </summary>

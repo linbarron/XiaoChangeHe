@@ -747,7 +747,6 @@
     <Content Include="Views\NewOrder\Detail.cshtml" />
     <Content Include="Views\NewOrder\MoneyBack.cshtml" />
     <Content Include="Views\NewOrder\My.cshtml" />
-    <Content Include="Views\NewBook\Mall.cshtml" />
     <Content Include="Views\NewBook\Info.cshtml" />
     <Content Include="Views\Member\Recharge.cshtml" />
   </ItemGroup>
