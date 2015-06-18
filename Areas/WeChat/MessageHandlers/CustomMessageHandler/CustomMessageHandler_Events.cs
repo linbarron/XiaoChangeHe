@@ -8,6 +8,7 @@ using Senparc.Weixin.MP.Entities;
 using Senparc.Weixin.MP.Helpers;
 using Senparc.Weixin.MP.MessageHandlers;
 using WitBird.XiaoChangHe.Areas.WeChat.Utilities;
+using WitBird.XiaoChangHe.Models;
 
 namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
 {
@@ -109,6 +110,15 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
         {
             var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
             strongResponseMessage.Articles.Add(GetWelcomeInfo());
+            try
+            {
+                CrmMemberModel cdb = new CrmMemberModel();
+                int i = cdb.Save();
+            }
+            catch (Exception)
+            {
+                //TODO
+            }
             return strongResponseMessage;
         }
 

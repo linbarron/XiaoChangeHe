@@ -134,8 +134,114 @@ a.Password,a.Idcard,a.Birthday,a.TypeId,a.RegDate,a.ExpiredDate,a.UseState,a.Sex
                 }
                 return 0;
             }
+        }
+
+        public bool SaveMember(string wxOpenid, string companyid)
+        {
+            var user = getCrmMemberListInfoData(wxOpenid);
+            if (user == null || (user!=null && user.Count==0))
+            {
+                CrmMember member = new CrmMember();
+                member.MemberSource = "01";
+                member.SourceAccountId = wxOpenid;
+                member.TypeId = 1;
+                member.UseState = "01";
+                member.RegDate = DateTime.Now;
+                member.CompanyId = new Guid(companyid);
+                var v = db.CrmMember.Max(t => t.Uid);
+                if (v == null)
+                {
+                    member.Uid = "88001100";
+                }
+                else
+                {
+                    member.Uid = (int.Parse(v) + 1).ToString();
+                }
+                db.CrmMember.Add(member);
+                PrepayAccount acc = new PrepayAccount();
+                acc.Uid = member.Uid;
+                acc.AccountMoney = 0;
+                acc.TotalMoney = 0;
+                acc.PresentMoney = 0;
+                acc.TotalPresent = 0;
+                acc.LastConsumeMoney = 0;
+                acc.LastPresentMoney = 0;
+                db.PrepayAccount.Add(acc);
+
+                CrmMemberScore scroe = new CrmMemberScore()
+                {
+                    LastScore = 0,
+                    LastScoredDate = DateTime.Now,
+                    Score = 0,
+                    TotalScore = 0,
+                    Uid = member.Uid,
+                    UseMoney = 0,
+                    UseScore = 0
+                };
+                db.CrmMemberScore.Add(scroe);
+
+                return db.SaveChanges() > 0;
+            }
+            else
+            {
+                CrmMember member = db.CrmMember.Single(t => t.SourceAccountId == wxOpenid && t.CompanyId == new Guid(companyid));
+                member.UseState = "01";
+                return db.SaveChanges() > 0;
+            }
+            //return true;
+        }
+
+        //public bool SaveMemberInfo(string wxOpenid, string companyid, string province, string city, string nickname, string sex)
+        //{
+        //    try
+        //    {
+        //        CrmMember member = db.CrmMember.Single(t => t.SourceAccountId == wxOpenid && t.CompanyId == new Guid(companyid));
+        //        member.ProvinceId = province;
+        //        member.CityId = city;
+        //        if (member.MemberName == null)
+        //        {
+        //            member.MemberName = nickname;
+        //            if (member.Sex == null)
+        //            {
+        //                if (sex == "1")
+        //                {
+        //                    member.Sex = true;
+        //                }
+        //                else if (sex == "2")
+        //                {
+        //                    member.Sex = false;
+        //                }
+        //            }
+        //        }
+        //        return db.SaveChanges() > 0;
+        //    }
+        //    catch
+        //    {
+        //        return false;
+        //    }
+        //}
+
+        //public bool DiscardMember(string wxOpenId, string companyid)
+        //{
+        //    if (db.CrmMember.Count(t => t.SourceAccountId == wxOpenId && t.CompanyId == new Guid(companyid)) > 0)
+        //    {
+        //        CrmMember member = db.CrmMember.Single(t => t.SourceAccountId == wxOpenId && t.CompanyId == new Guid(companyid));
+        //        member.UseState = "99";
+        //        return db.SaveChanges() > 0;
+        //    }
+        //    return true;
+        //}
+
+
+        /// <summary>
+        /// 分配新用户ID
+        /// </summary>
+        /// <returns></returns>
+        private int GetNewUserId()
+        {
+            
+        }
 
         #endregion
-        }
     }
 }

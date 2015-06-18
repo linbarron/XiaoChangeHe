@@ -27,5 +27,19 @@ namespace WitBird.XiaoChangHe.Models
             }
             return 0;
         }
+
+        public object ExecuteScalar(DbCommand cmd)
+        {
+            object result = null;
+            try
+            {
+                result = db.ExecuteScalar(cmd);
+            }
+            catch (Exception)
+            {
+                //TODO
+            }
+            return result;
+        }
     }
 }
