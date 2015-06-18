@@ -12,6 +12,7 @@ namespace WitBird.XiaoChangHe.Models
     {
         public Database db = EnterpriseLibraryContainer.Current.GetInstance<Database>("CrmRstV1");
         public static string SqlPara = "@";
+       
         public int ExecSql(DbCommand cmd)
         {
             try

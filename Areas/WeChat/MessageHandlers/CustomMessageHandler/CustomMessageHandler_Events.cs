@@ -17,6 +17,9 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
     /// </summary>
     public partial class CustomMessageHandler
     {
+        protected const string ImgUrl = "http://115.29.38.163/images/";
+        protected const string CompanyId = "CB824E58-E2CA-4C95-827A-CA62D528C6A7";
+
         private Article GetWelcomeInfo()
         {
             return new Article()
@@ -38,6 +41,9 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                         var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
                         strongResponseMessage.Articles.Add(new Article
                         {
+                            Title = "开始预定",
+                            Description = "通过微信预订点餐",
+                            PicUrl = ImgUrl + "wxbeginorder.jpg",
                             Url = string.Format("http://test.xgdg.cn/order/begin/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}?type=Quick", requestMessage.FromUserName)
                         });
                         reponseMessage = strongResponseMessage;
@@ -116,7 +122,7 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
             try
             {
                 CrmMemberModel cdb = new CrmMemberModel();
-                int i = cdb.Save();
+                //int i = cdb.Save();
             }
             catch (Exception)
             {

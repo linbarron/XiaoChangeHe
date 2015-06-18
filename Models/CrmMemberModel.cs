@@ -72,8 +72,7 @@ a.Password,a.Idcard,a.Birthday,a.TypeId,a.RegDate,a.ExpiredDate,a.UseState,a.Sex
         }
         #endregion
 
-
-          public List<PrepayAccount> getPrepayAccount(string memberId)
+        public List<PrepayAccount> getPrepayAccount(string memberId)
         {
             List<PrepayAccount> list = null;
             try
@@ -89,7 +88,7 @@ a.Password,a.Idcard,a.Birthday,a.TypeId,a.RegDate,a.ExpiredDate,a.UseState,a.Sex
                      .Map(t => t.uid).ToColumn("Uid")
                      .Map(t => t.AccountMoney).ToColumn("AccountMoney")
                      .Map(t => t.PresentMoney).ToColumn("PresentMoney")
-                    
+
                     .Build());
                 list = tableAccessor.Execute(new string[] { memberId }).ToList();
                 return list;
@@ -100,9 +99,6 @@ a.Password,a.Idcard,a.Birthday,a.TypeId,a.RegDate,a.ExpiredDate,a.UseState,a.Sex
                 return null;
             }
         }
-       
-
-
 
         #region Save
         //public int SaveOrderDetails(string type, OrderDetails info)
@@ -139,7 +135,7 @@ a.Password,a.Idcard,a.Birthday,a.TypeId,a.RegDate,a.ExpiredDate,a.UseState,a.Sex
         public bool SaveMember(string wxOpenid, string companyid)
         {
             var user = getCrmMemberListInfoData(wxOpenid);
-            if (user == null || (user!=null && user.Count==0))
+            if (user == null || (user != null && user.Count == 0))
             {
                 CrmMember member = new CrmMember();
                 member.MemberSource = "01";
@@ -148,47 +144,56 @@ a.Password,a.Idcard,a.Birthday,a.TypeId,a.RegDate,a.ExpiredDate,a.UseState,a.Sex
                 member.UseState = "01";
                 member.RegDate = DateTime.Now;
                 member.CompanyId = new Guid(companyid);
-                var v = db.CrmMember.Max(t => t.Uid);
-                if (v == null)
-                {
-                    member.Uid = "88001100";
-                }
-                else
-                {
-                    member.Uid = (int.Parse(v) + 1).ToString();
-                }
-                db.CrmMember.Add(member);
-                PrepayAccount acc = new PrepayAccount();
-                acc.Uid = member.Uid;
-                acc.AccountMoney = 0;
-                acc.TotalMoney = 0;
-                acc.PresentMoney = 0;
-                acc.TotalPresent = 0;
-                acc.LastConsumeMoney = 0;
-                acc.LastPresentMoney = 0;
-                db.PrepayAccount.Add(acc);
 
-                CrmMemberScore scroe = new CrmMemberScore()
-                {
-                    LastScore = 0,
-                    LastScoredDate = DateTime.Now,
-                    Score = 0,
-                    TotalScore = 0,
-                    Uid = member.Uid,
-                    UseMoney = 0,
-                    UseScore = 0
-                };
-                db.CrmMemberScore.Add(scroe);
+                var v = GetNewUserId();
+                member.Uid = v.ToString();
 
-                return db.SaveChanges() > 0;
+                #region Add new user
+                DbCommand cmd = null;
+                string sql;
+                sql = "insert into CrmMember([Uid],MemberSource,SourceAccountId,TypeId,UseState,RegDate,CompanyId)";
+                cmd = db.GetSqlStringCommand(sql);
+                //db.AddInParameter(cmd, "DetailsId", DbType.Guid, info.DetailsId);
+                //db.AddInParameter(cmd, "name", DbType.String, name);
+                //db.AddInParameter(cmd, "phone", DbType.String, phone);
+                //db.AddInParameter(cmd, "sex", DbType.Boolean, sex);
+                //db.AddInParameter(cmd, "addr", DbType.String, addr);
+                //db.AddInParameter(cmd, "bir", DbType.DateTime, bir);
+                //db.AddInParameter(cmd, "id", DbType.String, id);
+
+                #endregion
+
+                //PrepayAccount acc = new PrepayAccount();
+                //acc.Uid = member.Uid;
+                //acc.AccountMoney = 0;
+                //acc.TotalMoney = 0;
+                //acc.PresentMoney = 0;
+                //acc.TotalPresent = 0;
+                //acc.LastConsumeMoney = 0;
+                //acc.LastPresentMoney = 0;
+                //db.PrepayAccount.Add(acc);
+
+                //CrmMemberScore scroe = new CrmMemberScore()
+                //{
+                //    LastScore = 0,
+                //    LastScoredDate = DateTime.Now,
+                //    Score = 0,
+                //    TotalScore = 0,
+                //    Uid = member.Uid,
+                //    UseMoney = 0,
+                //    UseScore = 0
+                //};
+                //db.CrmMemberScore.Add(scroe);
+
+                //return db.SaveChanges() > 0;
             }
             else
             {
-                CrmMember member = db.CrmMember.Single(t => t.SourceAccountId == wxOpenid && t.CompanyId == new Guid(companyid));
-                member.UseState = "01";
-                return db.SaveChanges() > 0;
+                //CrmMember member = db.CrmMember.Single(t => t.SourceAccountId == wxOpenid && t.CompanyId == new Guid(companyid));
+                //member.UseState = "01";
+                //return db.SaveChanges() > 0;
             }
-            //return true;
+            return true;
         }
 
         //public bool SaveMemberInfo(string wxOpenid, string companyid, string province, string city, string nickname, string sex)
@@ -237,9 +242,22 @@ a.Password,a.Idcard,a.Birthday,a.TypeId,a.RegDate,a.ExpiredDate,a.UseState,a.Sex
         /// 分配新用户ID
         /// </summary>
         /// <returns></returns>
-        private int GetNewUserId()
+        private Int64 GetNewUserId()
         {
-            
+            Int64 uId = 1;
+            try
+            {
+                DbCommand cmd = null;
+                string sql;
+                sql = "select max(uid) from CrmMember;";
+                cmd = db.GetSqlStringCommand(sql);
+                uId = (Int64)ExecuteScalar(cmd);
+            }
+            catch (Exception ex)
+            {
+               //TODO
+            }
+            return uId;
         }
 
         #endregion
