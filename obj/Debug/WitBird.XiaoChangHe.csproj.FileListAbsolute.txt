@@ -196,3 +196,4 @@ E:\MyGit\XiaoChangeHe\bin\zxing.xml
 E:\MyGit\XiaoChangeHe\bin\zxing.presentation.xml
 E:\MyGit\XiaoChangeHe\obj\Debug\WitBird.XiaoChanghe.dll
 E:\MyGit\XiaoChangeHe\obj\Debug\WitBird.XiaoChanghe.pdb
+E:\MyGit\XiaoChangeHe\obj\Debug\WitBird.XiaoChangHe.csprojResolveAssemblyReference.cache
