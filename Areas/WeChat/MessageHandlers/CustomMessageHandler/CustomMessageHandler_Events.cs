@@ -122,11 +122,11 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
             try
             {
                 CrmMemberModel cdb = new CrmMemberModel();
-                //int i = cdb.Save();
+                cdb.SaveMember(requestMessage.FromUserName, CompanyId);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO
+                LogException(ex);
             }
             return strongResponseMessage;
         }
@@ -139,6 +139,15 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
         {
             var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
             strongResponseMessage.Articles.Add(GetWelcomeInfo());
+            try
+            {
+                CrmMemberModel cdb = new CrmMemberModel();
+                cdb.SaveMember(requestMessage.FromUserName, CompanyId);
+            }
+            catch (Exception ex)
+            {
+                LogException(ex);
+            }
             return strongResponseMessage;
         }
 

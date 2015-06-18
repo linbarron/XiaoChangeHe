@@ -63,5 +63,35 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
 
             return responseMessage;
         }
+
+        protected void LogException(Exception ex)
+        {
+            try
+            {
+                #region LogException
+                using (TextWriter tw = new StreamWriter(System.Web.HttpContext.Current.Server.MapPath("~/Applog/Error.txt")))
+                {
+                    tw.WriteLine("Time:" + DateTime.Now);
+                    tw.WriteLine("ExecptionMessage:" + ex.Message);
+                    tw.WriteLine(ex.Source);
+                    tw.WriteLine(ex.StackTrace);
+                    if (ex.InnerException != null)
+                    {
+                        tw.WriteLine("========= InnerException =========");
+                        tw.WriteLine(ex.InnerException.Message);
+                        tw.WriteLine(ex.InnerException.Source);
+                        tw.WriteLine(ex.InnerException.StackTrace);
+                    }
+
+                    tw.Flush();
+                    tw.Close();
+                }
+                #endregion
+            }
+            catch (Exception)
+            {
+                //TODO
+            }
+        }
     }
 }

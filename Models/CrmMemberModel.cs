@@ -135,92 +135,108 @@ a.Password,a.Idcard,a.Birthday,a.TypeId,a.RegDate,a.ExpiredDate,a.UseState,a.Sex
 
         public bool SaveMember(string wxOpenid, string companyid)
         {
-            using (TransactionScope transaction=new TransactionScope())
+            using (TransactionScope transaction = new TransactionScope())
             {
-                
-
-            var user = getCrmMemberListInfoData(wxOpenid);
-            if (user == null || (user != null && user.Count == 0))
-            {
-                CrmMember member = new CrmMember();
-                member.MemberSource = "01";
-                member.SourceAccountId = wxOpenid;
-                member.TypeId = 1;
-                member.UseState = "01";
-                member.RegDate = DateTime.Now;
-                member.CompanyId = new Guid(companyid);
-
-                var v = GetNewUserId();
-                member.Uid = v.ToString();
-
-                #region Add new user
-                DbCommand cmd = null;
-                string sql;
-                sql = "insert into CrmMember([Uid],MemberSource,SourceAccountId,TypeId,UseState,RegDate,CompanyId) " +
-                      "value(@Uid,@MemberSource,@SourceAccountId,@TypeId,@UseState,@RegDate,@CompanyId)";
-                cmd = db.GetSqlStringCommand(sql);
-                db.AddInParameter(cmd, "Uid", DbType.Guid, member.Uid);
-                db.AddInParameter(cmd, "MemberSource", DbType.String, member.MemberSource);
-                db.AddInParameter(cmd, "SourceAccountId", DbType.String, member.SourceAccountId);
-                db.AddInParameter(cmd, "TypeId", DbType.Boolean, member.TypeId);
-                db.AddInParameter(cmd, "UseState", DbType.String, member.UseState);
-                db.AddInParameter(cmd, "RegDate", DbType.DateTime, member.RegDate);
-                db.AddInParameter(cmd, "CompanyId", DbType.String, member.CompanyId);
-                
-                ExecSql(cmd);
-
-                #endregion
-
-                #region Add PrepayAccount
-
-                PrepayAccount acc = new PrepayAccount();
-                acc.uid = member.Uid;
-                acc.AccountMoney = 0;
-                acc.TotalMoney = 0;
-                acc.PresentMoney = 0;
-                acc.TotalPresent = 0;
-                acc.LastConsumeMoney = 0;
-                acc.LastPresentMoney = 0;
-
-                cmd = null;
-                sql = "insert into PrepayAccount([Uid],AccountMoney,TotalMoney,PresentMoney,TotalPresent,LastConsumeMoney,LastPresentMoney) " +
-                      "value(@Uid,@MemberSource,@SourceAccountId,@TypeId,@UseState,@RegDate,@CompanyId)";
-                cmd = db.GetSqlStringCommand(sql);
-                db.AddInParameter(cmd, "Uid", DbType.Guid, member.Uid);
-                db.AddInParameter(cmd, "AccountMoney", DbType.String, member.MemberSource);
-                db.AddInParameter(cmd, "TotalMoney", DbType.String, member.SourceAccountId);
-                db.AddInParameter(cmd, "TotalPresent", DbType.Boolean, member.TypeId);
-                db.AddInParameter(cmd, "LastConsumeMoney", DbType.String, member.UseState);
-                db.AddInParameter(cmd, "LastPresentMoney", DbType.DateTime, member.RegDate);
-
-                ExecSql(cmd);
-
-                #endregion
-
-                #region Add PrepayAccount
-
-                CrmMemberScore scroe = new CrmMemberScore()
+                var user = getCrmMemberListInfoData(wxOpenid);
+                if (user == null || (user != null && user.Count == 0))
                 {
-                    LastScore = 0,
-                    LastScoredDate = DateTime.Now,
-                    Score = 0,
-                    TotalScore = 0,
-                    Uid = member.Uid,
-                    UseMoney = 0,
-                    UseScore = 0
-                };
-                
+                    CrmMember member = new CrmMember();
+                    member.MemberSource = "01";
+                    member.SourceAccountId = wxOpenid;
+                    member.TypeId = 1;
+                    member.UseState = "01";
+                    member.RegDate = DateTime.Now;
+                    member.CompanyId = new Guid(companyid);
 
-                #endregion
+                    var v = GetNewUserId();
+                    member.Uid = v.ToString();
 
-                transaction.Complete();           
-            }
-            else
-            {
-                //CrmMember member = db.CrmMember.Single(t => t.SourceAccountId == wxOpenid && t.CompanyId == new Guid(companyid));
-                //member.UseState = "01";
-                //return db.SaveChanges() > 0;
-            }
+                    #region Add new user
+                    DbCommand cmd = null;
+                    string sql;
+                    sql = "insert into CrmMember([Uid],MemberSource,SourceAccountId,TypeId,UseState,RegDate,CompanyId) " +
+                          "value(@Uid,@MemberSource,@SourceAccountId,@TypeId,@UseState,@RegDate,@CompanyId)";
+                    cmd = db.GetSqlStringCommand(sql);
+                    db.AddInParameter(cmd, "Uid", DbType.Guid, member.Uid);
+                    db.AddInParameter(cmd, "MemberSource", DbType.String, member.MemberSource);
+                    db.AddInParameter(cmd, "SourceAccountId", DbType.String, member.SourceAccountId);
+                    db.AddInParameter(cmd, "TypeId", DbType.Boolean, member.TypeId);
+                    db.AddInParameter(cmd, "UseState", DbType.String, member.UseState);
+                    db.AddInParameter(cmd, "RegDate", DbType.DateTime, member.RegDate);
+                    db.AddInParameter(cmd, "CompanyId", DbType.String, member.CompanyId);
+
+                    ExecSql(cmd);
+
+                    #endregion
+
+                    #region Add PrepayAccount
+
+                    PrepayAccount acc = new PrepayAccount();
+                    acc.uid = member.Uid;
+                    acc.AccountMoney = 0;
+                    acc.TotalMoney = 0;
+                    acc.PresentMoney = 0;
+                    acc.TotalPresent = 0;
+                    acc.LastConsumeMoney = 0;
+                    acc.LastPresentMoney = 0;
+
+                    cmd = null;
+                    sql = "insert into PrepayAccount([Uid],AccountMoney,TotalMoney,PresentMoney,TotalPresent,LastConsumeMoney,LastPresentMoney) " +
+                          "value(@Uid,@AccountMoney,@TotalMoney,@TotalPresent,@LastConsumeMoney,@LastPresentMoney)";
+                    cmd = db.GetSqlStringCommand(sql);
+                    db.AddInParameter(cmd, "Uid", DbType.Guid, member.Uid);
+                    db.AddInParameter(cmd, "AccountMoney", DbType.String, member.MemberSource);
+                    db.AddInParameter(cmd, "TotalMoney", DbType.String, member.SourceAccountId);
+                    db.AddInParameter(cmd, "TotalPresent", DbType.Boolean, member.TypeId);
+                    db.AddInParameter(cmd, "LastConsumeMoney", DbType.String, member.UseState);
+                    db.AddInParameter(cmd, "LastPresentMoney", DbType.DateTime, member.RegDate);
+
+                    ExecSql(cmd);
+
+                    #endregion
+
+                    #region Add PrepayAccount
+
+                    CrmMemberScore scroe = new CrmMemberScore()
+                    {
+                        LastScore = 0,
+                        LastScoredDate = DateTime.Now,
+                        Score = 0,
+                        TotalScore = 0,
+                        Uid = member.Uid,
+                        UseMoney = 0,
+                        UseScore = 0
+                    };
+                    cmd = null;
+                    sql = "insert into CrmMemberScore([Uid],LastScoredDate,Score,LastScore,UseMoney,UseScore) " +
+                          "value(@Uid,@LastScoredDate,@Score,@LastScore,@UseMoney,@UseScore)";
+                    cmd = db.GetSqlStringCommand(sql);
+                    db.AddInParameter(cmd, "Uid", DbType.Guid, member.Uid);
+                    db.AddInParameter(cmd, "LastScoredDate", DbType.String, member.MemberSource);
+                    db.AddInParameter(cmd, "Score", DbType.String, member.SourceAccountId);
+                    db.AddInParameter(cmd, "LastScore", DbType.Boolean, member.TypeId);
+                    db.AddInParameter(cmd, "UseMoney", DbType.String, member.UseState);
+                    db.AddInParameter(cmd, "UseScore", DbType.DateTime, member.RegDate);
+
+                    ExecSql(cmd);
+
+                    #endregion
+
+                    transaction.Complete();
+                }
+                else
+                {
+                    #region Set user to New
+                    DbCommand cmd = null;
+                    string sql;
+                    sql = "update CrmMember set UseState=1 where SourceAccountId=@SourceAccountId";
+                    cmd = db.GetSqlStringCommand(sql);
+                    db.AddInParameter(cmd, "SourceAccountId", DbType.String, wxOpenid);
+
+                    ExecSql(cmd);
+
+                    #endregion
+                }
             }
             return true;
         }
