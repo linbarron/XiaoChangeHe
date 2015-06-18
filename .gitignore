@@ -217,3 +217,7 @@ pip-log.txt
 .mr.developer.cfg
 obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
 obj/Debug/WitBird.XiaoChangHe.csproj.FileListAbsolute.txt
+obj/Debug/WitBird.XiaoChangHe.csproj.FileListAbsolute.txt
+bin/WitBird.XiaoChanghe.pdb
+*.pdb
+*.pdb
