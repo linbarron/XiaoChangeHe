@@ -35,9 +35,12 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
             {
                 case "BeginOrderClick":
                     {
-                        var strongResponseMessage = CreateResponseMessage<ResponseMessageText>();
+                        var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
+                        strongResponseMessage.Articles.Add(new Article
+                        {
+                            Url = string.Format("http://test.xgdg.cn/order/begin/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}?type=Quick", requestMessage.FromUserName)
+                        });
                         reponseMessage = strongResponseMessage;
-                        strongResponseMessage.Content = "开始点菜";
                     }
                     break;
                 case "ActivityClick":
