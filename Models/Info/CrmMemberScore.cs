@@ -7,7 +7,7 @@ namespace WitBird.XiaoChangHe.Models.Info
 {
     public class CrmMemberScore
     {
-       // public Guid Uid { get; set; }
+        public string Uid { get; set; }
         public int TotalScore { get; set; }
         public int LastScore { get; set; }
         public DateTime LastScoredDate { get; set; }
