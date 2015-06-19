@@ -135,6 +135,7 @@ a.Password,a.Idcard,a.Birthday,a.TypeId,a.RegDate,a.ExpiredDate,a.UseState,a.Sex
 
         public bool SaveMember(string wxOpenid, string companyid)
         {
+            bool resukt = false;
             using (TransactionScope transaction = new TransactionScope())
             {
                 var user = getCrmMemberListInfoData(wxOpenid);
@@ -236,8 +237,9 @@ a.Password,a.Idcard,a.Birthday,a.TypeId,a.RegDate,a.ExpiredDate,a.UseState,a.Sex
                     #endregion
                 }
                 transaction.Complete();
+                resukt = true;
             }
-            return true;
+            return resukt;
         }
 
         //public bool SaveMemberInfo(string wxOpenid, string companyid, string province, string city, string nickname, string sex)
@@ -286,20 +288,24 @@ a.Password,a.Idcard,a.Birthday,a.TypeId,a.RegDate,a.ExpiredDate,a.UseState,a.Sex
         /// 分配新用户ID
         /// </summary>
         /// <returns></returns>
-        private Int64 GetNewUserId()
+        public long GetNewUserId()
         {
-            Int64 uId = 1;
+            long uId = 1;
             try
             {
                 DbCommand cmd = null;
                 string sql;
                 sql = "select max(uid) from CrmMember;";
                 cmd = db.GetSqlStringCommand(sql);
-                uId = (Int64)ExecuteScalar(cmd);
+                var result = ExecuteScalar(cmd);
+                if (result != null)
+                {
+                    uId = Convert.ToInt64(result);
+                }
             }
             catch (Exception ex)
             {
-               //TODO
+                throw ex;
             }
             return uId;
         }

@@ -32,7 +32,8 @@ namespace WitBird.XiaoChangHe
             var code = (error is HttpException) ? (error as HttpException).GetHttpCode() : 500;
             string path = Request.Path;
             #region LogException
-            using (TextWriter tw = new StreamWriter(Server.MapPath("~/Applog/Error.txt")))
+            var logPath = HttpContext.Current.Server.MapPath("~/Error.txt");
+            using (StreamWriter tw = new StreamWriter(logPath))
             {
                 tw.WriteLine("Path:" + path);
                 tw.WriteLine("Code:" + code);

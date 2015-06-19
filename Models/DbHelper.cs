@@ -36,9 +36,9 @@ namespace WitBird.XiaoChangHe.Models
             {
                 result = db.ExecuteScalar(cmd);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO
+                throw ex;
             }
             return result;
         }

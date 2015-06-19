@@ -66,12 +66,8 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.Controllers
             catch (Exception ex)
             {
                 #region LogException
-                var logPath = Server.MapPath("~/Applog/Error.txt");
-                if (!Directory.Exists(logPath))
-                {
-                    Directory.CreateDirectory(logPath);
-                }
-                using (TextWriter tw = new StreamWriter(Server.MapPath("~/Applog/Error.txt")))
+                var logPath = Server.MapPath("~/Error.txt");
+                using (StreamWriter tw = new StreamWriter(logPath))
                 {
                     tw.WriteLine("Time:" + DateTime.Now);
                     tw.WriteLine("ExecptionMessage:" + ex.Message);
