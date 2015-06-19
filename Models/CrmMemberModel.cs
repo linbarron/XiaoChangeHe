@@ -156,15 +156,15 @@ a.Password,a.Idcard,a.Birthday,a.TypeId,a.RegDate,a.ExpiredDate,a.UseState,a.Sex
                     DbCommand cmd = null;
                     string sql;
                     sql = "insert into CrmMember([Uid],MemberSource,SourceAccountId,TypeId,UseState,RegDate,CompanyId) " +
-                          "value(@Uid,@MemberSource,@SourceAccountId,@TypeId,@UseState,@RegDate,@CompanyId)";
+                          "values(@Uid,@MemberSource,@SourceAccountId,@TypeId,@UseState,@RegDate,@CompanyId)";
                     cmd = db.GetSqlStringCommand(sql);
-                    db.AddInParameter(cmd, "Uid", DbType.Guid, member.Uid);
+                    db.AddInParameter(cmd, "Uid", DbType.String, member.Uid);
                     db.AddInParameter(cmd, "MemberSource", DbType.String, member.MemberSource);
                     db.AddInParameter(cmd, "SourceAccountId", DbType.String, member.SourceAccountId);
-                    db.AddInParameter(cmd, "TypeId", DbType.Boolean, member.TypeId);
+                    db.AddInParameter(cmd, "TypeId", DbType.Int32, member.TypeId);
                     db.AddInParameter(cmd, "UseState", DbType.String, member.UseState);
                     db.AddInParameter(cmd, "RegDate", DbType.DateTime, member.RegDate);
-                    db.AddInParameter(cmd, "CompanyId", DbType.String, member.CompanyId);
+                    db.AddInParameter(cmd, "CompanyId", DbType.Guid, member.CompanyId);
 
                     ExecSql(cmd);
 
@@ -183,14 +183,15 @@ a.Password,a.Idcard,a.Birthday,a.TypeId,a.RegDate,a.ExpiredDate,a.UseState,a.Sex
 
                     cmd = null;
                     sql = "insert into PrepayAccount([Uid],AccountMoney,TotalMoney,PresentMoney,TotalPresent,LastConsumeMoney,LastPresentMoney) " +
-                          "value(@Uid,@AccountMoney,@TotalMoney,@TotalPresent,@LastConsumeMoney,@LastPresentMoney)";
+                          "values(@Uid,@AccountMoney,@TotalMoney,@PresentMoney,@TotalPresent,@LastConsumeMoney,@LastPresentMoney)";
                     cmd = db.GetSqlStringCommand(sql);
-                    db.AddInParameter(cmd, "Uid", DbType.Guid, member.Uid);
-                    db.AddInParameter(cmd, "AccountMoney", DbType.String, member.MemberSource);
-                    db.AddInParameter(cmd, "TotalMoney", DbType.String, member.SourceAccountId);
-                    db.AddInParameter(cmd, "TotalPresent", DbType.Boolean, member.TypeId);
-                    db.AddInParameter(cmd, "LastConsumeMoney", DbType.String, member.UseState);
-                    db.AddInParameter(cmd, "LastPresentMoney", DbType.DateTime, member.RegDate);
+                    db.AddInParameter(cmd, "Uid", DbType.String, acc.uid);
+                    db.AddInParameter(cmd, "AccountMoney", DbType.Decimal, acc.AccountMoney);
+                    db.AddInParameter(cmd, "TotalMoney", DbType.Decimal, acc.TotalMoney);
+                    db.AddInParameter(cmd, "PresentMoney", DbType.Decimal, acc.PresentMoney);
+                    db.AddInParameter(cmd, "TotalPresent", DbType.Decimal, acc.TotalPresent);
+                    db.AddInParameter(cmd, "LastConsumeMoney", DbType.Decimal, acc.LastConsumeMoney);
+                    db.AddInParameter(cmd, "LastPresentMoney", DbType.Decimal, acc.LastPresentMoney);
 
                     ExecSql(cmd);
 
@@ -210,14 +211,14 @@ a.Password,a.Idcard,a.Birthday,a.TypeId,a.RegDate,a.ExpiredDate,a.UseState,a.Sex
                     };
                     cmd = null;
                     sql = "insert into CrmMemberScore([Uid],LastScoredDate,Score,LastScore,UseMoney,UseScore) " +
-                          "value(@Uid,@LastScoredDate,@Score,@LastScore,@UseMoney,@UseScore)";
+                          "values(@Uid,@LastScoredDate,@Score,@LastScore,@UseMoney,@UseScore)";
                     cmd = db.GetSqlStringCommand(sql);
-                    db.AddInParameter(cmd, "Uid", DbType.Guid, member.Uid);
-                    db.AddInParameter(cmd, "LastScoredDate", DbType.String, member.MemberSource);
-                    db.AddInParameter(cmd, "Score", DbType.String, member.SourceAccountId);
-                    db.AddInParameter(cmd, "LastScore", DbType.Boolean, member.TypeId);
-                    db.AddInParameter(cmd, "UseMoney", DbType.String, member.UseState);
-                    db.AddInParameter(cmd, "UseScore", DbType.DateTime, member.RegDate);
+                    db.AddInParameter(cmd, "Uid", DbType.String, scroe.Uid);
+                    db.AddInParameter(cmd, "LastScoredDate", DbType.DateTime, scroe.LastScoredDate);
+                    db.AddInParameter(cmd, "Score", DbType.Int32, scroe.Score);
+                    db.AddInParameter(cmd, "LastScore", DbType.Int32, scroe.LastScore);
+                    db.AddInParameter(cmd, "UseMoney", DbType.Int32, scroe.UseMoney);
+                    db.AddInParameter(cmd, "UseScore", DbType.Int32, scroe.UseScore);
 
                     ExecSql(cmd);
 
@@ -301,6 +302,7 @@ a.Password,a.Idcard,a.Birthday,a.TypeId,a.RegDate,a.ExpiredDate,a.UseState,a.Sex
                 if (result != null)
                 {
                     uId = Convert.ToInt64(result);
+                    uId++;
                 }
             }
             catch (Exception ex)

@@ -23,8 +23,9 @@ namespace WitBird.XiaoChangHe.Models
                     return 1;
                 }
             }
-            catch (Exception)
+            catch (Exception ex) 
             {
+                throw ex;
             }
             return 0;
         }

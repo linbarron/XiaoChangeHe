@@ -83,9 +83,6 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                         tw.WriteLine(ex.InnerException.Source);
                         tw.WriteLine(ex.InnerException.StackTrace);
                     }
-
-                    tw.Flush();
-                    tw.Close();
                 }
                 #endregion
             }
