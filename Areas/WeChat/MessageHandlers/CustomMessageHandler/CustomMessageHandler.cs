@@ -69,7 +69,12 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
             try
             {
                 #region LogException
-                using (TextWriter tw = new StreamWriter(System.Web.HttpContext.Current.Server.MapPath("~/Applog/Error.txt")))
+                var logPath = HttpContext.Current.Server.MapPath("~/Applog/Error.txt");
+                if (!Directory.Exists(logPath))
+                {
+                    Directory.CreateDirectory(logPath);
+                }
+                using (TextWriter tw = new StreamWriter(HttpContext.Current.Server.MapPath("~/Applog/Error.txt")))
                 {
                     tw.WriteLine("Time:" + DateTime.Now);
                     tw.WriteLine("ExecptionMessage:" + ex.Message);

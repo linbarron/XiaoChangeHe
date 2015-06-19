@@ -66,13 +66,17 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.Controllers
             catch (Exception ex)
             {
                 #region LogException
+                var logPath = Server.MapPath("~/Applog/Error.txt");
+                if (!Directory.Exists(logPath))
+                {
+                    Directory.CreateDirectory(logPath);
+                }
                 using (TextWriter tw = new StreamWriter(Server.MapPath("~/Applog/Error.txt")))
                 {
+                    tw.WriteLine("Time:" + DateTime.Now);
                     tw.WriteLine("ExecptionMessage:" + ex.Message);
                     tw.WriteLine(ex.Source);
                     tw.WriteLine(ex.StackTrace);
-                    //tw.WriteLine("InnerExecptionMessage:" + ex.InnerException.Message);
-
                     if (messageHandler.ResponseDocument != null)
                     {
                         tw.WriteLine(messageHandler.ResponseDocument.ToString());

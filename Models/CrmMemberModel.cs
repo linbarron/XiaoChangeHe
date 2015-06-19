@@ -221,8 +221,6 @@ a.Password,a.Idcard,a.Birthday,a.TypeId,a.RegDate,a.ExpiredDate,a.UseState,a.Sex
                     ExecSql(cmd);
 
                     #endregion
-
-                    transaction.Complete();
                 }
                 else
                 {
@@ -237,6 +235,7 @@ a.Password,a.Idcard,a.Birthday,a.TypeId,a.RegDate,a.ExpiredDate,a.UseState,a.Sex
 
                     #endregion
                 }
+                transaction.Complete();
             }
             return true;
         }
