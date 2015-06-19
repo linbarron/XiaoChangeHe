@@ -273,16 +273,20 @@ a.Password,a.Idcard,a.Birthday,a.TypeId,a.RegDate,a.ExpiredDate,a.UseState,a.Sex
         //    }
         //}
 
-        //public bool DiscardMember(string wxOpenId, string companyid)
-        //{
-        //    if (db.CrmMember.Count(t => t.SourceAccountId == wxOpenId && t.CompanyId == new Guid(companyid)) > 0)
-        //    {
-        //        CrmMember member = db.CrmMember.Single(t => t.SourceAccountId == wxOpenId && t.CompanyId == new Guid(companyid));
-        //        member.UseState = "99";
-        //        return db.SaveChanges() > 0;
-        //    }
-        //    return true;
-        //}
+        public bool DiscardMember(string wxOpenId, string companyid)
+        {
+            #region Set user to 99
+
+            DbCommand cmd = null;
+            string sql;
+            sql = "update CrmMember set UseState=99 where SourceAccountId=@SourceAccountId";
+            cmd = db.GetSqlStringCommand(sql);
+            db.AddInParameter(cmd, "SourceAccountId", DbType.String, wxOpenId);
+
+            return ExecSql(cmd) > 0;
+
+            #endregion
+        }
 
 
         /// <summary>

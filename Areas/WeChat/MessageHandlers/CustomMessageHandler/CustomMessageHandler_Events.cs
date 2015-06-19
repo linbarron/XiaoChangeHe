@@ -152,6 +152,22 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
             return strongResponseMessage;
         }
 
+        public override IResponseMessageBase OnEvent_UnsubscribeRequest(RequestMessageEvent_Unsubscribe requestMessage)
+        {
+            var responseMessage = base.CreateResponseMessage<ResponseMessageText>();
+            responseMessage.Content = "有空再来";
+            try
+            {
+                CrmMemberModel cdb = new CrmMemberModel();
+                cdb.DiscardMember(requestMessage.FromUserName, CompanyId);
+            }
+            catch (Exception ex)
+            {
+                LogException(ex);
+            }
+            return responseMessage;
+        }
+
         /// <summary>
         /// 事件之弹出地理位置选择器（location_select）
         /// </summary>
