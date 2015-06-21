@@ -65,6 +65,7 @@ body{
 .content-img img{
  	width:100%;	
 	margin-top:10px;
+	max-height:150px;
 	}	
 .zhe{
  width:88%;
@@ -84,8 +85,19 @@ body{
   border-bottom:1px solid #ccc;
   position:relative;
 	}	
+.c{
+	width:80%;
+	height:60px;
+	position:absolute;
+   text-indent:20px;
+  
+	top:0px;
+	 text-overflow: ellipsis; 
+white-space: nowrap; 
+ overflow:hidden;
+	}	
 .content-list-img{
-   width:50px;
+   width:16%;
    height:50px;
    right:5px;
    z-index:100;
@@ -95,5 +107,6 @@ body{
 	}
 .content-list-img img{
   width:100%;	
+  max-height:50px;
 	}	
  

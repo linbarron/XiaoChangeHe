@@ -1,84 +1,185 @@
-﻿<!doctype html>
+<!doctype html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>开始点菜</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="format-detection" content="email=no">
-    <link href="style/ksdc.css" rel="stylesheet" type="text/css">
-    <script src="js/jquery.js"></script>
-    <script src="js/ksdc.js"></script>
-    <style>
-        a {
-            text-decoration: none;
-            color: #fff;
-        }
-    </style>
+<meta charset="utf-8">
+<title>开始点菜</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1,maximum-scale=1,initial-scale=1,user-scalable=no" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="yes" name="apple-touch-fullscreen" />
+    <meta content="telephone=no" name="format-detection" />
+    <meta content="email=no" name="format-detection" />
+    <meta content="black" name="apple-mobile-web-app-staimagess-bar-style">
+    <meta name="format-detection" content="telephone=no"> 
+    <meta name="wap-font-scale" content="no"/>
+ <!--  引入css和js-->
+<link href="style/ksdc2.css" rel="stylesheet" type="text/css">
+ <script src="js/jquery.js"></script>
+<script src="js/ksdc2.js"></script>
+ 
 </head>
 <body>
-    <div class="container">
-        <div class="header"><span class="header_l">返回</span>开始点菜<span class="header_r"><img src="images/5.png" height="20"></span></div>
-        <div class="left_top">今日特价</div>
-        <div class="top_list">
-            <ul>
-                <li class="r_bor bg1">火锅</li>
-                <li class="r_bor">中餐</li>
-                <li>酒水</li>
-            </ul>
-        </div>
-        <div class="left_list">
-            <ol>
-                <li class="bg2">特色锅底<span class="shu">4</span></li>
-                <li>鲜河鱼</li>
-                <li>经典丸滑<span class="shu">2</span></li>
-                <li>养生菌类</li>
-                <li>牛羊系列</li>
-                <li>田园时蔬</li>
-                <li>主食</li>
-            </ol>
-        </div>
-        <div class="content">
-            <div class="content2">
-                <div class="content_img">
-                    <img src="images/11 (2).png"></div>
-                <span class="img_title">土豆</span><span class="img_money">5.00元</span>
-                <div class="content-z-bottom">
-                    <div class="right_q"><span class="s_left">-</span><input class="text_box" name="" type="text" value="1" />
+<div class="container">
+  <!-- 上部导航开始， 今日特价，火锅，中餐，酒水 4个菜单都可以点击进行切换-->
+ <div class="top_list">
+    <ul>
+      <li class="r_bor bg1">今日特价</li>
+      <li class="r_bor">火锅</li>
+      <li class="r_bor">中餐</li>
+      <li>酒水</li>
+    </ul>
+  </div>
+   <!-- 今日特价菜单下内容默认选中，每天推荐一道菜-->
+  <div class="menu">
+    <ul class="level1">
+      <li style="display:none;">今日特价1</li>
+        <ul class="level2" style="display:block">
+          <li>
+             <div class="content2">
+          <!--   今日特价菜品图片-->
+ <div class="content_img"><img src="images/11 (2).png"></div>
+   <!--今日特价菜品名字-->
+ <span class="img_title">特价</span>
+   <!--今日特价价格-->
+ <span class="img_money">5.00元</span>
+ <div class="content-z-bottom">
+ <!--  加减按钮-->
+   <div class="right_q">
+    <span class="s_left">-</span>
+     <input class="text_box" name="" type="text" value="1" /> 
+    <span class="s_right">+</span></div>
+   </div> 
+ </div>
+          
+          </li>
+        </ul>
+    </ul>
+    
+          <!--火锅开始  二三级默认都是隐藏，因为加了class为hide-->
+    <ul class="level1 hide">
+      <li>火锅二级1</li>        <!--火锅二级菜单（左侧的）此处为了说明程序，下面我手动复制了 火锅二级2 及其下面的三级 你们要循环二级菜单，循环这里就ok了。-->
+        <ul class="level2 hide">
+          <!--下面最近的第一个<li></li>是三级菜单下面的内容，此处为了说明效果，我多复制了一个<li></li>你们遍历数据，循环这里一个li即可。-->
+           <li>
+                               <div class="content2">
+                               <!-- 菜品图片-->
+                               <div class="content_img"><img src="images/11 (2).png"></div>
+                                <!--菜品名称-->
+                               <span class="img_title">火锅1-1</span>
+                                <!--菜品价格-->
+                               <span class="img_money">35.00元</span>
+                                <!--加减按钮-->
+                               <div class="content-z-bottom">
+                               <div class="right_q">
+                               <span class="s_left">-</span>
+                               <input class="text_box" name="" type="text" value="1" /> 
+                               <span class="s_right">+</span></div>
+                               </div> 
+                               </div>
+ 
+            </li>
+           <li>
+                             <!--   同上面三级1-1复制的上面-->
+                             <div class="content2">
+                             <div class="content_img"><img src="images/11 (2).png"></div>
+                             <span class="img_title">火锅1-2</span>
+                             <span class="img_money">35.00元</span>
+                             <div class="content-z-bottom">
+                             <div class="right_q">
+                             <span class="s_left">-</span>
+                             <input class="text_box" name="" type="text" value="1" /> 
+                             <span class="s_right">+</span></div>
+                             </div> 
+                             </div>
+           
+           </li>
+        </ul>
+        
+         <!--与上面雷同，只是复制的上面。 上面简写形式就是下面二级和三级效果。完全可以删除-->
+              <!--测试数据火锅二级2开始-->
+              <li>火锅二级2</li>
+                <ul class="level2 hide">
+                   <!--测试数据火锅三级2开始-->
+                   <li>火锅三级2-1</li>
+                   <li>火锅三级2-2</li>
+                    <!--测试数据或股三级2结束-->
+                </ul>  
+               <!--测试数据火锅二级2结束-->  
+    </ul>
+    
+    
+      <!-- 此处level1是中餐 循环酒水二级和三级通过这里-->
+     <ul class="level1 hide">
+      <li>中餐二级1</li>
+        <ul class="level2 hide">
+           <li>
+                     <div class="content2">
+                     <div class="content_img"><img src="images/11 (2).png"></div>
+                     <span class="img_title">中餐1-1</span>
+                     <span class="img_money">35.00元</span>
+                     <div class="content-z-bottom">
+                     <div class="right_q">
+                     <span class="s_left">-</span>
+                      <input class="text_box" name="" type="text" value="1" /> 
                         <span class="s_right">+</span></div>
-                </div>
-            </div>
-            <div class="content2">
-                <div class="content_img">
-                    <img src="images/11 (2).png"></div>
-                <span class="img_title">土豆</span><span class="img_money">5.00元</span>
-                <div class="content-z-bottom">
-                    <div class="right_q"><span class="s_left">-</span><input class="text_box" name="" type="text" value="1" />
-                        <span class="s_right">+</span></div>
-                </div>
-            </div>
+                       </div> 
+                     </div>
+           
+           </li>
+           <li>中餐三级1-2</li>
+        </ul>
+        
+       <!-- 上面中餐测试数据的简写形式如下-->
+      <li>中餐二级2</li>
+        <ul class="level2 hide">
+           <li>中餐三级2-1</li>
+           <li>中餐三级2-2</li>
+        </ul>  
+    </ul>
+    
+       <!-- 此处level1是酒水 循环酒水二级，和三级通过这里-->
+     <ul class="level1 hide">
+      <li>酒水二级1</li>
+        <ul class="level2 hide">
+           <li>
+                         <!--content2代表内容区块-->
+                             <div class="content2">
+                             <div class="content_img"><img src="images/11 (2).png"></div>
+                             <span class="img_title">酒水1-1</span>
+                             <span class="img_money">35.00元</span>
+                             <div class="content-z-bottom">
+                               <div class="right_q">
+                                <span class="s_left">-</span>
+                                 <input class="text_box" name="" type="text" value="1" /> 
+                                <span class="s_right">+</span></div>
+                               </div> 
+                             </div>
+           
+           </li>
+            <!-- 上面酒水三级级的简写形式-->
+           <li>酒水三级1-2</li>
+        </ul>
+        
+          <!-- 上面中餐测试数据的简写形式如下-->
+      <li>酒水二级2</li>
+        <ul class="level2 hide">
+           <li>酒水三级2-1</li>
+           <li>酒水三级2-2</li>
+        </ul>  
+    </ul>
+    
+    
+    
+    
+  </div>
+  
+   <!-- 底部购物车，和价格，和选好了按钮-->
+  <div class="footer">
+ <div class="footer_left"><img src="images/4.png"><span class="shu2">2</span><span class="money">|　45.00元</span></div>
+ 
+<a href="ydxx.html"><div class="footer_right">选好了</div></a>
 
-            <div class="content2">
-                <div class="content_img">
-                    <img src="images/11 (2).png"></div>
-                <span class="img_title">土豆</span><span class="img_money">5.00元</span>
-                <div class="content-z-bottom">
-                    <div class="right_q"><span class="s_left">-</span><input class="text_box" name="" type="text" value="1" />
-                        <span class="s_right">+</span></div>
-                </div>
-            </div>
-
-
-        </div>
-        <div class="footer">
-            <div class="footer_left">
-                <img src="images/4.png"><span class="shu2">2</span><span class="money">|　45.00元</span></div>
-
-            <a href="ydxx.html">
-                <div class="footer_right">选好了</div>
-            </a>
-        </div>
-    </div>
+ </div>
+ </div>
 </body>
 </html>

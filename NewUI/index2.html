@@ -3,11 +3,30 @@
 <head>
 <meta charset="utf-8">
 <title>店铺详情</title>
+
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1,maximum-scale=1,initial-scale=1,user-scalable=no" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="yes" name="apple-touch-fullscreen" />
+    <meta content="telephone=no" name="format-detection" />
+    <meta content="email=no" name="format-detection" />
+    <meta content="black" name="apple-mobile-web-app-staimagess-bar-style">
+    <meta name="format-detection" content="telephone=no"> 
+    <meta name="wap-font-scale" content="no"/>
+  <!--引入css和js-->
 <link href="style/index2.css" rel="stylesheet" type="text/css">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="format-detection" content="telephone=no">
-<meta name="format-detection" content="email=no">
+  <link href="css/lunbo.css" type="text/css" rel="stylesheet" />
+ <script src="js/jquery.js"></script>
+  <script>
+//设置3秒自动轮播一次
+$(function(){
+  setInterval(function(){
+  $(".arrow-right").trigger("click");
+  },3000)
+  });
+	  
+  </script>
+ <!-- 点击可打电话js-->
 <script>
 function phone(date){
 window.location.href = 'tel://' + date;
@@ -15,29 +34,99 @@ window.location.href = 'tel://' + date;
 </script>
 </head>
 <body>
+
 <div class="container">
- <div class="header"><span class="header_l"><返回</span>店铺详情<span class="header_r"><img src="images/5.png" height="20"></span></div>
- <div class="tu">
- <div class="tu_top"><span class="tu_top_1">成都铁狮门晶融汇店</span><span class="tu_top_2">x 4张</span></div>
- <img src="images/3.png" width="100%">
- <a href="ksdc.html"><div class="bottom_1"><img src="images/dh2.png"  height="60"></div></a>
+
+   <!-- 轮播图 x4张-->
+ <div class="slider">
+  <!-- 轮播代码部分begin -->
+  <div class="device">
+    <a class="arrow-left" href="#"></a> 
+    <a class="arrow-right" href="#"></a>
+   
+    <div class="swiper-container">
+   
+      <div class="swiper-wrapper" style="z-index:1;">
+       <!-- 轮播代码部分php通过循环swiper-slide下面img来遍历数据 -->
+        
+        <div class="swiper-slide">
+        
+         <img src="images/3.png" > </div>
+        <div class="swiper-slide"> <img src="images/3.png" > </div>
+        <div class="swiper-slide"> <img src="images/3.png"></div>
+        <!-- php轮播结束-->
+           
+      </div>
+
+    </div>
+    <div class="pagination"></div>
+      
+  </div>
+    
+  <script src="js/lunbo.js"></script>
+  
+  <script>
+  var mySwiper = new Swiper('.swiper-container',{
+    pagination: '.pagination',
+    loop:true,
+    grabCursor: true,
+    paginationClickable: true
+  })
+  $('.arrow-left').on('click', function(e){
+    e.preventDefault()
+    mySwiper.swipePrev()
+  })
+  $('.arrow-right').on('click', function(e){
+    e.preventDefault()
+    mySwiper.swipeNext()
+  })
+  </script>
+<!-- 轮播代码部分end -->
+   </div>
+ 
+ 
+
+  <!--立即点菜图标-->
+ <a href="ksdc.html"><div class="top-title"> 成都铁狮门晶融汇店 <span>x4张</span>  </div><div class="bottom_1"><img src="images/dh2.png"  height="60"></div></a>
+  <!-- 今日特价图标-->
  <a href="ksdc.html"><div class="bottom_2"><img src="images/dh3.png"  height="60"></div></a>
+  <!-- 导航到店图标-->
  <div class="bottom_3"><img src="images/dh1.png"  height="60"></div>
+  <!--立即点菜-->
  <a href="ksdc.html"><div class="bottom_1_1 dibu">立即点菜</div></a>
+  <!-- 今日特价-->
  <a href="ksdc.html"> <div class="bottom_2_2 dibu">今日特价</div></a>
+  <!--导航到店-->
    <div class="bottom_3_3 dibu">导航到店</div>
  </div>
+ 
+  <!--  内容区域开始-->
 <div class="content">
+    <!-- 营业时间-->
 <div class="content_1"><span class="content_1_l">营业时间</span> <span class="content_1_r">10:0-22:00</span></div>
-<div class="content_2"><span class="content_1_l">成都市青羊区文翁路139号<br> 天府广场地区</span> <span class="content_2_r"><span style="color:#0ff;">地图</span>&nbsp;></span></div>
- 
+ <!--  地址-->
+<div class="content_2"><span class="content_1_l">成都市青羊区文翁路139号<br> 天府广场地区</span> <span class="content_2_r">
+ <!--  地图 可点击-->
+  <span style="color:#0ff;">地图</span>&nbsp;></span></div>
+  <!-- 联系商家电话， 可点击-->
  <div class="content_3"><span class="content_1_l">联系商家：<a href=”javascript:phone('+phone+') ”>13981798782</span> <span class="content_2_r"><span style="color:#0ff;"><img src="images/dianh.png"  height="22"></span></a></div>
- 
+   <!-- 今日特价更多-->
   <div class="content_4"><span class="content_1_l" style="font-weight:bold;">今日特价</span> <span class="content_1_r"> 更多>> </div>
 </div>
  <div class="content_5">
-   <div class="content_5_l"><img style="width:100%" src="images/11 (2).png" ></div><span class="z_s" style="font-weight:bold;">韭香凤冠</span><span class="y_s" style="font-size:12px;">星期一</span><span class="z_x"><span style="color:#F33">78元</span> <span class="through">100元</span></span><span class="y_x" style="font-size:12px;">已售5</span></div>
+  <!-- 商品图片-->
+   <div class="content_5_l"><img src="images/11 (2).png" ></div>
+    <!--商品名字-->
+   <span class="z_s" style="font-weight:bold;">韭香凤冠</span>
+    <!--时间-->
+   <span class="y_s" style="font-size:12px;">星期一</span>
+    <!--新价格和旧价格-->
+   <span class="z_x"><span style="color:#F33">78元</span> <span class="through">100元</span></span>
+    <!--已售件数-->
+   <span class="y_x" style="font-size:12px;">已售5</span></div>
 </div>
+
+ <!-- 商家提供-->
 <div style="color:#666;font-size:14px;margin:10px;"> 商家提供： WIFI(公共停车场)17点后免费 公交车：正通顺街站</div> 
 </div>
 </body>

@@ -3,11 +3,18 @@
 <head>
 <meta charset="utf-8">
 <title>订单详情已付款</title>
-<link href="style/ddxq(yfk).css" rel="stylesheet" type="text/css">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="format-detection" content="telephone=no">
-<meta name="format-detection" content="email=no">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1,maximum-scale=1,initial-scale=1,user-scalable=no" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="yes" name="apple-touch-fullscreen" />
+    <meta content="telephone=no" name="format-detection" />
+    <meta content="email=no" name="format-detection" />
+    <meta content="black" name="apple-mobile-web-app-staimagess-bar-style">
+    <meta name="format-detection" content="telephone=no"> 
+    <meta name="wap-font-scale" content="no"/>
+ <!--   引入css-->
+    <link href="style/ddxq(yfk).css" rel="stylesheet" type="text/css">
+     <!--遮罩层js-->
 <script type="text/javascript">
 //弹出隐藏层
 function ShowDiv(show_div,bg_div){
@@ -28,31 +35,46 @@ document.getElementById(bg_div).style.display='none';
 </head>
 <body>
 <div class="container">
-<a name="shang"> </a>
- <div class="header"><span class="header_l"><返回</span>订单详情<span class="header_r"><img src="images/5.png" height="20"></span></div>
+  <!-- 订单金额和金额 并且提示已付款 -->
  <div class="header2"><span class="jine">订单金额：　<span class="money">100元</span></span> <span class="yifu">已付款</span></div>
+   <!--姓名，电话，订单标号，备注-->
  <div class="info">　姓　　名：周德政先生<br/>　电　　话：13981798782<br/>　订单编号：123445<br/>　备　　注：无</div>
+ <!--  桌数+人数+时间-->
   <div class="san"><span class="san_l">散桌1-10人桌</span><span class="san_r"> 2015-05-22 周五 12:30</span></div>
-  
+   <!-- 菜品清单头部title-->
   <div class="content-header"><span>|</span>  菜品清单</div>
+   <!--内容区域开始，class为content 花香醉兔肉-->
   <div class="content">
-    <div class="content-img"><img src="images/8.png"></div>
-<div class="content-content"><span class="s_z">花香醉兔肉</span><br/><span class="x_z">25.00<span style="font-size:14px"> 元</span></span><span class="x_y">x1</span></div></div>
+    <div class="content-img">
+    <!--  菜品图片-->
+    <img src="images/8.png">
+    </div>
+   <!-- 菜名-->
+<div class="content-content"><span class="s_z">花香醉兔肉</span><br/>
+       <!--价格-->
+<span class="x_z">25.00<span style="font-size:14px"> 元</span></span>
+  <!-- 此菜的份数X？-->
+<span class="x_y">x1</span>
+</div></div>
 
-
+<!--以下为测试数据，复制的上面部分 class 为content的div-->
 <div class="content">
     <div class="content-img"><img src="images/8.png"></div>
 <div class="content-content"><span class="s_z">花香醉兔肉</span><br/><span class="x_z">25.00<span style="font-size:14px"> 元</span></span><span class="x_y">x1</span></div></div>
 
-
+<!--以下为测试数据，复制的上面部分 class 为content的div-->
 <div class="content">
     <div class="content-img"><img src="images/8.png"></div>
 <div class="content-content"><span class="s_z">花香醉兔肉</span><br/><span class="x_z">25.00<span style="font-size:14px"> 元</span></span><span class="x_y">x1</span></div></div>
 
-
+ <!-- 创建时间-->
  <div class="time">创建时间 2015-05-21 14:29:42</div>
 
-<div class="footer"><a href="#shang"><div class="footer_l" onClick="ShowDiv('MyDiv','fade')">修改订单</div> </a><a href="sqtk.html"><div class="footer_r">申请退款</div></a></div>
+<div class="footer"><a href="#shang">
+  <!--修改订单按钮-->
+<div class="footer_l" onClick="ShowDiv('MyDiv','fade')">修改订单</div> </a><a href="sqtk.html">
+  <!--申请退款按钮 点击跳到退款页面-->
+<div class="footer_r">申请退款</div></a></div>
 </div>
 
 
@@ -60,12 +82,15 @@ document.getElementById(bg_div).style.display='none';
 <!--弹出层时背景层DIV-->
 <div id="fade" class="black_overlay">
 </div>
+<!--  修改订单弹出层-->
 <div id="MyDiv" class="white_content">
 <div style="  cursor: default; height: 40px;color:#666;">
 
 订单为已支付状态，若此时修改订单，本次订单将作废，金额会在24小时内退回你的账户，点击“确认修改”回到之前点菜状态进行订单修改。
 <div  style="border-top:1px solid #ccc;margin-top:6%;">
+  <!--确认修改按钮，需要加功能-->
 <div class="queren">确认修改</div>
+  <!--取消则隐藏弹出层-->
 <div class="quxiao" style="font-size: 16px;" onClick="CloseDiv('MyDiv','fade')">取消</div>
 </div>
 </div>

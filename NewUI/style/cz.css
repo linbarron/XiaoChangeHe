@@ -18,6 +18,7 @@ body{
  font-size:18px;
  position:absolute;
  left:10px;
+ clear:both;
 	}	
 .header_r{
   margin-top:5px;
@@ -64,3 +65,23 @@ body{
   margin-top:15px;
   border-radius:5px;
 	}
+.sel{
+position:absolute;
+float:right;
+ margin-top:15px;
+ right:30px;
+ width:100px;
+display:none; 
+color:#999;
+	}	
+input{
+ border:none;	
+ text-align:right;
+ width:150px;
+ color:#999;
+	}	
+	
+	
+	
+	
+	
