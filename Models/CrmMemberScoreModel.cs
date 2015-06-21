@@ -36,7 +36,7 @@ namespace WitBird.XiaoChangHe.Models.Info
             {
                 IParameterMapper ipmapper = new SelCrmMemberScoreInfoParameterMapper();
                 DataAccessor<CrmMemberScore> tableAccessor;
-                string strSql = @"select  n.TotalScore,n.LastScore,n.LastScoredDate,n.Score ,n.UseMoney, n.UseScore from CrmMemberScore n
+                string strSql = @"select  * from CrmMemberScore n
                     where n.Uid=@Uid";
                 tableAccessor = db.CreateSqlStringAccessor(strSql, ipmapper, MapBuilder<CrmMemberScore>.MapAllProperties()
                    // .Map(t => t.Uid).ToColumn("Uid")

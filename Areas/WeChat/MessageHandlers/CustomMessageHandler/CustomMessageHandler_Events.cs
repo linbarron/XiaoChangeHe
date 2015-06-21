@@ -59,9 +59,26 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                     break;
                 case "AccountInfoClick":
                     {
-                        var strongResponseMessage = CreateResponseMessage<ResponseMessageText>();
+                        var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
+                        string msg = string.Empty;
+                        try
+                        {
+                            CrmMemberModel model=new CrmMemberModel();
+                            msg = model.getCrmMemberListInfoData(requestMessage.FromUserName).FirstOrDefault().Uid;
+                        }
+                        catch (Exception ex)
+                        {
+                            LogException(ex);
+                            msg = ex.StackTrace;
+                        }
+                        strongResponseMessage.Articles.Add(new Article
+                        {
+                            Title = "会员信息",
+                            Description = "您的会员号："+msg,
+                            PicUrl = ImgUrl + "wxmembercard_h.png",
+                            Url = string.Format("http://test.xgdg.cn/Member/Info/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}", requestMessage.FromUserName)
+                        });
                         reponseMessage = strongResponseMessage;
-                        strongResponseMessage.Content = "会员信息";
                     }
                     break;
                 case "VipPay":

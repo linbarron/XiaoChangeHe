@@ -84,7 +84,7 @@ a.Password,a.Idcard,a.Birthday,a.TypeId,a.RegDate,a.ExpiredDate,a.UseState,a.Sex
                 }
                 IParameterMapper ipmapper = new getCrmMemberListInfoDataParameterMapper();
                 DataAccessor<PrepayAccount> tableAccessor;
-                string strSql = @"select p.AccountMoney, p.uid,p.PresentMoney from PrepayAccount p where p.uid=@SourceAccountId";
+                string strSql = @"select * from PrepayAccount p where p.uid=@SourceAccountId";
                 tableAccessor = db.CreateSqlStringAccessor(strSql, ipmapper, MapBuilder<PrepayAccount>.MapAllProperties()
                      .Map(t => t.uid).ToColumn("Uid")
                      .Map(t => t.AccountMoney).ToColumn("AccountMoney")
