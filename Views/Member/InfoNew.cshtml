@@ -30,7 +30,7 @@
         <div>
              <nav id="img">
                  <span id="uid"><span style="font-size:15px;margin-right: -10px;" >NO.</span> @(info != null ? info.Uid : "")</span>
-                 
+
                   @if(ViewBag.PrepayAccount == 0)
                    {
                        <img src="~/Content/images/@(ViewBag.CompanyId)w.png" />
@@ -58,7 +58,7 @@
                 </li>
                 <li>
                     <a href="#">
-                        <span>积&nbsp;&nbsp; &nbsp;分&nbsp;&nbsp;&nbsp;&nbsp;@(ViewBag.TotalScore)</span>
+                        <span>积&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;分&nbsp;&nbsp;&nbsp;&nbsp;@(ViewBag.TotalScore)</span>
                         
                     </a>
                 </li>
@@ -127,11 +127,11 @@
                         <img class="img_right" src="~/Content/images/jiantou.png" />
                     </a>
                 </li>
-                 @*<li style="height:7em;">
+                 <li style="height:7em;">
                       <span>我的二维码</span>
                   
 <img src="@string.Format("http://qr.liantu.com/api.php?&bg=ffffff&fg=000000&text=WPT{0}", info.Uid)" style="width:6em; vertical-align:top"/>                    
-                </li>*@
+                </li>
             </ol>
             <nav style="clear: both;"></nav>
 
