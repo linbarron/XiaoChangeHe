@@ -189,5 +189,33 @@ rst.BusinessEndtDate,rst.RstType,ro.MapUrl,ro.VirtualUrl, null as Photo ,p.Name,
             }
         }
         #endregion
+
+
+        #region WitBird新建
+
+        public NewRestaurantAbstract GetRestaurentById(string restaurantId)
+        {
+            try
+            {
+                IParameterMapper ipmapper = new getRestaurentStateParameterMapper();
+                DataAccessor<NewRestaurantAbstract> tableAccessor;
+                string strSql = @"select rst.Id,rst.Name,rst.ContactPhone,rst.Address,rst.BusinessStartDate,
+rst.BusinessEndtDate,rst.RstType,ro.MapUrl,ro.VirtualUrl, null as Photo ,p.Name,
+ isnull(ro.MaxTime,0) as MaxTime ,case when (ro.Reven=1 or ro.Rnoon=1)  then 1 else 0 end as isAcceptOrder
+ from Restaurant rst left join ReceiveOrder ro on rst.Id=ro.RstId ,Province p
+ where rst.Id=@restaurantId;";
+
+                tableAccessor = db.CreateSqlStringAccessor(strSql, ipmapper, MapBuilder<NewRestaurantAbstract>.MapAllProperties()
+                        .Build());
+                return tableAccessor.Execute(new string[] { restaurantId }).ToList().FirstOrDefault();
+
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        #endregion
     }
 }

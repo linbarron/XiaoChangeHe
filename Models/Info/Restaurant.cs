@@ -43,6 +43,11 @@ namespace WitBird.XiaoChangHe.Models.Info
         public string name { get; set; }
     }
 
+    public class NewRestaurantAbstract : RestaurantAbstract
+    {
+
+    }
+
     public class RestaurantAbstract1
     {
         public Guid Id { get; set; }

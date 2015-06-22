@@ -104,7 +104,7 @@ function loadAuto(Id, RstType) {
 }
 
 function loadQuick(Id, RstType) {
-
+    console.log(Id);
     if ('@(ViewBag.AutoOrderCount)' != null && '@(ViewBag.AutoOrderCount)' == 0) {
         window.location.href = "/ProductType/Index?SourceAccountId=@(ViewBag.SourceAccountId)&RestaurantId=" + Id + "&Status=1&Type=FastFood&IsOrder=@(ViewBag.AutoOrderCount)&MemberCardNo=@(ViewBag.MemberCardNo)&Orderid=@(ViewBag.OrderId)";
     } else if ('@(ViewBag.AutoOrderCount)' != null && '@(ViewBag.AutoOrderCount)' == 1) {
@@ -113,7 +113,8 @@ function loadQuick(Id, RstType) {
 "<a href=\"/MyMenu/MyOrderDetail/?Orderid=@(ViewBag.OrderId)&SourceAccountI=@(ViewBag.SourceAccountId)&MemberCardNo=@(ViewBag.MemberCardNo)&RstType=FastFood\"  class=\"but\">查看订单</a> ";
             var unit = "%";
             sAlert(str, 80, 20, unit);
-        }
+    }
+    console.log("dfdf");
 }
 
 function tabCity() {

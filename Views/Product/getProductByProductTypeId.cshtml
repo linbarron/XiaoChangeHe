@@ -9,15 +9,26 @@
     {
         foreach (ProductNew item in Model)
         {
+        <li>
             <div class="content2">
+                <!-- 菜品图片-->
                 <div class="content_img">
                     <img src="/Order/GetImages/@(item.Id)"></div>
-                <span class="img_title">@item.ProductName</span><span class="img_money" id="rmb@(item.Id)">@(item.Price)元</span>
+                <!--菜品名称-->
+                <span class="img_title">@item.ProductName</span>
+                <!--菜品价格-->
+                <span class="img_money" id="rmb@(item.Id)">@(item.Price)元</span>
+                <!--加减按钮-->
                 <div class="content-z-bottom">
-                    <div class="right_q"><span class="s_left">-</span><input class="text_box" name="" type="text" value="1" />
-                        <span class="s_right">+</span></div>
+                    <div class="right_q">
+                        <span class="s_left">-</span>
+                        <input class="text_box" name="" type="text" value="1" />
+                        <span class="s_right">+</span>
+                    </div>
                 </div>
-            </div>     
+            </div>
+
+        </li>   
         }
     }
 

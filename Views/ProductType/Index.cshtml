@@ -13,8 +13,8 @@
 <head>
     <title>开始点菜</title>
     <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
-    <meta charset="utf-8"  http-equiv="expires" content="800000" >
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <meta name="viewport" content="width=device-width, minimum-scale=1,maximum-scale=1,initial-scale=1,user-scalable=no" />
     <meta content="yes" name="apple-mobile-web-app-capable" />
     <meta content="yes" name="apple-touch-fullscreen" />
@@ -23,72 +23,42 @@
     <meta content="black" name="apple-mobile-web-app-staimagess-bar-style">
     <meta name="format-detection" content="telephone=no"> 
     <meta name="wap-font-scale" content="no"/>
+
     <link href="~/NewContent/style/ksdc2.css" rel="stylesheet" type="text/css">
     <script src="~/NewContent/js/jquery.js"></script>
     <script src="~/NewContent/js/ksdc2.js"></script>
-    <style>
-        a {
-            text-decoration: none;
-            color: #fff;
-        }
-    </style>
 
 </head>
 <body>
     <div class="container">
         @if (ViewBag.FirstMenus != null)
         {
-            <div class="left_top">今日特价</div>
             <div class="top_list">
                 <ul>
                     @foreach (ProductType item1 in ViewBag.FirstMenus as List<ProductType>)
                     {
-                        if (m == 1)
-                        {
-                        <li class="r_bor bg1" onclick=" DisplaySecondMenus('@item1.TypeId', '@item1.RestaurantId') ">@item1.TypeName</li>
-                     }
-                     else if (m == 2)
-                     {
                         <li class="r_bor" onclick=" DisplaySecondMenus('@item1.TypeId', '@item1.RestaurantId') ">@item1.TypeName</li>
-                     }
-                     else
-                     {
-                        <li onclick=" DisplaySecondMenus('@item1.TypeId', '@item1.RestaurantId') ">@item1.TypeName</li>
-                     }
-                     m++;
-                 }
+                        m++;
+                    }
                 </ul>
             </div>
     }
-        <div class="left_list" style="margin-top: 0px; clear: both;">
-            <ol id="left_list">
+        <div class="menu" id="menu">
+            <ul class="level1" id="left_list">
                 @if (Model != null)
                 {
-
                     foreach (ProductType item in Model)
                     {
-                        if (i == 1)
-                        {
-                    <li class="bg2" tid="@item.TypeId" rid="@item.RestaurantId" onclick=" DisplayContent('@item.TypeId', '@item.RestaurantId') ">
-                        @Html.DisplayFor(modelItem => item.TypeName)
-                        <span class="shu">@i</span>
-                    </li>
+                        <li tid="@item.TypeId" rid="@item.RestaurantId" onclick=" DisplayContent('@item.TypeId', '@item.RestaurantId',@i) ">
+                            @Html.DisplayFor(modelItem => item.TypeName)
+                            <span class="shu">@i</span>
+                        </li>
+                        <ul class="level2" style="display: block" id="@string.Format("foodcontent{0}",i)">
+                    </ul>
+                        i++;
+                    }
                 }
-                else
-                {
-                    <li tid="@item.TypeId" rid="@item.RestaurantId" onclick=" DisplayContent('@item.TypeId', '@item.RestaurantId') ">
-                        @Html.DisplayFor(modelItem => item.TypeName)
-                        <span class="shu">@i</span>
-                    </li>
-                }
-                i++;
-            }
-        }
-            </ol>
-        </div>
-
-        <div class="content" id="foodcontent" style="top: 44px;">
-
+            </ul>
         </div>
 
         <div class="footer">
@@ -126,15 +96,15 @@
 
             var TypeId = $("#left_list li:first").attr("tid");
             var RestaurantId = $("#left_list li:first").attr("rid");
-            DisplayContent(TypeId, RestaurantId);
+            DisplayContent(TypeId, RestaurantId,1);
         }
 
-        function DisplayContent(TypeId, RestaurantId) {
+        function DisplayContent(TypeId, RestaurantId,contentId) {
             $.ajaxSetup({ async: false });
             var Status = '@ViewBag.Status';
         $.post("/Product/getProductByProductTypeId", { RestaurantId: RestaurantId, ProductTypeId: TypeId, SourceAccountId: SourceAccountId, Status: Status, Type: Type }, function (msg) {
 
-            $("#foodcontent").html(msg);
+            $("#foodcontent" + contentId).html(msg);
             orderid = $("#OrderId").val();
             MemberCardNo = $("#MemberCardNo").val();
             var t = $(".totalcount").val();

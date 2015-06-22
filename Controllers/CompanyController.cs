@@ -14,18 +14,18 @@ namespace WitBird.XiaoChangHe.Controllers
         //
         // GET: /Company/
 
-        public ActionResult Rst(string id,string name)
+        public ActionResult Rst(string id)
         {
-            List<Restaurant> p = null;
+            NewRestaurantAbstract p = null;
             object obj = System.Web.HttpRuntime.Cache.Get("id" + id);
             if (obj != null)
             {
-                p = obj as List<Restaurant>;
+                p = obj as NewRestaurantAbstract;
             }
             if (p == null)
             {
                 RestaurantModel rdb = new RestaurantModel();
-              //p= rdb.getRestaurentState(id,"1");
+                p= rdb.GetRestaurentById(id);
                 System.Web.HttpRuntime.Cache.Add("id" + id, p, null, DateTime.Now.AddHours(2),
                 TimeSpan.Zero, CacheItemPriority.Normal, null);
             }

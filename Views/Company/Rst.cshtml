@@ -3,19 +3,41 @@
     Layout = "";
 }
 @using WitBird.XiaoChangHe.Models.Info;
-@model IEnumerable<Restaurant>
+@model NewRestaurantAbstract
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
     <title>店面信息</title>
     <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
-    
-    <link href="~/Content/book.css" rel="stylesheet" />
-    <link href="~/Content/public.css" rel="stylesheet" />
+
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1,maximum-scale=1,initial-scale=1,user-scalable=no" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="yes" name="apple-touch-fullscreen" />
+    <meta content="telephone=no" name="format-detection" />
+    <meta content="email=no" name="format-detection" />
+    <meta content="black" name="apple-mobile-web-app-staimagess-bar-style">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="wap-font-scale" content="no" />
+    <!--引入css和js-->
+    <link href="~/NewContent/style/index2.css" rel="stylesheet" type="text/css">
+    <link href="~/NewContent/css/lunbo.css" type="text/css" rel="stylesheet" />
+    <script src="~/NewContent/js/jquery.js"></script>
     <script>
+        //设置3秒自动轮播一次
+        $(function () {
+            setInterval(function () {
+                $(".arrow-right").trigger("click");
+            }, 3000)
+        });
+
+    </script>
+    <!-- 点击可打电话js-->
+    <script>
+        function phone(date) {
+            window.location.href = 'tel://' + date;
+        }
     </script>
 </head>
 <body style="-webkit-padding-end: 0px;
