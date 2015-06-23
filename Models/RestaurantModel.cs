@@ -193,14 +193,30 @@ rst.BusinessEndtDate,rst.RstType,ro.MapUrl,ro.VirtualUrl, null as Photo ,p.Name,
 
         #region WitBird新建
 
+        private class GetRestaurentByIdParameterMapper : IParameterMapper
+        {
+            #region IParameterMapper 成员
+
+            public void AssignParameters(System.Data.Common.DbCommand command, object[] parameterValues)
+            {
+                DbParameter ps0 = command.CreateParameter();
+                ps0.ParameterName = SqlPara + "restaurantId";
+                ps0.DbType = DbType.String;
+                ps0.Value = parameterValues[0];
+                command.Parameters.Add(ps0);
+            }
+            #endregion
+
+        }
+
         public NewRestaurantAbstract GetRestaurentById(string restaurantId)
         {
             try
             {
-                IParameterMapper ipmapper = new getRestaurentStateParameterMapper();
+                IParameterMapper ipmapper = new GetRestaurentByIdParameterMapper();
                 DataAccessor<NewRestaurantAbstract> tableAccessor;
                 string strSql = @"select rst.Id,rst.Name,rst.ContactPhone,rst.Address,rst.BusinessStartDate,
-rst.BusinessEndtDate,rst.RstType,ro.MapUrl,ro.VirtualUrl, null as Photo ,p.Name,
+rst.BusinessEndtDate,rst.RstType,rst.[Description],ro.MapUrl,ro.VirtualUrl, null as Photo ,p.Name,
  isnull(ro.MaxTime,0) as MaxTime ,case when (ro.Reven=1 or ro.Rnoon=1)  then 1 else 0 end as isAcceptOrder
  from Restaurant rst left join ReceiveOrder ro on rst.Id=ro.RstId ,Province p
  where rst.Id=@restaurantId;";

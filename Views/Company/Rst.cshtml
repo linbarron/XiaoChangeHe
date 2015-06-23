@@ -61,13 +61,14 @@
 
                         <div class="swiper-slide">
 
-                            <img src="images/3.png">
+                            <img src="~/Order/GetImagesRst/@(Model.Id)">
                         </div>
                         <div class="swiper-slide">
-                            <img src="images/3.png">
+                            <img src="~/Order/GetImagesRst/@(Model.Id)">
                         </div>
                         <div class="swiper-slide">
-                            <img src="images/3.png"></div>
+                            <img src="~/Order/GetImagesRst/@(Model.Id)">
+                        </div>
                         <!-- php轮播结束-->
 
                     </div>
@@ -99,18 +100,21 @@
         </div>
         <!--立即点菜图标-->
         <a href="~/NewUI/ksdc.html">
-            <div class="top-title">@Model.Name <span>x4张</span>  </div>
+            <div class="top-title">@Model.Name <span>x3张</span>  </div>
             <div class="bottom_1">
-                <img src="~/NewContent/images/dh2.png" height="60"></div>
+                <img src="~/NewContent/images/dh2.png" height="60">
+            </div>
         </a>
         <!-- 今日特价图标-->
         <a href="~/NewUI/ksdc.html">
             <div class="bottom_2">
-                <img src="~/NewContent/images/dh3.png" height="60"></div>
+                <img src="~/NewContent/images/dh3.png" height="60">
+            </div>
         </a>
         <!-- 导航到店图标-->
         <div class="bottom_3">
-            <img src="~/NewContent/images/dh1.png" height="60"></div>
+            <img src="~/NewContent/images/dh1.png" height="60">
+        </div>
         <!--立即点菜-->
         <a href="javascript:void(0);" onclick="@clickEvent">
             <div class="bottom_1_1 dibu">立即点菜</div>
@@ -125,16 +129,18 @@
         <!--  内容区域开始-->
         <div class="content">
             <!-- 营业时间-->
-            <div class="content_1"><span class="content_1_l">营业时间</span> <span class="content_1_r">
-@(Model.BusinessStartDate != null ? Model.BusinessStartDate.ToString("hh:mm:ss") : "")--@(Model.BusinessEndtDate != null ? Model.BusinessEndtDate.ToString("hh:mm:ss") : "")
-</span></div>
+            <div class="content_1">
+                <span class="content_1_l">营业时间</span> <span class="content_1_r">
+                    @(Model.BusinessStartDate != null ? Model.BusinessStartDate.ToString("hh:mm:ss") : "")--@(Model.BusinessEndtDate != null ? Model.BusinessEndtDate.ToString("hh:mm:ss") : "")
+                </span>
+            </div>
             <!--  地址-->
             <div class="content_2">
                 <span class="content_1_l">
-@(Model != null ? Model.Address : "")
-</span> <span class="content_2_r">
-                        <!--  地图 可点击-->
-                        <span style="color: #0ff;"><a href="@(Model.MapUrl)">地图</a></span>&nbsp;></span>
+                    @(Model != null ? Model.Address : "")
+                </span><span class="content_2_r">
+                    <!--  地图 可点击-->
+                    <span style="color: #0ff;" onclick="window.location.href='@(Model.MapUrl)'">地图</span>&nbsp;></span>
             </div>
             <!-- 联系商家电话， 可点击-->
             <div class="content_3">
@@ -148,11 +154,15 @@
                 </a>
             </div>
             <!-- 今日特价更多-->
-            <div class="content_4"><span class="content_1_l" style="font-weight: bold;">今日特价</span> <span class="content_1_r">更多>> </div>
-            <div class="content_5">
+            <div class="content_4"><span class="content_1_l" style="font-weight: bold;">今日特价</span> 
+                <span class="content_1_r">更多>> </span></div>
+            
+        </div>
+        <div class="content_5">
                 <!-- 商品图片-->
                 <div class="content_5_l">
-                    <img src="~/NewContent/images/11 (2).png"></div>
+                    <img src="~/NewContent/images/11 (2).png">
+                </div>
                 <!--商品名字-->
                 <span class="z_s" style="font-weight: bold;">韭香凤冠</span>
                 <!--时间-->
@@ -162,10 +172,8 @@
                 <!--已售件数-->
                 <span class="y_x" style="font-size: 12px;">已售5</span>
             </div>
-        </div>
-
         <!-- 商家提供-->
-        <div style="color: #666; font-size: 14px; margin: 10px;">商家提供： WIFI(公共停车场)17点后免费 公交车：正通顺街站</div>
+        <div style="color: #666; font-size: 14px; margin: 10px;">@Model.Description</div>
     </div>
 </body>
 <script type="text/javascript">

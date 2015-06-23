@@ -45,7 +45,7 @@ namespace WitBird.XiaoChangHe.Models.Info
 
     public class NewRestaurantAbstract : RestaurantAbstract
     {
-
+        public string Description { set; get; }
     }
 
     public class RestaurantAbstract1

@@ -13,11 +13,11 @@
 {
     foreach (ProductType item in Model)
     {
-    <li tid="@item.TypeId" rid="@item.RestaurantId" onclick=" DisplayContent('@item.TypeId', '@item.RestaurantId') ">
+    <li tid="@item.TypeId" rid="@item.RestaurantId" onclick=" DisplayContent('@item.TypeId', '@item.RestaurantId',@i) ">
         @Html.DisplayFor(modelItem => item.TypeName)
         <span class="shu">@i</span>
     </li>
-    <ul class="level2" style="display: block" id="foodcontent(@i)">
+    <ul class="level2" style="display: block" id="@string.Format("foodcontent{0}",i)">
     </ul>
                         i++;
                     }

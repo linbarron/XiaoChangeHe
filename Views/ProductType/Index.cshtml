@@ -103,7 +103,7 @@
             $.ajaxSetup({ async: false });
             var Status = '@ViewBag.Status';
         $.post("/Product/getProductByProductTypeId", { RestaurantId: RestaurantId, ProductTypeId: TypeId, SourceAccountId: SourceAccountId, Status: Status, Type: Type }, function (msg) {
-
+            $(".level2").html('');
             $("#foodcontent" + contentId).html(msg);
             orderid = $("#OrderId").val();
             MemberCardNo = $("#MemberCardNo").val();

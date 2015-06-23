@@ -33,7 +33,7 @@ namespace WitBird.XiaoChangHe
             string path = Request.Path;
             #region LogException
             var logPath = HttpContext.Current.Server.MapPath("~/Error.txt");
-            using (StreamWriter tw = new StreamWriter(logPath))
+            using (StreamWriter tw = new StreamWriter(logPath,true))
             {
                 tw.WriteLine("Path:" + path);
                 tw.WriteLine("Code:" + code);
