@@ -28,6 +28,25 @@ namespace WitBird.XiaoChangHe.Controllers
                 p= rdb.GetRestaurentById(id);
                 System.Web.HttpRuntime.Cache.Add("id" + id, p, null, DateTime.Now.AddHours(2),
                 TimeSpan.Zero, CacheItemPriority.Normal, null);
+
+                var crmMember =  Session["CrmMember"] as CrmMember;
+                if (crmMember != null)
+                {
+                    ViewBag.MemberCardNo = crmMember.Uid;
+                    ViewBag.SourceAccountId = crmMember.SourceAccountId;
+
+                    List<FastFoodOrder> FastFoodOrder = null;
+
+                    //如果为自动点餐和快捷点餐。如果还有未过期的订单则跳转到订单详情 ViewBag.AutoOrderCount=1 有订单
+                    ViewBag.AutoOrderCount = 0;
+                    OrderModel odm = new OrderModel();
+                    FastFoodOrder = odm.selOrderByMemberId(crmMember.Uid);
+                    if (FastFoodOrder.Count > 0)
+                    {
+                        ViewBag.AutoOrderCount = 1;
+                        ViewBag.OrderId = FastFoodOrder.First().Id;
+                    }
+                }
             }
 
             return View(p);

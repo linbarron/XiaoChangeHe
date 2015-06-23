@@ -82,6 +82,9 @@ namespace WitBird.XiaoChangHe.Controllers
             CrmMemberModel cdb = new CrmMemberModel();
             List<CrmMember> crm = cdb.getCrmMemberListInfoData(name);
             ViewBag.MemberCardNo = crm.First().Uid;
+
+            Session["CrmMember"] = crm.First();
+
           //  Session["MemberCardNo"] = crm.First().Uid;
             if (!string.IsNullOrEmpty(CityName)) { ViewBag.cityName = CityName; }
 
