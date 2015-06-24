@@ -1,17 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WitBird.XiaoChangHe", "WitBird.XiaoChangHe.csproj", "{5925A366-F808-4B46-A9B7-BE26A5E40FFA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WitBird.XiaoChangeHe.Core", "..\WitBird.XiaoChangeHe.Core\WitBird.XiaoChangeHe.Core.csproj", "{00238F06-73D3-4D29-B0BF-AFE8BF0F0107}"
+EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 2
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://yixinyq.visualstudio.com/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = WitBird.XiaoChangHe.csproj
-		SccLocalPath1 = .
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -21,6 +17,10 @@ Global
 		{5925A366-F808-4B46-A9B7-BE26A5E40FFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5925A366-F808-4B46-A9B7-BE26A5E40FFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5925A366-F808-4B46-A9B7-BE26A5E40FFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00238F06-73D3-4D29-B0BF-AFE8BF0F0107}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00238F06-73D3-4D29-B0BF-AFE8BF0F0107}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00238F06-73D3-4D29-B0BF-AFE8BF0F0107}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00238F06-73D3-4D29-B0BF-AFE8BF0F0107}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

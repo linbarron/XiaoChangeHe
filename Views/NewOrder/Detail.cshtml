@@ -1,5 +1,4 @@
-﻿@using WitBird.XiaoChangHe.Models.Info
-@model IEnumerable<MyOrderDetail>
+﻿@model WitBird.XiaoChangeHe.Core.Entity.OrderDetail
 @{
     Layout = null;
 }
@@ -35,30 +34,38 @@
 <body>
     <div class="container">
 
-        <div class="header2"><span class="jine">订单金额：　<span class="money">100元</span></span> <span class="yifu">已付款</span></div>
-        <div class="info">　姓　　名：周德政先生<br />　电　　话：13981798782<br />　订单编号：123445<br />　备　　注：无</div>
-        <div class="san"><span class="san_l">散桌1-10人桌</span><span class="san_r"> 2015-05-22 周五 12:30</span></div>
-
-        <div class="content-header"><span>|</span>  菜品清单</div>
-        <div class="content">
-            <div class="content-img"><img src="http://img.savory.cn/wedinner/8.png"></div>
-            <div class="content-content">
-                <span class="s_z">花香醉兔肉</span><br /><span class="x_z">25.00<span style="font-size:14px"> 元</span></span><span class="x_y">x1</span>
-            </div>
+        <div class="header2">
+            <span class="jine">订单金额：　<span class="money">100元</span></span>
+            <span class="yifu">已付款</span>
         </div>
-        <div class="content">
-            <div class="content-img"><img src="http://img.savory.cn/wedinner/8.png"></div>
-            <div class="content-content">
-                <span class="s_z">花香醉兔肉</span><br /><span class="x_z">25.00<span style="font-size:14px"> 元</span></span><span class="x_y">x1</span>
-            </div>
+        <div class="info">
+            姓　　名：@Model.CustomName<br />
+            电　　话：@Model.Telephone<br />
+            订单编号：@Model.OrderId<br />
+            备　　注：@string.Format("{0}", string.IsNullOrEmpty(Model.Backlog) ? "无" : Model.Backlog)
         </div>
-        <div class="content">
-            <div class="content-img"><img src="http://img.savory.cn/wedinner/8.png"></div>
-            <div class="content-content">
-                <span class="s_z">花香醉兔肉</span><br /><span class="x_z">25.00<span style="font-size:14px"> 元</span></span><span class="x_y">x1</span>
-            </div>
+        <div class="san">
+            <span class="san_l">散桌1-10人桌</span>
+            <span class="san_r"> @Model.EatTime.ToString("yyyy-MM-dd") @Model.EatTime.DayOfWeek @Model.EatTime.ToString("hh:mm")</span>
         </div>
-        <div class="time">创建时间 2015-05-21 14:29:42</div>
+        <div class="content-header">
+            <span>|</span>  菜品清单
+        </div>
+        @if (Model.ProductList != null && Model.ProductList.Count > 0)
+        {
+            foreach (var product in Model.ProductList)
+            {
+                <div class="content">
+                    <div class="content-img"><img src="http://img.savory.cn/wedinner/8.png"></div>
+                    <div class="content-content">
+                        <span class="s_z">@product.ProductName</span><br />
+                        <span class="x_z">@product.UnitPrice.ToString("0.00")<span style="font-size:14px"> 元</span></span>
+                        <span class="x_y">@string.Format("x{0}", product.Count)</span>
+                    </div>
+                </div>
+            }
+        }
+        <div class="time">创建时间 @Model.CreateTime.ToString("yyyy-MM-dd hh:m:ss")</div>
 
         <div class="footer">
             <a href="#shang"><div class="footer_l" onclick="ShowDiv('MyDiv','fade')">修改订单</div> </a><a href="sqtk.html">
@@ -137,88 +144,3 @@
     </script>
 </body>
 </html>
-
-
-@if (Model != null)
-{
-
-    string orderid = "";
-    foreach (MyOrderDetail item in Model)
-    {
-
-        if (string.IsNullOrEmpty(orderid))
-        {
-            orderid = item.OrderId.ToString();
-            <nav id="rst">
-                <nav>店名：<span>@item.RstName</span></nav>
-                <nav>电话：<span><a href="tel://@item.RstPhone" style="color:#1da507;">@item.RstPhone</a></span></nav>
-                <nav>地址：<span>@item.address</span></nav>
-                @if (ViewBag.Explain != null && ViewBag.Explain != "")
-                {
-                    <span style="font-size: 0.8em;color: royalblue">@ViewBag.Explain</span>
-                }
-            </nav>
-            <nav id="mem">
-                <nav>用户名：<span>@item.ContactName</span></nav>
-                <nav>电话：<span><a href="tel://@item.ContactPhone" style="color:#1da507;">@item.ContactPhone</a></span></nav>
-                @if (item.RstType != "01" && item.DiningDate != null)
-                {
-                    <nav>订餐时间:<span>@(item.DiningDate.ToString("yyyy-MM-dd"))</span></nav>
-                    <nav>
-                        订餐时段：<span>
-                            @if (item.DiningDate.ToString("hh").Equals("09"))
-                            {
-                                string.Format("午餐");
-                            }
-                            else if (item.DiningDate.ToString("hh").Equals("16"))
-                            {
-                                string.Format("晚餐");
-                            }
-                        </span>
-                    </nav>
-                }
-
-                @if (item.PersonCount != null && item.PersonCount != 0)
-                {
-                    <nav>人数：<span>@item.PersonCount</span></nav>}
-
-                @if (item.Remark != null && item.Remark != "")
-                {
-                    <nav>备注：<span>@item.Remark</span></nav>}
-                <nav style="color: #d32502;">总原价：<span>@item.total</span></nav>
-                <nav style="color: #d32502;">储值会员价：<span>@(ViewBag.MemberPriceTotal)</span></nav>
-                @if (ViewBag.PrepayAccount == 0)
-                {
-                    <span style="font-size:12px; color:#ffa631">* 如果升级为储值会员可优惠<span style="font-size:18px ;color:#d32502"> @(item.total - (ViewBag.MemberPriceTotal)) </span>元</span>
-                }
-            </nav>
-        }
-
-        if (orderid.Equals(item.OrderId.ToString()))
-        {
-            if (item.proId != null && item.proId != new Guid("00000000-0000-0000-0000-000000000000"))
-            {
-                <nav id="pro" style="line-height: 50px">
-                    <nav class="food-image" style="-webkit-border-radius:5px;border-radius:5px;">
-                        <img src="/Order/GetImages/@item.proId" />
-                    </nav>
-                    <nav style="display: block; font-weight: 700; line-height: 1.8em; overflow: hidden; color: #d32502; font-size: 0.9em;">
-                        <span>@item.ProductName</span>&nbsp;
-                    </nav>
-                    <nav class="people-count" style="font-size: 0.7em">@item.ProductCount @item.CodeTypeListName </nav>
-                    <nav>
-                        @if (item.UseState == "04")
-                        {
-                            <nav class="RMB" style="font-size: 0.7em"> <span style="color:#1da507">赠送</span></nav>
-                        }
-                        else
-                        {
-                            <nav class="RMB" style="font-size: 0.6em;line-height: 20px;">  <span style="color:#666;">原价：￥</span>@(item.UnitPrice * item.ProductCount);</nav>
-                            <nav class="RMB" style="font-size: 0.7em;line-height: 20px;">  <span style="color:#666;">储值会员价：￥</span>@(item.MemberPrice * item.ProductCount); </nav>
-                        }
-                    </nav>
-                </nav>
-            }
-        }
-    }
-}

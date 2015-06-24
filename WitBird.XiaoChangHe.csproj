@@ -787,6 +787,12 @@
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WitBird.XiaoChangeHe.Core\WitBird.XiaoChangeHe.Core.csproj">
+      <Project>{00238f06-73d3-4d29-b0bf-afe8bf0f0107}</Project>
+      <Name>WitBird.XiaoChangeHe.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
