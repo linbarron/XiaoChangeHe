@@ -43,6 +43,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentData">
+      <HintPath>packages\FluentData.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=5.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -337,6 +340,8 @@
     <Compile Include="Models\ReceiveOrderModel.cs" />
     <Compile Include="Models\RestaurantModel.cs" />
     <Compile Include="Models\SelTableInfoModel.cs" />
+    <Compile Include="Models\Specials\SpecialsEntity.cs" />
+    <Compile Include="Models\Specials\SpecialsModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
