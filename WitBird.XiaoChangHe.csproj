@@ -788,7 +788,7 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WitBird.XiaoChangeHe.Core\WitBird.XiaoChangeHe.Core.csproj">
+    <ProjectReference Include="WitBird.XiaoChangeHe.Core\WitBird.XiaoChangeHe.Core.csproj">
       <Project>{00238f06-73d3-4d29-b0bf-afe8bf0f0107}</Project>
       <Name>WitBird.XiaoChangeHe.Core</Name>
     </ProjectReference>

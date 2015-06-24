@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WitBird.XiaoChangHe", "WitBird.XiaoChangHe.csproj", "{5925A366-F808-4B46-A9B7-BE26A5E40FFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WitBird.XiaoChangeHe.Core", "..\WitBird.XiaoChangeHe.Core\WitBird.XiaoChangeHe.Core.csproj", "{00238F06-73D3-4D29-B0BF-AFE8BF0F0107}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WitBird.XiaoChangeHe.Core", "WitBird.XiaoChangeHe.Core\WitBird.XiaoChangeHe.Core.csproj", "{00238F06-73D3-4D29-B0BF-AFE8BF0F0107}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
