@@ -15,27 +15,34 @@ namespace WitBird.XiaoChangHe.Models.Specials
         /// <param name="maximumRows"></param>
         /// <param name="sortExpression"></param>
         /// <returns></returns>
-        public static List<SpecialsEntity> SelectAll(int startRowIndex, int maximumRows, string sortExpression)
+        public static List<SpecialsEntity> GetTodayByRestaurantId(Guid restaurantId)
         {
-            using (var context = 
-                new DbContext().ConnectionStringName("CrmRstV1", new SqlServerProvider()))
+            List<SpecialsEntity> result = null;
+            try
             {
-                var select = context.Select<SpecialsEntity>(" * ")
-                    .From(" Specials ");
-
-                if (maximumRows > 0)
+                using (var context =
+                    new DbContext().ConnectionStringName("CrmRstV1", new SqlServerProvider()))
                 {
-                    if (startRowIndex == 0)
-                        startRowIndex = 1;
-
-                    select.Paging(startRowIndex, maximumRows);
+                    int dayOfWeek = (int) DateTime.Now.DayOfWeek;
+                    if (dayOfWeek == 0)
+                    {
+                        dayOfWeek = 7;
+                    }
+                    var select = context.StoredProcedure("sp_GetTodayByRestaurantId")
+                        .Parameter("RestaurantId", restaurantId)
+                        .Parameter("WeekDateUse", dayOfWeek);
+                    result =  select.QueryMany<SpecialsEntity>();
                 }
-
-                if (!string.IsNullOrEmpty(sortExpression))
-                    select.OrderBy(sortExpression);
-
-                return select.QueryMany();
             }
+            catch (Exception)
+            {
+                //TODO
+            }
+            if (result == null)
+            {
+                result=new List<SpecialsEntity>();
+            }
+            return result;
         }
 
         /// <summary>

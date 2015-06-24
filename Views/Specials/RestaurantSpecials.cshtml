@@ -1,0 +1,44 @@
+﻿@using WitBird.XiaoChangHe.Models.Info
+@using WitBird.XiaoChangHe.Models.Specials
+@model RestaurantSpecialsViewModel
+
+@{
+    Layout = null;
+}
+<!-- the content start -->
+<li style="display: none;">今日特价</li>
+<ul class="level2" style="display: block">
+    @if (Model != null)
+    {
+
+        foreach (var item in Model.SpecialsList)
+        {
+        <li>
+            <div class="content2">
+                <!-- 菜品图片-->
+                <div class="content_img">
+                    <img src="/Order/GetImages/@(item.ProductId)">
+                </div>
+                <!--菜品名称-->
+                <span class="img_title">@item.Product.ProductName</span>
+                <!--菜品价格-->
+                <span class="img_money" id="rmb@(item.Id)">@(item.SpecPrice)元</span>
+                <!--加减按钮-->
+                <div class="content-z-bottom">
+                    <div class="right_q">
+                        <span class="s_left">-</span>
+                        <input class="text_box" name="" type="text" value="1" />
+                        <span class="s_right">+</span>
+                    </div>
+                </div>
+            </div>
+
+        </li>
+        }
+    }
+</ul>
+<input  type="hidden" value="@ViewBag.OrderId" id="OrderId"/>
+<input type="hidden" value="@ViewBag.MemberCardNo" id="MemberCardNo"/>
+
+<!-- the content end -->
+

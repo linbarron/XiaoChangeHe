@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using WitBird.XiaoChangHe.Models.Info;
 
 namespace WitBird.XiaoChangHe.Models.Specials
 {
@@ -15,5 +16,7 @@ namespace WitBird.XiaoChangHe.Models.Specials
         public Int32? WeekDateUse { get; set; }
         public Boolean? Stauts { get; set; }
         public DateTime? UseDate { get; set; }
+
+        public ProductNew Product { set; get; }
     }
 }

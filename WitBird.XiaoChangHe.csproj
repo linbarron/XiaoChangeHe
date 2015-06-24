@@ -286,6 +286,7 @@
     <Compile Include="Controllers\ProductMenuTypeController.cs" />
     <Compile Include="Controllers\StageController.cs" />
     <Compile Include="Controllers\SubscribeController.cs" />
+    <Compile Include="Controllers\WitBird\SpecialsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -340,6 +341,7 @@
     <Compile Include="Models\ReceiveOrderModel.cs" />
     <Compile Include="Models\RestaurantModel.cs" />
     <Compile Include="Models\SelTableInfoModel.cs" />
+    <Compile Include="Models\Specials\RestaurantSpecialsViewModel.cs" />
     <Compile Include="Models\Specials\SpecialsEntity.cs" />
     <Compile Include="Models\Specials\SpecialsModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -775,6 +777,7 @@
     <Content Include="Views\NewOrder\My.cshtml" />
     <Content Include="Views\NewBook\Info.cshtml" />
     <Content Include="Views\Member\Recharge.cshtml" />
+    <Content Include="Views\Specials\RestaurantSpecials.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
