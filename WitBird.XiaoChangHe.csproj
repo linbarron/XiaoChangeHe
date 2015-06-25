@@ -321,6 +321,7 @@
     <Compile Include="Models\Info\ProductType.cs" />
     <Compile Include="Models\Info\Province.cs" />
     <Compile Include="Models\Info\RandomProduct.cs" />
+    <Compile Include="Models\ModelExtensions\CrmMemberExtension.cs" />
     <Compile Include="Models\NewsModel.cs" />
     <Compile Include="Models\PrepayRecordModel.cs" />
     <Compile Include="Models\ProductConfigureModel.cs" />

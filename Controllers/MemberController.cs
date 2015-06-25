@@ -114,9 +114,27 @@ namespace WitBird.XiaoChangHe.Controllers
             return View(p);
         }
 
-        public ActionResult Recharge(string id, string name, string companyId)
+        public ActionResult Recharge(string companyId, string name)
         {
             CrmMember crmMember = new CrmMember();
+
+            try
+            { 
+            if (!string.IsNullOrEmpty(name))
+            {
+                CrmMemberModel cdb = new CrmMemberModel();
+                crmMember = cdb.getCrmMemberListInfoData(name).FirstOrDefault();
+            }
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                crmMember = crmMember ?? new CrmMember();
+            }
+
             return View(crmMember);
         }
 
