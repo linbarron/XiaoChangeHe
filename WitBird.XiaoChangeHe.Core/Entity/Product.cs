@@ -11,7 +11,7 @@ namespace WitBird.XiaoChangeHe.Core.Entity
 
         public string ProductName { get; set; }
 
-        public float UnitPrice { get; set; }
+        public decimal UnitPrice { get; set; }
 
         public int Count { get; set; }
 

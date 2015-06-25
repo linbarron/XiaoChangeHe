@@ -16,15 +16,50 @@ namespace WitBird.XiaoChangeHe.Core
 
             OrderDal orderDal = new OrderDal();
 
-            var details = orderDal.GetOrderDetails(orderId);
+            var orderSummary = orderDal.GetOrderSummary(orderId);
 
-            if (details != null) 
+            if (orderSummary != null)
             {
                 detail = new OrderDetail();
 
-                var productIds = details.Select(v => v.ProductId).ToList();
+                detail.OrderId = orderSummary.OrderId;
+                detail.CustomName = orderSummary.CustomName;
+                detail.Telephone = orderSummary.Telephone;
+                detail.DiningDate = orderSummary.DiningDate;
+                detail.CreateTime = orderSummary.CreateTime;
+                detail.Backlog = orderSummary.Backlog;
 
-                var products = orderDal.GetProducts(productIds);
+                var details = orderDal.GetOrderDetails(orderId);
+
+                if (details != null)
+                {
+                    var productIds = details.Select(v => v.ProductId).ToList();
+
+                    var products = orderDal.GetProducts(productIds);
+
+                    if (products != null && products.Count > 0)
+                    {
+                        detail.ProductList = new List<Product>();
+
+                        foreach (var subDetail in details)
+                        {
+                            var productDetail = products.FirstOrDefault(v => v.ProductId == subDetail.ProductId);
+                            if (productDetail != null)
+                            {
+                                var product = new Product();
+
+                                product.ProductId = subDetail.ProductId;
+                                product.UnitPrice = subDetail.UnitPrice;
+                                product.Count = subDetail.ProductCount;
+
+                                product.ProductName = productDetail.ProductName;
+                                productDetail.Image = productDetail.Image;
+
+                                detail.ProductList.Add(product);
+                            }
+                        }
+                    }
+                }
             }
 
             return detail;
