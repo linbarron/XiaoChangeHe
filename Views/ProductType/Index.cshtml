@@ -35,10 +35,10 @@
         {
             <div class="top_list">
                 <ul>
-                    <li class="r_bor bg1" onclick=" DisplaySecondMenus('', '@ViewBag.RestaurantId') ">今日特价</li>
+                    <li class="r_bor bg1" onclick="DisplaySpecialsListContent('', '@ViewBag.RestaurantId') ">今日特价</li>
                     @foreach (ProductType item1 in ViewBag.FirstMenus as List<ProductType>)
                     {
-                        <li class="r_bor" onclick=" DisplaySecondMenus('@item1.TypeId', '@item1.RestaurantId') ">@item1.TypeName</li>
+                        <li class="r_bor" onclick="DisplaySecondMenus('@item1.TypeId', '@item1.RestaurantId') ">@item1.TypeName</li>
                         m++;
                     }
                 </ul>
@@ -46,19 +46,6 @@
     }
         <div class="menu" id="menu">
             <ul class="level1" id="left_list">
-                @*@if (Model != null)
-                {               
-                    foreach (ProductType item in Model)
-                    {
-                        <li tid="@item.TypeId" rid="@item.RestaurantId" onclick=" DisplayContent('@item.TypeId', '@item.RestaurantId',@i) ">
-                            @Html.DisplayFor(modelItem => item.TypeName)
-                            <span class="shu">@i</span>
-                        </li>
-                        <ul class="level2" style="display: block" id="@string.Format("foodcontent{0}", i)">
-                    </ul>
-                        i++;
-                    }
-                }*@
             </ul>
         </div>
 
@@ -82,7 +69,8 @@
     </script>
     <script>
         $(document).ready(function () {
-            loadContent();
+            var RestaurantId = '@ViewBag.RestaurantId';
+            DisplaySpecialsListContent('', RestaurantId);
         });
         function DisplaySecondMenus(TypeId, RestaurantId) {
             $.ajaxSetup({ async: false });
@@ -94,8 +82,9 @@
     </script>
     <script>
         function loadContent() {
-            var RestaurantId = '@ViewBag.RestaurantId';
-            DisplaySpecialsListContent('', RestaurantId);
+            var TypeId = $("#left_list li:first").attr("tid");
+            var RestaurantId = $("#left_list li:first").attr("rid");
+            DisplayContent(TypeId, RestaurantId,1);
         }
 
         function DisplaySpecialsListContent(TypeId, RestaurantId) {

@@ -13,7 +13,7 @@
 {
     foreach (ProductType item in Model)
     {
-    <li tid="@item.TypeId" rid="@item.RestaurantId" onclick=" DisplayContent('@item.TypeId', '@item.RestaurantId',@i) ">
+    <li tid="@item.TypeId" rid="@item.RestaurantId" onclick="DisplayContent('@item.TypeId', '@item.RestaurantId',@i) ">
         @Html.DisplayFor(modelItem => item.TypeName)
         <span class="shu">@i</span>
     </li>
