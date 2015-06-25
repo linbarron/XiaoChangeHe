@@ -340,10 +340,13 @@
     <Compile Include="Models\ProvinceModel.cs" />
     <Compile Include="Models\ReceiveOrderModel.cs" />
     <Compile Include="Models\RestaurantModel.cs" />
+    <Compile Include="Models\Restaurant\RestaurantImage.cs" />
+    <Compile Include="Models\Restaurant\RestaurantImageDBModel.cs" />
     <Compile Include="Models\SelTableInfoModel.cs" />
     <Compile Include="Models\Specials\RestaurantSpecialsViewModel.cs" />
     <Compile Include="Models\Specials\SpecialsEntity.cs" />
     <Compile Include="Models\Specials\SpecialsModel.cs" />
+    <Compile Include="Models\Specials\WeekUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -507,6 +510,9 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Images\20121218190556907572254.jpg" />
+    <Content Include="Images\20150625101819834.png" />
+    <Content Include="Images\p800_201408121407826371996.jpg" />
     <Content Include="NewContent\css\common.css" />
     <Content Include="NewContent\css\lunbo.css" />
     <Content Include="NewContent\images\1.png" />

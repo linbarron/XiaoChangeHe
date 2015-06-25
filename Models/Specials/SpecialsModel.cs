@@ -9,7 +9,7 @@ namespace WitBird.XiaoChangHe.Models.Specials
     public class SpecialsModel
     {
         /// <summary>
-        /// 分页获取。
+        /// 获取今天所有特价菜。
         /// </summary>
         /// <param name="startRowIndex"></param>
         /// <param name="maximumRows"></param>
