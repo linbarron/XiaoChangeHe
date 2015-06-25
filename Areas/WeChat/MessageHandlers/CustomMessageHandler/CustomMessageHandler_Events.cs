@@ -28,7 +28,7 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                 Title = "成都映象小场合以经营地道川菜、干锅、小吃为主要特色。",
                 Description = "小场合以经营地道川菜、干锅、小吃为主要特色，在这里您可以找到儿时的回忆，在这里您可以找到妈妈饭菜的味道！",
                 PicUrl = "http://115.29.38.163/Images/xchlogo.jpg",
-                Url ="http://mp.weixin.qq.com/s?__biz=MjM5MjIzMDIzMQ==&mid=200696040&idx=1&sn=13ba2109e4bf2ff3ee019ee086c3ce47#rd"
+                Url = "http://mp.weixin.qq.com/s?__biz=MjM5MjIzMDIzMQ==&mid=200696040&idx=1&sn=13ba2109e4bf2ff3ee019ee086c3ce47#rd"
             };
         }
 
@@ -63,7 +63,7 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                         string msg = string.Empty;
                         try
                         {
-                            CrmMemberModel model=new CrmMemberModel();
+                            CrmMemberModel model = new CrmMemberModel();
                             msg = model.getCrmMemberListInfoData(requestMessage.FromUserName).FirstOrDefault().Uid;
                         }
                         catch (Exception ex)
@@ -74,7 +74,7 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                         strongResponseMessage.Articles.Add(new Article
                         {
                             Title = "会员信息",
-                            Description = "您的会员号："+msg,
+                            Description = "您的会员号：" + msg,
                             PicUrl = ImgUrl + "wxmembercard_h.png",
                             Url = string.Format("http://test.xgdg.cn/Member/Info/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}", requestMessage.FromUserName)
                         });
@@ -90,7 +90,16 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                     break;
                 case "MyOrder"://我的订单
                     {
-                        //TODO
+                        //NewOrder/My/CB824E58-E2CA-4C95-827A-CA62D528C6A7/ovYq8vgkV-hK11i_ftjaoRBM_IMM
+                        var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
+                        strongResponseMessage.Articles.Add(new Article
+                        {
+                            Title = "我的订单",
+                            Description = "我的订单：",
+                            PicUrl = ImgUrl + "wxmembercard_h.png",
+                            Url = string.Format("http://test.xgdg.cn/NewOrder/My/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}", requestMessage.FromUserName)
+                        });
+                        reponseMessage = strongResponseMessage;
                     }
                     break;
                 case "CompanyInfo"://成都印象餐饮有限公司
