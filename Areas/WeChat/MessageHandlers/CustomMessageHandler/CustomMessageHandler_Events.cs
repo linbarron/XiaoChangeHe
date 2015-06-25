@@ -52,9 +52,36 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                     break;
                 case "ActivityClick":
                     {
-                        var strongResponseMessage = CreateResponseMessage<ResponseMessageText>();
+                        var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
+                        strongResponseMessage.Articles.Add(new Article
+                        {
+                            Title = "小场合活动",
+                            Description = "亲，熊孩子在家不？",
+                            PicUrl = "http://test.xgdg.cn/Images/2.jpg",
+                            Url = string.Format("http://test.xgdg.cn/Activity/index/{0}", requestMessage.FromUserName)
+                        });
+                        strongResponseMessage.Articles.Add(new Article
+                        {
+                            Title = "小场合活动",
+                            Description = "召唤12对情侣",
+                            PicUrl = "http://test.xgdg.cn/Images/1.jpg",
+                            Url = string.Format("http://test.xgdg.cn/Activity/index/{0}", requestMessage.FromUserName)
+                        });
+                        strongResponseMessage.Articles.Add(new Article
+                        {
+                            Title = "小场合活动",
+                            Description = "组队看小鲜肉",
+                            PicUrl = "http://test.xgdg.cn/Images/3.jpg",
+                            Url = string.Format("http://test.xgdg.cn/Activity/index/{0}", requestMessage.FromUserName)
+                        });
+                        strongResponseMessage.Articles.Add(new Article
+                        {
+                            Title = "小场合活动",
+                            Description = "缤纷微影。。",
+                            PicUrl = "http://test.xgdg.cn/Images/4.jpg",
+                            Url = string.Format("http://test.xgdg.cn/Activity/index/{0}", requestMessage.FromUserName)
+                        });
                         reponseMessage = strongResponseMessage;
-                        strongResponseMessage.Content = "小场合活动";
                     }
                     break;
                 case "AccountInfoClick":

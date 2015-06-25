@@ -286,6 +286,7 @@
     <Compile Include="Controllers\ProductMenuTypeController.cs" />
     <Compile Include="Controllers\StageController.cs" />
     <Compile Include="Controllers\SubscribeController.cs" />
+    <Compile Include="Controllers\WitBird\ActivityController.cs" />
     <Compile Include="Controllers\WitBird\SpecialsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -785,6 +786,7 @@
     <Content Include="Views\NewBook\Info.cshtml" />
     <Content Include="Views\Member\Recharge.cshtml" />
     <Content Include="Views\Specials\RestaurantSpecials.cshtml" />
+    <Content Include="Views\Activity\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
