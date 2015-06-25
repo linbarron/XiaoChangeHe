@@ -3,17 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace WitBird.XiaoChangeHe.Core.Entity
+namespace WitBird.XiaoChangeHe.Core.Dal.Entity
 {
-    public class OrderDetail
+    public class OrderSummary
     {
         public Guid OrderId { get; set; }
 
         public string CustomName { get; set; }
 
         public string Telephone { get; set; }
-
-        public List<Product> ProductList { get; set; }
 
         public DateTime? DiningDate { get; set; }
 

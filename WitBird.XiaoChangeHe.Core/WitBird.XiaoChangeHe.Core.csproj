@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -39,7 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dal\ConnectionProvider.cs" />
     <Compile Include="Dal\Entity\OrderDetails.cs" />
+    <Compile Include="Dal\Entity\OrderSummary.cs" />
     <Compile Include="Dal\Entity\Product.cs" />
     <Compile Include="Dal\OrderDal.cs" />
     <Compile Include="Entity\OrderDetail.cs" />

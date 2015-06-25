@@ -46,7 +46,15 @@
         </div>
         <div class="san">
             <span class="san_l">散桌1-10人桌</span>
-            <span class="san_r"> @Model.EatTime.ToString("yyyy-MM-dd") @Model.EatTime.DayOfWeek @Model.EatTime.ToString("hh:mm")</span>
+            @if (Model.DiningDate != null)
+            {
+                <span class="san_r"> @Model.DiningDate.Value.ToString("yyyy-MM-dd") @Model.DiningDate.Value.DayOfWeek @Model.DiningDate.Value.ToString("hh:mm")</span>
+            }
+            else
+            {
+                <span class="san_r">未确认</span>
+            }
+
         </div>
         <div class="content-header">
             <span>|</span>  菜品清单

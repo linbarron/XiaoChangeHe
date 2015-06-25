@@ -1,4 +1,6 @@
 ﻿@using WitBird.XiaoChangHe.Models.Info;
+@using WitBird.XiaoChangHe.Models.Restaurant
+@using WitBird.XiaoChangHe.Models.Specials
 @model NewRestaurantAbstract
 @{
     ViewBag.Title = "Addr";
@@ -9,6 +11,8 @@
     {
         clickEvent = string.Format("loadQuick('{0}', '{1}'); ", Model.Id, Model.RstType);
     }
+    var specialList = ViewData["special"] as List<SpecialsEntity>;
+    var images = ViewData["RestaurantImages"] as List<RestaurantImage>;
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -58,17 +62,15 @@
 
                     <div class="swiper-wrapper" style="z-index: 1;">
                         <!-- 轮播代码部分php通过循环swiper-slide下面img来遍历数据 -->
-
-                        <div class="swiper-slide">
-
-                            <img src="~/Order/GetImagesRst/@(Model.Id)">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="~/Order/GetImagesRst/@(Model.Id)">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="~/Order/GetImagesRst/@(Model.Id)">
-                        </div>
+                        @if (images != null && images.Count > 0)
+                        {
+                            foreach (var item in images)
+                            {
+                            <div class="swiper-slide">
+                                <img src="@item.Url">
+                            </div>
+                            }
+                        }
                         <!-- php轮播结束-->
 
                     </div>
@@ -99,7 +101,7 @@
             <!-- 轮播代码部分end -->
         </div>
         <!--立即点菜图标-->
-        <a href="~/NewUI/ksdc.html">
+        <a href="javascript:void(0);" onclick="@clickEvent">
             <div class="top-title">@Model.Name <span>x3张</span>  </div>
             <div class="bottom_1">
                 <img src="~/NewContent/images/dh2.png" height="60">
@@ -155,23 +157,26 @@
             </div>
             <!-- 今日特价更多-->
             <div class="content_4"><span class="content_1_l" style="font-weight: bold;">今日特价</span> 
-                <span class="content_1_r">更多>> </span></div>
+                <span class="content_1_r" onclick="@clickEvent">更多>> </span></div>
             
         </div>
         <div class="content_5">
+            @if (specialList != null && specialList.Count > 0)
+            {
                 <!-- 商品图片-->
                 <div class="content_5_l">
-                    <img src="~/NewContent/images/11 (2).png">
+                    <img src="/Order/GetImages/@(specialList[0].ProductId)">
                 </div>
                 <!--商品名字-->
-                <span class="z_s" style="font-weight: bold;">韭香凤冠</span>
+                <span class="z_s" style="font-weight: bold;">@specialList[0].Product.ProductName</span>
                 <!--时间-->
-                <span class="y_s" style="font-size: 12px;">星期一</span>
+                <span class="y_s" style="font-size: 12px;">@Html.GetCN()</span>
                 <!--新价格和旧价格-->
-                <span class="z_x"><span style="color: #F33">78元</span> <span class="through">100元</span></span>
+                <span class="z_x"><span style="color: #F33">@(specialList[0].SpecPrice)元</span> <span class="through">@(specialList[0].Product.Price)元</span></span>
                 <!--已售件数-->
-                <span class="y_x" style="font-size: 12px;">已售5</span>
-            </div>
+                <span class="y_x" style="font-size: 12px; display: none;">已售5</span>
+            }
+        </div>
         <!-- 商家提供-->
         <div style="color: #666; font-size: 14px; margin: 10px;">@Model.Description</div>
     </div>

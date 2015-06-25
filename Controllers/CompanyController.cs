@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using WitBird.XiaoChangHe.Models.Info;
 using WitBird.XiaoChangHe.Models;
 using System.Web.Caching;
+using WitBird.XiaoChangHe.Models.Restaurant;
+using WitBird.XiaoChangHe.Models.Specials;
 
 namespace WitBird.XiaoChangHe.Controllers
 {
@@ -48,7 +50,8 @@ namespace WitBird.XiaoChangHe.Controllers
                     }
                 }
             }
-
+            ViewData["special"] = SpecialsModel.GetTodayByRestaurantId(new Guid(id));
+            ViewData["RestaurantImages"] = RestaurantImageDBModel.GetRestaurantImages(new Guid(id));
             return View(p);
         }
 

@@ -19,16 +19,12 @@ namespace WitBird.XiaoChangHe.Controllers
         /// </summary>
         /// <returns></returns>
 
-        public ActionResult Detail(string MemberCardNo, string OrderId, string SourceAccountId, string ComypanyId = null, string Type = null, string RstType = null)
+        public ActionResult Detail(string orderId)
         {
-            ViewBag.SourceAccountId = SourceAccountId;
-            ViewBag.OrderId = OrderId;
-            ViewBag.MemberCardNo = MemberCardNo;
-
             var orderManager = new OrderManager();
 
             Guid orderGuid = Guid.Empty;
-            if (Guid.TryParse(OrderId, out orderGuid))
+            if (Guid.TryParse(orderId, out orderGuid))
             {
                 var detail = orderManager.GetOrderDetailById(orderGuid);
 

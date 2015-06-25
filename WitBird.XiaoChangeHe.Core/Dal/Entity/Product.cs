@@ -11,6 +11,6 @@ namespace WitBird.XiaoChangeHe.Core.Dal.Entity
 
         public string ProductName { get; set; }
 
-        public byte[] OriginalImage { get; set; }
+        public byte[] Image { get; set; }
     }
 }
