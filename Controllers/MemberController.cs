@@ -29,28 +29,44 @@ namespace WitBird.XiaoChangHe.Controllers
 
         public ActionResult Info(string id, string name)
         {
+            CrmMember model = null;
 
-            CrmMemberModel cdb = new CrmMemberModel();
-            ViewBag.CrmMemberListData = cdb.getCrmMemberListInfoData(name);
-            CrmMemberModel cdb1 = new CrmMemberModel();
-            List<CrmMember> crm = cdb1.getCrmMemberListInfoData(name);
-            CrmMemberScoreModel crsModel = new CrmMemberScoreModel();
-            ViewBag.PrepayAccount = 0;
-            ViewBag.TotalScore = 0;
+            ViewBag.AccountMoney = 0;
+            ViewBag.Score = 0;
             ViewBag.PresentMoney = 0;
-            if (crm.Count() > 0)
+            ViewBag.CompanyId = id;
+            ViewBag.SourceAccountId = name;
+
+            try
             {
-                decimal dec = cdb.getPrepayAccount(crm.First().Uid).First().AccountMoney;
-                ViewBag.PrepayAccount = dec;
-                decimal PresentMoney = cdb.getPrepayAccount(crm.First().Uid).First().PresentMoney;
-                ViewBag.PresentMoney = PresentMoney;
-                int TotalScore = crsModel.SelCrmMemberScoreInfo(crm.First().Uid).First().Score;
-                ViewBag.TotalScore = TotalScore;
+                CrmMemberModel cmModel = new CrmMemberModel();
+                CrmMemberScoreModel cmsModel = new CrmMemberScoreModel();
+
+                if (!string.IsNullOrEmpty(name))
+                {
+                    model = cmModel.getCrmMemberListInfoData(name).FirstOrDefault();
+                    
+                    var prepayAccount = cmModel.getPrepayAccount(model.Uid).FirstOrDefault();
+                    var memberScore = cmsModel.SelCrmMemberScoreInfo(model.Uid).FirstOrDefault();
+
+                    if (prepayAccount != null && memberScore != null)
+                    {
+                        ViewBag.AccountMoney = prepayAccount.AccountMoney;
+                        ViewBag.PresentMoney = prepayAccount.PresentMoney;
+                        ViewBag.Score = memberScore.Score;
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+
             }
 
-            ViewBag.SourceAccountId = name;
-            ViewBag.CompanyId = id;
-            return View();
+            return View(model);
         }
 
         public ActionResult editMemberInfo(string id, string name)
@@ -76,7 +92,13 @@ namespace WitBird.XiaoChangHe.Controllers
             return RedirectToAction("Info", "Member", new { id = CompanyId, name = SourceAccountId });
         }
 
-        //消费记录   
+        /// <summary>
+        /// 消费记录
+        /// </summary>
+        /// <param name="id">Uid</param>
+        /// <param name="name">SourceAccountId</param>
+        /// <param name="companyId">CompanyId</param>
+        /// <returns></returns>
         public ActionResult ConsumptionRecords(string id, string name, string companyId)
         {
             CrmMemberModel cdb1 = new CrmMemberModel();
@@ -114,17 +136,37 @@ namespace WitBird.XiaoChangHe.Controllers
             return View(p);
         }
 
-        public ActionResult Recharge(string companyId, string name)
+        /// <summary>
+        /// Handles user recharging request.
+        /// </summary>
+        /// <param name="id">Commpany id.</param>
+        /// <param name="name">SourceAccountId, corresponding to wechat unique name.</param>
+        /// <returns></returns>
+        public ActionResult Recharge(string id, string name)
         {
-            CrmMember crmMember = new CrmMember();
+            CrmMember crmMember = null;
 
             try
-            { 
-            if (!string.IsNullOrEmpty(name))
             {
-                CrmMemberModel cdb = new CrmMemberModel();
-                crmMember = cdb.getCrmMemberListInfoData(name).FirstOrDefault();
-            }
+                if (!string.IsNullOrEmpty(name))
+                {
+                    CrmMemberModel cdb = new CrmMemberModel();
+                    crmMember = cdb.getCrmMemberListInfoData(name).FirstOrDefault();
+
+                    if (crmMember != null)
+                    {
+                        PrepayRecordModel prm = new PrepayRecordModel();
+                        var rechargeRecords = prm.getRechargeRecordListInfoData(crmMember.Uid);
+                        if (rechargeRecords != null && rechargeRecords.Count > 0)
+                        {
+                            ViewBag.IsFirstRecharge = false;
+                        }
+                        else
+                        {
+                            ViewBag.IsFirstRecharge = true;
+                        }
+                    }
+                }
             }
             catch
             {
@@ -132,7 +174,6 @@ namespace WitBird.XiaoChangHe.Controllers
             }
             finally
             {
-                crmMember = crmMember ?? new CrmMember();
             }
 
             return View(crmMember);

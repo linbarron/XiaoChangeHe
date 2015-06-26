@@ -1,0 +1,170 @@
+﻿@{
+
+    Layout = "";
+
+    List<WitBird.XiaoChangHe.Models.Info.CrmMember> list = null;
+    try
+    {
+        list = ViewBag.CrmMemberListData as List<WitBird.XiaoChangHe.Models.Info.CrmMember>;
+        if (list != null && list.Count > 0)
+        {
+            WitBird.XiaoChangHe.Models.Info.CrmMember info = list.First();
+
+
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no, minimum-scale= 0.5" />
+                <title>会员卡</title>
+                <script>document.cookie = 'resolution=' + Math.max(screen.width, screen.height) + '; path=/';</script>
+                <link href="~/Content/public.css" rel="stylesheet" />
+                <link href="~/Content/member.css" rel="stylesheet" />
+                <script>
+                </script>
+            </head>
+            <body>
+
+                <form id="payment">
+                    <div>
+                        <nav id="img">
+                            <span id="uid"><span style="font-size:15px;margin-right: -10px;">NO.</span> @(info != null ? info.Uid : "")</span>
+
+                            @if (ViewBag.PrepayAccount == 0)
+                            {
+                                <img src="~/Content/images/@(ViewBag.CompanyId)w.png" />
+                                @*<img src="~/Content/images/vipw.png" />*@
+                                <a href="/Product/getMemProducts/@(ViewBag.CompanyId)/@(info.Uid)" style="color: #d32502;display: block;padding-top: 10px;font-size: 15px;">升级为储值会员可优惠价格</a>
+
+                            }
+                            else
+                            {
+                                <img src="~/Content/images/@(ViewBag.CompanyId)h.png" />
+                                @* <img src="~/Content/images/viph.png" />*@
+                            }
+
+                        </nav>
+                        <ol style="padding: 0px;">
+                            <li>
+                                <a href="#">
+                                    <span>预存余额 &nbsp;&nbsp;@(ViewBag.PrepayAccount)</span>
+
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span>赠送金额 &nbsp;&nbsp;@(ViewBag.PresentMoney)</span>
+
+                                </a>
+                            </li>
+                            @if (ViewBag.PrepayAccount <= 0)
+                            {
+                                <li>
+                                    <a href="#">
+                                        <span>积&nbsp;&nbsp;分 &nbsp;&nbsp;@(ViewBag.TotalScore)</span>
+
+                                    </a>
+                                </li>
+                            }
+                            <li>
+                                <a href="/Member/ConsumptionRecords/@(info.Uid)/@(ViewBag.SourceAccountId)?companyId=@(ViewBag.CompanyId)" style="padding:0px">
+                                    <span>消费记录</span>
+                                    <img class="img_right" src="~/Content/images/jiantou.png" />
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="/Member/RechargeRecord/@(info.Uid)/@(ViewBag.SourceAccountId)?companyId=@(ViewBag.CompanyId)" style="padding:0px">
+                                    <span>充值记录</span>
+                                    <img class="img_right" src="~/Content/images/jiantou.png" />
+                                </a>
+                            </li>
+                            @*  <li>
+                                    <a href="#" style="padding:0px">
+                                        <span>预存商品信息 &nbsp;&nbsp; 0</span>
+                                        <img class="img_right" src="~/Content/images/jiantou.png" />
+                                    </a>
+                                </li>*@
+
+                            <li>
+                                <a href="/Member/editMemberInfo/@(ViewBag.CompanyId)/@(ViewBag.SourceAccountId)" style="padding:0px">
+                                    <span>完善会员卡资料</span>
+                                    <img class="img_right" src="~/Content/images/jiantou.png" />
+                                </a>
+                            </li>
+                            @*  <li>
+                                                    <a href="/Company/Message/37A48962-9EE2-1627-62D0-EAF41068475A/744aab08-2f08-4a28-96af-88927f124eb6" style="padding:0px">
+                                                        <span>会员专享40余道特惠菜肴</span>
+                                                        <img class="img_right" src="~/Content/images/jiantou.png" />
+                                                    </a>
+
+                                                </li>
+                                                <li>
+                                                    <a href="/Company/Message/37A48962-9EE2-1627-62D0-EAF41068475A/09507320-9CFA-4C18-942A-ECB1149C060B" style="padding:0px">
+                                                        <span>会员专享5%-12%积分特权</span>
+                                                        <img class="img_right" src="~/Content/images/jiantou.png" />
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="/Company/Message/37A48962-9EE2-1627-62D0-EAF41068475A/d4deecb8-07a7-40a0-a1bd-4a097aca91a1" style="padding:0px">
+                                                        <span>会员专享生日优惠 </span>
+                                                        <img class="img_right" src="~/Content/images/jiantou.png" />
+                                                    </a>
+
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <span>交易记录</span>
+                                                        <img class="img_right" src="~/Content/images/jiantou.png" />
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="/Company/Message/37A48962-9EE2-1627-62D0-EAF41068475A/5888f0d6-6827-40c7-b4fe-6c35a77ade8c
+                                " style="padding:0px">
+                                                        <span>会员卡说明</span>
+                                                        <img class="img_right" src="~/Content/images/jiantou.png" />
+                                                    </a>
+                                                </li>*@
+                            <li>
+                                <a href="/Order/Begin/@ViewBag.CompanyId/@ViewBag.SourceAccountId" style="padding:0px">
+                                    <span>适用门店电话及地址</span>
+                                    <img class="img_right" src="~/Content/images/jiantou.png" />
+                                </a>
+                            </li>
+                            @*<li style="height:7em;">
+                                                      <span>我的二维码</span>
+
+                                <img src="@string.Format("http://qr.liantu.com/api.php?&bg=ffffff&fg=000000&text=WPT{0}", info.Uid)" style="width:6em; vertical-align:top"/>
+                                                </li>*@
+                        </ol>
+                        <nav style="clear: both;"></nav>
+
+                    </div>
+                </form>
+                <div style="clear: both;"></div>
+                <div id="mCopyright" class="footFix">
+                    <div class="mcrInn">
+                        <h1>微跑堂</h1>
+                        <h2>©成都爱信雅克科技有限公司</h2>
+
+                    </div>
+
+                </div>
+            </body>
+
+        </html>
+
+        }
+    }
+    catch (Exception)
+    {
+
+    }
+
+
+}
+
+
+
+
+
