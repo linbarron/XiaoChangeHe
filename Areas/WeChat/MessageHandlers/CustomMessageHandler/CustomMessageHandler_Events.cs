@@ -62,21 +62,21 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                         });
                         strongResponseMessage.Articles.Add(new Article
                         {
-                            Title = "小场合活动",
+                            Title = "召唤12对情侣",
                             Description = "召唤12对情侣",
                             PicUrl = "http://test.xgdg.cn/Images/1.jpg",
                             Url = string.Format("http://test.xgdg.cn/Activity/index/{0}", requestMessage.FromUserName)
                         });
                         strongResponseMessage.Articles.Add(new Article
                         {
-                            Title = "小场合活动",
+                            Title = "组队看小鲜肉",
                             Description = "组队看小鲜肉",
                             PicUrl = "http://test.xgdg.cn/Images/3.jpg",
                             Url = string.Format("http://test.xgdg.cn/Activity/index/{0}", requestMessage.FromUserName)
                         });
                         strongResponseMessage.Articles.Add(new Article
                         {
-                            Title = "小场合活动",
+                            Title = "缤纷微影。。",
                             Description = "缤纷微影。。",
                             PicUrl = "http://test.xgdg.cn/Images/4.jpg",
                             Url = string.Format("http://test.xgdg.cn/Activity/index/{0}", requestMessage.FromUserName)
