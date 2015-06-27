@@ -45,7 +45,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 if (!string.IsNullOrEmpty(name))
                 {
                     model = cmModel.getCrmMemberListInfoData(name).FirstOrDefault();
-                    
+
                     var prepayAccount = cmModel.getPrepayAccount(model.Uid).FirstOrDefault();
                     var memberScore = cmsModel.SelCrmMemberScoreInfo(model.Uid).FirstOrDefault();
 
@@ -72,12 +72,20 @@ namespace WitBird.XiaoChangHe.Controllers
         public ActionResult editMemberInfo(string id, string name)
         {
             List<CrmMember> p = null;
-            CrmMemberModel cdb = new CrmMemberModel();
-            p = cdb.getCrmMemberListInfoData(name);
-            decimal dec = cdb.getPrepayAccount(p.First().Uid).First().AccountMoney;
-            ViewBag.PrepayAccount = dec;
-            ViewBag.SourceAccountId = name;
-            ViewBag.CompanyId = id;
+            try
+            {
+                CrmMemberModel cmm = new CrmMemberModel();
+                p = cmm.getCrmMemberListInfoData(name);
+                decimal dec = cmm.getPrepayAccount(p.First().Uid).First().AccountMoney;
+                ViewBag.PrepayAccount = dec;
+                ViewBag.SourceAccountId = name;
+                ViewBag.CompanyId = id;
+            }
+            catch
+            { }
+            finally
+            { }
+
             return View(p);
         }
 
@@ -101,38 +109,62 @@ namespace WitBird.XiaoChangHe.Controllers
         /// <returns></returns>
         public ActionResult ConsumptionRecords(string id, string name, string companyId)
         {
-            CrmMemberModel cdb1 = new CrmMemberModel();
-            List<CrmMember> crm = cdb1.getCrmMemberListInfoData(name);
-            ViewBag.PrepayAccount = 0;
-            if (crm.Count() > 0)
-            {
-                decimal dec = cdb1.getPrepayAccount(crm.First().Uid).First().AccountMoney;
-                ViewBag.PrepayAccount = dec;
-            }
-            ViewBag.Uid = id;
-            ViewBag.CompanyId = companyId;
             List<PrepayRecord> p = null;
-            PrepayRecordModel cdb = new PrepayRecordModel();
-            p = cdb.getConsumptionRecordsListInfoData(id);
+            try
+            {
+
+                CrmMemberModel cmm = new CrmMemberModel();
+                List<CrmMember> crm = cmm.getCrmMemberListInfoData(name);
+                ViewBag.PrepayAccount = 0;
+                if (crm.Count() > 0)
+                {
+                    decimal dec = cmm.getPrepayAccount(crm.First().Uid).First().AccountMoney;
+                    ViewBag.PrepayAccount = dec;
+                }
+                ViewBag.Uid = id;
+                ViewBag.CompanyId = companyId;
+                PrepayRecordModel prm = new PrepayRecordModel();
+                p = prm.getConsumptionRecordsListInfoData(id);
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+
+            }
+
             return View(p);
         }
 
         //充值记录
         public ActionResult RechargeRecord(string id, string name, string companyId)
         {
-            CrmMemberModel cdb1 = new CrmMemberModel();
-            List<CrmMember> crm = cdb1.getCrmMemberListInfoData(name);
-            ViewBag.PrepayAccount = 0;
-            if (crm.Count() > 0)
-            {
-                decimal dec = cdb1.getPrepayAccount(crm.First().Uid).First().AccountMoney;
-                ViewBag.PrepayAccount = dec;
-            }
-            ViewBag.Uid = id;
-            ViewBag.CompanyId = companyId;
             List<PrepayRecord> p = null;
-            PrepayRecordModel cdb = new PrepayRecordModel();
-            p = cdb.getRechargeRecordListInfoData(id);
+            try
+            {
+                CrmMemberModel cmm = new CrmMemberModel();
+                List<CrmMember> crm = cmm.getCrmMemberListInfoData(name);
+                ViewBag.PrepayAccount = 0;
+                if (crm.Count() > 0)
+                {
+                    decimal dec = cmm.getPrepayAccount(crm.First().Uid).First().AccountMoney;
+                    ViewBag.PrepayAccount = dec;
+                }
+                ViewBag.Uid = id;
+                ViewBag.CompanyId = companyId;
+                PrepayRecordModel prm = new PrepayRecordModel();
+                p = prm.getRechargeRecordListInfoData(id);
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+
+            }
             return View(p);
         }
 
