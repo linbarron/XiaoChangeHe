@@ -40,8 +40,11 @@ namespace WitBird.XiaoChangHe.Models
                 }
                 IParameterMapper ipmapper = new getPrepayRecordListInfoDataParameterMapper();
                 DataAccessor<PrepayRecord> tableAccessor;
-                string strSql = @"select p.AddMoney,p.BillPayId,p.PayModel,p.PrepayDate,p.PrepayMoney,p.PresentMoney,p.PromotionId,p.RecordId,p.RstId,p.SId,p.Uid,p.UserId 
-                                from PrepayRecord p where p.Uid=@Uid and  p.PrepayMoney<0  and p.PrepayDate between  dateadd (MM,-1,GETDATE()) and   getdate() order by p.PrepayDate desc";
+//                string strSql = @"select p.AddMoney,p.BillPayId,p.PayModel,p.PrepayDate,p.PrepayMoney,p.PresentMoney,p.PromotionId,p.RecordId,p.RstId,p.SId,p.Uid,p.UserId 
+//                                from PrepayRecord p where p.Uid=@Uid and  p.PrepayMoney<0  and p.PrepayDate between  dateadd (MM,-1,GETDATE()) and   getdate() order by p.PrepayDate desc";
+
+                string strSql = @"select top 10 p.AddMoney,p.BillPayId,p.PayModel,p.PrepayDate,p.PrepayMoney,p.PresentMoney,p.PromotionId,p.RecordId,p.RstId,p.SId,p.Uid,p.UserId 
+                                from PrepayRecord p where p.Uid=@Uid and  p.PrepayMoney<0 order by p.PrepayDate desc";
                 tableAccessor = db.CreateSqlStringAccessor(strSql, ipmapper, MapBuilder<PrepayRecord>.MapAllProperties()
                      .Map(t => t.Uid).ToColumn("Uid")
                      .Map(t => t.AddMoney).ToColumn("AddMoney")
@@ -79,8 +82,11 @@ namespace WitBird.XiaoChangHe.Models
                 }
                 IParameterMapper ipmapper = new getPrepayRecordListInfoDataParameterMapper();
                 DataAccessor<PrepayRecord> tableAccessor;
-                string strSql = @"select p.AddMoney,p.BillPayId,p.PayModel,p.PrepayDate,p.PrepayMoney,p.PresentMoney,p.PromotionId,p.RecordId,p.RstId,p.SId,p.Uid,p.UserId 
-                                from PrepayRecord p where p.Uid=@Uid and  p.PrepayMoney>0 and p.PrepayDate between  dateadd (MM,-1,GETDATE()) and   getdate() order by p.PrepayDate desc";
+                //string strSql = @"select p.AddMoney,p.BillPayId,p.PayModel,p.PrepayDate,p.PrepayMoney,p.PresentMoney,p.PromotionId,p.RecordId,p.RstId,p.SId,p.Uid,p.UserId 
+                //                from PrepayRecord p where p.Uid=@Uid and  p.PrepayMoney>0 and p.PrepayDate between  dateadd (MM,-1,GETDATE()) and   getdate() order by p.PrepayDate desc";
+
+                string strSql = @"select top 10 p.AddMoney,p.BillPayId,p.PayModel,p.PrepayDate,p.PrepayMoney,p.PresentMoney,p.PromotionId,p.RecordId,p.RstId,p.SId,p.Uid,p.UserId 
+                                from PrepayRecord p where p.Uid=@Uid and  p.PrepayMoney>0 order by p.PrepayDate desc";
                 tableAccessor = db.CreateSqlStringAccessor(strSql, ipmapper, MapBuilder<PrepayRecord>.MapAllProperties()
                      .Map(t => t.Uid).ToColumn("Uid")
                      .Map(t => t.AddMoney).ToColumn("AddMoney")
