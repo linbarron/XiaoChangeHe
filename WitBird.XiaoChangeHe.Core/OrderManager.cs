@@ -37,6 +37,8 @@ namespace WitBird.XiaoChangeHe.Core
 
                     var products = orderDal.GetProducts(productIds);
 
+                    decimal orderTotallMoney = 0;
+
                     if (products != null && products.Count > 0)
                     {
                         detail.ProductList = new List<Product>();
@@ -51,6 +53,7 @@ namespace WitBird.XiaoChangeHe.Core
                                 product.ProductId = subDetail.ProductId;
                                 product.UnitPrice = subDetail.UnitPrice;
                                 product.Count = subDetail.ProductCount;
+                                orderTotallMoney += subDetail.TotalPrice;//计算订单总金额
 
                                 product.ProductName = productDetail.ProductName;
                                 productDetail.Image = productDetail.Image;
@@ -59,6 +62,8 @@ namespace WitBird.XiaoChangeHe.Core
                             }
                         }
                     }
+
+                    detail.TotalMoney = orderTotallMoney;
                 }
             }
 

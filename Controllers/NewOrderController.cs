@@ -41,9 +41,32 @@ namespace WitBird.XiaoChangHe.Controllers
         /// 申请退款页面
         /// </summary>
         /// <returns></returns>
-        public ActionResult MoneyBack()
+        public ActionResult MoneyBack(string orderId)
         {
-            return View();
+            ActionResult result = null;
+
+            var orderManager = new OrderManager();
+
+            Guid orderGuid = Guid.Empty;
+            if (Guid.TryParse(orderId, out orderGuid))
+            {
+                var detail = orderManager.GetOrderDetailById(orderGuid);
+
+                if (detail == null)
+                {
+                    result = Redirect("/");
+                }
+                else
+                {
+                    result = View(detail);
+                }
+            }
+            else
+            {
+                result = Redirect("/");
+            }
+
+            return result;
         }
 
         /// <summary>

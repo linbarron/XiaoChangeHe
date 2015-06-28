@@ -17,6 +17,8 @@ namespace WitBird.XiaoChangeHe.Core.Entity
 
         public DateTime? DiningDate { get; set; }
 
+        public decimal TotalMoney { get; set; }
+
         public DateTime CreateTime { get; set; }
 
         public string Backlog { get; set; }

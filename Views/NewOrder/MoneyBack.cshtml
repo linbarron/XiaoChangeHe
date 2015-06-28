@@ -1,4 +1,5 @@
-﻿@{
+﻿@model WitBird.XiaoChangeHe.Core.Entity.OrderDetail
+@{
     Layout = null;
 }
 
@@ -19,7 +20,7 @@
 <body>
     <div class="container">
         <div class="content">
-            <div class="title1"><span class="title1_l">订单金额：</span><span class="title1_r">238元</span></div>
+            <div class="title1"><span class="title1_l">订单金额：</span><span class="title1_r">@Model.TotalMoney.ToString("0.00")元</span></div>
             <div class="title2"><span class="title2_l">选择退款方式：</span><span class="title2_r">微信钱包　></span></div>
         </div>
         <div class="footer">
