@@ -18,7 +18,7 @@ namespace WitBird.XiaoChangeHe.Core.Dal
                 var SqlCmd = new SqlCommand();
                 SqlCmd.Connection = SqlConn;
                 SqlCmd.CommandText = @"
-select Id AS OrderId,ContactName,ContactPhone,DiningDate,DiningDate,CreateDate,Status
+select Id AS OrderId,ContactName,ContactPhone,DiningDate,DiningDate,CreateDate,Status,RstId AS RestaurantId
 from orders
 where MemberCardNo=@MemberCardNo
 order by CreateDate desc";
@@ -44,6 +44,8 @@ order by CreateDate desc";
                     {
                         summary.DiningDate = Convert.ToDateTime(reader["DiningDate"]);
                     }
+                    summary.RestaurantId = Guid.Parse(reader["RestaurantId"].ToString());
+
                     summary.CreateTime = Convert.ToDateTime(reader["CreateDate"]);
                     summary.Backlog = "无";
 
@@ -54,6 +56,16 @@ order by CreateDate desc";
                     }
 
                     list.Add(summary);
+                }
+            }
+
+            if (list != null && list.Count > 0)
+            {
+                RestaurantDal restaurantDal = new RestaurantDal();
+
+                foreach (var item in list)
+                {
+                    item.RestaurantName = restaurantDal.GetRestaurantName(item.RestaurantId);
                 }
             }
 

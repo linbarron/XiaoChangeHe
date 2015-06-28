@@ -14,22 +14,6 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="format-detection" content="email=no">
     <link href="http://css.savory.cn/wedinner/ddxq(yfk).css" rel="stylesheet" type="text/css">
-    <script type="text/javascript">
-        //弹出隐藏层
-        function ShowDiv(show_div, bg_div) {
-            document.getElementById(show_div).style.display = 'block';
-            document.getElementById(bg_div).style.display = 'block';
-            var bgdiv = document.getElementById(bg_div);
-            bgdiv.style.width = document.body.scrollWidth;
-            // bgdiv.style.height = $(document).height();
-            $("#" + bg_div).height($(document).height());
-        };
-        //关闭弹出层
-        function CloseDiv(show_div, bg_div) {
-            document.getElementById(show_div).style.display = 'none';
-            document.getElementById(bg_div).style.display = 'none';
-        };
-    </script>
 </head>
 <body>
     <div class="container">
@@ -94,61 +78,5 @@
             </div>
         </div>
     </div>
-
-    <script>
-        function add(id) {
-            var num = $("#" + id).val();
-            $("#" + id).val(parseInt(num) + 1);
-            $.ajaxSetup({ cache: false });
-            var SourceAccountId = '@ViewBag.SourceAccountId';
-            var productId = id;
-            var price = $("#rmb" + id).html().replace('￥', '');
-            $.post("/Order/SaveOrders", { type: "Insert", SourceAccountId: SourceAccountId }, function (msg) {
-                alert(msg);
-                if (msg != "00000000-0000-0000-0000-000000000000") {
-                    var num1 = $("#" + id).val();
-                    $.post("/Order/SaveOrderDetails", { type: "Insert", productId: productId, unitPrice: price, orderId: msg, productCount: num1 }, function (msg1) {
-                        if (msg1 == 1) {
-
-                        }
-
-                    });
-                }
-
-            });
-        }
-        function jian(id) {
-
-            var num = $("#" + id).val();
-            $("#" + id).val(parseInt(num) - 1);
-            $.ajaxSetup({ cache: false });
-            var SourceAccountId = '@ViewBag.SourceAccountId';
-            var productId = id;
-            var price = $("#rmb" + id).html().replace('￥', '');
-            $.post("/Order/SaveOrders", { type: "Insert", SourceAccountId: SourceAccountId }, function (msg) {
-                alert(msg);
-                if (msg != "00000000-0000-0000-0000-000000000000") {
-                    var num1 = $("#" + id).val();
-                    if (num1 > 0) {
-                        $.post("/Order/SaveOrderDetails", { type: "Insert", productId: productId, unitPrice: price, orderId: msg, productCount: num1 }, function (msg1) {
-                            if (msg1 == 1) {
-
-                            }
-
-                        });
-                    } else if (num1 == 0) {
-                        var num1 = $("#" + id).val();
-                        $.post("/Order/DelOrderDetails", { productId: productId, orderId: msg }, function (msg1) {
-                            if (msg1 == 1) {
-
-                            }
-
-                        });
-                    }
-                }
-
-            });
-        }
-    </script>
 </body>
 </html>

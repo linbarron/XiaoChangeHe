@@ -45,6 +45,7 @@
     <Compile Include="Dal\Entity\OrderSummary.cs" />
     <Compile Include="Dal\Entity\Product.cs" />
     <Compile Include="Dal\OrderDal.cs" />
+    <Compile Include="Dal\RestaurantDal.cs" />
     <Compile Include="Dal\UserDal.cs" />
     <Compile Include="Entity\OrderDetail.cs" />
     <Compile Include="Entity\OrderSummary.cs" />

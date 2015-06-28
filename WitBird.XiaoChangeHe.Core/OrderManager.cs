@@ -22,6 +22,8 @@ namespace WitBird.XiaoChangeHe.Core
                 list = entities.Select(v => new BusinessModel.OrderSummary
                 {
                     OrderId = v.OrderId,
+                    RestaurantId = v.RestaurantId,
+                    RestaurantName = v.RestaurantName,
                     ContactName = v.ContactName,
                     ContactPhone = v.ContactPhone,
                     TotalMoney = v.TotalMoney,

@@ -9,6 +9,10 @@ namespace WitBird.XiaoChangeHe.Core.Dal.Entity
     {
         public Guid OrderId { get; set; }
 
+        public Guid RestaurantId { get; set; }
+
+        public string RestaurantName { get; set; }
+
         public string ContactName { get; set; }
 
         public string ContactPhone { get; set; }
