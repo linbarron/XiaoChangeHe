@@ -1,9 +1,8 @@
-﻿@using WitBird.XiaoChangHe.Models.Info;
+﻿@model List<WitBird.XiaoChangeHe.Core.Entity.OrderSummary>
+
+@using WitBird.XiaoChangHe.Models.Info;
 @{
     Layout = null;
-    var myOrders = ViewBag.MyOrders;
-    var myQuickOrders = ViewBag.MyQuickOrders;
-    var hasOrder = myOrders != null || myQuickOrders != null;
 }
 
 <!doctype html>
@@ -21,51 +20,37 @@
 </head>
 <body>
     <div class="container">
-        @if (hasOrder)
+        @if (Model != null && Model.Count > 0)
         {
-            if (myOrders != null)
+            foreach (var order in Model)
             {
-                foreach (var myOrder in (List<MyOrder>)myOrders)
-                {
-                    <div class="content">
-                        <div class="content_header">
-                            创建时间 @myOrder.DiningDate.ToString("yyyy-MM-dd hh:mm:ss")
-                            <div class="content_content">
-                                <div class="content_img"><img src="http://img.savory.cn/wedinner/1.png"></div>
-                                <div class="content_title">
-                                    <span class="title_l">味蜀吾老火锅(金牛万达)</span><span class="title_r">@myOrder.status</span><br />散座（8人）
-                                    <br />2015-05-22 周五 12:30
-                                </div>
+                <div class="content">
+                    <div class="content_header">
+                        创建时间 @order.CreateTime.ToString("yyyy-MM-dd hh:mm:ss")
+                        <div class="content_content">
+                            <div class="content_img"><img src="http://img.savory.cn/wedinner/1.png"></div>
+                            <div class="content_title">
+                                <span class="title_l">味蜀吾老火锅(金牛万达)</span>
+                                <br />散座（8人）
+                                @if (order.DiningDate != null)
+                                {
+                                    <br />@order.DiningDate.Value.ToString("yyyy-MM-dd ddd hh:mm")
+                                }
                             </div>
                         </div>
-                        <div class="footer">
-                            <span>订单金额：<span class="money">238元</span></span>
-                            <div class="fuk">确认付款</div>
-                        </div>
                     </div>
-                }
-            }
-            if (myQuickOrders != null)
-            {
-                foreach (var myOrder in (List<MyOrder>)myQuickOrders)
-                {
-                    <div class="content">
-                        <div class="content_header">
-                            创建时间 @myOrder.DiningDate.ToString("yyyy-MM-dd hh:mm:ss")
-                            <div class="content_content">
-                                <div class="content_img"><img src="http://img.savory.cn/wedinner/1.png"></div>
-                                <div class="content_title">
-                                    <span class="title_l">味蜀吾老火锅(金牛万达)</span><span class="title_r">未付款</span><br />散座（8人）
-                                    <br />2015-05-22 周五 12:30
-                                </div>
-                            </div>
-                        </div>
-                        <div class="footer">
-                            <span>订单金额：<span class="money">238元</span></span>
+                    <div class="footer">
+                        <span>订单金额：<span class="money">@order.TotalMoney.ToString("0.00")元</span></span>
+                        @if (order.Status)
+                        {
+                            <div><a href="/">查看订单</a></div>
+                        }
+                        else
+                        {
                             <div class="fuk">确认付款</div>
-                        </div>
+                        }
                     </div>
-                }
+                </div>
             }
         }
         else

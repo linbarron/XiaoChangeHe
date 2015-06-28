@@ -50,15 +50,15 @@ namespace WitBird.XiaoChangHe.Controllers
             Guid orderGuid = Guid.Empty;
             if (Guid.TryParse(orderId, out orderGuid))
             {
-                var detail = orderManager.GetOrderDetailById(orderGuid);
+                var summary = orderManager.GetOrderSummary(orderGuid);
 
-                if (detail == null)
+                if (summary == null)
                 {
                     result = Redirect("/");
                 }
                 else
                 {
-                    result = View(detail);
+                    result = View(summary);
                 }
             }
             else
@@ -70,54 +70,42 @@ namespace WitBird.XiaoChangHe.Controllers
         }
 
         /// <summary>
-        /// 我的订单页面
-        /// 重写OrderController/My
+        /// 
         /// </summary>
+        /// <param name="id">CompanyId</param>
+        /// <param name="name">SourceAccountId</param>
         /// <returns></returns>
         public ActionResult My(string id, string name)
         {
-            ViewBag.CompanyId = id;
-            ViewBag.SourceAccountId = name;
+            ActionResult result = null;
 
-            OrderModel orderManager = new OrderModel();
-            CrmMemberModel crmManager = new CrmMemberModel();
-            MyMenuModel menuManager = new MyMenuModel();
+            var userManager = new UserManager();
+            var orderManager = new OrderManager();
 
-            var members = crmManager.getCrmMemberListInfoData(name);
-
-            if (members != null && members.Count > 0)
+            Guid companyGuid = Guid.Empty;
+            if (Guid.TryParse(id, out companyGuid))
             {
-                var currentMember = members.FirstOrDefault();
-                if (currentMember != null)
+                var uid = userManager.GetUid(companyGuid, name);
+                if (!string.IsNullOrEmpty(uid))
                 {
-                    var memberCardNo = currentMember.Uid;
-                    ViewBag.MemberCardNo = currentMember.Uid;
+                    var list = orderManager.GetUserOrders(uid);
 
-                    var myOrders = menuManager.getMyOrderListData(memberCardNo);
-                    var myQuickOrders = menuManager.getMyOrderListData(memberCardNo, "FastFood");
-
-                    if (myOrders != null && myOrders.Count > 0)
-                    {
-                        ViewBag.MyOrders = myOrders;
-                    }
-                    if (myQuickOrders != null && myQuickOrders.Count > 0)
-                    {
-                        ViewBag.MyQuickOrders = myQuickOrders;
-                    }
-
-                    return View();
+                    result = View(list);
                 }
                 else
                 {
-                    Redirect("/");
+                    result = Redirect("/");
                 }
             }
             else
             {
-                Redirect("/");
+                result = Redirect("/");
             }
 
-            return View();
+            ViewBag.CompanyId = id;
+            ViewBag.SourceAccountId = name;
+
+            return result;
         }
     }
 }

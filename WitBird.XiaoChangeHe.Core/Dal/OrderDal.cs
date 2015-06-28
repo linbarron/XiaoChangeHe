@@ -9,6 +9,57 @@ namespace WitBird.XiaoChangeHe.Core.Dal
 {
     public class OrderDal
     {
+        public List<OrderSummary> GetUserOrders(string memberCardNo)
+        {
+            List<OrderSummary> list = new List<OrderSummary>();
+
+            using (var SqlConn = ConnectionProvider.GetConnection())
+            {
+                var SqlCmd = new SqlCommand();
+                SqlCmd.Connection = SqlConn;
+                SqlCmd.CommandText = @"
+select Id AS OrderId,ContactName,ContactPhone,DiningDate,DiningDate,CreateDate,Status
+from orders
+where MemberCardNo=@MemberCardNo
+order by CreateDate desc";
+
+                SqlCmd.Parameters.AddWithValue(@"MemberCardNo", memberCardNo);
+
+                var reader = SqlCmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    var summary = new OrderSummary();
+
+                    summary.OrderId = Guid.Parse(reader["OrderId"].ToString());
+                    summary.ContactName = reader["ContactName"].ToString();
+                    if (reader["ContactPhone"] != DBNull.Value)
+                    {
+                        summary.ContactPhone = reader["ContactPhone"].ToString();
+                    }
+                    if (reader["Status"] != DBNull.Value)
+                    {
+                        summary.Status = Convert.ToBoolean(reader["Status"]);
+                    }
+                    if (reader["DiningDate"] != DBNull.Value)
+                    {
+                        summary.DiningDate = Convert.ToDateTime(reader["DiningDate"]);
+                    }
+                    summary.CreateTime = Convert.ToDateTime(reader["CreateDate"]);
+                    summary.Backlog = "无";
+
+                    var details = this.GetOrderDetails(summary.OrderId);
+                    if (details != null && details.Count > 0)
+                    {
+                        summary.TotalMoney = details.Sum(v => v.TotalPrice);
+                    }
+
+                    list.Add(summary);
+                }
+            }
+
+            return list;
+        }
+
         public OrderSummary GetOrderSummary(Guid orderId)
         {
             OrderSummary summary = null;
@@ -18,7 +69,7 @@ namespace WitBird.XiaoChangeHe.Core.Dal
                 var SqlCmd = new SqlCommand();
                 SqlCmd.Connection = SqlConn;
                 SqlCmd.CommandText = @"
-select Id as OrderId, ContactName,ContactPhone,DiningDate,CreateDate
+select Id as OrderId,ContactName,ContactPhone,DiningDate,CreateDate,Status
 from Orders
 where Id=@OrderId";
 
@@ -30,10 +81,14 @@ where Id=@OrderId";
                     summary = new OrderSummary();
 
                     summary.OrderId = Guid.Parse(reader["OrderId"].ToString());
-                    summary.CustomName = reader["ContactName"].ToString();
-                    if (reader["ContactName"] != DBNull.Value)
+                    summary.ContactName = reader["ContactName"].ToString();
+                    if (reader["ContactPhone"] != DBNull.Value)
                     {
-                        summary.Telephone = reader["ContactPhone"].ToString();
+                        summary.ContactPhone = reader["ContactPhone"].ToString();
+                    }
+                    if (reader["Status"] != DBNull.Value)
+                    {
+                        summary.Status = Convert.ToBoolean(reader["Status"]);
                     }
                     if (reader["DiningDate"] != DBNull.Value)
                     {
@@ -41,6 +96,15 @@ where Id=@OrderId";
                     }
                     summary.CreateTime = Convert.ToDateTime(reader["CreateDate"]);
                     summary.Backlog = "无";
+                }
+            }
+
+            if (summary != null)
+            {
+                var details = this.GetOrderDetails(summary.OrderId);
+                if (details != null && details.Count > 0)
+                {
+                    summary.TotalMoney = details.Sum(v => v.TotalPrice);
                 }
             }
 

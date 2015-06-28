@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace WitBird.XiaoChangeHe.Core.Dal.Entity
+namespace WitBird.XiaoChangeHe.Core.Entity
 {
     public class OrderSummary
     {
