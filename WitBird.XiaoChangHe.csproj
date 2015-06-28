@@ -275,7 +275,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
     <Compile Include="Controllers\MyMenuController.cs" />
-    <Compile Include="Controllers\NewBookController.cs" />
     <Compile Include="Controllers\NewOrderController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
@@ -887,7 +886,6 @@
     <Content Include="Views\NewOrder\Detail.cshtml" />
     <Content Include="Views\NewOrder\MoneyBack.cshtml" />
     <Content Include="Views\NewOrder\My.cshtml" />
-    <Content Include="Views\NewBook\Info.cshtml" />
     <Content Include="Views\Member\Recharge.cshtml" />
     <Content Include="Views\Specials\RestaurantSpecials.cshtml" />
     <Content Include="Views\Activity\Index.cshtml" />
