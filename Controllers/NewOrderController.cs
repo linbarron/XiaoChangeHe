@@ -19,7 +19,7 @@ namespace WitBird.XiaoChangHe.Controllers
         /// </summary>
         /// <returns></returns>
 
-        public ActionResult Detail(string orderId)
+        public ActionResult Detail(string id, string name, string orderId)
         {
             var orderManager = new OrderManager();
 
@@ -41,7 +41,7 @@ namespace WitBird.XiaoChangHe.Controllers
         /// 申请退款页面
         /// </summary>
         /// <returns></returns>
-        public ActionResult MoneyBack(string orderId)
+        public ActionResult MoneyBack(string id, string name, string orderId)
         {
             ActionResult result = null;
 
