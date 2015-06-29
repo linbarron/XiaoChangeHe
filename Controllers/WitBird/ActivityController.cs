@@ -16,5 +16,9 @@ namespace WitBird.XiaoChangHe.Controllers.WitBird
             return View();
         }
 
+        public ActionResult View(string id)
+        {
+            return View();
+        }
     }
 }

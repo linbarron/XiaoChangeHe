@@ -890,6 +890,7 @@
     <Content Include="Views\Specials\RestaurantSpecials.cshtml" />
     <Content Include="Views\Activity\Index.cshtml" />
     <Content Include="Views\Member\Info - Copy.cshtml" />
+    <Content Include="Views\Activity\View.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
