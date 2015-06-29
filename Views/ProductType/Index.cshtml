@@ -112,7 +112,9 @@
             var Status = '@ViewBag.Status';
         $.post("/Product/getProductByProductTypeId", { RestaurantId: RestaurantId, ProductTypeId: TypeId, SourceAccountId: SourceAccountId, Status: Status, Type: Type }, function (msg) {
             $(".level2").html('');
+            $(".level2").addClass("hide");
             $("#foodcontent" + contentId).html(msg);
+            $("#foodcontent" + contentId).removeClass("hide");
             orderid = $("#OrderId").val();
             MemberCardNo = $("#MemberCardNo").val();
             var t = $(".totalcount").val();

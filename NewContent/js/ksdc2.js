@@ -1,15 +1,16 @@
-$(function(){  
-	 $(".s_right").click(function(){ 
-	 var t = $(this).siblings("input");  
-        t.val(parseInt(t.val())+1);  
-		
-    }) 
- 
-    $(".s_left").click(function(){  
-	 var t = $(this).siblings("input");  
-	if(t.val()>1)
-        t.val(parseInt(t.val())-1)  
-    })  
+$(function() {
+    $(".s_right").click(function() {
+        var t = $(this).siblings("input");
+        t.val(parseInt(t.val()) + 1);
+        console($(this).attr("pid"));
+    });
+
+    $(".s_left").click(function() {
+        var t = $(this).siblings("input");
+        if (t.val() > 1)
+            t.val(parseInt(t.val()) - 1);
+        console($(this).attr("pid"));
+    });
    
  //上面导航栏切换效果   
     
