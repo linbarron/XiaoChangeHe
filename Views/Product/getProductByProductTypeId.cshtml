@@ -19,13 +19,13 @@
                     <!--菜品名称-->
                     <span class="img_title">@item.ProductName</span>
                     <!--菜品价格-->
-                    <span class="img_money" id="rmb@(item.Id)">@(item.Price)元</span>
+                    <span class="img_money" id="rmb@(item.Id)" data-price="@item.Price">@(item.Price)元</span>
                     <!--加减按钮-->
                     <div class="content-z-bottom">
                         <div class="right_q">
-                            <span class="s_left" onclick="jian('@item.Id')" pid="@item.Id">-</span>
-                            <input class="text_box" name="" type="text" value="1" />
-                            <span class="s_right" onclick="add('@item.Id')" pid="@item.Id">+</span>
+                            <span class="s_left" data-pid="@item.Id">-</span>
+                            <input class="text_box" id="@item.Id" name="" type="text" value="1" />
+                            <span class="s_right" data-pid="@item.Id">+</span>
                         </div>
                     </div>
                 </div>

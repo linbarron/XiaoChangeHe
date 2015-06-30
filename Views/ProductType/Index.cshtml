@@ -51,7 +51,7 @@
 
         <div class="footer">
             <div class="footer_left">
-                <img src="/NewContent/images/4.png" onclick="myMenu()"><span class="shu2" id="totalcount">2</span><span class="money">|　45.00元</span></div>
+                <img src="/NewContent/images/4.png" onclick="myMenu()"><span class="shu2" id="totalcount">2</span><span class="money">|　<strong id="toatalprice">45.00</strong>元</span></div>
 
             <a href="/NewUI/ydxx.html">
                 <div class="footer_right">选好了</div>
@@ -63,7 +63,7 @@
         var orderid;
         var MemberCardNo;
         var SourceAccountId = '@ViewBag.SourceAccountId';
-        var bookTime = '@ViewBag.BookTime'
+        var bookTime = '@ViewBag.BookTime';
         var Type = '@ViewBag.FastFood';
         var CompanyId = $("#CompanyId").val();
     </script>
@@ -156,34 +156,22 @@
     }
 
     function add(id) {
-        console.log("11");
-        var num = $("#" + id).val();
-        $("#" + id).val(parseInt(num) + 1);
         $.ajaxSetup({ cache: false });
         var productId = id;
         var num1 = $("#" + id).val();
         if (num1 > 0) {
             $("#" + id).css("display", "inline");
-            $("#" + "pic" + id).css("display", "inline");
+            //$("#" + "pic" + id).css("display", "inline");
         }
         //用户已点菜数量
         var total = $("#totalcount").html();
-        if (total == null || total == "" || total == undefined) {
+        if (total == null || total == "") {
             total = 0;
         }
 
         $("#totalcount").html(parseInt(total) + 1);
 
-        ////好多人点过此菜
-        //if (num1 == 1) {
-        //    var num = $("#DianCount" + id).html();
-
-        //    $("#DianCount" + id).html(parseInt(num) + 1);
-        //    var num2 = $("#DianCount" + id).html();
-        //    $.post("/ProductConfigure/save", { id: id, Count: num2 }, function (msg1) {
-        //    });
-        //}
-        var price = $("#rmb" + id).html(); //.replace('￥', '');
+        var price = $("#rmb" + id).data("price"); //.replace('￥', '');
         if (orderid == null || orderid == '') {
             $.post("/Order/SaveOrders", { type: "Insert", SourceAccountId: SourceAccountId, bookTime: bookTime, isQuick: Type }, function(msg) {
                 //$("#saveorderid").val(msg);
@@ -211,12 +199,10 @@
                 });
             }
         }
+        count(price);
     }
 
     function jian(id) {
-
-        console.log("11");
-
         var num = $("#" + id).val();
         if (num > 0) {
             $("#" + id).val(parseInt(num) - 1);
@@ -232,18 +218,8 @@
         if (total > 0) {
             $("#totalcount").html(parseInt(total) - 1);
         }
-        ////好多人点过此菜
-        //if (num1 == 0) {
-        //    var num = $("#DianCount" + id).html();
-        //    if (num > 0) {
-        //        $("#DianCount" + id).html(parseInt(num) - 1);
-        //        var num2 = $("#DianCount" + id).html();
-        //        $.post("/ProductConfigure/save", { id: id, Count: num2 }, function (msg1) {
-        //        });
-        //    }
-        //}
         var productId = id;
-        var price = $("#rmb" + id).html(); //.replace('￥', '');
+        var price = $("#rmb" + id).data("price"); //.replace('￥', '');
         if (orderid != null && orderid != '') {
             if (orderid != "00000000-0000-0000-0000-000000000000") {
 
@@ -266,7 +242,15 @@
                 }
             }
         }
+        count(0 - price);
+    }
 
+    function count(price) {
+        console.log(price)
+        console.log($("#toatalprice").html())
+        var toatalprice = parseFloat($("#toatalprice").html());
+
+        $("#toatalprice").html((toatalprice + parseFloat(price)).toFixed(2));
     }
 
     function addLove(id) {
@@ -346,14 +330,14 @@
             $(".s_right").click(function () {
                 var t = $(this).siblings("input");
                 t.val(parseInt(t.val()) + 1);
-                console($(this).attr("pid"));
+                add($(this).data("pid"));
             });
 
             $(".s_left").click(function () {
                 var t = $(this).siblings("input");
                 if (t.val() > 1)
                     t.val(parseInt(t.val()) - 1);
-                console($(this).attr("pid"));
+                jian($(this).data("pid"));
             });
         }
     </script>

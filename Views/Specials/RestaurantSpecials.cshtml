@@ -22,13 +22,13 @@
                 <!--菜品名称-->
                 <span class="img_title">@item.Product.ProductName</span>
                 <!--菜品价格-->
-                <span class="img_money" id="rmb@(item.Id)">@(item.SpecPrice)元</span>
+                <span class="img_money" id="rmb@(item.ProductId)" data-price="@item.SpecPrice">@(item.SpecPrice)元</span>
                 <!--加减按钮-->
                 <div class="content-z-bottom">
                     <div class="right_q">
-                        <span class="s_left">-</span>
-                        <input class="text_box" name="" type="text" value="1" />
-                        <span class="s_right">+</span>
+                        <span class="s_left" data-pid="@item.ProductId">-</span>
+                        <input class="text_box" id="@item.Id" name="" type="text" value="1" />
+                        <span class="s_right" data-pid="@item.ProductId">+</span>
                     </div>
                 </div>
             </div>
