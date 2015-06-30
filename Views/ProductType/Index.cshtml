@@ -27,7 +27,16 @@
     <link href="~/NewContent/style/ksdc2.css" rel="stylesheet" type="text/css">
     <script src="~/NewContent/js/jquery.js"></script>
     <script src="~/NewContent/js/ksdc2.js"></script>
-
+    <style type="text/css">
+        .yuan-bottom {
+            position: absolute;
+            margin-left: 58%;
+            margin-top: -20%;
+            width: 80px;
+            height: 30px;
+            text-align: right;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -53,7 +62,7 @@
             <div class="footer_left">
                 <img src="/NewContent/images/4.png" onclick="myMenu()"><span class="shu2" id="totalcount">2</span><span class="money">|　<strong id="toatalprice">45.00</strong>元</span></div>
 
-            <a href="/NewUI/ydxx.html">
+            <a  href="javascript:void(0);" onclick="myMenu()">
                 <div class="footer_right">选好了</div>
             </a>
         </div>
@@ -97,10 +106,16 @@
                 $("#left_list").html(msg);
                 orderid = $("#OrderId").val();
                 MemberCardNo = $("#MemberCardNo").val();
-                var t = $(".totalcount").val();
+
+                var t = $("#pretotalcount").val();
                 //显示用户已点菜数量
                 if (t != null || t != 0 || t != "" || t != undefined) {
                     $("#totalcount").html(t);
+                }
+                var tp = $("#pretotalprice").val();
+                //显示用户已点菜总价
+                if (tp != null || tp != 0) {
+                    $("#toatalprice").html(tp);
                 }
 
                 InitEvent();
@@ -117,10 +132,16 @@
                 $("#li" + contentId).after(msg);
                 orderid = $("#OrderId").val();
                 MemberCardNo = $("#MemberCardNo").val();
-                var t = $(".totalcount").val();
+
+                var t = $("#pretotalcount").val();
                 //显示用户已点菜数量
-                if (t != null || t != 0 || t != "" || t != undefined) {
+                if (t != null || t != 0 ) {
                     $("#totalcount").html(t);
+                }
+                var tp = $("#pretotalprice").val();
+                //显示用户已点菜总价
+                if (tp != null || tp != 0) {
+                    $("#toatalprice").html(tp);
                 }
 
                 InitEvent();
@@ -246,8 +267,6 @@
     }
 
     function count(price) {
-        console.log(price)
-        console.log($("#toatalprice").html())
         var toatalprice = parseFloat($("#toatalprice").html());
 
         $("#toatalprice").html((toatalprice + parseFloat(price)).toFixed(2));
@@ -338,6 +357,11 @@
                 if (t.val() > 1)
                     t.val(parseInt(t.val()) - 1);
                 jian($(this).data("pid"));
+            });
+
+            $(".yuan-bottom").click(function () {
+                $(".right_q").show();
+                $(this).hide();
             });
         }
     </script>

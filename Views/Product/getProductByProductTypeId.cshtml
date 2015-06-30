@@ -3,6 +3,8 @@
 
 @{
     Layout = null;
+    var totalcount = 0;
+    decimal totalprice = new decimal(0);
 }
 <!-- the content start -->
 <ul class="level2" style="display: block;">
@@ -22,11 +24,39 @@
                     <span class="img_money" id="rmb@(item.Id)" data-price="@item.Price">@(item.Price)元</span>
                     <!--加减按钮-->
                     <div class="content-z-bottom">
-                        <div class="right_q">
-                            <span class="s_left" data-pid="@item.Id">-</span>
-                            <input class="text_box" id="@item.Id" name="" type="text" value="1" />
-                            <span class="s_right" data-pid="@item.Id">+</span>
-                        </div>
+
+                        @{ bool hadOrder = false; }
+                        @if (ViewBag.MyMenuListData != null)
+                        {
+                            foreach (MyMenu item1 in ViewBag.MyMenuListData as List<MyMenu>)
+                            {
+                                totalcount = totalcount + item1.ProductCount;
+                                totalprice = totalprice + item1.ProductCount*item1.MemberPrice;
+                                if (item.Id.Equals(item1.ProductId) && item1.ProductCount>0)
+                                {
+                            <div class="right_q">
+                                <span class="s_left" data-pid="@item.Id">-</span>
+                                <input type="text" id="@item.Id" value="@item1.ProductCount" class="text_box"/>
+                                <span class="s_right" data-pid="@item.Id">+</span>
+                            </div>   
+                                        {
+                                            hadOrder = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+
+                        @if (!hadOrder)
+                        {
+                            <div class="right_q" style="display: none;">
+                                <span class="s_left" data-pid="@item.Id">-</span>
+                                <input type="text" id="@item.Id" value="1" class="text_box"/>
+                                <span class="s_right" data-pid="@item.Id">+</span>
+                            </div>  
+                            <div class="yuan-bottom" data-pid="@item.Id" style="display: block;">
+                                <img src="~/NewContent/images/yj.png" width="33" height="34"></div>
+                         }
                     </div>
                 </div>
 
@@ -36,6 +66,8 @@
 </ul>
 <input  type="hidden" value="@ViewBag.OrderId" id="OrderId"/>
 <input type="hidden" value="@ViewBag.MemberCardNo" id="MemberCardNo"/>
+<input type="hidden" value="@totalcount" id="pretotalcount"/>
+<input  type="hidden" value="@totalprice" id="pretotalprice"/>
 
 <!-- the content end -->
 
