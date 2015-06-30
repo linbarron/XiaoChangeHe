@@ -63,7 +63,7 @@
         var orderid;
         var MemberCardNo;
         var SourceAccountId = '@ViewBag.SourceAccountId';
-    var bookTime = '@ViewBag.BookTime'
+        var bookTime = '@ViewBag.BookTime'
         var Type = '@ViewBag.FastFood';
         var CompanyId = $("#CompanyId").val();
     </script>
@@ -81,51 +81,56 @@
         }
     </script>
     <script>
-    function loadContent() {
-        var TypeId = $("#left_list li:first").attr("tid");
-        var RestaurantId = $("#left_list li:first").attr("rid");
-        DisplayContent(TypeId, RestaurantId, 1);
-    }
+        function loadContent() {
+            var TypeId = $("#left_list li:first").attr("tid");
+            var RestaurantId = $("#left_list li:first").attr("rid");
+            DisplayContent(TypeId, RestaurantId, 1);
+        }
 
-    function DisplaySpecialsListContent(TypeId, RestaurantId) {
+        function DisplaySpecialsListContent(TypeId, RestaurantId) {
 
-        $("#left_list").html("");
+            $("#left_list").html("");
 
-        $.ajaxSetup({ async: false });
-        var Status = '@ViewBag.Status';
-        $.post("/Specials/RestaurantSpecials", { RestaurantId: RestaurantId, ProductTypeId: TypeId, SourceAccountId: SourceAccountId, Status: Status, Type: Type }, function (msg) {
-            $("#left_list").html(msg);
-            orderid = $("#OrderId").val();
-            MemberCardNo = $("#MemberCardNo").val();
-            var t = $(".totalcount").val();
-            //显示用户已点菜数量
-            if (t != null || t != 0 || t != "" || t != undefined) {
-                $("#totalcount").html(t);
-            }
+            $.ajaxSetup({ async: false });
+            var Status = '@ViewBag.Status';
+            $.post("/Specials/RestaurantSpecials", { RestaurantId: RestaurantId, ProductTypeId: TypeId, SourceAccountId: SourceAccountId, Status: Status, Type: Type }, function (msg) {
+                $("#left_list").html(msg);
+                orderid = $("#OrderId").val();
+                MemberCardNo = $("#MemberCardNo").val();
+                var t = $(".totalcount").val();
+                //显示用户已点菜数量
+                if (t != null || t != 0 || t != "" || t != undefined) {
+                    $("#totalcount").html(t);
+                }
 
-        });
+                InitEvent();
 
-    }
+            });
 
-    function DisplayContent(TypeId, RestaurantId, contentId) {
-        $.ajaxSetup({ async: false });
-        var Status = '@ViewBag.Status';
-        $.post("/Product/getProductByProductTypeId", { RestaurantId: RestaurantId, ProductTypeId: TypeId, SourceAccountId: SourceAccountId, Status: Status, Type: Type }, function (msg) {
-            $(".level2").html('');
-            $("#li" + contentId).after(msg);
-            orderid = $("#OrderId").val();
-            MemberCardNo = $("#MemberCardNo").val();
-            var t = $(".totalcount").val();
-            //显示用户已点菜数量
-            if (t != null || t != 0 || t != "" || t != undefined) {
-                $("#totalcount").html(t);
-            }
-        });
+        }
 
-    }
+        function DisplayContent(TypeId, RestaurantId, contentId) {
+            $.ajaxSetup({ async: false });
+            var Status = '@ViewBag.Status';
+            $.post("/Product/getProductByProductTypeId", { RestaurantId: RestaurantId, ProductTypeId: TypeId, SourceAccountId: SourceAccountId, Status: Status, Type: Type }, function (msg) {
+                $(".level2").html('');
+                $("#li" + contentId).after(msg);
+                orderid = $("#OrderId").val();
+                MemberCardNo = $("#MemberCardNo").val();
+                var t = $(".totalcount").val();
+                //显示用户已点菜数量
+                if (t != null || t != 0 || t != "" || t != undefined) {
+                    $("#totalcount").html(t);
+                }
+
+                InitEvent();
+
+            });
+
+        }
 
 
-</script>
+    </script>
 <script>
     function myMenu() {
         $.ajaxSetup({ async: false });
@@ -151,6 +156,7 @@
     }
 
     function add(id) {
+        console.log("11");
         var num = $("#" + id).val();
         $("#" + id).val(parseInt(num) + 1);
         $.ajaxSetup({ cache: false });
@@ -208,6 +214,9 @@
     }
 
     function jian(id) {
+
+        console.log("11");
+
         var num = $("#" + id).val();
         if (num > 0) {
             $("#" + id).val(parseInt(num) - 1);
@@ -331,6 +340,23 @@
 
 
 </script>
+    
+    <script type="text/javascript">
+        function InitEvent() {
+            $(".s_right").click(function () {
+                var t = $(this).siblings("input");
+                t.val(parseInt(t.val()) + 1);
+                console($(this).attr("pid"));
+            });
+
+            $(".s_left").click(function () {
+                var t = $(this).siblings("input");
+                if (t.val() > 1)
+                    t.val(parseInt(t.val()) - 1);
+                console($(this).attr("pid"));
+            });
+        }
+    </script>
 
 </body>
 </html>
