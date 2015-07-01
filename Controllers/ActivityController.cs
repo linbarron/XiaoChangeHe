@@ -12,10 +12,23 @@ namespace WitBird.XiaoChangHe.Controllers
         /// <summary>
         /// 活动列表
         /// </summary>
+        /// <param name="id">如果id不传，表示拿进行中的活动。否则，拿已经结束的活动</param>
         /// <returns></returns>
-        public ActionResult Index()
+        public ActionResult Index(string id)
         {
-            return View();
+            var state = 1;//正在进行
+            if (!string.IsNullOrEmpty(id))
+            {
+                state = 2;//已经结束
+            }
+
+            var manager = new ActivityManager();
+
+            var list = manager.GetActivityList(state);
+
+            ViewBag.State = state;
+
+            return View(list);
         }
 
         /// <summary>

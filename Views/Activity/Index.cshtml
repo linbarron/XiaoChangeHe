@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<WitBird.XiaoChangeHe.Core.Entity.Activity>
+@{
     Layout = null;
 }
 
@@ -23,11 +24,21 @@
 </head>
 <body>
     <div class="container">
+        @if (ViewBag.State == 1)//当前页面是正在进行中的活动
+        {
+            <ul>
+                <li class="bg1">进行中活动</li>
+                <li><a href="/activity/index/2">已结束活动</a></li>
+            </ul>
+        }
+        else//当前页面是已经结束的活动
+        {
+            <ul>
+                <li><a href="/activity">进行中活动</a></li>
+                <li class="bg1">已结束活动</li>
+            </ul>
+        }
         <!-- 进行中活动和已结束活动按钮-->
-        <ul>
-            <li>进行中活动</li>
-            <li class="bg1">已结束活动</li>
-        </ul>
         <!--内容区域开始-->
         <div class="content">
             <a href="../Activity/View/1">
@@ -38,29 +49,18 @@
                     <div class="zhe" style="position:relative;width:97%">亲, 熊孩子在家不？</div>
                 </div>
             </a>
-            <!-- 内容列表1 有标题 有图片 标题超出部分显示...-->
-            <div class="content-list">
-                <div class="c">召唤12对儿神仙召唤12对儿神仙召唤12对儿神仙</div>
-                <div class="content-list-img">
-                    <img src="~/NewContent/images/list1.png">
-                </div>
-            </div>
-
-            <!-- 复制测试数据 复制上面的列表1-->
-            <div class="content-list">
-                <div class="c">走，组队看小鲜肉【姜漕】去~</div>
-                <div class="content-list-img">
-                    <img src="~/NewContent/images/list2.png">
-                </div>
-            </div>
-
-            <!-- 复制测试数据 复制上面的列表1-->
-            <div class="content-list">
-                <div class="c">走，组队看小鲜肉【姜漕】去~</div>
-                <div class="content-list-img">
-                    <img src="~/NewContent/images/list3.png">
-                </div>
-            </div>
+            @if (Model != null && Model.Count > 0)
+            {
+                foreach (var activity in Model)
+                {
+                    <div class="content-list">
+                        <div class="c">@activity.Title</div>
+                        <div class="content-list-img">
+                            <img src="@activity.ImageUrl">
+                        </div>
+                    </div>
+                }
+            }
         </div>
     </div>
 </body>

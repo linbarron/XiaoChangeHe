@@ -9,6 +9,47 @@ namespace WitBird.XiaoChangeHe.Core.Dal
 {
     public class ActivityDal
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="state">1.正在进行中的。2，已经结束的</param>
+        /// <returns></returns>
+        public List<Activity> GetActivities(int state)
+        {
+            List<Activity> list = new List<Activity>();
+
+            using (var SqlConn = ConnectionProvider.GetConnection())
+            {
+                var SqlCmd = new SqlCommand();
+                SqlCmd.Connection = SqlConn;
+                SqlCmd.CommandText = @"
+select Title, ImageUrl
+from Activity
+where State = @State
+order by LastUpdatedTime desc";
+
+                SqlCmd.Parameters.AddWithValue(@"State", state);
+
+                var reader = SqlCmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    var summary = new Activity();
+
+                    if (reader["Title"] != DBNull.Value)
+                    {
+                        summary.Title = reader["Title"].ToString();
+                    }
+                    if (reader["ImageUrl"] != DBNull.Value)
+                    {
+                        summary.ImageUrl = reader["ImageUrl"].ToString();
+                    }
+
+                    list.Add(summary);
+                }
+            }
+
+            return list;
+        }
         public ActivityDetail GetActivityById(int activitytId)
         {
             ActivityDetail detail = null;

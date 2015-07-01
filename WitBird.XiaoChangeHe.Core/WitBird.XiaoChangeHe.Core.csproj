@@ -44,7 +44,7 @@
     <Compile Include="Dal\ActivityDal.cs" />
     <Compile Include="Dal\ConnectionProvider.cs" />
     <Compile Include="Dal\Entity\ActivityDetail.cs" />
-    <Compile Include="Dal\Entity\ActivityItem.cs" />
+    <Compile Include="Dal\Entity\Activity.cs" />
     <Compile Include="Dal\Entity\OrderDetails.cs" />
     <Compile Include="Dal\Entity\OrderSummary.cs" />
     <Compile Include="Dal\Entity\Product.cs" />

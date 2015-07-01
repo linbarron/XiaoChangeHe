@@ -9,6 +9,37 @@ namespace WitBird.XiaoChangeHe.Core
 {
     public class ActivityManager
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="state">1.正在进行中的。2，已经结束的</param>
+        /// <returns></returns>
+        public List<Activity> GetActivityList(int state)
+        {
+            List<Activity> activities = null;
+
+            ActivityDal activityDal = new ActivityDal();
+
+            var entities = activityDal.GetActivities(state);
+
+            if (entities != null && entities.Count > 0)
+            {
+                activities = new List<Activity>();
+
+                foreach (var entity in entities)
+                {
+                    var activity = new Activity();
+
+                    activity.Title = entity.Title;
+                    activity.ImageUrl = entity.ImageUrl;
+
+                    activities.Add(activity);
+                }
+            }
+
+            return activities;
+        }
+
         public ActivityDetail GetActivityDetailById(int id)
         {
             ActivityDetail detail = null;
