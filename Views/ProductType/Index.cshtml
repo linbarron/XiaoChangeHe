@@ -360,8 +360,22 @@
             });
 
             $(".yuan-bottom").click(function () {
-                $(".right_q").show();
+
+                console.log(this);
+
+                $(this).parent().find(".right_q").show();
                 $(this).hide();
+
+                ////用户已点菜数量
+                //var total = $("#totalcount").html();
+                //if (total > 0) {
+                //    $("#totalcount").html(parseInt(total) + 1);
+                //} else {
+                //    $("#totalcount").html(1);
+                //}
+                //var price = $("#rmb" + $(this).data("pid")).data("price");
+                //count(price);
+                add($(this).data("pid"));
             });
         }
     </script>
