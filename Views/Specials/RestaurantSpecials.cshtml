@@ -19,12 +19,12 @@
             <div class="content2">
                     <!-- 菜品图片-->
                     <div class="content_img">
-                        <img src="/Order/GetImages/@(item.Id)">
+                        <img src="/Order/GetImages/@(item.ProductId)">
                     </div>
                     <!--菜品名称-->
-                    <span class="img_title">@item.ProductName</span>
+                    <span class="img_title">@item.Product.ProductName</span>
                     <!--菜品价格-->
-                    <span class="img_money" id="rmb@(item.Id)" data-price="@item.Price">@(item.Price)元</span>
+                    <span class="img_money" id="rmb@(item.ProductId)" data-price="@item.SpecPrice">@(item.SpecPrice)元</span>
                     <!--加减按钮-->
                     <div class="content-z-bottom">
 
@@ -53,11 +53,11 @@
                         @if (!hadOrder)
                         {
                             <div class="right_q" style="display: none;">
-                                <span class="s_left" data-pid="@item.Id">-</span>
-                                <input type="text" id="@item.Id" value="1" class="text_box"/>
-                                <span class="s_right" data-pid="@item.Id">+</span>
+                                <span class="s_left" data-pid="@item.ProductId">-</span>
+                                <input type="text" id="@item.ProductId" value="1" class="text_box"/>
+                                <span class="s_right" data-pid="@item.ProductId">+</span>
                             </div>  
-                            <div class="yuan-bottom" data-pid="@item.Id" style="display: block;">
+                            <div class="yuan-bottom" data-pid="@item.ProductId" style="display: block;">
                                 <img src="~/NewContent/images/yj.png" width="33" height="34"></div>
                          }
                     </div>
