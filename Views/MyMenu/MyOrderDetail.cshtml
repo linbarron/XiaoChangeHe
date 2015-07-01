@@ -53,90 +53,91 @@
     </script>
 </head>
 <body>
-    <div class="container">
-        @if (Model != null)
+<div class="container">
+    <form method="POST" action="SubmitOrder">
+    @if (Model != null)
+    {
+
+        string orderid = "";
+        decimal totalprice = new decimal(0);
+        decimal viptotalprice = new decimal(0);
+        foreach (MyOrderDetail item in Model)
         {
 
-            string orderid = "";
-            decimal totalprice = new decimal(0);
-            decimal viptotalprice = new decimal(0);
-            foreach (MyOrderDetail item in Model)
+            if (string.IsNullOrEmpty(orderid))
             {
-
-                if (string.IsNullOrEmpty(orderid))
-                {
-                    orderid = item.OrderId.ToString();
-            <!-- 店铺名字 可点击-->
-                    <a href="~/company/Rst/@ViewBag.RestaurantId">
-                        <div class="header2">@item.RstName<span class="header_r">></span></div>
-                    </a>
-                    <!--选择用餐时间-->
-                    <div class="header3" style="position: relative;">
-                        选择用餐时间
-                        <input id="endTime"/><span class="header_r">></span>
-                    </div>
-                    <div class="header3">
-                        <span style="color: #999;">
+                orderid = item.OrderId.ToString();
+                <!-- 店铺名字 可点击-->
+                <a href="~/company/Rst/@ViewBag.RestaurantId">
+                    <div class="header2">@item.RstName<span class="header_r">></span></div>
+                </a>
+                <!--选择用餐时间-->
+                <div class="header3" style="position: relative;">
+                    选择用餐时间
+                    <input name="DiningDate" id="endTime"/><span class="header_r">></span>
+                </div>
+                <div class="header3">
+                    <span style="color: #999;">
                             <input type="text" placeholder="请输入姓名" name="ContactName" value="@item.ContactName" style="width: 24%;" /></span>
-                        <div class="sex">
-                            <input type="hidden" value="0" name="sex" />
-                            <img class="img1" src="~/NewContent/images/11.png" height="30">
-                            <img class="img2" src="~/NewContent/images/10.png" height="30">
-                        </div>
+                    <div class="sex">
+                        <input type="hidden" value="0" name="sex"/>
+                        <img class="img1" src="~/NewContent/images/11.png" height="30">
+                        <img class="img2" src="~/NewContent/images/10.png" height="30">
                     </div>
-                    <div class="header3" style="color: #999;">
-                        <input type="text" name="ContactPhone" placeholder="输入预定手机号码" />
-                    </div>
-                    <div class="header3" style="color: #999; line-height: 50px; height: 50px;">
-                        <input type="text" name="PersonCount" placeholder="填写用餐人数" /><span style="color: #000;"> 人</span>
-                    </div>
-                    <div class="huise"></div>
-                    <!--  菜品清单标题-->
-                    <div class="header3" style="font-weight: bold; margin-bottom: 10px;">
-                        <span style="color: red; font-size: 15px;">|</span> 菜品清单
-                    </div>
-            
-                    totalprice = item.total;
-                    viptotalprice = ViewBag.MemberPriceTotal;
-                }
+                </div>
+                <div class="header3" style="color: #999;">
+                    <input type="text" name="ContactPhone" placeholder="输入预定手机号码"/>
+                </div>
+                <div class="header3" style="color: #999; line-height: 50px; height: 50px;">
+                    <input type="text" name="PersonCount" placeholder="填写用餐人数"/><span style="color: #000;"> 人</span>
+                </div>
+                <div class="huise"></div>
+                <!-- 菜品清单标题-->
+                <div class="header3" style="font-weight: bold; margin-bottom: 10px;">
+                    <span style="color: red; font-size: 15px;">|</span> 菜品清单
+                </div>
 
-                if (orderid.Equals(item.OrderId.ToString()))
-                {
-                    if (item.proId != null && item.proId != new Guid("00000000-0000-0000-0000-000000000000"))
-                    {
-                        <div class="content2">
-                            <img src="/Order/GetImages/@item.proId" width="30%" height="122px">
-                            <!--菜品名字-->
-                            <span class="sz">@item.ProductName</span> <span class="xz">
-                                <!-- 菜品价格-->
-                                <span style="font-size: 18px;">@(item.UnitPrice * item.ProductCount)</span><span style="font-size: 13px;"> 元</span></span>
-                            <!--菜品数量-->
-                            <span class="xy">x@(item.ProductCount)</span>
-                        </div>
-                    }
-                }
-
+                totalprice = item.total;
+                viptotalprice = ViewBag.MemberPriceTotal;
             }
 
-            <!-- 底部遮罩层提示语-->
-            <div class="footer">
-                 @if (ViewBag.PrepayAccount == 0)
-                 {
-                     <div class="zhe"><span style="opacity: 1;">如升级为储值微会员，当前可优惠@(totalprice-viptotalprice)元且可享受 ( 充1000再送300 ) 的优惠！</span></div>
-                 }
-                <!-- 合计价格-->
-                <span class="heji">合计：@totalprice ¥</span> <a href="~/NewUI/ddxq(yfk).html">
-                    <!--确认付款按钮-->
-                    <div class="fukuan">确认付款</div>
-                </a>
-            </div>
+            if (orderid.Equals(item.OrderId.ToString()))
+            {
+                if (item.proId != null && item.proId != new Guid("00000000-0000-0000-0000-000000000000"))
+                {
+                    <div class="content2">
+                        <img src="/Order/GetImages/@item.proId" width="30%" height="122px">
+                        <!--菜品名字-->
+                        <span class="sz">@item.ProductName</span> <span class="xz">
+                                <!-- 菜品价格-->
+                                <span style="font-size: 18px;">@(item.UnitPrice*item.ProductCount)</span><span style="font-size: 13px;"> 元</span></span>
+                        <!--菜品数量-->
+                        <span class="xy">x@(item.ProductCount)</span>
+                    </div>
+                }
+            }
+
         }
 
-        <div id="datePlugin"></div>
-        <!--效果html结束-->
-        <div class="clear"></div>
-        <!-- 日期插件部分div结束，不能删哦-->
-    </div>
+        <!-- 底部遮罩层提示语-->
+        <div class="footer">
+            @if (ViewBag.PrepayAccount == 0)
+            {
+                <div class="zhe"><span style="opacity: 1;">如升级为储值微会员，当前可优惠@(totalprice - viptotalprice)元且可享受 ( 充1000再送300 ) 的优惠！</span></div>
+            }
+            <!-- 合计价格-->
+            <span class="heji">合计：@totalprice ¥</span> <a href="~/NewUI/ddxq(yfk).html">
+                <!--确认付款按钮-->
+                <div class="fukuan">确认付款</div>
+            </a>
+        </div>
+    }
+    </form>
+    <div id="datePlugin"></div>
+    <!--效果html结束-->
+    <div class="clear"></div>
+    <!-- 日期插件部分div结束，不能删哦-->
+</div>
 </body>
 
 </html>

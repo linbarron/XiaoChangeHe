@@ -157,5 +157,18 @@ namespace WitBird.XiaoChangHe.Controllers
             return View(mymenu);
         }
 
+        [HttpPost]
+        public ActionResult SubmitOrder(MyOrderDetail order)
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                
+            }
+            return View();
+        }
     }
 }
