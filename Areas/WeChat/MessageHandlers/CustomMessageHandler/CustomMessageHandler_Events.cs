@@ -58,7 +58,7 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                             Title = "小场合活动",
                             Description = "亲，熊孩子在家不？",
                             PicUrl = "http://test.xgdg.cn/Images/2.jpg",
-                            Url = string.Format("http://test.xgdg.cn/Activity/index/{0}", requestMessage.FromUserName)
+                            Url = string.Format("http://test.xgdg.cn/Activity/index")
                         });
                         strongResponseMessage.Articles.Add(new Article
                         {
