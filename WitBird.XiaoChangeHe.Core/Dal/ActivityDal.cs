@@ -23,7 +23,7 @@ namespace WitBird.XiaoChangeHe.Core.Dal
                 var SqlCmd = new SqlCommand();
                 SqlCmd.Connection = SqlConn;
                 SqlCmd.CommandText = @"
-select Title, ImageUrl
+select Id,Title, ImageUrl
 from Activity
 where State = @State
 order by LastUpdatedTime desc";
@@ -33,18 +33,20 @@ order by LastUpdatedTime desc";
                 var reader = SqlCmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    var summary = new Activity();
+                    var activity = new Activity();
+
+                    activity.Id = Convert.ToInt32(reader["Id"]);
 
                     if (reader["Title"] != DBNull.Value)
                     {
-                        summary.Title = reader["Title"].ToString();
+                        activity.Title = reader["Title"].ToString();
                     }
                     if (reader["ImageUrl"] != DBNull.Value)
                     {
-                        summary.ImageUrl = reader["ImageUrl"].ToString();
+                        activity.ImageUrl = reader["ImageUrl"].ToString();
                     }
 
-                    list.Add(summary);
+                    list.Add(activity);
                 }
             }
 

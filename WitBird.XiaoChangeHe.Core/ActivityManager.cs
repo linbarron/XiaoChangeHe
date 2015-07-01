@@ -30,6 +30,7 @@ namespace WitBird.XiaoChangeHe.Core
                 {
                     var activity = new Activity();
 
+                    activity.Id = entity.Id;
                     activity.Title = entity.Title;
                     activity.ImageUrl = entity.ImageUrl;
 
