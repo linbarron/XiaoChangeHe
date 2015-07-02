@@ -36,33 +36,42 @@
             height: 30px;
             text-align: right;
         }
+        .top_list ul li {
+  width: 49.5%;
+}
     </style>
 </head>
 <body>
     <div class="container">
-        @if (ViewBag.FirstMenus != null)
-        {
-            <div class="top_list">
-                <ul>
-                    <li class="r_bor bg1" onclick="DisplaySpecialsListContent('', '@ViewBag.RestaurantId') ">今日特价</li>
-                    @foreach (ProductType item1 in ViewBag.FirstMenus as List<ProductType>)
-                    {
-                        <li class="r_bor" onclick="DisplaySecondMenus('@item1.TypeId', '@item1.RestaurantId') ">@item1.TypeName</li>
-                        m++;
-                    }
-                </ul>
-            </div>
-    }
+        <div class="top_list">
+            <ul>
+                <li class="r_bor bg1" onclick="DisplaySpecialsListContent('', '@ViewBag.RestaurantId') ">今日特价</li>
+                <li class="r_bor" onclick="DisplaySecondMenus(1, '@ViewBag.RestaurantId') ">菜品酒水</li>
+            </ul>
+        </div>
         <div class="menu" id="menu">
-            <ul class="level1" id="left_list">
+            <ul class="level1" id="Specials_left_list">
+            </ul>
+            <ul class="level1" id="left_list" style="display: none;">
+                @if (Model != null)
+                {
+                    foreach (ProductType item in Model)
+                    {
+                    <li tid="@item.TypeId" rid="@item.RestaurantId" onclick="DisplayContent('@item.TypeId', '@item.RestaurantId',@i) " id="li@(i)">
+                        @Html.DisplayFor(modelItem => item.TypeName)
+                        <span class="shu">@i</span>
+                    </li>
+        i++;
+    }
+}
             </ul>
         </div>
 
         <div class="footer">
             <div class="footer_left">
-                <img src="/NewContent/images/4.png" onclick="myMenu()"><span class="shu2" id="totalcount">2</span><span class="money">|　<strong id="toatalprice">45.00</strong>元</span></div>
+                <img src="/NewContent/images/4.png" onclick="myOrder()"><span class="shu2" id="totalcount">2</span><span class="money">|　<strong id="toatalprice">45.00</strong>元</span></div>
 
-            <a  href="javascript:void(0);" onclick="myMenu()">
+            <a  href="javascript:void(0);" onclick="myOrder()">
                 <div class="footer_right">选好了</div>
             </a>
         </div>
@@ -82,10 +91,7 @@
             DisplaySpecialsListContent('', RestaurantId);
         });
         function DisplaySecondMenus(TypeId, RestaurantId) {
-            $.ajaxSetup({ async: false });
-            $.post("/ProductType/getSecondProductTypeByTypeId", { RestaurantId: RestaurantId, TypeId: TypeId }, function (msg) {
-                $("#left_list").html(msg);
-            });
+            $("#left_list").fadeIn(10);
             loadContent();
         }
     </script>
@@ -97,13 +103,12 @@
         }
 
         function DisplaySpecialsListContent(TypeId, RestaurantId) {
-
-            $("#left_list").html("");
-
+            $("#left_list").fadeOut(10);
+            $("#Specials_left_list").html("");
             $.ajaxSetup({ async: false });
             var Status = '@ViewBag.Status';
             $.post("/Specials/RestaurantSpecials", { RestaurantId: RestaurantId, ProductTypeId: TypeId, SourceAccountId: SourceAccountId, Status: Status, Type: Type }, function (msg) {
-                $("#left_list").html(msg);
+                $("#Specials_left_list").html(msg);
                 orderid = $("#OrderId").val();
                 MemberCardNo = $("#MemberCardNo").val();
 
