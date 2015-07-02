@@ -348,6 +348,8 @@
     <Compile Include="Models\Specials\SpecialsEntity.cs" />
     <Compile Include="Models\Specials\SpecialsModel.cs" />
     <Compile Include="Models\Specials\WeekUtil.cs" />
+    <Compile Include="Models\SubmitOrder\SubmitOrderDBModel.cs" />
+    <Compile Include="Models\SubmitOrder\SubmitOrderEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
