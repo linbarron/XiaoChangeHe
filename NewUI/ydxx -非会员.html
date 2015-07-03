@@ -1,0 +1,262 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>预定信息</title>
+
+ <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1,maximum-scale=1,initial-scale=1,user-scalable=no" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="yes" name="apple-touch-fullscreen" />
+    <meta content="telephone=no" name="format-detection" />
+    <meta content="email=no" name="format-detection" />
+    <meta content="black" name="apple-mobile-web-app-staimagess-bar-style">
+    <meta name="format-detection" content="telephone=no"> 
+    <meta name="wap-font-scale" content="no"/>
+<!--引入css和js-->
+
+<link href="css/common.css" rel="stylesheet" type="text/css" />
+ <link href="style/ydxx.css" rel="stylesheet" type="text/css">
+ 
+ <script src="js/jquery.js"></script>
+ <script src="js/ydxx.js"></script>
+<script type="text/javascript" src="js/date.js" ></script>
+<script type="text/javascript" src="js/iscroll.js" ></script>
+<!--  下面是日期插件js-->
+<script type="text/javascript">
+$(function(){
+	$('#beginTime').date();
+	$('#endTime').date({theme:"datetime"});
+
+   $(".kbtn").click(function(){
+	   
+	    $("input.kbtn").css({"background-image":"none"});
+	   });
+	$("#endTime").click(function(){
+	  $(this).css({"opacity":"1"});	
+		});
+	$("input").focus(function(){
+		   $(this).val("");
+		 }).blur(function(){
+			 if($(this).val()=="")
+			$(this).val(this.defaultValue);
+			 });	
+			 
+	$("body").click(function(){
+		 
+	var maskWidth = $(document).width();
+
+	//遮照层的高度
+	var maskHeight = $(document).height();	
+		 //浏览器纵向滚动条距离上边界的值
+	var browserScrollTop = $(window).scrollTop();
+
+	//浏览器横向滚动条距离左边界的值
+	var browserScrollLeft = $(window).scrollLeft(); 
+ $(".fukuan").click(function(){
+	 popWindow=$(".popWindow");
+	 $('.mask').fadeIn().width(maskWidth).height(maskHeight);
+	 browserWidth = $(window).width();
+	 browserHeight = $(window).height();
+	 positionLeft = browserWidth/2 - 125+browserScrollLeft;
+     positionTop = browserHeight/2 - 125+browserScrollTop;
+ popWindow.animate({
+						'left':positionLeft+'px',
+						'top':positionTop+'px'
+			},10);		
+	 popWindow.show().animate({
+						'left':positionLeft+'px',
+						'top':positionTop+'px'
+			},500);		
+	 
+	 });
+		});		
+	$(".close").click(function(){
+		$(".mask,.popWindow").fadeOut();
+		});	 
+		var zong=$(".zong").text();
+		var yue=$(".yue").text();
+   if(yue < zong){
+	  $(".buzu").show();
+	   }else{
+	  $(".buzu").hide();	
+ 
+		   }	
+   
+});
+</script>
+<style>
+.mask{
+	  height:100%;
+	  width:100%; 
+	  background:#000;
+	  position:absolute;
+	  left:0px;
+	  top:0px;
+	  opacity:0.5;
+      filter:alpha(opacity=90); /* IE */ 
+      -moz-opacity:0.9; /* Moz + FF */ 
+      display:none;
+	  z-indent:9;
+	  }
+.popWindow{
+	height:240px;
+	width:240px;
+	position:absolute;
+	left:0px;
+	top:0px;
+	background:#fff;
+	z-index:100;
+    padding-left:10px;
+	border-radius:5px 5px;
+	text-align:left;
+	display:none;
+	}	  
+.dqye{
+line-height:40px; 
+	text-align:left;
+	font-size:16px;
+	color:#ed3a2e;	
+	} 
+.yfje{
+	line-height:40px; 
+	text-align:left;
+	font-size:16px;
+	color:#666;
+	 }
+
+span.cz{
+   color:#ed3a2e;
+   font-size:16px; 
+	 }	 
+span.buzu{
+   color:#ed3a2e;
+   font-size:16px; 
+	 }		 
+ .yfje span.yue{
+   color:#333;
+   font-size:16px; 
+	 }	 
+.dqye{
+  margin-top:30px;	
+	}	 
+.liji{
+	height:30px;
+	width:100px;
+	border-radius:5px 5px;
+	background:#ed3a2e;
+	float:left;
+	margin-left:20px;
+	text-align:center;
+	color:#fff;
+	line-height:30px;
+	margin-top:10px;
+	} 
+.zhifu{
+	height:30px;
+	width:100px;
+	border-radius:5px 5px;
+	background:#38b324;
+	float:left;
+	line-height:30px;
+	color:#fff;
+	margin-left:10px;
+	text-align:center;
+	margin-top:10px;
+	}	
+.close{
+ height:20px;
+ width:20px;
+background:url(images/cha.png);
+background-size:100% 100%;
+ position:absolute;	
+ top:2px;
+ right:2px;
+	}
+.sm{
+ color:#248be1;
+ margin-top:10px;
+ line-height:20px;
+	}	
+.sm span{
+ color:	#ed3a2e;
+	}	
+</style>
+</head>
+  <div class="mask"></div>
+   <div class="popWindow hide">
+		 <div class="dqye">原价:<span class="zong">72.00</span></div>
+         
+         <div class="yfje">账户余额：<span class="yue">52.00</span>　<span class="buzu">余额不足</span></div>
+         <div class="yfje">微信支付金额：<span class="weixin">0.00</span></div>
+         <span class="sm">如升级为储值会员，当前可优惠<span>11.00</span>并可享受充<span>1000</span>送<span>300</span>的优惠。</span>
+         <div class="liji">立即充值</div><div class="zhifu">确认支付</div>
+         <div class="close"></div>
+	</div>
+    
+<div class="container">
+  <!-- 店铺名字 可点击-->
+ <a href="index2.html"> <div class="header2">成都铁狮门晶融汇店<span class="header_r">></span></div></a>
+    <!--选择用餐时间-->
+   <div class="header3">选择用餐时间<input id="endTime"  type="text"/><span class="header_r">></span></div>
+    <div class="header3"><span style="color:#999;"><input type="text" placeholder="请输入姓名" style="width:24%;"/></span>
+   <div class="sex"><img class="img1" src="images/11.png" height="30">　<img class="img2" src="images/10.png" height="30"> </div>
+    </div>
+
+  <div class="header3" style="color:#999;"><input type="text" placeholder="输入预定手机号码"/></div>
+  <div class="header3" style="color:#999;line-height:50px;height:50px;"><input type="text"  placeholder="填写用餐人数"/><span style="color:#000;"> 人</span></div>
+   <div class="huise"></div>
+  <!--  菜品清单标题-->
+  <div class="header3" style="font-weight:bold;margin-bottom:10px;"><span style="color:red;font-size:15px;">|</span> 菜品清单</div>
+   <!--  菜品区域开始-->
+    <!--菜品图片-->
+   <div class="content2"><img src="images/11 (2).png" width="30%">
+    <!--菜品名字-->
+   <span class="sz">绝味鲜椒蹄花</span> <span class="xz">
+   <!-- 菜品价格-->
+   <span style="font-size:18px;">25.00</span><span style="font-size:13px;"> 元</span></span> 
+     <!--菜品数量-->
+   <span class="xy"> x1</span></div>
+    <!--菜品区域结束-->
+    
+   <!--  以下为复制的测试数据， 同上 -->
+    <div class="content2"><img src="images/11 (2).png" width="30%"><span class="sz">绝味鲜椒蹄花</span> <span class="xz"><span style="font-size:18px;">25.00</span><span style="font-size:13px;"> 元</span></span> <span class="xy"> x1</span></div>
+     
+     <!--  以下为复制的测试数据， 同上 -->
+     <div class="content2"><img src="images/11 (2).png" width="30%"><span class="sz">绝味鲜椒蹄花</span> <span class="xz"><span style="font-size:18px;">25.00</span><span style="font-size:13px;"> 元</span></span> <span class="xy"> x1</span></div>
+     
+     <!--  以下为复制的测试数据， 同上 -->
+    <div class="content2"><img src="images/11 (2).png" width="30%"><span class="sz">绝味鲜椒蹄花</span> <span class="xz"><span style="font-size:18px;">25.00</span><span style="font-size:13px;"> 元</span></span> <span class="xy"> x1</span></div>
+   
+  <!-- 底部遮罩层提示语-->
+    <div class="footer">  <div class="zhe"><span style="opacity:1;">如升级为储值微会员，当前可优惠30元且可享受 ( 充1000再送300 ) 的优惠！</span></div>
+     <!-- 合计价格-->
+    <span class="heji">合计：238 ¥</span>
+    <!--确认付款按钮-->
+    <div class="fukuan">确认付款</div></div>
+    
+    
+   <!-- 日期插件部分div开始，不能删哦-->
+<div id="datePlugin"></div>
+<!--效果html结束-->
+<div class="clear"></div>
+</div>
+ 
+</div>
+    
+</div>
+<div id="datePlugin"></div>
+<!--效果html结束-->
+<div class="clear"></div>
+  <!-- 日期插件部分div结束，不能删哦-->
+</body>
+</html>
+
+
+
+
+
+
+
+
+

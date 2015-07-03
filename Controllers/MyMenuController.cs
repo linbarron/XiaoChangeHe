@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using WitBird.XiaoChangHe.Models;
 using WitBird.XiaoChangHe.Models.Info;
+using WitBird.XiaoChangHe.Models.SubmitOrder;
+
 namespace WitBird.XiaoChangHe.Controllers
 {
     public class MyMenuController : Controller
@@ -158,17 +160,24 @@ namespace WitBird.XiaoChangHe.Controllers
         }
 
         [HttpPost]
-        public ActionResult SubmitOrder(MyOrderDetail order)
+        public JsonResult SubmitOrder(SubmitOrderEntity order)
         {
+            string msg = string.Empty;
             try
             {
-
+                var currentUser = Session["CrmMember"] as CrmMember;
+                CrmMemberModel cdb1 = new CrmMemberModel();
+                decimal dec = cdb1.getPrepayAccount(currentUser.Uid).First().AccountMoney;
+                if (!SubmitOrderDBModel.UpdateOrderInfo(order))
+                {
+                    msg = "提交订单失败！";
+                }
             }
             catch (Exception ex)
             {
-                
+                msg = "出错了！";
             }
-            return View();
+            return Json(msg);
         }
     }
 }
