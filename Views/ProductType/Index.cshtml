@@ -236,8 +236,9 @@
         $.ajaxSetup({ cache: false });
         var num1 = $("#" + id).val();
         if (num1 == 0) {
-            $("#" + id).css("display", "none");
-            $("#" + "pic" + id).css("display", "none");
+            $("#" + id).val(0);
+            $("#" + id).parent().hide();
+            $("#" + id).parent().parent().find(".yuan-bottom").show();
         }
         //用户已点菜数量
         var total = $("#totalcount").html();
@@ -371,15 +372,6 @@
                 $(this).parent().find(".right_q").show();
                 $(this).hide();
 
-                ////用户已点菜数量
-                //var total = $("#totalcount").html();
-                //if (total > 0) {
-                //    $("#totalcount").html(parseInt(total) + 1);
-                //} else {
-                //    $("#totalcount").html(1);
-                //}
-                //var price = $("#rmb" + $(this).data("pid")).data("price");
-                //count(price);
                 add($(this).data("pid"));
             });
         }
