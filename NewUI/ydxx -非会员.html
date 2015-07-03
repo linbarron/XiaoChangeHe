@@ -42,46 +42,48 @@ $(function(){
 			$(this).val(this.defaultValue);
 			 });	
 			 
-	$("body").click(function(){
-		 
-	var maskWidth = $(document).width();
+	$("body").click(function () {
 
-	//遮照层的高度
-	var maskHeight = $(document).height();	
-		 //浏览器纵向滚动条距离上边界的值
-	var browserScrollTop = $(window).scrollTop();
+	    var maskWidth = $(document).width();
 
-	//浏览器横向滚动条距离左边界的值
-	var browserScrollLeft = $(window).scrollLeft(); 
- $(".fukuan").click(function(){
-	 popWindow=$(".popWindow");
-	 $('.mask').fadeIn().width(maskWidth).height(maskHeight);
-	 browserWidth = $(window).width();
-	 browserHeight = $(window).height();
-	 positionLeft = browserWidth/2 - 125+browserScrollLeft;
-     positionTop = browserHeight/2 - 125+browserScrollTop;
- popWindow.animate({
-						'left':positionLeft+'px',
-						'top':positionTop+'px'
-			},10);		
-	 popWindow.show().animate({
-						'left':positionLeft+'px',
-						'top':positionTop+'px'
-			},500);		
-	 
-	 });
-		});		
-	$(".close").click(function(){
-		$(".mask,.popWindow").fadeOut();
-		});	 
-		var zong=$(".zong").text();
-		var yue=$(".yue").text();
-   if(yue < zong){
-	  $(".buzu").show();
-	   }else{
-	  $(".buzu").hide();	
- 
-		   }	
+	    //遮照层的高度
+	    var maskHeight = $(document).height();
+	    //浏览器纵向滚动条距离上边界的值
+	    var browserScrollTop = $(window).scrollTop();
+
+	    //浏览器横向滚动条距离左边界的值
+	    var browserScrollLeft = $(window).scrollLeft();
+	    $(".fukuan").click(function () {
+	        popWindow = $(".popWindow");
+	        $('.mask').fadeIn().width(maskWidth).height(maskHeight);
+	        browserWidth = $(window).width();
+	        browserHeight = $(window).height();
+	        positionLeft = browserWidth / 2 - 125 + browserScrollLeft;
+	        positionTop = browserHeight / 2 - 125 + browserScrollTop;
+	        popWindow.animate({
+	            'left': positionLeft + 'px',
+	            'top': positionTop + 'px'
+	        }, 10);
+	        popWindow.show().animate({
+	            'left': positionLeft + 'px',
+	            'top': positionTop + 'px'
+	        }, 500);
+
+	    });
+	});
+
+	$(".close").click(function () {
+	    $(".mask,.popWindow").fadeOut();
+	});
+
+	var zong = $(".zong").text();
+	var yue = $(".yue").text();
+	if (yue < zong) {
+	    $(".buzu").show();
+	} else {
+	    $(".buzu").hide();
+
+	}
    
 });
 </script>
