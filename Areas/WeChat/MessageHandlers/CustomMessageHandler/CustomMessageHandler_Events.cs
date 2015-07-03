@@ -87,22 +87,28 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                 case "AccountInfoClick":
                     {
                         var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
-                        string msg = string.Empty;
+                        string uid = string.Empty;
+                        string picUrl = "http://test.xgdg.cn/newcontent/images/w.jpg"; ;
                         try
                         {
                             CrmMemberModel model = new CrmMemberModel();
-                            msg = model.getCrmMemberListInfoData(requestMessage.FromUserName).FirstOrDefault().Uid;
+                            uid = model.getCrmMemberListInfoData(requestMessage.FromUserName).FirstOrDefault().Uid;
+                            var prepayAccount = model.getPrepayAccount(uid).FirstOrDefault();
+                            if (prepayAccount != null && prepayAccount.AccountMoney > 0)
+                            {
+                                picUrl = "http://test.xgdg.cn/newcontent/images/chu.jpg";
+                            }
                         }
                         catch (Exception ex)
                         {
                             LogException(ex);
-                            msg = ex.StackTrace;
+                            uid = ex.StackTrace;
                         }
                         strongResponseMessage.Articles.Add(new Article
                         {
                             Title = "会员信息",
-                            Description = "您的会员号：" + msg,
-                            PicUrl = ImgUrl + "wxmembercard_h.png",
+                            Description = "您的会员号：" + uid,
+                            PicUrl = picUrl,
                             Url = string.Format("http://test.xgdg.cn/Member/Info/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}", requestMessage.FromUserName)
                         });
                         reponseMessage = strongResponseMessage;

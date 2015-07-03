@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using WitBird.XiaoChangHe.Models;
@@ -112,7 +113,6 @@ namespace WitBird.XiaoChangHe.Controllers
             List<PrepayRecord> p = null;
             try
             {
-
                 CrmMemberModel cmm = new CrmMemberModel();
                 List<CrmMember> crm = cmm.getCrmMemberListInfoData(name);
                 ViewBag.PrepayAccount = 0;

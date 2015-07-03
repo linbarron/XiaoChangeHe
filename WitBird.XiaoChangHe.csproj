@@ -646,6 +646,7 @@
     <Content Include="NewContent\images\touxiang_name.png" />
     <Content Include="NewContent\images\tuji.jpg" />
     <Content Include="NewContent\images\vip.png" />
+    <Content Include="NewContent\images\w.png" />
     <Content Include="NewContent\images\wpt.JPG" />
     <Content Include="NewContent\images\wujiang1.png" />
     <Content Include="NewContent\images\wujiang2.png" />
