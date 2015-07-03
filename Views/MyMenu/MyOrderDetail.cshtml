@@ -194,7 +194,7 @@
         .close {
             height: 20px;
             width: 20px;
-            background: url(images/cha.png);
+            background: url(/NewContent/images/cha.png);
             background-size: 100% 100%;
             position: absolute;
             top: 2px;
@@ -278,7 +278,10 @@
 
                     <!-- 底部遮罩层提示语-->
                     <div class="footer">
-                        <div class="zhe"><span style="opacity:1;">如升级为储值微会员，当前可优惠@(totalprice - viptotalprice)元且可享受 ( 充1000再送300 ) 的优惠！</span></div>
+                         @if (PrepayAccount == 0)
+                         {
+                        <div class="zhe"><span style="opacity: 1;">如升级为储值微会员，当前可优惠@(totalprice - viptotalprice)元且可享受 ( 充1000再送300 ) 的优惠！</span></div>
+                         }
                         <!-- 合计价格-->
                         <span class="heji">合计：@totalprice ¥</span> 
                         <div class="fukuan">确认付款</div>
