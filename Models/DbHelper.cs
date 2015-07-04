@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
 using Microsoft.Practices.EnterpriseLibrary.Data;
+using System.Data;
 
 namespace WitBird.XiaoChangHe.Models
 {
@@ -42,6 +43,14 @@ namespace WitBird.XiaoChangHe.Models
                 throw ex;
             }
             return result;
+        }
+    }
+
+    public static class ExtensionMethod
+    {
+        public static T TryGetValue<T>(this IDataReader reader, string parameterName, T defaultValue)
+        {
+            return reader[parameterName] != DBNull.Value ? (T)(reader[parameterName]) : defaultValue;
         }
     }
 }

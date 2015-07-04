@@ -132,7 +132,9 @@
         function DisplayContent(TypeId, RestaurantId, contentId) {
             $.ajaxSetup({ async: false });
             var Status = '@ViewBag.Status';
-            $.post("/Product/getProductByProductTypeId", { RestaurantId: RestaurantId, ProductTypeId: TypeId, SourceAccountId: SourceAccountId, Status: Status, Type: Type }, function (msg) {
+            $.post("/Product/getProductByProductTypeId",
+                { RestaurantId: RestaurantId, ProductTypeId: TypeId, SourceAccountId: SourceAccountId, Status: Status, Type: Type },
+                function (msg) {
                 $(".level2").html('');
                 $("#li" + contentId).after(msg);
                 orderid = $("#OrderId").val();

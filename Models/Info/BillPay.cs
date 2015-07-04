@@ -7,7 +7,10 @@ namespace WitBird.XiaoChangHe.Models.Info
 {
     public class BillPay
     {
-        public string PayId { get; set; }
+        /// <summary>
+        /// 支付ID
+        /// </summary>
+        public Guid PayId { get; set; }
         public decimal Receivable { get; set; }
         public decimal PaidIn { get; set; }
         public decimal Change { get; set; }
@@ -20,9 +23,13 @@ namespace WitBird.XiaoChangHe.Models.Info
         public string CouponsNo { get; set; }
         public string Remark { get; set; }
         public string PayState { get; set; }
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
         public string UserName { get; set; }
         public DateTime CreateDate { get; set; }
+
+        public decimal Discount { get; set; }
+
+        public Guid RstId { get; set; }
 
     }
 }

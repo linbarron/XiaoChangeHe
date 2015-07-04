@@ -45,16 +45,25 @@ namespace WitBird.XiaoChangHe.Models.Info
         ///</summary>
         public string UserId { get; set; }
         ///<summary>
-        ///客户端提交的流水号
+        ///客户端提交的流水号, 订单编号
         ///</summary>
         public string SId { get; set; }
         ///<summary>
-        ///
+        ///支付编号
         ///</summary>
-        public Guid BillPayId { get; set; }
+        public Guid? BillPayId { get; set; }
         ///<summary>
         ///
         ///</summary>
-        public Guid RstId { get; set; }
+        public Guid? RstId { get; set; }
+
+        public int? ScoreVip { get; set; }
+
+        public int? PayByScore { get; set; }
+
+        public string RState { get; set; }
+        public DateTime? AsureDate { get; set; }
+        public decimal? RecMoney { get; set; }
+        public decimal? DiscountlMoeny { get; set; }
     }
 }

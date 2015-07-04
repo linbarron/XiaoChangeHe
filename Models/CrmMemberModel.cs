@@ -197,7 +197,7 @@ a.Password,a.Idcard,a.Birthday,a.TypeId,a.RegDate,a.ExpiredDate,a.UseState,a.Sex
 
                     #endregion
 
-                    #region Add PrepayAccount
+                    #region Add CrmMemberScore
 
                     CrmMemberScore scroe = new CrmMemberScore()
                     {

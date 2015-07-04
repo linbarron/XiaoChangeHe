@@ -29,6 +29,9 @@ namespace WitBird.XiaoChangHe.Models
             #endregion
 
         }
+
+        #endregion
+
         public List<PrepayRecord> getConsumptionRecordsListInfoData(string Uid)
         {
             List<PrepayRecord> list = null;
@@ -40,8 +43,8 @@ namespace WitBird.XiaoChangHe.Models
                 }
                 IParameterMapper ipmapper = new getPrepayRecordListInfoDataParameterMapper();
                 DataAccessor<PrepayRecord> tableAccessor;
-//                string strSql = @"select p.AddMoney,p.BillPayId,p.PayModel,p.PrepayDate,p.PrepayMoney,p.PresentMoney,p.PromotionId,p.RecordId,p.RstId,p.SId,p.Uid,p.UserId 
-//                                from PrepayRecord p where p.Uid=@Uid and  p.PrepayMoney<0  and p.PrepayDate between  dateadd (MM,-1,GETDATE()) and   getdate() order by p.PrepayDate desc";
+                //                string strSql = @"select p.AddMoney,p.BillPayId,p.PayModel,p.PrepayDate,p.PrepayMoney,p.PresentMoney,p.PromotionId,p.RecordId,p.RstId,p.SId,p.Uid,p.UserId 
+                //                                from PrepayRecord p where p.Uid=@Uid and  p.PrepayMoney<0  and p.PrepayDate between  dateadd (MM,-1,GETDATE()) and   getdate() order by p.PrepayDate desc";
 
                 string strSql = @"select top 10 p.AddMoney,p.BillPayId,p.PayModel,p.PrepayDate,p.PrepayMoney,p.PresentMoney,p.PromotionId,p.RecordId,p.RstId,p.SId,p.Uid,p.UserId 
                                 from PrepayRecord p where p.Uid=@Uid and  p.PrepayMoney<0 order by p.PrepayDate desc";
@@ -57,7 +60,7 @@ namespace WitBird.XiaoChangHe.Models
                      .Map(t => t.UserId).ToColumn("UserId")
                      .Map(t => t.BillPayId).ToColumn("BillPayId")
                      .Map(t => t.RstId).ToColumn("RstId")
-                     .Map(t => t.SId).ToColumn("SId") 
+                     .Map(t => t.SId).ToColumn("SId")
                     .Build());
                 list = tableAccessor.Execute(new string[] { Uid }).ToList();
                 return list;
@@ -68,7 +71,7 @@ namespace WitBird.XiaoChangHe.Models
                 return null;
             }
         }
-        #endregion
+
 
 
         public List<PrepayRecord> getRechargeRecordListInfoData(string Uid)
@@ -110,6 +113,81 @@ namespace WitBird.XiaoChangHe.Models
                 return null;
             }
         }
-        
+
+        public bool AddPrepayRecord(PrepayRecord prepayRecord)
+        {
+            bool result = false;
+
+            try
+            {
+                DbCommand cmd = null;
+                string sql = @"
+                INSERT INTO [CrmRstCloud].[dbo].[PrepayRecord]
+                           ([Uid]
+                           ,[PrepayMoney]
+                           ,[PresentMoney]
+                           ,[AddMoney]
+                           ,[PrepayDate]
+                           ,[PromotionId]
+                           ,[PayModel]
+                           ,[UserId]
+                           ,[SId]
+                           ,[BillPayId]
+                           ,[RstId]
+                           ,[ScoreVip]
+                           ,[PayByScore]
+                           ,[RState]
+                           ,[AsureDate]
+                           ,[RecMoney]
+                           ,[DiscountlMoeny])
+                     VALUES
+                           (@Uid
+                           ,@PrepayMoney
+                           ,@PresentMoney
+                           ,@AddMoney
+                           ,@PrepayDate
+                           ,@PromotionId
+                           ,@PayModel
+                           ,@UserId
+                           ,@SId
+                           ,@BillPayId
+                           ,@RstId
+                           ,@ScoreVip
+                           ,@PayByScore
+                           ,@RState
+                           ,@AsureDate
+                           ,@RecMoney
+                           ,@DiscountlMoeny)
+                ";
+
+                cmd = db.GetSqlStringCommand(sql);
+
+                db.AddInParameter(cmd, "Uid", DbType.String, prepayRecord.Uid);
+                db.AddInParameter(cmd, "PrepayMoney", DbType.Decimal, prepayRecord.PrepayMoney);
+                db.AddInParameter(cmd, "PresentMoney", DbType.Decimal, prepayRecord.PresentMoney);
+                db.AddInParameter(cmd, "AddMoney", DbType.Decimal, prepayRecord.AddMoney);
+                db.AddInParameter(cmd, "PrepayDate", DbType.DateTime, prepayRecord.PrepayDate);
+                db.AddInParameter(cmd, "PromotionId", DbType.Int32, prepayRecord.PromotionId);
+                db.AddInParameter(cmd, "PayModel", DbType.String, prepayRecord.PayModel);
+                db.AddInParameter(cmd, "UserId", DbType.String, prepayRecord.UserId);
+                db.AddInParameter(cmd, "SId", DbType.String, prepayRecord.SId);
+                db.AddInParameter(cmd, "BillPayId", DbType.Guid, prepayRecord.BillPayId);
+                db.AddInParameter(cmd, "RstId", DbType.Guid, prepayRecord.RstId);
+                db.AddInParameter(cmd, "ScoreVip", DbType.Int32, prepayRecord.ScoreVip);
+                db.AddInParameter(cmd, "PayByScore", DbType.Int32, prepayRecord.PayByScore);
+                db.AddInParameter(cmd, "RState", DbType.String, prepayRecord.RState);
+                db.AddInParameter(cmd, "AsureDate", DbType.DateTime, prepayRecord.AsureDate);
+                db.AddInParameter(cmd, "RecMoney", DbType.Decimal, prepayRecord.RecMoney);
+                db.AddInParameter(cmd, "DiscountlMoeny", DbType.Decimal, prepayRecord.DiscountlMoeny);
+
+                result = ExecSql(cmd) > 0;
+            }
+            catch
+            {
+
+            }
+
+            return result;
+        }
     }
 }
