@@ -231,7 +231,7 @@
                             <!--选择用餐时间-->
                             <div class="header3" style="position: relative;">
                                 选择用餐时间
-                                <input id="DiningDate" id="endTime"/><span class="header_r">></span>
+                                <input id="endTime"/><span class="header_r">></span>
                             </div>
                             <div class="header3">
                                 <span style="color: #999;">
@@ -322,7 +322,7 @@
         <script type="text/javascript">
             function SubmitOrder() {
                 $.post("SubmitOrder", {
-                    DiningDate: $("#DiningDate").val(),
+                    DiningDate: $("#endTime").val(),
                     ContactName: $("#ContactName").val(),
                     ContactPhone: $("#ContactPhone").val(),
                     PersonCount: $("#PersonCount").val(),
