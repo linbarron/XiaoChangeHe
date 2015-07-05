@@ -33,6 +33,7 @@ namespace WitBird.XiaoChangeHe.Core
                     activity.Id = entity.Id;
                     activity.Title = entity.Title;
                     activity.ImageUrl = entity.ImageUrl;
+                    activity.Description = entity.Description;
 
                     activities.Add(activity);
                 }

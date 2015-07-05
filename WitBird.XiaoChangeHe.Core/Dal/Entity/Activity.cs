@@ -12,5 +12,7 @@ namespace WitBird.XiaoChangeHe.Core.Dal.Entity
         public string Title { get; set; }
 
         public string ImageUrl { get; set; }
+
+        public string Description { get; set; }
     }
 }
