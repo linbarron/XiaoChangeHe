@@ -23,7 +23,7 @@ namespace WitBird.XiaoChangeHe.Core.Dal
                 var SqlCmd = new SqlCommand();
                 SqlCmd.Connection = SqlConn;
                 SqlCmd.CommandText = @"
-select Id,Title, ImageUrl
+select Id,Title, ImageUrl,Description
 from Activity
 where State = @State
 order by LastUpdatedTime desc";
