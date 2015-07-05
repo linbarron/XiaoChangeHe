@@ -10,6 +10,7 @@ using Senparc.Weixin.MP.Helpers;
 using Senparc.Weixin.MP.MessageHandlers;
 using WitBird.XiaoChangHe.Areas.WeChat.Utilities;
 using WitBird.XiaoChangHe.Models;
+using WitBird.XiaoChangeHe.Core;
 
 namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
 {
@@ -53,34 +54,32 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                 case "ActivityClick":
                     {
                         var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
-                        strongResponseMessage.Articles.Add(new Article
+
+                        ActivityManager manager = new ActivityManager();
+
+                        var list = manager.GetActivityList(1);
+                        if (list != null && list.Count > 0)
                         {
-                            Title = "小场合活动",
-                            Description = "亲，熊孩子在家不？",
-                            PicUrl = "http://test.xgdg.cn/Images/2.jpg",
-                            Url = string.Format("http://test.xgdg.cn/Activity/index")
-                        });
-                        strongResponseMessage.Articles.Add(new Article
+                            foreach (var activity in list)
+                            {
+                                Article article = new Article();
+
+                                article.Title = activity.Title;
+                                article.Description = activity.Description;
+                                article.PicUrl = activity.ImageUrl;
+                                article.Url = string.Format("http://test.xgdg.cn/Activity/{0}", activity.Id);
+
+                                strongResponseMessage.Articles.Add(article);
+                            }
+                        }
+                        else
                         {
-                            Title = "召唤12对情侣",
-                            Description = "召唤12对情侣",
-                            PicUrl = "http://test.xgdg.cn/Images/1.jpg",
-                            Url = string.Format("http://test.xgdg.cn/Activity/index/{0}", requestMessage.FromUserName)
-                        });
-                        strongResponseMessage.Articles.Add(new Article
-                        {
-                            Title = "组队看小鲜肉",
-                            Description = "组队看小鲜肉",
-                            PicUrl = "http://test.xgdg.cn/Images/3.jpg",
-                            Url = string.Format("http://test.xgdg.cn/Activity/index/{0}", requestMessage.FromUserName)
-                        });
-                        strongResponseMessage.Articles.Add(new Article
-                        {
-                            Title = "缤纷微影。。",
-                            Description = "缤纷微影。。",
-                            PicUrl = "http://test.xgdg.cn/Images/4.jpg",
-                            Url = string.Format("http://test.xgdg.cn/Activity/index/{0}", requestMessage.FromUserName)
-                        });
+                            strongResponseMessage.Articles.Add(new Article
+                            {
+                                Title = "暂无活动"
+                            });
+                        }
+
                         reponseMessage = strongResponseMessage;
                     }
                     break;

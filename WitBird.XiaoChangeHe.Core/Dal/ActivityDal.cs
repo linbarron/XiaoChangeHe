@@ -45,6 +45,10 @@ order by LastUpdatedTime desc";
                     {
                         activity.ImageUrl = reader["ImageUrl"].ToString();
                     }
+                    if (reader["Description"] != DBNull.Value)
+                    {
+                        activity.Description = reader["Description"].ToString();
+                    }
 
                     list.Add(activity);
                 }
