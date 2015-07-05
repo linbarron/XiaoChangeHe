@@ -50,7 +50,19 @@ namespace WitBird.XiaoChangHe.Models
     {
         public static T TryGetValue<T>(this IDataReader reader, string parameterName, T defaultValue)
         {
-            return reader[parameterName] != DBNull.Value ? (T)(reader[parameterName]) : defaultValue;
+            T returnValue = defaultValue;
+
+            try
+            {
+                returnValue = (T)(reader[parameterName]);
+            }
+            catch(Exception innerEx)
+            {
+                Exception ex = new Exception("参数转换错误，参数名：" + parameterName, innerEx);
+                throw ex;
+            }
+
+            return returnValue;
         }
     }
 }

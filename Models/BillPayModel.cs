@@ -22,10 +22,10 @@ namespace WitBird.XiaoChangHe.Models
 
             try
             {
-                string sql = @"select * from BillPay where PayId=@PayId";
+                string sql = @"select top 1 * from BillPay where PayId = @PayId";
                 DbCommand cmd = db.GetSqlStringCommand(sql);
 
-                db.AddInParameter(cmd, "PayId", DbType.String, payId.ToString());
+                db.AddInParameter(cmd, "PayId", DbType.Guid, payId);
 
                 var reader = db.ExecuteReader(cmd);
 
@@ -34,29 +34,29 @@ namespace WitBird.XiaoChangHe.Models
                     billPay = new BillPay()
                     {
                         PayId = payId,
-                        Cash = reader.TryGetValue("Cash", 0),
-                        Change = reader.TryGetValue("Change", 0),
-                        Coupons = reader.TryGetValue("Change", 0),
+                        Cash = reader.TryGetValue("Cash", 0m),
+                        Change = reader.TryGetValue("Change", 0m),
+                        Coupons = reader.TryGetValue("Change", 0m),
                         CouponsNo = reader.TryGetValue("Change", ""),
                         CreateDate = reader.TryGetValue("Change", DateTime.Now),
-                        CreditCard = reader.TryGetValue("Change", 0),
-                        MemberCard = reader.TryGetValue("Change", 0),
+                        CreditCard = reader.TryGetValue("Change", 0m),
+                        MemberCard = reader.TryGetValue("Change", 0m),
                         MemberCardNo = reader.TryGetValue("Change", ""),
-                        PaidIn = reader.TryGetValue("Change", 0),
+                        PaidIn = reader.TryGetValue("Change", 0m),
                         PayState = reader.TryGetValue("Change", BillPayState.NotPaid),
-                        Receivable = reader.TryGetValue("Change", 0),
+                        Receivable = reader.TryGetValue("Change", 0m),
                         Remark = reader.TryGetValue("Change", ""),
-                        Remove = reader.TryGetValue("Change", 0),
+                        Remove = reader.TryGetValue("Change", 0m),
                         UserId = reader.TryGetValue("Change", Guid.Empty),
                         UserName = reader.TryGetValue("Change", ""),
                         RstId = reader.TryGetValue("RstId", Guid.Empty),
-                        Discount = reader.TryGetValue("Discount", 0)
+                        Discount = reader.TryGetValue("Discount", 0m)
                     };
                 }
             }
             catch
             {
-
+                throw;
             }
 
             return billPay;
@@ -147,18 +147,20 @@ namespace WitBird.XiaoChangHe.Models
             return result;
         }
 
-        public bool UpdateBillStateAsPaid(Guid billPayId)
+        public bool UpdateBillStateAsPaid(Guid billPayId, string payTransactionId)
         {
             bool result = false;
 
             try
             {
                 DbCommand cmd = null;
-                string sql = @"UPDATE [CrmRstCloud].[dbo].[BillPay] SET PayState = @PayState WHERE PayId = @PayId;";
+                string remark = "微信支付订单流水号： " + payTransactionId;
+                string sql = @"UPDATE [CrmRstCloud].[dbo].[BillPay] SET PayState = @PayState, Remark = Remark+@Remark WHERE PayId = @PayId;";
 
                 cmd = db.GetSqlStringCommand(sql);
 
                 db.AddInParameter(cmd, "PayState", DbType.String, BillPayState.Paid);
+                db.AddInParameter(cmd, "Remark", DbType.String, remark);
                 db.AddInParameter(cmd, "PayId", DbType.Guid, billPayId);
 
                 result = ExecSql(cmd) > 0;

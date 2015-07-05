@@ -37,7 +37,6 @@ namespace WitBird.XiaoChangHe.Models.Info
         public int? PromotionId { get; set; }
         ///<summary>
         ///代码（moneypaymodelcode):00现金01刷卡02微信支付03支付宝
-
         ///</summary>
         public string PayModel { get; set; }
         ///<summary>

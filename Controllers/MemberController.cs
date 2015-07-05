@@ -8,7 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml.Linq;
@@ -178,14 +180,6 @@ namespace WitBird.XiaoChangHe.Controllers
 
 
         private static TenPayV3Info _tenPayV3Info;
-
-        private static bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
-        {
-            if (errors == SslPolicyErrors.None)
-                return true;
-            return false;
-        }
-
         public static TenPayV3Info TenPayV3Info
         {
             get
@@ -201,8 +195,7 @@ namespace WitBird.XiaoChangHe.Controllers
 
         public ActionResult PreRecharge(string id, string name)
         {
-            Session["SourceAccountId"] = name;
-            var returnUrl = string.Format("http://test.xgdg.cn/member/recharge");
+            var returnUrl = string.Format("http://test.xgdg.cn/member/recharge?name=" + name + "&showwxpaytitle=1");
             var state = "";
             var url = OAuthApi.GetAuthorizeUrl(TenPayV3Info.AppId, returnUrl, state, OAuthScope.snsapi_userinfo);
 
@@ -215,13 +208,13 @@ namespace WitBird.XiaoChangHe.Controllers
         /// <param name="id">Commpany id.</param>
         /// <param name="name">SourceAccountId, corresponding to wechat unique name.</param>
         /// <returns></returns>
-        public ActionResult Recharge(string code, string state)
+        public ActionResult Recharge(string code, string state, string name)
         {
             CrmMember crmMember = null;
 
             try
             {
-                string name = Session["SourceAccountId"].ToString();
+                //string name = Session["SourceAccountId"].ToString();
                 if (!string.IsNullOrEmpty(name))
                 {
                     CrmMemberModel cdb = new CrmMemberModel();
@@ -243,6 +236,8 @@ namespace WitBird.XiaoChangHe.Controllers
                         ViewBag.Code = code;
                         ViewBag.State = state;
                         ViewBag.Uid = crmMember.Uid;
+                        ViewBag.SourceAccountId = name;
+                        ViewBag.CompanyId = Constants.CompanyId;
                     }
                 }
             }
@@ -264,7 +259,8 @@ namespace WitBird.XiaoChangHe.Controllers
             {
                 if (string.IsNullOrEmpty(code))
                 {
-                    return Content("您拒绝了授权！");
+                    var jsonData = new { IsSuccess = false, Message = "您拒绝了授权" };
+                    return Json(jsonData, JsonRequestBehavior.AllowGet);
                 }
 
                 string timeStamp = "";
@@ -276,7 +272,8 @@ namespace WitBird.XiaoChangHe.Controllers
                 var openIdResult = OAuthApi.GetAccessToken(TenPayV3Info.AppId, TenPayV3Info.AppSecret, code);
                 if (openIdResult.errcode != ReturnCode.请求成功)
                 {
-                    return Content("错误：" + openIdResult.errmsg);
+                    var jsonData = new { IsSuccess = false, Message = "错误：" + openIdResult.errmsg };
+                    return Json(jsonData, JsonRequestBehavior.AllowGet);
                 }
 
                 PrepayRecordModel prepayRecordModel = new PrepayRecordModel();
@@ -292,20 +289,26 @@ namespace WitBird.XiaoChangHe.Controllers
 
                 if (!decimal.TryParse(amount, out totalPrice))
                 {
-                    return Content("金额错误");
+                    var jsonData = new { IsSuccess = false, Message = "金额错误" };
+                    return Json(jsonData, JsonRequestBehavior.AllowGet);
                 }
 
                 if (isFirstRecharge && totalPrice != 1000)
                 {
-                    return Content("金额错误");
+                    var jsonData = new { IsSuccess = false, Message = "金额错误" };
+                    return Json(jsonData, JsonRequestBehavior.AllowGet);
                 }
 
                 if (!isFirstRecharge && (totalPrice != 500 || totalPrice != 1000))
                 {
-                    return Content("金额错误");
+                    var jsonData = new { IsSuccess = false, Message = "金额错误" };
+                    return Json(jsonData, JsonRequestBehavior.AllowGet);
                 }
 
                 prepayAccount = crmMemberModel.getPrepayAccount(uid).FirstOrDefault();
+
+                //调试强制设置为1分钱。
+                totalPrice = 0.01m;
 
                 if (isFirstRecharge)
                 {
@@ -330,14 +333,11 @@ namespace WitBird.XiaoChangHe.Controllers
                 prepayRecord.RecMoney = 0;
                 prepayRecord.RecordId = -1;
                 prepayRecord.RState = "";
-                prepayRecord.RstId = Guid.Parse("CB824E58-E2CA-4C95-827A-CA62D528C6A7");
+                prepayRecord.RstId = Constants.CompanyId;
                 prepayRecord.ScoreVip = 0;
-                prepayRecord.SId = DateTime.Now.ToString("HHmmss") + TenPayV3Util.BuildRandomStr(28); ;
+                prepayRecord.SId = DateTime.Now.ToString("HHmmss") + TenPayV3Util.BuildRandomStr(28);
                 prepayRecord.Uid = uid;
                 prepayRecord.UserId = "System";
-
-                decimal creditCard = totalPrice - (prepayAccount.AccountMoney + prepayAccount.PresentMoney);
-                if (creditCard < 0) creditCard = 0;
 
                 billPay = new BillPay();
                 billPay.Cash = 0;
@@ -355,18 +355,20 @@ namespace WitBird.XiaoChangHe.Controllers
                 billPay.Receivable = totalPrice;
                 billPay.Remark = "用户充值" + totalPrice + "元";
                 billPay.Remove = 0;
-                billPay.RstId = Guid.Parse("CB824E58-E2CA-4C95-827A-CA62D528C6A7");
+                billPay.RstId = Constants.CompanyId;
                 billPay.UserId = Guid.Empty;
                 billPay.UserName = name;
 
                 if (!prepayRecordModel.AddPrepayRecord(prepayRecord))
                 {
-                    return Content("充值数据插入失败");
+                    var jsonData = new { IsSuccess = false, Message = "充值数据插入失败" };
+                    return Json(jsonData, JsonRequestBehavior.AllowGet);
                 }
 
                 if (!billPayModel.AddBillPay(billPay))
                 {
-                    return Content("充值数据插入失败");
+                    var jsonData = new { IsSuccess = false, Message = "充值数据插入失败" };
+                    return Json(jsonData, JsonRequestBehavior.AllowGet);
                 }
 
 
@@ -383,7 +385,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 packageReqHandler.SetParameter("mch_id", TenPayV3Info.MchId);		  //商户号
                 packageReqHandler.SetParameter("nonce_str", nonceStr);                    //随机字符串
                 packageReqHandler.SetParameter("body", billPay.Remark);    //商品信息
-                packageReqHandler.SetParameter("out_trade_no", billPay.PayId.ToString());		//商家订单号
+                packageReqHandler.SetParameter("out_trade_no", billPay.PayId.ToString("N"));		//商家订单号
                 packageReqHandler.SetParameter("total_fee", (Convert.ToInt32(billPay.CreditCard * 100)).ToString());			        //商品金额,以分为单位(money * 100).ToString()
                 packageReqHandler.SetParameter("spbill_create_ip", Request.UserHostAddress);   //用户的公网ip，不是商户服务器IP
                 packageReqHandler.SetParameter("notify_url", TenPayV3Info.TenPayV3Notify);		    //接收财付通通知的URL
@@ -416,11 +418,14 @@ namespace WitBird.XiaoChangHe.Controllers
             }
             catch (Exception ex)
             {
-                return Content("请求发生错误，请返回重新尝试");
+                var jsonData = new { IsSuccess = false, Message = "请求发生错误，请返回重新尝试.\r\n" +ex.Message};//"请求发生错误，请返回重新尝试" };
+                return Json(jsonData, JsonRequestBehavior.AllowGet);
             }
 
-            var jsonData = new
+            var jsonResult = new
             {
+                IsSuccess = true,
+                Message = "",
                 appId = ViewData["appId"],
                 timeStamp = ViewData["timeStamp"],
                 nonceStr = ViewData["nonceStr"],
@@ -428,7 +433,116 @@ namespace WitBird.XiaoChangHe.Controllers
                 paySign = ViewData["paySign"]
             };
 
-            return Json(jsonData, JsonRequestBehavior.AllowGet);
+            return Json(jsonResult, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult RechargePayNotifyUrl()
+        {
+            ResponseHandler resHandler = new ResponseHandler(null);
+
+            string return_code = resHandler.GetParameter("return_code");
+            string return_msg = resHandler.GetParameter("return_msg");
+
+            string res = null;
+
+            try
+            {
+
+                resHandler.SetKey(TenPayV3Info.Key);
+                //验证请求是否从微信发过来（安全）
+                if (resHandler.IsTenpaySign())
+                {
+                    res = "success";
+
+                    //正确的订单处理
+
+                    string out_trade_no = resHandler.GetParameter("out_trade_no");
+                    string total_fee = resHandler.GetParameter("total_fee");
+                    //微信支付订单号
+                    string transaction_id = resHandler.GetParameter("transaction_id");
+                    //支付完成时间
+                    string time_end = resHandler.GetParameter("time_end");
+
+                    BillPay billPay = null;
+                    BillPayModel billPayModel = new BillPayModel();
+
+                    Guid billPayId = Guid.Parse(out_trade_no);
+                    billPay = billPayModel.GetBillPayById(billPayId);
+
+                    if (billPay == null)
+                    {
+                        res = "订单:" + billPayId + "不存在";
+                        return_msg = res;
+                        return_code = "FAIL";
+                    }
+                    else if (billPay.CreditCard != (decimal)(Convert.ToDecimal(total_fee) / 100))
+                    {
+                        res = "订单金额不符合";
+                        return_msg = res;
+                        return_code = "FAIL";
+                    }
+                    else if (!billPay.PayState.Equals(BillPayState.Paid)) //没有处理过该订单
+                    {
+                        using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
+                        {
+                            //更新订单状态为已支付，记录交易流水号
+                            if (billPayModel.UpdateBillStateAsPaid(billPayId, transaction_id))
+                            {
+
+                                CrmMemberModel crmMemberModel = new CrmMemberModel();
+                                PrepayRecordModel prepayRecordModel = new PrepayRecordModel();
+                                //查询支付订单对应的充值记录
+                                PrepayRecord prepayRecord = prepayRecordModel.GetPrepayRecordByBillPayId(billPayId);
+
+                                string uid = prepayRecord.Uid;
+                                //查询个人余额账户
+                                PrepayAccount prepayAccount = crmMemberModel.getPrepayAccount(prepayRecord.Uid).FirstOrDefault();
+                                //更新个人账户                                
+                                prepayAccount.LastPresentMoney = prepayRecord.PresentMoney;
+                                prepayAccount.AccountMoney += prepayRecord.PrepayMoney.Value;
+                                prepayAccount.PresentMoney += prepayRecord.PresentMoney.Value;
+                                prepayAccount.TotalPresent = prepayAccount.PresentMoney;
+                                prepayAccount.TotalMoney = prepayAccount.AccountMoney + prepayAccount.PresentMoney;
+
+                                //更新支付时间
+                                //prepayRecord.AsureDate = DateTime.Now;
+
+                                if (crmMemberModel.UpdatePrepayAccount(prepayAccount))
+                                {
+                                    return_code = "SUCCESS";
+                                    return_msg = "OK";
+                                }
+                            }
+
+                            scope.Complete();
+                        }
+                    }
+                }
+                else
+                {
+                    res = "非法支付结果通知";
+
+                    //错误的订单处理
+                }
+
+            }
+            catch (Exception ex)
+            {
+                res += ex.ToString();
+                return_code = "FAIL";
+                return_msg = ex.ToString();
+            }
+
+            var fileStream = System.IO.File.OpenWrite(Server.MapPath("~/1.txt"));
+            fileStream.Write(Encoding.Default.GetBytes(res), 0, Encoding.Default.GetByteCount(res));
+            fileStream.Close();
+            string xml = string.Format(@"<xml>
+   <return_code><![CDATA[{0}]]></return_code>
+   <return_msg><![CDATA[{1}]]></return_msg>
+</xml>", return_code, return_msg);
+
+            return Content(xml, "text/xml");
         }
 
     }

@@ -189,5 +189,52 @@ namespace WitBird.XiaoChangHe.Models
 
             return result;
         }
+
+        public PrepayRecord GetPrepayRecordByBillPayId(Guid billPayId)
+        {
+            PrepayRecord prepayRecord = null;
+
+            try
+            {
+                string sql = @"select top 1 * from PrepayRecord where BillPayId=@BillPayId";
+                DbCommand cmd = db.GetSqlStringCommand(sql);
+
+                db.AddInParameter(cmd, "BillPayId", DbType.Guid, billPayId.ToString());
+
+                var reader = db.ExecuteReader(cmd);
+
+                while (reader.Read())
+                {
+                    prepayRecord = new PrepayRecord()
+                    {
+                        AddMoney = reader.TryGetValue("AddMoney", 0m),
+                        AsureDate = reader.TryGetValue("AsureDate", DateTime.Now),
+                        BillPayId = reader.TryGetValue("BillPayId", Guid.Empty),
+                        DiscountlMoeny = reader.TryGetValue("DiscountlMoeny", 0m),
+                        PayByScore = reader.TryGetValue("PayByScore", 0),
+                        PayModel = reader.TryGetValue("PayModel", "02"),
+                        PrepayDate = reader.TryGetValue("PrepayDate", DateTime.Now),
+                        PrepayMoney = reader.TryGetValue("PrepayMoney", 0m),
+                        PresentMoney = reader.TryGetValue("PresentMoney", 0m),
+                        PromotionId = reader.TryGetValue("PromotionId", 0),
+                        RecMoney = reader.TryGetValue("RecMoney", 0m),
+                        RecordId = reader.TryGetValue("RecordId", 0),
+                        RState = reader.TryGetValue("RState", ""),
+                        RstId = reader.TryGetValue("RstId", Constants.CompanyId),
+                        ScoreVip = reader.TryGetValue("ScoreVip", 0),
+                        SId = reader.TryGetValue("SId", DateTime.Now.ToString("HHmmss") + 
+                        Senparc.Weixin.MP.TenPayLibV3.TenPayV3Util.BuildRandomStr(28)),
+                        Uid = reader.TryGetValue("Uid", ""),
+                        UserId = reader.TryGetValue("UserId", "System")
+                    };
+                }
+            }
+            catch
+            {
+
+            }
+
+            return prepayRecord;
+        }
     }
 }

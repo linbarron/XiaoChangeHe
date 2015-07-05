@@ -88,7 +88,7 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                     {
                         var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
                         string uid = string.Empty;
-                        string picUrl = "http://test.xgdg.cn/newcontent/images/w.jpg"; ;
+                        string picUrl = "http://test.xgdg.cn/NewContent/images/w.png"; ;
                         try
                         {
                             CrmMemberModel model = new CrmMemberModel();
@@ -96,7 +96,7 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                             var prepayAccount = model.getPrepayAccount(uid).FirstOrDefault();
                             if (prepayAccount != null && prepayAccount.AccountMoney > 0)
                             {
-                                picUrl = "http://test.xgdg.cn/newcontent/images/chu.jpg";
+                                picUrl = "http://test.xgdg.cn/NewContent/images/chu.png";
                             }
                         }
                         catch (Exception ex)

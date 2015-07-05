@@ -13,6 +13,7 @@ using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Transactions;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml.Linq;
@@ -25,7 +26,6 @@ namespace WitBird.XiaoChangHe.Controllers
 {
     public class PayTestController : Controller
     {
-        private static TenPayV3Info _tenPayV3Info;
 
         private static bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
         {
@@ -34,6 +34,7 @@ namespace WitBird.XiaoChangHe.Controllers
             return false;
         }
 
+        private static TenPayV3Info _tenPayV3Info;
         public static TenPayV3Info TenPayV3Info
         {
             get
@@ -255,7 +256,7 @@ namespace WitBird.XiaoChangHe.Controllers
             return View();
         }
 
-        public ActionResult PayNotifyUrl()
+        public ActionResult RechargeNotifyUrl()
         {
             ResponseHandler resHandler = new ResponseHandler(null);
 
@@ -264,25 +265,97 @@ namespace WitBird.XiaoChangHe.Controllers
 
             string res = null;
 
-            resHandler.SetKey(TenPayV3Info.Key);
-            //验证请求是否从微信发过来（安全）
-            if (resHandler.IsTenpaySign())
+            try
             {
-                res = "success";
 
-                //正确的订单处理
+                resHandler.SetKey(TenPayV3Info.Key);
+                //验证请求是否从微信发过来（安全）
+                if (resHandler.IsTenpaySign())
+                {
+                    res = "success";
+
+                    //正确的订单处理
+
+                    string out_trade_no = resHandler.GetParameter("out_trade_no");
+                    string total_fee = resHandler.GetParameter("total_fee");
+                    //微信支付订单号
+                    string transaction_id = resHandler.GetParameter("transaction_id");
+                    //支付完成时间
+                    string time_end = resHandler.GetParameter("time_end");
+
+                    BillPay billPay = null;
+                    BillPayModel billPayModel = new BillPayModel();
+
+                    Guid billPayId = Guid.Parse(out_trade_no);
+                    billPay = billPayModel.GetBillPayById(billPayId);
+
+                    if (billPay == null)
+                    {
+                        res = "订单:" + billPayId + "不存在";
+                        return_msg = res;
+                        return_code = "FAIL";
+                    }
+                    else if (billPay.CreditCard != (decimal)(Convert.ToDecimal(total_fee)/100))
+                    {
+                        res = "订单金额不符合";
+                        return_msg = res;
+                        return_code = "FAIL";
+                    }
+                    else if (!billPay.PayState.Equals(BillPayState.Paid)) //没有处理过该订单
+                    {
+                        using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
+                        {
+                            //更新订单状态为已支付，记录交易流水号
+                            if (billPayModel.UpdateBillStateAsPaid(billPayId, transaction_id))
+                            {
+                                
+                                CrmMemberModel crmMemberModel = new CrmMemberModel();
+                                PrepayRecordModel prepayRecordModel = new PrepayRecordModel();
+                                //查询支付订单对应的充值记录
+                                PrepayRecord prepayRecord = prepayRecordModel.GetPrepayRecordByBillPayId(billPayId);
+
+                                string uid = prepayRecord.Uid;
+                                //查询个人余额账户
+                                PrepayAccount prepayAccount = crmMemberModel.getPrepayAccount(prepayRecord.Uid).FirstOrDefault();
+                                //更新个人账户                                
+                                prepayAccount.LastPresentMoney = prepayRecord.PresentMoney;
+                                prepayAccount.AccountMoney += prepayRecord.PrepayMoney.Value;
+                                prepayAccount.PresentMoney += prepayRecord.PresentMoney.Value;
+                                prepayAccount.TotalPresent = prepayAccount.PresentMoney;
+                                prepayAccount.TotalMoney = prepayAccount.AccountMoney + prepayAccount.PresentMoney;
+
+                                //更新支付时间
+                                //prepayRecord.AsureDate = DateTime.Now;
+
+                                if (crmMemberModel.UpdatePrepayAccount(prepayAccount))
+                                {
+                                    return_code = "SUCCESS";
+                                    return_msg = "OK";
+                                }
+                            }
+
+                            scope.Complete();
+                        }
+                    }
+                }
+                else
+                {
+                    res = "非法支付结果通知";
+
+                    //错误的订单处理
+                }
+
             }
-            else
+            catch (Exception ex)
             {
-                res = "wrong";
-
-                //错误的订单处理
+                res += ex.ToString();
+                return_code = "FAIL";
+                return_msg = ex.ToString();
             }
 
             var fileStream = System.IO.File.OpenWrite(Server.MapPath("~/1.txt"));
             fileStream.Write(Encoding.Default.GetBytes(res), 0, Encoding.Default.GetByteCount(res));
             fileStream.Close();
-
             string xml = string.Format(@"<xml>
    <return_code><![CDATA[{0}]]></return_code>
    <return_msg><![CDATA[{1}]]></return_msg>

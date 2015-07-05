@@ -6,7 +6,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>充值</title>
+    <title>会员充值中心</title>
     <link href="/newcontent/style/cz.css" rel="stylesheet" type="text/css">
     <script src="~/NewContent/js/jquery.js"></script>
     <script src="~/NewContent/js/cz.js"></script>
@@ -17,6 +17,7 @@
     <meta name="format-detection" content="email=no">
     <style>
         input, select { font-size: 1.2em; color: #333; outline: none; border: none; padding: 0; }
+        .loading { text-align: center;background-color: burlywood;bottom: 0;position: fixed;width: 100%;}
     </style>
     <script language="javascript" type="text/javascript">
         function auto_remove(img) {
@@ -31,7 +32,7 @@
         }
 
         // 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
-        document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+        @*document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
             //公众号支付
             jQuery('a#getBrandWCPayRequest').click(function (e) {
                 WeixinJSBridge.invoke('getBrandWCPayRequest', {
@@ -53,37 +54,9 @@
 
             WeixinJSBridge.log('yo~ ready.');
 
-        }, false);
-        if (jQuery) {
-            jQuery(function () {
+        }, false);*@
 
-                var width = jQuery('body').width() * 0.87;
-                jQuery('img').error(function () {
-                    var self = jQuery(this);
-                    var org = self.attr('data-original1');
-                    self.attr("src", org);
-                    self.error(function () {
-                        auto_remove(this);
-                    });
-                });
-                jQuery('img').each(function () {
-                    var self = jQuery(this);
-                    var w = self.css('width');
-                    var h = self.css('height');
-                    w = w.replace('px', '');
-                    h = h.replace('px', '');
-                    if (w <= width) {
-                        return;
-                    }
-                    var new_w = width;
-                    var new_h = Math.round(h * width / w);
-                    self.css({ 'width': new_w + 'px', 'height': new_h + 'px' });
-                    self.parents('div.pic').css({ 'width': new_w + 'px', 'height': new_h + 'px' });
-                });
-            });
-        }
-
-        function callPayApi(a, t, n, p, ps){
+        function callPayApi(a, t, n, p, ps) {
             WeixinJSBridge.invoke('getBrandWCPayRequest', {
                 "appId": a,
                 "timeStamp": t,
@@ -91,15 +64,34 @@
                 "package": p,
                 "signType": "MD5",
                 "paySign": ps
+            }, function (res) {
+                if (res.err_msg == "get_brand_wcpay_request:ok") {
+                    window.location = "/member/info?id=@(ViewBag.CompanyId)&name=@(ViewBag.SourceAccountId)";
+                }
+                else {
+                    window.location = "/member/prerecharge?id=@(ViewBag.CompanyId)&name=@(ViewBag.SourceAccountId)";
+                }
             });
         }
 
         //string code, string uid, string name, string tel, string amount, bool isFirstRecharge
         function postBillInfo() {
+            //var loading = $('<div style="text-align: center;background-color: burlywood;bottom: 0;position: fixed;width: 100%;">正在发起支付请求，请稍后...</div>');
+            var loading = document.createElement("div");
+            $(loading).addClass("loading");
+            loading.innerHTML = "正在发起支付请求，请稍后...";
+            document.body.appendChild(loading);
             $.post("/member/recharge",
-                {Code:'@ViewBag.Code', uid:'@ViewBag.Uid', name:$('#name').val(), tel:$('#tel').val(), amount:$('#amount').val(), isFirstRecharge:'@ViewBag.IsFirstRecharge'},
+                { Code: '@ViewBag.Code', uid: '@ViewBag.Uid', name: $('#name').val(), tel: $('#tel').val(), amount: $('#amount').val(), isFirstRecharge: '@ViewBag.IsFirstRecharge' },
                 function (data) {
-                    callPayApi(data.appId, data.timeStamp, data.nonceStr, data.package, data.paySign);
+                    $(loading).remove();
+                    if (data.IsSuccess) {
+                        callPayApi(data.appId, data.timeStamp, data.nonceStr, data.package, data.paySign);
+                    }
+                    else {
+                        alert(data.Message);
+                        window.location = "/member/prerecharge?id=@(ViewBag.CompanyId)&name=@(ViewBag.SourceAccountId)";
+                    }
                 });
         }
 
@@ -126,7 +118,8 @@
                     </span>
                 </div>
                 <div class="content1" style="position: relative;">
-                    &nbsp;&nbsp;选择充值金额 <span class="sc">首冲1000元起 　></span>
+                    &nbsp;&nbsp;选择充值金额 @if (ViewBag.IsFirstRecharge)
+                    {<span class="sc">首冲1000元起 　></span>}
                     <select id="amount" name="amount" class="sel">
                         @if (ViewBag.IsFirstRecharge)
                         {

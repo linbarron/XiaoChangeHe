@@ -101,6 +101,39 @@ a.Password,a.Idcard,a.Birthday,a.TypeId,a.RegDate,a.ExpiredDate,a.UseState,a.Sex
             }
         }
 
+        public bool UpdatePrepayAccount(PrepayAccount prepayAccount)
+        {
+            bool result = false;
+
+            try
+            {
+                DbCommand cmd = null; 
+
+                string sql = @"UPDATE [CrmRstCloud].[dbo].[PrepayAccount] SET AccountMoney = @AccountMoney, 
+PresentMoney = @PresentMoney, TotalPresent = @TotalPresent, TotalMoney=@TotalMoney, LastPresentMoney=@LastPresentMoney, 
+LastConsumeMoney = @LastConsumeMoney WHERE Uid = @Uid;";
+
+                cmd = db.GetSqlStringCommand(sql);
+
+                db.AddInParameter(cmd, "AccountMoney", DbType.Decimal, prepayAccount.AccountMoney);
+                db.AddInParameter(cmd, "PresentMoney", DbType.Decimal, prepayAccount.PresentMoney);
+                db.AddInParameter(cmd, "TotalPresent", DbType.Decimal, prepayAccount.TotalPresent);
+                db.AddInParameter(cmd, "TotalMoney", DbType.Decimal, prepayAccount.TotalMoney);
+                db.AddInParameter(cmd, "LastConsumeMoney", DbType.Decimal, prepayAccount.LastConsumeMoney);
+                db.AddInParameter(cmd, "LastPresentMoney", DbType.Decimal, prepayAccount.LastPresentMoney);
+                db.AddInParameter(cmd, "Uid", DbType.String, prepayAccount.uid);
+
+                result = ExecSql(cmd) > 0;
+            }
+            catch
+            {
+                throw;
+            }
+
+            return result;
+
+        }
+
         #region Save
         //public int SaveOrderDetails(string type, OrderDetails info)
         public int Save(string id, string name, string phone, string sex, string bir, string addr)

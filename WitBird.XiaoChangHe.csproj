@@ -307,6 +307,7 @@
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\AutoMenuConfigurationModel.cs" />
+    <Compile Include="Models\Constants.cs" />
     <Compile Include="Models\CrmMemberModel.cs" />
     <Compile Include="Models\DbHelper.cs" />
     <Compile Include="Models\ExtensionModel.cs" />
