@@ -73,32 +73,42 @@ a.Password,a.Idcard,a.Birthday,a.TypeId,a.RegDate,a.ExpiredDate,a.UseState,a.Sex
         }
         #endregion
 
-        public List<PrepayAccount> getPrepayAccount(string memberId)
+        public PrepayAccount GetPrepayAccount(string uid)
         {
-            List<PrepayAccount> list = null;
+            PrepayAccount prepayAccount = null;
+
             try
             {
-                if (string.IsNullOrEmpty(memberId))
+                string sql = @"select top 1 * from PrepayAccount where Uid = @Uid";
+                DbCommand cmd = db.GetSqlStringCommand(sql);
+
+                db.AddInParameter(cmd, "Uid", DbType.String, uid);
+
+                using (var reader = db.ExecuteReader(cmd))
                 {
-                    return null;
+                    while (reader.Read())
+                    {
+                        prepayAccount = new PrepayAccount()
+                        {
+                            AccountMoney = reader.TryGetValue("AccountMoney", 0m),
+                            LastConsumeDate = reader.TryGetValue("LastConsumeDate", DateTime.Now),
+                            LastConsumeMoney = reader.TryGetValue("LastConsumeMoney", 0m),
+                            LastPresentMoney = reader.TryGetValue("LastPresentMoney", 0m),
+                            PAId = reader.TryGetValue("PAId", 0),
+                            PresentMoney = reader.TryGetValue("PresentMoney", 0m),
+                            TotalMoney = reader.TryGetValue("TotalMoney", 0m),
+                            TotalPresent = reader.TryGetValue("TotalPresent", 0m),
+                            uid = reader.TryGetValue("Uid", uid)
+                        };
+                    }
                 }
-                IParameterMapper ipmapper = new getCrmMemberListInfoDataParameterMapper();
-                DataAccessor<PrepayAccount> tableAccessor;
-                string strSql = @"select * from PrepayAccount p where p.uid=@SourceAccountId";
-                tableAccessor = db.CreateSqlStringAccessor(strSql, ipmapper, MapBuilder<PrepayAccount>.MapAllProperties()
-                     .Map(t => t.uid).ToColumn("Uid")
-                     .Map(t => t.AccountMoney).ToColumn("AccountMoney")
-                     .Map(t => t.PresentMoney).ToColumn("PresentMoney")
-
-                    .Build());
-                list = tableAccessor.Execute(new string[] { memberId }).ToList();
-                return list;
-
             }
-            catch (Exception ex)
+            catch
             {
-                return null;
+                throw;
             }
+
+            return prepayAccount;
         }
 
         public bool UpdatePrepayAccount(PrepayAccount prepayAccount)

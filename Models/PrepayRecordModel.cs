@@ -46,7 +46,7 @@ namespace WitBird.XiaoChangHe.Models
                 //                string strSql = @"select p.AddMoney,p.BillPayId,p.PayModel,p.PrepayDate,p.PrepayMoney,p.PresentMoney,p.PromotionId,p.RecordId,p.RstId,p.SId,p.Uid,p.UserId 
                 //                                from PrepayRecord p where p.Uid=@Uid and  p.PrepayMoney<0  and p.PrepayDate between  dateadd (MM,-1,GETDATE()) and   getdate() order by p.PrepayDate desc";
 
-                string strSql = @"select top 10 p.AddMoney,p.BillPayId,p.PayModel,p.PrepayDate,p.PrepayMoney,p.PresentMoney,p.PromotionId,p.RecordId,p.RstId,p.SId,p.Uid,p.UserId 
+                string strSql = @"select top 10 *
                                 from PrepayRecord p where p.Uid=@Uid and  p.PrepayMoney<0 order by p.PrepayDate desc";
                 tableAccessor = db.CreateSqlStringAccessor(strSql, ipmapper, MapBuilder<PrepayRecord>.MapAllProperties()
                      .Map(t => t.Uid).ToColumn("Uid")
@@ -88,8 +88,12 @@ namespace WitBird.XiaoChangHe.Models
                 //string strSql = @"select p.AddMoney,p.BillPayId,p.PayModel,p.PrepayDate,p.PrepayMoney,p.PresentMoney,p.PromotionId,p.RecordId,p.RstId,p.SId,p.Uid,p.UserId 
                 //                from PrepayRecord p where p.Uid=@Uid and  p.PrepayMoney>0 and p.PrepayDate between  dateadd (MM,-1,GETDATE()) and   getdate() order by p.PrepayDate desc";
 
-                string strSql = @"select top 10 p.AddMoney,p.BillPayId,p.PayModel,p.PrepayDate,p.PrepayMoney,p.PresentMoney,p.PromotionId,p.RecordId,p.RstId,p.SId,p.Uid,p.UserId 
-                                from PrepayRecord p where p.Uid=@Uid and  p.PrepayMoney>0 order by p.PrepayDate desc";
+                string strSql = @"
+                                select top 10 p.* from PrepayRecord p
+                                left join BillPay b on b.PayId = p.BillPayId
+                                where p.Uid='9995926' and  p.PrepayMoney>0  and b.PayState = '0x01'--0x01:支付成功
+                                order by p.PrepayDate desc";
+
                 tableAccessor = db.CreateSqlStringAccessor(strSql, ipmapper, MapBuilder<PrepayRecord>.MapAllProperties()
                      .Map(t => t.Uid).ToColumn("Uid")
                      .Map(t => t.AddMoney).ToColumn("AddMoney")
@@ -110,7 +114,7 @@ namespace WitBird.XiaoChangHe.Models
             }
             catch (Exception ex)
             {
-                return null;
+                throw;
             }
         }
 
@@ -196,42 +200,43 @@ namespace WitBird.XiaoChangHe.Models
 
             try
             {
-                string sql = @"select top 1 * from PrepayRecord where BillPayId=@BillPayId";
+                string sql = @"select top 1 * from PrepayRecord where BillPayId=@BillPayId;";
                 DbCommand cmd = db.GetSqlStringCommand(sql);
 
-                db.AddInParameter(cmd, "BillPayId", DbType.Guid, billPayId.ToString());
+                db.AddInParameter(cmd, "BillPayId", DbType.Guid, billPayId);
 
-                var reader = db.ExecuteReader(cmd);
-
-                while (reader.Read())
+                using (var reader = db.ExecuteReader(cmd))
                 {
-                    prepayRecord = new PrepayRecord()
+                    while (reader.Read())
                     {
-                        AddMoney = reader.TryGetValue("AddMoney", 0m),
-                        AsureDate = reader.TryGetValue("AsureDate", DateTime.Now),
-                        BillPayId = reader.TryGetValue("BillPayId", Guid.Empty),
-                        DiscountlMoeny = reader.TryGetValue("DiscountlMoeny", 0m),
-                        PayByScore = reader.TryGetValue("PayByScore", 0),
-                        PayModel = reader.TryGetValue("PayModel", "02"),
-                        PrepayDate = reader.TryGetValue("PrepayDate", DateTime.Now),
-                        PrepayMoney = reader.TryGetValue("PrepayMoney", 0m),
-                        PresentMoney = reader.TryGetValue("PresentMoney", 0m),
-                        PromotionId = reader.TryGetValue("PromotionId", 0),
-                        RecMoney = reader.TryGetValue("RecMoney", 0m),
-                        RecordId = reader.TryGetValue("RecordId", 0),
-                        RState = reader.TryGetValue("RState", ""),
-                        RstId = reader.TryGetValue("RstId", Constants.CompanyId),
-                        ScoreVip = reader.TryGetValue("ScoreVip", 0),
-                        SId = reader.TryGetValue("SId", DateTime.Now.ToString("HHmmss") + 
-                        Senparc.Weixin.MP.TenPayLibV3.TenPayV3Util.BuildRandomStr(28)),
-                        Uid = reader.TryGetValue("Uid", ""),
-                        UserId = reader.TryGetValue("UserId", "System")
-                    };
+                        prepayRecord = new PrepayRecord()
+                        {
+                            AddMoney = reader.TryGetValue("AddMoney", 0m),
+                            AsureDate = reader.TryGetValue("AsureDate", DateTime.Now),
+                            BillPayId = reader.TryGetValue("BillPayId", Guid.Empty),
+                            DiscountlMoeny = reader.TryGetValue("DiscountlMoeny", 0m),
+                            PayByScore = reader.TryGetValue("PayByScore", 0),
+                            PayModel = reader.TryGetValue("PayModel", "02"),
+                            PrepayDate = reader.TryGetValue("PrepayDate", DateTime.Now),
+                            PrepayMoney = reader.TryGetValue("PrepayMoney", 0m),
+                            PresentMoney = reader.TryGetValue("PresentMoney", 0m),
+                            PromotionId = reader.TryGetValue("PromotionId", 0),
+                            RecMoney = reader.TryGetValue("RecMoney", 0m),
+                            RecordId = reader.TryGetValue("RecordId", 0),
+                            RState = reader.TryGetValue("RState", ""),
+                            RstId = reader.TryGetValue("RstId", Constants.CompanyId),
+                            ScoreVip = reader.TryGetValue("ScoreVip", 0),
+                            SId = reader.TryGetValue("SId", DateTime.Now.ToString("HHmmss") +
+                            Senparc.Weixin.MP.TenPayLibV3.TenPayV3Util.BuildRandomStr(28)),
+                            Uid = reader.TryGetValue("Uid", ""),
+                            UserId = reader.TryGetValue("UserId", "System")
+                        };
+                    }
                 }
             }
             catch
             {
-
+                throw;
             }
 
             return prepayRecord;

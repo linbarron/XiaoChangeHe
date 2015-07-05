@@ -57,7 +57,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 {
                     model = cmModel.getCrmMemberListInfoData(name).FirstOrDefault();
 
-                    var prepayAccount = cmModel.getPrepayAccount(model.Uid).FirstOrDefault();
+                    var prepayAccount = cmModel.GetPrepayAccount(model.Uid);
                     var memberScore = cmsModel.SelCrmMemberScoreInfo(model.Uid).FirstOrDefault();
 
                     if (prepayAccount != null && memberScore != null)
@@ -87,7 +87,7 @@ namespace WitBird.XiaoChangHe.Controllers
             {
                 CrmMemberModel cmm = new CrmMemberModel();
                 p = cmm.getCrmMemberListInfoData(name);
-                decimal dec = cmm.getPrepayAccount(p.First().Uid).First().AccountMoney;
+                decimal dec = cmm.GetPrepayAccount(p.First().Uid).AccountMoney;
                 ViewBag.PrepayAccount = dec;
                 ViewBag.SourceAccountId = name;
                 ViewBag.CompanyId = id;
@@ -128,7 +128,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 ViewBag.PrepayAccount = 0;
                 if (crm.Count() > 0)
                 {
-                    decimal dec = cmm.getPrepayAccount(crm.First().Uid).First().AccountMoney;
+                    decimal dec = cmm.GetPrepayAccount(crm.First().Uid).AccountMoney;
                     ViewBag.PrepayAccount = dec;
                 }
                 ViewBag.Uid = id;
@@ -159,7 +159,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 ViewBag.PrepayAccount = 0;
                 if (crm.Count() > 0)
                 {
-                    decimal dec = cmm.getPrepayAccount(crm.First().Uid).First().AccountMoney;
+                    decimal dec = cmm.GetPrepayAccount(crm.First().Uid).AccountMoney;
                     ViewBag.PrepayAccount = dec;
                 }
                 ViewBag.Uid = id;
@@ -299,16 +299,24 @@ namespace WitBird.XiaoChangHe.Controllers
                     return Json(jsonData, JsonRequestBehavior.AllowGet);
                 }
 
-                if (!isFirstRecharge && (totalPrice != 500 || totalPrice != 1000))
+                if (!isFirstRecharge && totalPrice != 500 && totalPrice != 1000)
                 {
                     var jsonData = new { IsSuccess = false, Message = "金额错误" };
                     return Json(jsonData, JsonRequestBehavior.AllowGet);
                 }
 
-                prepayAccount = crmMemberModel.getPrepayAccount(uid).FirstOrDefault();
+                prepayAccount = crmMemberModel.GetPrepayAccount(uid);
 
-                //调试强制设置为1分钱。
-                totalPrice = 0.01m;
+                //try
+                //{
+                //    //强制设置为配置的值。
+                //    string testingAmount = System.Configuration.ConfigurationManager.AppSettings["TenPayV3_Testing_Amount"];
+                //    decimal.TryParse(testingAmount, out totalPrice);
+                //}
+                //catch
+                //{
+
+                //}
 
                 if (isFirstRecharge)
                 {
@@ -418,7 +426,7 @@ namespace WitBird.XiaoChangHe.Controllers
             }
             catch (Exception ex)
             {
-                var jsonData = new { IsSuccess = false, Message = "请求发生错误，请返回重新尝试.\r\n" +ex.Message};//"请求发生错误，请返回重新尝试" };
+                var jsonData = new { IsSuccess = false, Message = "请求发生错误，请返回重新尝试.\r\n" + ex.Message };//"请求发生错误，请返回重新尝试" };
                 return Json(jsonData, JsonRequestBehavior.AllowGet);
             }
 
@@ -443,7 +451,8 @@ namespace WitBird.XiaoChangHe.Controllers
 
             string return_code = resHandler.GetParameter("return_code");
             string return_msg = resHandler.GetParameter("return_msg");
-
+            return_code = "FAIL";
+            return_msg = "处理支付通知出现异常";
             string res = null;
 
             try
@@ -453,8 +462,6 @@ namespace WitBird.XiaoChangHe.Controllers
                 //验证请求是否从微信发过来（安全）
                 if (resHandler.IsTenpaySign())
                 {
-                    res = "success";
-
                     //正确的订单处理
 
                     string out_trade_no = resHandler.GetParameter("out_trade_no");
@@ -474,13 +481,11 @@ namespace WitBird.XiaoChangHe.Controllers
                     {
                         res = "订单:" + billPayId + "不存在";
                         return_msg = res;
-                        return_code = "FAIL";
                     }
                     else if (billPay.CreditCard != (decimal)(Convert.ToDecimal(total_fee) / 100))
                     {
                         res = "订单金额不符合";
                         return_msg = res;
-                        return_code = "FAIL";
                     }
                     else if (!billPay.PayState.Equals(BillPayState.Paid)) //没有处理过该订单
                     {
@@ -489,34 +494,61 @@ namespace WitBird.XiaoChangHe.Controllers
                             //更新订单状态为已支付，记录交易流水号
                             if (billPayModel.UpdateBillStateAsPaid(billPayId, transaction_id))
                             {
-
                                 CrmMemberModel crmMemberModel = new CrmMemberModel();
                                 PrepayRecordModel prepayRecordModel = new PrepayRecordModel();
                                 //查询支付订单对应的充值记录
                                 PrepayRecord prepayRecord = prepayRecordModel.GetPrepayRecordByBillPayId(billPayId);
 
-                                string uid = prepayRecord.Uid;
-                                //查询个人余额账户
-                                PrepayAccount prepayAccount = crmMemberModel.getPrepayAccount(prepayRecord.Uid).FirstOrDefault();
-                                //更新个人账户                                
-                                prepayAccount.LastPresentMoney = prepayRecord.PresentMoney;
-                                prepayAccount.AccountMoney += prepayRecord.PrepayMoney.Value;
-                                prepayAccount.PresentMoney += prepayRecord.PresentMoney.Value;
-                                prepayAccount.TotalPresent = prepayAccount.PresentMoney;
-                                prepayAccount.TotalMoney = prepayAccount.AccountMoney + prepayAccount.PresentMoney;
-
-                                //更新支付时间
-                                //prepayRecord.AsureDate = DateTime.Now;
-
-                                if (crmMemberModel.UpdatePrepayAccount(prepayAccount))
+                                if (prepayRecord == null)
                                 {
-                                    return_code = "SUCCESS";
-                                    return_msg = "OK";
+                                    res = "查询不到对应的消费记录";
+                                    return_msg = res;
+                                }
+                                else
+                                {
+                                    string uid = prepayRecord.Uid;
+                                    //查询个人余额账户
+                                    PrepayAccount prepayAccount = crmMemberModel.GetPrepayAccount(prepayRecord.Uid);
+
+                                    if (prepayAccount == null)
+                                    {
+                                        res = "查询不到用户账户记录";
+                                        return_msg = res;
+                                    }
+                                    else
+                                    {
+                                        //更新个人账户                                
+                                        prepayAccount.LastPresentMoney = prepayRecord.PresentMoney;
+                                        prepayAccount.AccountMoney += prepayRecord.PrepayMoney.Value;
+                                        prepayAccount.PresentMoney += prepayRecord.PresentMoney.Value;
+                                        prepayAccount.TotalPresent = prepayAccount.PresentMoney;
+                                        prepayAccount.TotalMoney = prepayAccount.AccountMoney + prepayAccount.PresentMoney;
+
+                                        //更新支付时间
+                                        //prepayRecord.AsureDate = DateTime.Now;
+
+                                        if (crmMemberModel.UpdatePrepayAccount(prepayAccount))
+                                        {
+                                            //提交事务
+                                            scope.Complete();
+                                            return_code = "SUCCESS";
+                                            return_msg = "OK";
+                                        }
+                                        else
+                                        {
+                                            res = "更新用户账户信息未成功";
+                                            return_msg = res;
+                                        }
+                                    }
                                 }
                             }
-
-                            scope.Complete();
                         }
+                    }
+                    else
+                    {
+                        res = "订单：" + billPay.PayId + "已处理，不能重复处理";
+                        return_code = "SUCCESS";
+                        return_msg = "OK";
                     }
                 }
                 else
@@ -537,6 +569,7 @@ namespace WitBird.XiaoChangHe.Controllers
             var fileStream = System.IO.File.OpenWrite(Server.MapPath("~/1.txt"));
             fileStream.Write(Encoding.Default.GetBytes(res), 0, Encoding.Default.GetByteCount(res));
             fileStream.Close();
+
             string xml = string.Format(@"<xml>
    <return_code><![CDATA[{0}]]></return_code>
    <return_msg><![CDATA[{1}]]></return_msg>

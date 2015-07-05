@@ -61,7 +61,7 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                         if (list != null && list.Count > 0)
                         {
                             foreach (var activity in list)
-                        {
+                            {
                                 Article article = new Article();
 
                                 article.Title = activity.Title;
@@ -74,10 +74,10 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                         }
                         else
                         {
-                        strongResponseMessage.Articles.Add(new Article
-                        {
+                            strongResponseMessage.Articles.Add(new Article
+                            {
                                 Title = "暂无活动"
-                        });
+                            });
                         }
 
                         reponseMessage = strongResponseMessage;
@@ -92,7 +92,7 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                         {
                             CrmMemberModel model = new CrmMemberModel();
                             uid = model.getCrmMemberListInfoData(requestMessage.FromUserName).FirstOrDefault().Uid;
-                            var prepayAccount = model.getPrepayAccount(uid).FirstOrDefault();
+                            var prepayAccount = model.GetPrepayAccount(uid);
                             if (prepayAccount != null && prepayAccount.AccountMoney > 0)
                             {
                                 picUrl = "http://test.xgdg.cn/NewContent/images/chu.png";
