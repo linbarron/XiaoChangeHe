@@ -207,9 +207,9 @@
             line-height: 20px;
         }
 
-            .sm span {
-                color: #ed3a2e;
-            }
+        .sm span {
+            color: #ed3a2e;
+        }
     </style>
 </head>
     <body>
@@ -231,11 +231,11 @@
                             <!--选择用餐时间-->
                             <div class="header3" style="position: relative;">
                                 选择用餐时间
-                                <input name="DiningDate" id="endTime"/><span class="header_r">></span>
+                                <input id="DiningDate" id="endTime"/><span class="header_r">></span>
                             </div>
                             <div class="header3">
                                 <span style="color: #999;">
-                                    <input type="text" placeholder="请输入姓名" name="ContactName" value="@item.ContactName" style="width: 24%;" /></span>
+                                    <input type="text" placeholder="请输入姓名" id="ContactName" value="@item.ContactName" style="width: 24%;" /></span>
                                 <div class="sex">
                                     <input type="hidden" id="sexval" value="0" name="sex"/>
                                     <img class="img1" src="~/NewContent/images/11.png" height="30">
@@ -243,10 +243,10 @@
                                 </div>
                             </div>
                             <div class="header3" style="color: #999;">
-                                <input type="text" name="ContactPhone" placeholder="输入预定手机号码"/>
+                                <input type="text" id="ContactPhone" placeholder="输入预定手机号码"/>
                             </div>
                             <div class="header3" style="color: #999; line-height: 50px; height: 50px;">
-                                <input type="text" name="PersonCount" placeholder="填写用餐人数"/><span style="color: #000;"> 人</span>
+                                <input type="text" id="PersonCount" placeholder="填写用餐人数"/><span style="color: #000;"> 人</span>
                             </div>
                             <div class="huise"></div>
                             <!-- 菜品清单标题-->
@@ -290,15 +290,25 @@
                 
                 <div class="mask"></div>
                 <div class="popWindow hide">
-                    <div class="dqye">原价:<span class="zong">@totalprice</span></div>
                     @if (PrepayAccount > 0)
                     {
+                        <style>
+                            .yfje {
+                                line-height: 30px;
+                            }
+                        </style>
+                        <div class="dqye" style="line-height: 30px;text-align: left;font-size: 16px;color: #666;">原价:<span class="zong" style="text-decoration:line-through">@totalprice</span></div>
                         <div class="yfje"><span class="cz">储值会员价：<span class="hyj">@viptotalprice</span></span></div>
+                    }
+                    else
+                    {
+                        <div class="dqye">原价:<span class="zong">@totalprice</span></div>
                     }
                     <div class="yfje">账户余额：<span class="yue">@PrepayAccount</span>　<span class="buzu">余额不足</span></div>
                     <div class="yfje">微信支付金额：<span class="weixin">@totalprice</span></div>
                     <span class="sm">如升级为储值会员，当前可优惠<span>@(totalprice - viptotalprice)</span>并可享受充<span>1000</span>送<span>300</span>的优惠。</span>
-                    <div class="liji" onclick="window.location.href='/member/prerecharge/CB824E58-E2CA-4C95-827A-CA62D528C6A7/@ViewBag.SourceAccountId'">立即充值</div><div class="zhifu">确认支付</div>
+                    <div class="liji" onclick=" window.location.href = '/member/prerecharge/CB824E58-E2CA-4C95-827A-CA62D528C6A7/@ViewBag.SourceAccountId' ">立即充值</div>
+                    <div class="zhifu" onclick="SubmitOrder();">确认支付</div>
                     <div class="close"></div>
                 </div>
 
@@ -316,12 +326,19 @@
                     ContactName: $("#ContactName").val(),
                     ContactPhone: $("#ContactPhone").val(),
                     PersonCount: $("#PersonCount").val(),
-                    OrderId: $("#OrderId").val(),
-                    sex: $("#sex").val()
-                }, function (msg) {
-
+                    OrderId: '@orderid',
+                    sex: $("#sexval").val()
+                }, function(msg) {
+                    if (msg == '') {
+                        var name = $("#ContactName").val();
+                        var tel = $("#ContactPhone").val();
+                        var a = @(totalprice)
+                        // 更新订单成功，去微信支付
+                        window.location.href = '~/PayTest/index?id=@(ViewBag.SourceAccountId)&hc=hc&uid=@(ViewBag.MemberCardNo)&m=c&n=' + name+'&t='+tel+'&a='+a;
+                    } else {
+                        alert(msg);
+                    }
                 });
-                window.location.href = '~/NewUI/ddxq(yfk).html';
             }
         </script>
 
