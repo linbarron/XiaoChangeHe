@@ -15,7 +15,7 @@
     {
     <li tid="@item.TypeId" rid="@item.RestaurantId" onclick="DisplayContent('@item.TypeId', '@item.RestaurantId',@i) " id="li@(i)">
         @Html.DisplayFor(modelItem => item.TypeName)
-        <span class="shu">@i</span>
+        <span class="shu" style="display: none;">@i</span>
     </li>
                         i++;
                     }

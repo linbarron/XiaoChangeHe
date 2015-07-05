@@ -565,6 +565,7 @@
     <Content Include="NewContent\images\cai_bg.jpg" />
     <Content Include="NewContent\images\CB824E58-E2CA-4C95-827A-CA62D528C6A7h.png" />
     <Content Include="NewContent\images\CB824E58-E2CA-4C95-827A-CA62D528C6A7w.png" />
+    <Content Include="NewContent\images\cha.png" />
     <Content Include="NewContent\images\chu.png" />
     <Content Include="NewContent\images\close.png" />
     <Content Include="NewContent\images\content.png" />
@@ -719,6 +720,8 @@
     <Content Include="NewUI\js\ksdc2.js" />
     <Content Include="NewUI\js\lunbo.js" />
     <Content Include="NewUI\style\ksdc2.css" />
+    <Content Include="NewUI\ydxx -会员.html" />
+    <Content Include="NewUI\ydxx -非会员.html" />
     <Content Include="NewUI\_notes\ydxx.html.mno" />
     <Content Include="Areas\WeChat\Views\Web.config" />
     <Content Include="Areas\WeChat\Views\Auth\CreateMenu.cshtml" />
