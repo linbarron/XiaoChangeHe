@@ -9,7 +9,7 @@ namespace WitBird.XiaoChangeHe.Core.Entity
     {
         public Guid OrderId { get; set; }
 
-        public string CustomName { get; set; }
+        public string ContactName { get; set; }
 
         public string Telephone { get; set; }
 
@@ -22,5 +22,7 @@ namespace WitBird.XiaoChangeHe.Core.Entity
         public DateTime CreateTime { get; set; }
 
         public string Backlog { get; set; }
+
+        public int? PersonCount { get; set; }
     }
 }

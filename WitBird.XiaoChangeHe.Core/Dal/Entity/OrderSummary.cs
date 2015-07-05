@@ -25,6 +25,8 @@ namespace WitBird.XiaoChangeHe.Core.Dal.Entity
 
         public DateTime CreateTime { get; set; }
 
+        public int? PersonCount { get; set; }
+
         public string Backlog { get; set; }
     }
 }
