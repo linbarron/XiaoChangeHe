@@ -31,7 +31,10 @@
                             <div class="content_img"><img src="~/NewContent/images/1.png"></div>
                             <div class="content_title">
                                 <span class="title_l">@order.RestaurantName</span>
-                                <br />散座（8人）
+                                @if (order.PersonCount.HasValue)
+                                {
+                                    <br /><span>散座（@order.PersonCount.Value.ToString() 人）</span>
+                                }
                                 @if (order.DiningDate != null)
                                 {
                                     <br />@order.DiningDate.Value.ToString("yyyy-MM-dd ddd hh:mm")

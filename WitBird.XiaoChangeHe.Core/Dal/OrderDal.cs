@@ -18,7 +18,7 @@ namespace WitBird.XiaoChangeHe.Core.Dal
                 var SqlCmd = new SqlCommand();
                 SqlCmd.Connection = SqlConn;
                 SqlCmd.CommandText = @"
-select Id AS OrderId,ContactName,ContactPhone,DiningDate,DiningDate,CreateDate,Status,RstId AS RestaurantId
+select Id AS OrderId,ContactName,ContactPhone,DiningDate,DiningDate,CreateDate,Status,RstId AS RestaurantId,PersonCount
 from orders
 where MemberCardNo=@MemberCardNo
 order by CreateDate desc";
@@ -35,6 +35,10 @@ order by CreateDate desc";
                     if (reader["ContactPhone"] != DBNull.Value)
                     {
                         summary.ContactPhone = reader["ContactPhone"].ToString();
+                    }
+                    if (reader["PersonCount"] != DBNull.Value)
+                    {
+                        summary.PersonCount = Convert.ToInt32(reader["PersonCount"]);
                     }
                     if (reader["Status"] != DBNull.Value)
                     {
@@ -81,7 +85,7 @@ order by CreateDate desc";
                 var SqlCmd = new SqlCommand();
                 SqlCmd.Connection = SqlConn;
                 SqlCmd.CommandText = @"
-select Id as OrderId,ContactName,ContactPhone,DiningDate,CreateDate,Status
+select Id as OrderId,ContactName,ContactPhone,DiningDate,CreateDate,Status,sex,PersonCount
 from Orders
 where Id=@OrderId";
 
@@ -94,6 +98,22 @@ where Id=@OrderId";
 
                     summary.OrderId = Guid.Parse(reader["OrderId"].ToString());
                     summary.ContactName = reader["ContactName"].ToString();
+                    if (reader["sex"] != DBNull.Value)
+                    {
+                        int sexValue = Convert.ToInt32(reader["sex"]);
+                        if (sexValue == 0)
+                        {
+                            summary.ContactName += "先生";
+                        }
+                        else if (sexValue == 1)
+                        {
+                            summary.ContactName += "女士";
+                        }
+                    }
+                    if (reader["PersonCount"] != DBNull.Value)
+                    {
+                        summary.PersonCount = Convert.ToInt32(reader["PersonCount"]);
+                    }
                     if (reader["ContactPhone"] != DBNull.Value)
                     {
                         summary.ContactPhone = reader["ContactPhone"].ToString();

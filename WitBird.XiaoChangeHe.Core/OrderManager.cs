@@ -30,7 +30,8 @@ namespace WitBird.XiaoChangeHe.Core
                     Status = v.Status,
                     DiningDate = v.DiningDate,
                     CreateTime = v.CreateTime,
-                    Backlog = v.Backlog
+                    Backlog = v.Backlog,
+                    PersonCount = v.PersonCount
                 }).ToList();
             }
 
@@ -67,11 +68,12 @@ namespace WitBird.XiaoChangeHe.Core
                 detail = new BusinessModel.OrderDetail();
 
                 detail.OrderId = orderSummary.OrderId;
-                detail.CustomName = orderSummary.ContactName;
+                detail.ContactName = orderSummary.ContactName;
                 detail.Telephone = orderSummary.ContactPhone;
                 detail.DiningDate = orderSummary.DiningDate;
                 detail.CreateTime = orderSummary.CreateTime;
                 detail.Backlog = orderSummary.Backlog;
+                detail.PersonCount = orderSummary.PersonCount;
 
                 var details = orderDal.GetOrderDetails(orderId);
 

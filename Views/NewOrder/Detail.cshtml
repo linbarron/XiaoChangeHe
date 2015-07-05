@@ -23,16 +23,26 @@
             <span class="yifu">已付款</span>
         </div>
         <div class="info">
-            姓　　名：@Model.CustomName<br />
+            姓　　名：@Model.ContactName<br />
             电　　话：@Model.Telephone<br />
             订单编号：@Model.OrderId<br />
             备　　注：@string.Format("{0}", string.IsNullOrEmpty(Model.Backlog) ? "无" : Model.Backlog)
         </div>
         <div class="san">
-            <span class="san_l">散桌1-10人桌</span>
+            @if (Model.PersonCount.HasValue)
+            {
+                if (Model.PersonCount.Value < 10)
+                {
+                    <span class="san_l">散桌1-10人桌</span>
+                }
+                else
+                {
+                    <span class="san_l">大于10人桌</span>
+                }
+            }
             @if (Model.DiningDate != null)
             {
-                <span class="san_r"> @Model.DiningDate.Value.ToString("yyyy-MM-dd") @Model.DiningDate.Value.DayOfWeek @Model.DiningDate.Value.ToString("hh:mm")</span>
+                <span class="san_r"> @Model.DiningDate.Value.ToString("yyyy-MM-dd ddd hh:mm")</span>
             }
             else
             {
