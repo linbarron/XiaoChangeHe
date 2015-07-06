@@ -91,7 +91,7 @@ namespace WitBird.XiaoChangHe.Models
                 string strSql = @"
                                 select top 10 p.* from PrepayRecord p
                                 left join BillPay b on b.PayId = p.BillPayId
-                                where p.Uid='9995926' and  p.PrepayMoney>0  and b.PayState = '0x01'--0x01:支付成功
+                                where p.Uid=@Uid and  p.PrepayMoney>0  and b.PayState = '0x01'--0x01:支付成功
                                 order by p.PrepayDate desc";
 
                 tableAccessor = db.CreateSqlStringAccessor(strSql, ipmapper, MapBuilder<PrepayRecord>.MapAllProperties()

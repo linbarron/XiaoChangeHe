@@ -154,16 +154,6 @@ namespace WitBird.XiaoChangHe.Controllers
             List<PrepayRecord> p = null;
             try
             {
-                CrmMemberModel cmm = new CrmMemberModel();
-                List<CrmMember> crm = cmm.getCrmMemberListInfoData(name);
-                ViewBag.PrepayAccount = 0;
-                if (crm.Count() > 0)
-                {
-                    decimal dec = cmm.GetPrepayAccount(crm.First().Uid).AccountMoney;
-                    ViewBag.PrepayAccount = dec;
-                }
-                ViewBag.Uid = id;
-                ViewBag.CompanyId = companyId;
                 PrepayRecordModel prm = new PrepayRecordModel();
                 p = prm.getRechargeRecordListInfoData(id);
             }
