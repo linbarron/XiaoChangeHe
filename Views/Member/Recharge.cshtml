@@ -17,7 +17,7 @@
     <meta name="format-detection" content="email=no">
     <style>
         input, select { font-size: 1.2em; color: #333; outline: none; border: none; padding: 0; }
-        .loading { text-align: center;background-color: burlywood;bottom: 0;position: fixed;width: 100%;}
+        .loading { text-align: center; background-color: burlywood; bottom: 0; position: fixed; width: 100%; }
     </style>
     <script language="javascript" type="text/javascript">
         function auto_remove(img) {
@@ -118,8 +118,7 @@
                     </span>
                 </div>
                 <div class="content1" style="position: relative;">
-                    &nbsp;&nbsp;选择充值金额 @if (ViewBag.IsFirstRecharge)
-                    {<span class="sc">首冲1000元起 　></span>}
+                    &nbsp;&nbsp;选择充值金额 <span class="sc">首冲1000元起 　></span>
                     <select id="amount" name="amount" class="sel">
                         @if (ViewBag.IsFirstRecharge)
                         {

@@ -147,7 +147,7 @@ namespace WitBird.XiaoChangHe.Controllers
                         }
                     }
 
-                    prepayAccount = crmMemberModel.getPrepayAccount(uid).FirstOrDefault();
+                    prepayAccount = crmMemberModel.GetPrepayAccount(uid);
 
                     prepayRecord = new PrepayRecord();
                     prepayRecord.AddMoney = -totalPrice;
@@ -316,7 +316,7 @@ namespace WitBird.XiaoChangHe.Controllers
 
                                 string uid = prepayRecord.Uid;
                                 //查询个人余额账户
-                                PrepayAccount prepayAccount = crmMemberModel.getPrepayAccount(prepayRecord.Uid).FirstOrDefault();
+                                PrepayAccount prepayAccount = crmMemberModel.GetPrepayAccount(prepayRecord.Uid);
                                 //更新个人账户                                
                                 prepayAccount.LastPresentMoney = prepayRecord.PresentMoney;
                                 prepayAccount.AccountMoney += prepayRecord.PrepayMoney.Value;

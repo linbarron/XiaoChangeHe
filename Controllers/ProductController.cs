@@ -13,10 +13,9 @@ namespace WitBird.XiaoChangHe.Controllers
         //
         // GET: /Product/
 
-        public ActionResult getProductByProductTypeId(string RestaurantId, string ProductTypeId, string SourceAccountId,string Status,string Type=null)
-
+        public ActionResult getProductByProductTypeId(string RestaurantId, string ProductTypeId, string SourceAccountId, string Status, string Type = null)
         {
-           
+
             List<ProductNew> p = null;
             //object obj = System.Web.HttpRuntime.Cache.Get("ProductType" + ProductTypeId);
 
@@ -26,10 +25,10 @@ namespace WitBird.XiaoChangHe.Controllers
             //}
             //if (p == null)
             //{
-                ProductModel pm = new ProductModel();
-                p = pm.getProductByProductTypeId(RestaurantId, ProductTypeId);
-              //  System.Web.HttpRuntime.Cache.Add("ProductType" + ProductTypeId, p, null, DateTime.Now.AddHours(2),
-              //  TimeSpan.Zero, CacheItemPriority.Normal, null);
+            ProductModel pm = new ProductModel();
+            p = pm.getProductByProductTypeId(RestaurantId, ProductTypeId);
+            //  System.Web.HttpRuntime.Cache.Add("ProductType" + ProductTypeId, p, null, DateTime.Now.AddHours(2),
+            //  TimeSpan.Zero, CacheItemPriority.Normal, null);
             //}
             CrmMemberModel cdb = new CrmMemberModel();
             if (SourceAccountId != null && SourceAccountId != "")
@@ -40,24 +39,26 @@ namespace WitBird.XiaoChangHe.Controllers
                 OrderModel odm = new OrderModel();
                 List<Order> order = null;
                 List<FastFoodOrder> FastFoodOrder = null;
-               //Type == "FastFood"表明此店为快餐店。
+                //Type == "FastFood"表明此店为快餐店。
                 if (!string.IsNullOrEmpty(Type) && Type == "FastFood")
                 {
 
                     FastFoodOrder = odm.selOrderByMemberId(crm.First().Uid);
-                }else {
+                }
+                else
+                {
                     order = odm.SelUnFinValidOrder(crm.First().Uid);
                 }
-             
+
                 string OrderId = "";
-                if (order != null && order.Count > 0 || FastFoodOrder != null && FastFoodOrder.Count>0)
+                if (order != null && order.Count > 0 || FastFoodOrder != null && FastFoodOrder.Count > 0)
                 {
 
                     ViewBag.OrderId = order != null && order.Count > 0 ? order.First().Id : FastFoodOrder.First().Id;
                     OrderId = order != null && order.Count > 0 ? order.First().Id.ToString() : FastFoodOrder.First().Id.ToString();
                     /* 显示用户已点菜数量*/
                     MyMenuModel myMenu = new MyMenuModel();
-                    List<MyMenu> mymenu = myMenu.getMyMenuListData(MemberCardNo, OrderId,Type);
+                    List<MyMenu> mymenu = myMenu.getMyMenuListData(MemberCardNo, OrderId, Type);
                     ViewBag.MyMenuListData = mymenu;
                 }
             }
@@ -65,21 +66,22 @@ namespace WitBird.XiaoChangHe.Controllers
             return View(p);
         }
 
-        public ActionResult getMemProducts(string id,string name) {
-            ProductModel p=new ProductModel();
+        public ActionResult getMemProducts(string id, string name)
+        {
+            ProductModel p = new ProductModel();
             ViewBag.Uid = name;
             ViewBag.CompanyId = id;
-            List<MemProduct> result=p.getMemProducts(id);
+            List<MemProduct> result = p.getMemProducts(id);
             ViewBag.PrepayAccount = 0;
             CrmMemberModel cdb = new CrmMemberModel();
             List<CrmMember> crm = cdb.getCrmMemberListInfoData(name);
             if (crm.Count() > 0)
             {
-                decimal dec = cdb.getPrepayAccount(crm.First().Uid).First().AccountMoney;
+                decimal dec = cdb.GetPrepayAccount(crm.First().Uid).AccountMoney;
                 ViewBag.PrepayAccount = dec;
             }
             return View(result);
-        
+
         }
 
 
@@ -109,6 +111,6 @@ namespace WitBird.XiaoChangHe.Controllers
 
 
 
-       
+
     }
 }

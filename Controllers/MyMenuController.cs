@@ -52,7 +52,7 @@ namespace WitBird.XiaoChangHe.Controllers
             ViewBag.MemberCardNo = MemberCardNo;
             CrmMemberModel cdb1 = new CrmMemberModel();
             ViewBag.PrepayAccount = 0;
-            decimal dec = cdb1.getPrepayAccount(MemberCardNo).First().AccountMoney;
+            decimal dec = cdb1.GetPrepayAccount(MemberCardNo).AccountMoney;
              ViewBag.PrepayAccount = dec;
           string RestaurantId = Session["begindm"] != null ? Session["begindm"].ToString() : "";
             ViewBag.RestaurantId=RestaurantId;
@@ -167,7 +167,7 @@ namespace WitBird.XiaoChangHe.Controllers
             {
                 var currentUser = Session["CrmMember"] as CrmMember;
                 CrmMemberModel cdb1 = new CrmMemberModel();
-                decimal dec = cdb1.getPrepayAccount(currentUser.Uid).First().AccountMoney;
+                decimal dec = cdb1.GetPrepayAccount(currentUser.Uid).AccountMoney;
                 if (!SubmitOrderDBModel.UpdateOrderInfo(order))
                 {
                     msg = "提交订单失败！";
