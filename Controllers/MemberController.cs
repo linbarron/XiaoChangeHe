@@ -155,6 +155,7 @@ namespace WitBird.XiaoChangHe.Controllers
             List<PrepayRecord> p = null;
             try
             {
+                ViewBag.Uid = id;
                 PrepayRecordModel prm = new PrepayRecordModel();
                 p = prm.getRechargeRecordListInfoData(id);
             }
