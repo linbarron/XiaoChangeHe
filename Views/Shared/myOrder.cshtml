@@ -26,32 +26,32 @@
             {
                 <ul style="width: 95%;">
                     <li>
-                        <a href="/MyMenu/MyOrderDetail?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(item.OrderId)&SourceAccountId= @(ViewBag.SourceAccountId)&type='detail'&ComypanyId=@( ViewBag.ComypanyId)" style="color:#ccc">
+                        <a href="/MyMenu/prepareorder?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(item.OrderId)&SourceAccountId= @(ViewBag.SourceAccountId)&type='detail'&ComypanyId=@( ViewBag.ComypanyId)" style="color:#ccc">
                             <nav>
                                 <img src="~/Content/images/ico_dian.png" />
                                 <span style="color: white">@item.name</span>
-
                             </nav>
-                          
-                            @if (item.RstType!="01"&&item.DiningDate != null )
-                            {    
+
+                            @if (item.RstType != "01" && item.DiningDate != null)
+                            {
                                 <nav>
                                     订餐时段：<span>
                                         @if (item.DiningDate.ToString("hh").Equals("09"))
                                         {
                                             string.Format("午餐");
 
-                                        }  else if (item.DiningDate.ToString("hh").Equals("16"))
+                                        }
+                                        else if (item.DiningDate.ToString("hh").Equals("16"))
                                         {
                                             string.Format("晚餐");
                                         }
                                     </span>
                                 </nav>
                                 <nav>订餐时间：<span>@(item.DiningDate.ToString("yyyy-MM-dd HH:mm"))</span></nav>
-                                 
+
                             }
                             @if (item.PersonCount != null && item.PersonCount != 0)
-                            { 
+                            {
                                 <nav>人数：<span>@item.PersonCount</span></nav>
                             }
                         </a>
@@ -99,25 +99,25 @@
             { 
                  <ul style="width: 95%;">
                     <li>
-                        <a href="/MyMenu/MyOrderDetail?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(item.OrderId)&SourceAccountId= @(ViewBag.SourceAccountId)&type='detail'&ComypanyId=@( ViewBag.ComypanyId)&RstType=FastFood" style="color:#ccc">
+                        <a href="/MyMenu/prepareorder?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(item.OrderId)&SourceAccountId= @(ViewBag.SourceAccountId)&type='detail'&ComypanyId=@( ViewBag.ComypanyId)&RstType=FastFood" style="color:#ccc">
                             <nav>
                                 <img src="~/Content/images/ico_dian.png" />
                                 <span style="color: white">@item.name</span>
                             </nav>
                             <nav>会员编号：<span>@(ViewBag.MemberCardNo)</span></nav>
-                             <nav>用餐人数:<span>@(item.PersonCount)</span></nav>
-                            <nav>订餐时间:<span>@(item.DiningDate)</span></nav>  
-
+                            <nav>用餐人数:<span>@(item.PersonCount)</span></nav>
+                            <nav>订餐时间:<span>@(item.DiningDate)</span></nav>
                             @for (int i = 0; i < order_arr[item.OrderId].Count(); i++)
                             {
-                                 <img src="/Order/GetImages/@(order_arr[item.OrderId][i])" style="height: 4.6em; width: 5em; margin-top: 6px;-webkit-border-radius: 5px;border-radius: 5px;" />
-                                if (order_arr[item.OrderId].Count()==1){
-                                 <span>@(item.ProductName)</span>
-                                
+                                <img src="/Order/GetImages/@(order_arr[item.OrderId][i])" style="height: 4.6em; width: 5em; margin-top: 6px;-webkit-border-radius: 5px;border-radius: 5px;" />
+                                if (order_arr[item.OrderId].Count() == 1)
+                                {
+                                    <span>@(item.ProductName)</span>
+
                                 }
                             }
-                            
-                   </a>   
+
+                        </a>   
                         @if (item.status == false)
                         {
                         <div  style="margin:5% 30%; text-align: center; cursor: pointer;" onclick="cancel('@item.OrderId');">

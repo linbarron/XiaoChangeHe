@@ -69,7 +69,7 @@
 
         <div class="footer">
             <div class="footer_left">
-                <img src="/NewContent/images/4.png" onclick="myOrder()"><span class="shu2" id="totalcount">2</span><span class="money">|　<strong id="toatalprice">45.00</strong>元</span></div>
+                <img src="/NewContent/images/4.png" onclick="myOrder()"><span class="shu2" id="totalcount">0</span><span class="money">|　<strong id="toatalprice">00.00</strong>元</span></div>
 
             <a  href="javascript:void(0);" onclick="myOrder()">
                 <div class="footer_right">选好了</div>
@@ -84,6 +84,7 @@
         var bookTime = '@ViewBag.BookTime';
         var Type = '@ViewBag.FastFood';
         var CompanyId = $("#CompanyId").val();
+        var hasLoadSp = false;
     </script>
     <script>
         $(document).ready(function () {
@@ -99,7 +100,10 @@
         function loadContent() {
             var TypeId = $("#left_list li:first").attr("tid");
             var RestaurantId = $("#left_list li:first").attr("rid");
-            DisplayContent(TypeId, RestaurantId, 1);
+            if ($(".jiushuilevel").length == 0)
+                {
+                DisplayContent(TypeId, RestaurantId, 1);
+            }
         }
 
         function DisplaySpecialsListContent(TypeId, RestaurantId) {
@@ -107,21 +111,24 @@
             $("#Specials_left_list").html("");
             $.ajaxSetup({ async: false });
             var Status = '@ViewBag.Status';
+            if (hasLoadSp) {
+                return;
+            }
             $.post("/Specials/RestaurantSpecials", { RestaurantId: RestaurantId, ProductTypeId: TypeId, SourceAccountId: SourceAccountId, Status: Status, Type: Type }, function (msg) {
                 $("#Specials_left_list").html(msg);
                 orderid = $("#OrderId").val();
                 MemberCardNo = $("#MemberCardNo").val();
 
-                var t = $("#pretotalcount").val();
-                //显示用户已点菜数量
-                if (t != null || t != 0 || t != "" || t != undefined) {
-                    $("#totalcount").html(t);
-                }
-                var tp = $("#pretotalprice").val();
-                //显示用户已点菜总价
-                if (tp != null || tp != 0) {
-                    $("#toatalprice").html(tp);
-                }
+                //var t = $("#pretotalcount").val();
+                ////显示用户已点菜数量
+                //if (t != null || t != 0 || t != "" || t != undefined) {
+                //    $("#totalcount").html(t);
+                //}
+                //var tp = $("#pretotalprice").val();
+                ////显示用户已点菜总价
+                //if (tp != null || tp != 0) {
+                //    $("#toatalprice").html(tp);
+                //}
 
                 InitEvent();
 
@@ -140,16 +147,16 @@
                 orderid = $("#OrderId").val();
                 MemberCardNo = $("#MemberCardNo").val();
 
-                var t = $("#pretotalcount").val();
-                //显示用户已点菜数量
-                if (t != null || t != 0 ) {
-                    $("#totalcount").html(t);
-                }
-                var tp = $("#pretotalprice").val();
-                //显示用户已点菜总价
-                if (tp != null || tp != 0) {
-                    $("#toatalprice").html(tp);
-                }
+                //var t = $("#pretotalcount").val();
+                ////显示用户已点菜数量
+                //if (t != null || t != 0 ) {
+                //    $("#totalcount").html(t);
+                //}
+                //var tp = $("#pretotalprice").val();
+                ////显示用户已点菜总价
+                //if (tp != null || tp != 0) {
+                //    $("#toatalprice").html(tp);
+                //}
 
                 InitEvent();
 
@@ -179,7 +186,7 @@
             alert("你还未点菜！");
             return;
         }
-        window.location.href = "/MyMenu/MyOrderDetail?MemberCardNo=" + MemberCardNo + "&OrderId=" + orderid + "&SourceAccountI=" + SourceAccountId + "&ComypanyId =" + CompanyId + "&RstType=" + Type + "";
+        window.location.href = "/MyMenu/prepareorder?MemberCardNo=" + MemberCardNo + "&OrderId=" + orderid + "&SourceAccountI=" + SourceAccountId + "&ComypanyId =" + CompanyId + "&RstType=" + Type + "";
 
     }
 

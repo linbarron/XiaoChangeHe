@@ -5,6 +5,7 @@ using Senparc.Weixin.MP.AdvancedAPIs.OAuth;
 using Senparc.Weixin.MP.TenPayLibV3;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
@@ -179,13 +180,15 @@ namespace WitBird.XiaoChangHe.Controllers
                     _tenPayV3Info =
                         TenPayV3InfoCollection.Data[System.Configuration.ConfigurationManager.AppSettings["TenPayV3_MchId"]];
                 }
+                //这里需要重新设置一下充值支付返回处理路径
+                _tenPayV3Info.TenPayV3Notify = ConfigurationManager.AppSettings["TenPayV3_TenpayNotify"];
                 return _tenPayV3Info;
             }
         }
 
         public ActionResult PreRecharge(string id, string name)
         {
-            var returnUrl = string.Format("http://test.xgdg.cn/member/recharge?name=" + name + "&showwxpaytitle=1");
+            var returnUrl = "/member/recharge?name=" + name + "&showwxpaytitle=1";
             var state = "";
             var url = OAuthApi.GetAuthorizeUrl(TenPayV3Info.AppId, returnUrl, state, OAuthScope.snsapi_userinfo);
 
@@ -271,7 +274,6 @@ namespace WitBird.XiaoChangHe.Controllers
                 BillPayModel billPayModel = new BillPayModel();
 
                 Models.Info.PrepayRecord prepayRecord = null;
-                Models.Info.PrepayAccount prepayAccount = null;
                 Models.Info.BillPay billPay = null;
 
                 decimal totalPrice = 0;
@@ -294,8 +296,6 @@ namespace WitBird.XiaoChangHe.Controllers
                     var jsonData = new { IsSuccess = false, Message = "金额错误" };
                     return Json(jsonData, JsonRequestBehavior.AllowGet);
                 }
-
-                prepayAccount = crmMemberModel.GetPrepayAccount(uid);
 
                 //try
                 //{
@@ -333,7 +333,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 prepayRecord.RState = "";
                 prepayRecord.RstId = Constants.CompanyId;
                 prepayRecord.ScoreVip = 0;
-                prepayRecord.SId = DateTime.Now.ToString("HHmmss") + TenPayV3Util.BuildRandomStr(28);
+                prepayRecord.SId = Guid.NewGuid().ToString();//DateTime.Now.ToString("HHmmss") + TenPayV3Util.BuildRandomStr(28);
                 prepayRecord.Uid = uid;
                 prepayRecord.UserId = "System";
 

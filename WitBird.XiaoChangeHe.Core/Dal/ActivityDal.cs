@@ -23,7 +23,7 @@ namespace WitBird.XiaoChangeHe.Core.Dal
                 var SqlCmd = new SqlCommand();
                 SqlCmd.Connection = SqlConn;
                 SqlCmd.CommandText = @"
-select Id,Title, ImageUrl
+select Id,Title, ImageUrl,Description
 from Activity
 where State = @State
 order by LastUpdatedTime desc";
@@ -90,7 +90,7 @@ where Id=@ActivitytId";
                     detail.ImageUrl = reader["ImageUrl"] == DBNull.Value ? null : reader["ImageUrl"].ToString();
                     detail.Link = reader["ImageUrl"] == DBNull.Value ? null : reader["ImageUrl"].ToString();
                     detail.StartTime = reader["EndTime"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(reader["EndTime"]);
-                    detail.Title = reader["ContentText"] == DBNull.Value ? null : reader["ContentText"].ToString();
+                    detail.Title = reader["Title"] == DBNull.Value ? null : reader["Title"].ToString();
                 }
             }
 

@@ -26,32 +26,32 @@
             {
                 <ul style="width: 95%;">
                     <li>
-                        <a href="/MyMenu/MyOrderDetail?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(item.OrderId)&SourceAccountId= @(ViewBag.SourceAccountId)&type='detail'&ComypanyId=@( ViewBag.ComypanyId)" style="color:#ccc">
+                        <a href="/MyMenu/prepareorder?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(item.OrderId)&SourceAccountId= @(ViewBag.SourceAccountId)&type='detail'&ComypanyId=@( ViewBag.ComypanyId)" style="color:#ccc">
                             <nav>
                                 <img src="~/Content/images/ico_dian.png" />
                                 <span style="color: white">@item.name</span>
-
                             </nav>
-                          
-                            @if (item.RstType!="01"&&item.DiningDate != null )
-                            {    
+
+                            @if (item.RstType != "01" && item.DiningDate != null)
+                            {
                                 <nav>
                                     订餐时段：<span>
                                         @if (item.DiningDate.ToString("hh").Equals("09"))
                                         {
                                             string.Format("午餐");
 
-                                        }  else if (item.DiningDate.ToString("hh").Equals("16"))
+                                        }
+                                        else if (item.DiningDate.ToString("hh").Equals("16"))
                                         {
                                             string.Format("晚餐");
                                         }
                                     </span>
                                 </nav>
                                 <nav>订餐时间：<span>@(item.DiningDate.ToString("yyyy-MM-dd HH:mm"))</span></nav>
-                                 
+
                             }
                             @if (item.PersonCount != null && item.PersonCount != 0)
-                            { 
+                            {
                                 <nav>人数：<span>@item.PersonCount</span></nav>
                             }
                         </a>
@@ -75,37 +75,36 @@
             {
                 <ul style="width: 95%;">
                     <li>
-                        <a href="/MyMenu/MyOrderDetail?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(item.OrderId)&SourceAccountId= @(ViewBag.SourceAccountId)&type='detail'&ComypanyId=@( ViewBag.ComypanyId)&RstType=FastFood" style="color:#ccc">
+                        <a href="/MyMenu/prepareorder?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(item.OrderId)&SourceAccountId= @(ViewBag.SourceAccountId)&type='detail'&ComypanyId=@( ViewBag.ComypanyId)&RstType=FastFood" style="color:#ccc">
                             <nav>
                                 <img src="~/Content/images/ico_dian.png" />
                                 <span style="color: white">@item.name</span>
-
                             </nav>
-                          @* <nav>订单号：<span>@(ViewBag.MemberCardNo)@(item.DiningDate)</span></nav>*@
+                            @* <nav>订单号：<span>@(ViewBag.MemberCardNo)@(item.DiningDate)</span></nav>*@
                             <nav>会员编号：<span>@(ViewBag.MemberCardNo)</span></nav>
-                             <nav>用餐人数:<span>@(item.PersonCount)</span></nav>
+                            <nav>用餐人数:<span>@(item.PersonCount)</span></nav>
                             <nav>订餐时间:<span>@(item.DiningDate)</span></nav>
-                           @* @if (item.RstType!="01"&&item.DiningDate != null )
-                            {      
-                                <nav>
-                                    订餐时段：<span>
-                                        @if (item.DiningDate.ToString("hh").Equals("09"))
-                                        {
-                                            string.Format("午餐");
+                            @* @if (item.RstType!="01"&&item.DiningDate != null )
+            {
+                <nav>
+                    订餐时段：<span>
+                        @if (item.DiningDate.ToString("hh").Equals("09"))
+                        {
+                            string.Format("午餐");
 
-                                        }
-                                        
-                                        else if (item.DiningDate.ToString("hh").Equals("16"))
-                                        {
-                                            string.Format("晚餐");
+                        }
 
-                                        }
-                                    </span>
-                                </nav>}
-                            @if (item.PersonCount != null && item.PersonCount != 0)
-                            { 
-                                <nav>人数：<span>@item.PersonCount</span></nav>
-                            }*@
+                        else if (item.DiningDate.ToString("hh").Equals("16"))
+                        {
+                            string.Format("晚餐");
+
+                        }
+                    </span>
+                </nav>}
+            @if (item.PersonCount != null && item.PersonCount != 0)
+            {
+                <nav>人数：<span>@item.PersonCount</span></nav>
+            }*@
                         </a>
                         <div  style="margin:5% 30%; text-align: center; cursor: pointer;" onclick="cancel('@item.OrderId');">
                             <img src="~/Content/images/ico_quxiao.png" />

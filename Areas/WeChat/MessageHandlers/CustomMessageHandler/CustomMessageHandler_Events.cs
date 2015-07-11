@@ -55,28 +55,42 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                     {
                         var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
 
-                        ActivityManager manager = new ActivityManager();
-
-                        var list = manager.GetActivityList(1);
-                        if (list != null && list.Count > 0)
+                        try
                         {
-                            foreach (var activity in list)
+                            ActivityManager manager = new ActivityManager();
+
+                            var list = manager.GetActivityList(1);
+                            if (list != null && list.Count > 0)
                             {
-                                Article article = new Article();
+                                list = list.Take(4).ToList();
+                                foreach (var activity in list)
+                                {
+                                    Article article = new Article();
 
-                                article.Title = activity.Title;
-                                article.Description = activity.Description;
-                                article.PicUrl = activity.ImageUrl;
-                                article.Url = string.Format("http://test.xgdg.cn/Activity/{0}", activity.Id);
+                                    article.Title = activity.Title;
+                                    article.Description = activity.Description;
+                                    article.PicUrl = activity.ImageUrl;
+                                    article.Url = string.Format("http://test.xgdg.cn/Activity/Detail/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}?activityId={1}", requestMessage.FromUserName, activity.Id);
 
-                                strongResponseMessage.Articles.Add(article);
+                                    strongResponseMessage.Articles.Add(article);
+                                }
+                            }
+                            else
+                            {
+                                strongResponseMessage.Articles.Add(new Article
+                                {
+                                    Title = "暂无活动"
+                                });
                             }
                         }
-                        else
+                        catch (Exception)
                         {
                             strongResponseMessage.Articles.Add(new Article
                             {
-                                Title = "暂无活动"
+                                Title = "点击查看最新活动",
+                                Description = "点击查看最新活动",
+                                PicUrl = "http://test.xgdg.cn/Images/4.jpg",
+                                Url = "http://test.xgdg.cn/Activity"
                             });
                         }
 

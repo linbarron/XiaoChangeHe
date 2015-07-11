@@ -16,7 +16,13 @@ namespace WitBird.XiaoChangHe.Models.Info
         public decimal Change { get; set; }
         public decimal? Remove { get; set; }
         public string MemberCardNo { get; set; }
+        /// <summary>
+        /// 余额支付金额
+        /// </summary>
         public decimal Cash { get; set; }
+        /// <summary>
+        /// 在线支付金额
+        /// </summary>
         public decimal CreditCard { get; set; }
         public decimal MemberCard { get; set; }
         public decimal Coupons { get; set; }
