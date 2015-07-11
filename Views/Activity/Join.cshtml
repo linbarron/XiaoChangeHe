@@ -1,0 +1,39 @@
+﻿@model WitBird.XiaoChangHe.Models.JoinActivityModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>线上vip认证</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1,maximum-scale=1,initial-scale=1,user-scalable=no" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="yes" name="apple-touch-fullscreen" />
+    <meta content="telephone=no" name="format-detection" />
+    <meta content="email=no" name="format-detection" />
+    <meta content="black" name="apple-mobile-web-app-staimagess-bar-style">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="wap-font-scale" content="no" />
+    <!-- 引入css-->
+    <link href="/NewUI/style/vip.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div class="container">
+        @using (Html.BeginForm())
+        {
+            <!--  会员号码 和number-->
+            <div class="content">
+                <span class="span_l">认证会员号：</span> <span class="span_r">NO.770638</span>
+                <!-- 输入邀请码输入框-->
+                <div class="content-bottom">
+                    <input type="text" placeholder="请输入邀请码" />         <!--立即验证按钮   -->
+                    <input type="submit" class="submit" value="立即验证" />
+                </div>
+            </div>
+        }
+    </div>
+</body>
+</html>

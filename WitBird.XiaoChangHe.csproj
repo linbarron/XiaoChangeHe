@@ -337,6 +337,7 @@
     <Compile Include="Models\Info\ProductType.cs" />
     <Compile Include="Models\Info\Province.cs" />
     <Compile Include="Models\Info\RandomProduct.cs" />
+    <Compile Include="Models\JoinActivityModel.cs" />
     <Compile Include="Models\ModelExtensions\CrmMemberExtension.cs" />
     <Compile Include="Models\NewsModel.cs" />
     <Compile Include="Models\PrepayRecordModel.cs" />
@@ -914,6 +915,9 @@
     <Content Include="Views\Activity\Index.cshtml" />
     <Content Include="Views\Member\Info - Copy.cshtml" />
     <Content Include="Views\Activity\Detail.cshtml" />
+    <Content Include="Views\Activity\Join.cshtml" />
+    <Content Include="Views\Activity\Pass.cshtml" />
+    <Content Include="Views\Activity\Failed.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
