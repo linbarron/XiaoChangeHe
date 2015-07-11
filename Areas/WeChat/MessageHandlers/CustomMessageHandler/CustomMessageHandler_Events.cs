@@ -70,7 +70,7 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                                     article.Title = activity.Title;
                                     article.Description = activity.Description;
                                     article.PicUrl = activity.ImageUrl;
-                                    article.Url = string.Format("http://test.xgdg.cn/Activity/Detail/{0}?fromUserName={1}", activity.Id, requestMessage.FromUserName);
+                                    article.Url = string.Format("http://test.xgdg.cn/Activity/Detail/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}?activityId={1}", requestMessage.FromUserName, activity.Id);
 
                                     strongResponseMessage.Articles.Add(article);
                                 }

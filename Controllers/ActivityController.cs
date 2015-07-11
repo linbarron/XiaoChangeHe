@@ -15,12 +15,12 @@ namespace WitBird.XiaoChangHe.Controllers
         /// </summary>
         /// <param name="id">1.进行中的活动。2.已经结束的活动</param>
         /// <returns></returns>
-        public ActionResult Index(string id, string fromUserName)
+        public ActionResult Index(string id, string name, string activityState)
         {
             int state = 1;
-            if (!string.IsNullOrEmpty(id))
+            if (!string.IsNullOrEmpty(activityState))
             {
-                switch (id)
+                switch (activityState)
                 {
                     case "2":
                         state = 2;
@@ -38,6 +38,9 @@ namespace WitBird.XiaoChangHe.Controllers
 
             ViewBag.State = state;
 
+            ViewBag.CompanyId = id;
+            ViewBag.Name = name;
+
             return View(list);
         }
 
@@ -45,10 +48,10 @@ namespace WitBird.XiaoChangHe.Controllers
         /// 活动详情
         /// </summary>
         /// <returns></returns>
-        public ActionResult Detail(string id, string fromUserName)
+        public ActionResult Detail(string id, string name, string activityId)
         {
             var intId = 0;
-            if (int.TryParse(id, out intId))
+            if (int.TryParse(activityId, out intId))
             {
                 var manager = new ActivityManager();
 
@@ -56,7 +59,8 @@ namespace WitBird.XiaoChangHe.Controllers
 
                 if (activity != null)
                 {
-                    ViewBag.FromUserName = fromUserName;
+                    ViewBag.CompanyId = id;
+                    ViewBag.Name = name;
 
                     return View(activity);
                 }
@@ -69,20 +73,45 @@ namespace WitBird.XiaoChangHe.Controllers
             {
                 return Redirect("/");
             }
-
-            return View();
         }
 
         /// <summary>
         /// 活动详情页“立即加入”之后的页面
         /// </summary>
         /// <returns></returns>
-        public ActionResult Join(string fromUserName)
+        public ActionResult Join(string id, string name)
         {
-            var model = new JoinActivityModel();
-            model.FromUserName = fromUserName;
+            ActionResult result = null;
 
-            return View(model);
+            var model = new JoinActivityModel();
+
+            var userManager = new UserManager();
+            var orderManager = new OrderManager();
+
+            Guid companyGuid = Guid.Empty;
+            if (Guid.TryParse(id, out companyGuid))
+            {
+                var uid = userManager.GetUid(companyGuid, name);
+
+                if (!string.IsNullOrEmpty(uid))
+                {
+                    ViewBag.CompanyId = id;
+                    ViewBag.Name = name;
+                    ViewBag.Uid = uid;
+
+                    result = View(model);
+                }
+                else
+                {
+                    result = Redirect("/");
+                }
+            }
+            else
+            {
+                result = Redirect("/");
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -90,7 +119,7 @@ namespace WitBird.XiaoChangHe.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Join(JoinActivityModel model)
+        public ActionResult Join(string id, string name, JoinActivityModel model)
         {
             ActionResult result = null;
 
@@ -114,14 +143,16 @@ namespace WitBird.XiaoChangHe.Controllers
                 }
                 else//验证失败
                 {
-                    ViewBag.FromUserName = model.FromUserName;
+                    ViewBag.CompanyId = id;
+                    ViewBag.Name = name;
 
                     result = View("Failed");
                 }
             }
             else
             {
-                ViewBag.FromUserName = model.FromUserName;
+                ViewBag.CompanyId = id;
+                ViewBag.Name = name;
 
                 result = View("Failed");
             }
