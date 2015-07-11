@@ -59,7 +59,7 @@ namespace WitBird.XiaoChangHe.Controllers
             {
                 return Content("非正常交易请求");
             }
-            var returnUrl = string.Format("http://test.xgdg.cn/paytest/JsApi");
+            var returnUrl = string.Format(Constants.HostDomain + "/paytest/JsApi");
             var state = string.Format("{0}|{1}|{2}|{3}", id, hc, uid, m);
             var url = OAuthApi.GetAuthorizeUrl(TenPayV3Info.AppId, returnUrl, state, OAuthScope.snsapi_userinfo);
 

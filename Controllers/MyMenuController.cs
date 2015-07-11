@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Text;
 using System.Transactions;
 using System.Web;
 using System.Web.Mvc;
@@ -70,12 +71,63 @@ namespace WitBird.XiaoChangHe.Controllers
             }
         }
 
+        public ActionResult MyOrderDetail(string code, string state, string MemberCardNo, string OrderId, string SourceAccountId,
+            string ComypanyId = null, string Type = null, string RstType = null)
+        {
+            try
+            {
+                ViewBag.Code = code;
+                ViewBag.State = state;
+                ViewBag.Uid = MemberCardNo;
+                ViewBag.CompanyId = Constants.CompanyId;
+                ViewBag.RstType = RstType;
+                ViewBag.SourceAccountId = SourceAccountId;
+                ViewBag.OrderId = OrderId;
+                ViewBag.MemberCardNo = MemberCardNo;
+                CrmMemberModel cdb1 = new CrmMemberModel();
+                ViewBag.PrepayAccount = 0;
+                decimal dec = cdb1.GetPrepayAccount(MemberCardNo).AccountMoney;
+                ViewBag.PrepayAccount = dec;
+                string RestaurantId = Session["begindm"] != null ? Session["begindm"].ToString() : "";
+                ViewBag.RestaurantId = RestaurantId;
+                MyMenuModel odb = new MyMenuModel();
+
+                List<MyOrderDetail> detail = odb.getMyOrderDetailListData(MemberCardNo, OrderId, RstType);
+                // ViewBag.MyOrderDetail = detail;
+
+                decimal sum = 0;
+                if (detail.Count > 0)
+                {
+                    for (int i = 0; i < detail.Count; i++)
+                    {
+                        if (detail[i].UnitPrice != 0)
+                        {
+                            sum += detail[i].MemberPrice * detail[i].ProductCount;
+                        }
+                    }
+                }
+                ViewBag.MemberPriceTotal = sum;
+                //获取该店面的就餐时间
+                ViewBag.Explain = "";
+                ReceiveOrderModel m = new ReceiveOrderModel();
+                List<ReceiveOrder2> list = m.SelReceiveOrder2Info(RestaurantId);
+                if (list != null && list.Count > 0) { ViewBag.Explain = list.First().Explain; }
+                return View(detail);
+            }
+            catch (Exception ex)
+            {
+                return Content("订单信息获取错误:\r\rn" + ex.Message);
+            }
+        }
+
+
+
         public ActionResult PrepareOrder(string MemberCardNo, string OrderId, string SourceAccountId,
             string ComypanyId = null, string Type = null, string RstType = null)
         {
             const string Format = "MemberCardNo={0}&OrderId={1}&SourceAccountId={2}&ComypanyId={3}&Type={4}&RstType={5}";
             string paras = string.Format(Format, MemberCardNo, OrderId, SourceAccountId, ComypanyId, Type, RstType);
-            var returnUrl = "/member/MyOrderDetail?" + paras + "&showwxpaytitle=1";
+            var returnUrl = Constants.HostDomain + "/mymenu/MyOrderDetail?" + paras + "&showwxpaytitle=1";
             var state = "";
             var url = OAuthApi.GetAuthorizeUrl(TenPayV3Info.AppId, returnUrl, state, OAuthScope.snsapi_userinfo);
 
@@ -99,29 +151,25 @@ namespace WitBird.XiaoChangHe.Controllers
                 OrderModel orderModel = new OrderModel();
                 OrderDetailsModel orderDetaisModel = new OrderDetailsModel();
 
-                Models.Info.Order order = null;
                 List<MyOrderDetail> orderDetails = null;
                 Models.Info.PrepayRecord prepayRecord = null;
                 Models.Info.BillPay billPay = null;
                 Models.Info.PrepayAccount prepayAccount = null;
 
-                order = orderModel.selOrderId(orderId).FirstOrDefault();
+                orderDetails = odb.getMyOrderDetailListData(uid, orderId, RstType);
 
-                if (order != null)
+                if (orderDetails != null && orderDetails.Count > 0)
                 {
                     decimal totalPrice = 0;
 
-                    orderDetails = odb.getMyOrderDetailListData(uid, orderId, RstType);
-                    if (orderDetails.Count > 0)
+                    for (int i = 0; i < orderDetails.Count; i++)
                     {
-                        for (int i = 0; i < orderDetails.Count; i++)
+                        if (orderDetails[i].UnitPrice != 0)
                         {
-                            if (orderDetails[i].UnitPrice != 0)
-                            {
-                                totalPrice += orderDetails[i].MemberPrice * orderDetails[i].ProductCount;
-                            }
+                            totalPrice += orderDetails[i].MemberPrice * orderDetails[i].ProductCount;
                         }
                     }
+
                     prepayAccount = crmMemberModel.GetPrepayAccount(uid);
 
                     bool isOnlinePay = false;
@@ -194,7 +242,9 @@ namespace WitBird.XiaoChangHe.Controllers
                     billPay.Remove = 0;
                     billPay.RstId = Constants.CompanyId;
                     billPay.UserId = Guid.Empty;
-                    billPay.UserName = order.ContactName;
+                    billPay.UserName = orderDetails.First().ContactName;
+
+                    billPay.CreditCard = 0.01m;
 
                     using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
                     {
@@ -228,7 +278,7 @@ namespace WitBird.XiaoChangHe.Controllers
                             packageReqHandler.SetParameter("out_trade_no", billPay.PayId.ToString("N"));		//商家订单号
                             packageReqHandler.SetParameter("total_fee", (Convert.ToInt32(billPay.CreditCard * 100)).ToString());			        //商品金额,以分为单位(money * 100).ToString()
                             packageReqHandler.SetParameter("spbill_create_ip", Request.UserHostAddress);   //用户的公网ip，不是商户服务器IP
-                            packageReqHandler.SetParameter("notify_url", TenPayV3Info.TenPayV3Notify);		    //接收财付通通知的URL
+                            packageReqHandler.SetParameter("notify_url", ConfigurationManager.AppSettings["TenPayV3_TenpayNotify_Consuming"]);		    //接收财付通通知的URL
                             packageReqHandler.SetParameter("trade_type", TenPayV3Type.JSAPI.ToString());	                    //交易类型
                             packageReqHandler.SetParameter("openid", openid);	                    //用户的openId
 
@@ -240,13 +290,13 @@ namespace WitBird.XiaoChangHe.Controllers
                             var result = TenPayV3.Unifiedorder(data);
                             var res = XDocument.Parse(result);
                             var prepayId = res.Element("xml").Element("prepay_id").Value;
-
+                            package = string.Format("prepay_id={0}", prepayId);
                             //设置支付参数
                             RequestHandler paySignReqHandler = new RequestHandler(null);
                             paySignReqHandler.SetParameter("appId", TenPayV3Info.AppId);
                             paySignReqHandler.SetParameter("timeStamp", timeStamp);
                             paySignReqHandler.SetParameter("nonceStr", nonceStr);
-                            paySignReqHandler.SetParameter("package", string.Format("prepay_id={0}", prepayId));
+                            paySignReqHandler.SetParameter("package", package);
                             paySignReqHandler.SetParameter("signType", "MD5");
                             paySign = paySignReqHandler.CreateMd5Sign("key", TenPayV3Info.Key);
 
@@ -255,25 +305,6 @@ namespace WitBird.XiaoChangHe.Controllers
                             //ViewData["nonceStr"] = nonceStr;
                             //ViewData["package"] = string.Format("prepay_id={0}", prepayId);
                             //ViewData["paySign"] = paySign;
-
-
-                            //余额清零，在notify里边做
-                            //if (billPay.Cash > 0)
-                            //{
-                            //    prepayAccount.AccountMoney = 0;
-                            //    prepayAccount.PresentMoney = 0;
-                            //    prepayAccount.TotalMoney = 0;
-                            //    prepayAccount.TotalPresent = 0;
-                            //    prepayAccount.LastConsumeDate = DateTime.Now;
-                            //    prepayAccount.LastConsumeMoney = billPay.Cash;
-                            //    prepayAccount.LastPresentMoney = 0;
-
-                            //    if (!crmMemberModel.UpdatePrepayAccount(prepayAccount))
-                            //    {
-                            //        var failedData = new { IsSuccess = false, Message = "支付失败" };
-                            //        return Json(failedData, JsonRequestBehavior.AllowGet);
-                            //    }
-                            //}
 
                             scope.Complete();
                             var onlinePayResult = new
@@ -314,7 +345,7 @@ namespace WitBird.XiaoChangHe.Controllers
                                 prepayAccount.PresentMoney -= cash - accountMoney;
                             }
 
-                            if (!crmMemberModel.UpdatePrepayAccount(prepayAccount))
+                            if (!crmMemberModel.UpdatePrepayAccount(prepayAccount) && orderModel.UpdateOrderAsPaid(Guid.Parse(orderId)))
                             {
                                 var failedData = new { IsSuccess = false, Message = "支付失败" };
                                 return Json(failedData, JsonRequestBehavior.AllowGet);
@@ -340,53 +371,144 @@ namespace WitBird.XiaoChangHe.Controllers
             }
         }
 
-        public ActionResult MyOrderDetail(string code, string state, string MemberCardNo, string OrderId, string SourceAccountId,
-            string ComypanyId = null, string Type = null, string RstType = null)
+        [HttpPost]
+        public ActionResult ComsumingPayNotifyUrl()
         {
+            ResponseHandler resHandler = new ResponseHandler(null);
+
+            string return_code = resHandler.GetParameter("return_code");
+            string return_msg = resHandler.GetParameter("return_msg");
+            return_code = "FAIL";
+            return_msg = "处理支付通知出现异常";
+            string res = null;
+
             try
             {
-                ViewBag.Code = code;
-                ViewBag.State = state;
-                ViewBag.Uid = MemberCardNo;
-                ViewBag.CompanyId = Constants.CompanyId;
-                ViewBag.RstType = RstType;
-                ViewBag.SourceAccountId = SourceAccountId;
-                ViewBag.OrderId = OrderId;
-                ViewBag.MemberCardNo = MemberCardNo;
-                CrmMemberModel cdb1 = new CrmMemberModel();
-                ViewBag.PrepayAccount = 0;
-                decimal dec = cdb1.GetPrepayAccount(MemberCardNo).AccountMoney;
-                ViewBag.PrepayAccount = dec;
-                string RestaurantId = Session["begindm"] != null ? Session["begindm"].ToString() : "";
-                ViewBag.RestaurantId = RestaurantId;
-                MyMenuModel odb = new MyMenuModel();
 
-                List<MyOrderDetail> detail = odb.getMyOrderDetailListData(MemberCardNo, OrderId, RstType);
-                // ViewBag.MyOrderDetail = detail;
-
-                decimal sum = 0;
-                if (detail.Count > 0)
+                resHandler.SetKey(TenPayV3Info.Key);
+                //验证请求是否从微信发过来（安全）
+                if (resHandler.IsTenpaySign())
                 {
-                    for (int i = 0; i < detail.Count; i++)
+                    //正确的订单处理
+
+                    string out_trade_no = resHandler.GetParameter("out_trade_no");
+                    string total_fee = resHandler.GetParameter("total_fee");
+                    //微信支付订单号
+                    string transaction_id = resHandler.GetParameter("transaction_id");
+                    //支付完成时间
+                    string time_end = resHandler.GetParameter("time_end");
+
+                    BillPay billPay = null;
+                    BillPayModel billPayModel = new BillPayModel();
+
+                    Guid billPayId = Guid.Parse(out_trade_no);
+                    billPay = billPayModel.GetBillPayById(billPayId);
+
+                    if (billPay == null)
                     {
-                        if (detail[i].UnitPrice != 0)
+                        res = "订单:" + billPayId + "不存在";
+                        return_msg = res;
+                    }
+                    else if (billPay.CreditCard != (decimal)(Convert.ToDecimal(total_fee) / 100))
+                    {
+                        res = "订单金额不符合";
+                        return_msg = res;
+                    }
+                    else if (!billPay.PayState.Equals(BillPayState.Paid)) //没有处理过该订单
+                    {
+                        using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
                         {
-                            sum += detail[i].MemberPrice * detail[i].ProductCount;
+                            //更新订单状态为已支付，记录交易流水号
+                            if (billPayModel.UpdateBillStateAsPaid(billPayId, transaction_id))
+                            {
+                                CrmMemberModel crmMemberModel = new CrmMemberModel();
+                                PrepayRecordModel prepayRecordModel = new PrepayRecordModel();
+                                OrderModel orderModel = new OrderModel();
+
+                                //查询支付订单对应的充值记录
+                                PrepayRecord prepayRecord = prepayRecordModel.GetPrepayRecordByBillPayId(billPayId);
+
+                                if (prepayRecord == null)
+                                {
+                                    res = "查询不到对应的消费记录";
+                                    return_msg = res;
+                                }
+                                else
+                                {
+                                    string uid = prepayRecord.Uid;
+                                    //查询个人余额账户
+                                    PrepayAccount prepayAccount = crmMemberModel.GetPrepayAccount(prepayRecord.Uid);
+
+                                    if (prepayAccount == null)
+                                    {
+                                        res = "查询不到用户账户记录";
+                                        return_msg = res;
+                                    }
+                                    else
+                                    {
+                                        //个人账户清零                               
+                                        prepayAccount.LastPresentMoney = prepayRecord.PresentMoney;
+                                        prepayAccount.AccountMoney = 0;
+                                        prepayAccount.PresentMoney = 0;
+                                        prepayAccount.TotalPresent = 0;
+                                        prepayAccount.TotalMoney = 0;
+                                        prepayAccount.LastConsumeDate = DateTime.Now;
+                                        prepayAccount.LastConsumeMoney = billPay.Cash;
+
+                                        if (!crmMemberModel.UpdatePrepayAccount(prepayAccount))
+                                        {
+                                            res = "更新用户账户信息未成功";
+                                        }
+                                        else if(!orderModel.UpdateOrderAsPaid(Guid.Parse(prepayRecord.SId)))
+                                        {
+                                            res = "更新订单状态为已支付失败";
+                                        }
+                                        else
+                                        {
+                                            return_msg = res;
+                                            return_code = "SUCCESS";
+                                            return_msg = "OK";
+                                            //提交事务
+                                            scope.Complete();
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
+                    else
+                    {
+                        res = "订单：" + billPay.PayId + "已处理，不能重复处理";
+                        return_code = "SUCCESS";
+                        return_msg = "OK";
+                    }
                 }
-                ViewBag.MemberPriceTotal = sum;
-                //获取该店面的就餐时间
-                ViewBag.Explain = "";
-                ReceiveOrderModel m = new ReceiveOrderModel();
-                List<ReceiveOrder2> list = m.SelReceiveOrder2Info(RestaurantId);
-                if (list != null && list.Count > 0) { ViewBag.Explain = list.First().Explain; }
-                return View(detail);
+                else
+                {
+                    res = "非法支付结果通知";
+
+                    //错误的订单处理
+                }
+
             }
             catch (Exception ex)
             {
-                return Content("订单信息获取错误:\r\rn" + ex.Message);
+                res += ex.ToString();
+                return_code = "FAIL";
+                return_msg = ex.ToString();
             }
+
+            var fileStream = System.IO.File.OpenWrite(Server.MapPath("~/1.txt"));
+            fileStream.Write(Encoding.Default.GetBytes(res), 0, Encoding.Default.GetByteCount(res));
+            fileStream.Close();
+
+            string xml = string.Format(@"<xml>
+   <return_code><![CDATA[{0}]]></return_code>
+   <return_msg><![CDATA[{1}]]></return_msg>
+</xml>", return_code, return_msg);
+
+            return Content(xml, "text/xml");
+
         }
 
         public int EmptyMyMenu(string MemberCardNo, string orderId, string SourceAccountId, string type = null)
@@ -465,8 +587,9 @@ namespace WitBird.XiaoChangHe.Controllers
             string msg = string.Empty;
             try
             {
-                var currentUser = Session["CrmMember"] as CrmMember;
                 CrmMemberModel cdb1 = new CrmMemberModel();
+
+                var currentUser = cdb1.getCrmMemberListInfoData(order.SourceAccountId).FirstOrDefault();
                 decimal dec = cdb1.GetPrepayAccount(currentUser.Uid).AccountMoney;
                 if (!SubmitOrderDBModel.UpdateOrderInfo(order))
                 {

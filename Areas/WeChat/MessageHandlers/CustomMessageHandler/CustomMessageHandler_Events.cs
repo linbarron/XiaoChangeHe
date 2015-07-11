@@ -46,7 +46,7 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                             Title = "开始预定",
                             Description = "通过微信预订点餐",
                             PicUrl = ImgUrl + "wxbeginorder.jpg",
-                            Url = string.Format("http://test.xgdg.cn/order/begin/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}?type=Quick", requestMessage.FromUserName)
+                            Url = string.Format(Constants.HostDomain + "/order/begin/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}?type=Quick", requestMessage.FromUserName)
                         });
                         reponseMessage = strongResponseMessage;
                     }
@@ -70,7 +70,7 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                                     article.Title = activity.Title;
                                     article.Description = activity.Description;
                                     article.PicUrl = activity.ImageUrl;
-                                    article.Url = string.Format("http://test.xgdg.cn/Activity/Detail/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}?activityId={1}", requestMessage.FromUserName, activity.Id);
+                                    article.Url = string.Format(Constants.HostDomain + "/Activity/Detail/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}?activityId={1}", requestMessage.FromUserName, activity.Id);
 
                                     strongResponseMessage.Articles.Add(article);
                                 }
@@ -89,8 +89,8 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                             {
                                 Title = "点击查看最新活动",
                                 Description = "点击查看最新活动",
-                                PicUrl = "http://test.xgdg.cn/Images/4.jpg",
-                                Url = "http://test.xgdg.cn/Activity"
+                                PicUrl = Constants.HostDomain + "/Images/4.jpg",
+                                Url = Constants.HostDomain + "/Activity"
                             });
                         }
 
@@ -101,7 +101,7 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                     {
                         var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
                         string uid = string.Empty;
-                        string picUrl = "http://test.xgdg.cn/NewContent/images/w.png"; ;
+                        string picUrl = Constants.HostDomain + "/NewContent/images/w.png"; ;
                         try
                         {
                             CrmMemberModel model = new CrmMemberModel();
@@ -109,7 +109,7 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                             var prepayAccount = model.GetPrepayAccount(uid);
                             if (prepayAccount != null && prepayAccount.AccountMoney > 0)
                             {
-                                picUrl = "http://test.xgdg.cn/NewContent/images/chu.png";
+                                picUrl = Constants.HostDomain + "/NewContent/images/chu.png";
                             }
                         }
                         catch (Exception ex)
@@ -122,7 +122,7 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                             Title = "会员信息",
                             Description = "您的会员号：" + uid,
                             PicUrl = picUrl,
-                            Url = string.Format("http://test.xgdg.cn/Member/Info/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}", requestMessage.FromUserName)
+                            Url = string.Format(Constants.HostDomain + "/Member/Info/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}", requestMessage.FromUserName)
                         });
                         reponseMessage = strongResponseMessage;
                     }
@@ -135,7 +135,7 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                             Title = "会员支付",
                             Description = "点击发起微信支付测试",
                             PicUrl = ImgUrl + "wxbeginorder.jpg",
-                            Url = string.Format("http://test.xgdg.cn/member/PreRecharge/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}?type=Quick", requestMessage.FromUserName)
+                            Url = string.Format(Constants.HostDomain + "/member/PreRecharge/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}?type=Quick", requestMessage.FromUserName)
                         });
                         reponseMessage = strongResponseMessage;
                     }
@@ -149,7 +149,7 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                             Title = "我的订单",
                             Description = "我的订单：",
                             PicUrl = ImgUrl + "wxmembercard_h.png",
-                            Url = string.Format("http://test.xgdg.cn/NewOrder/My/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}", requestMessage.FromUserName)
+                            Url = string.Format(Constants.HostDomain + "/NewOrder/My/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}", requestMessage.FromUserName)
                         });
                         reponseMessage = strongResponseMessage;
                     }

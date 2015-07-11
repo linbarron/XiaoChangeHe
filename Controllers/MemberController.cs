@@ -189,7 +189,7 @@ namespace WitBird.XiaoChangHe.Controllers
 
         public ActionResult PreRecharge(string id, string name)
         {
-            var returnUrl = "/member/recharge?name=" + name + "&showwxpaytitle=1";
+            var returnUrl = Constants.HostDomain + "/member/recharge?name=" + name + "&showwxpaytitle=1";
             var state = "";
             var url = OAuthApi.GetAuthorizeUrl(TenPayV3Info.AppId, returnUrl, state, OAuthScope.snsapi_userinfo);
 
@@ -297,17 +297,10 @@ namespace WitBird.XiaoChangHe.Controllers
                     var jsonData = new { IsSuccess = false, Message = "金额错误" };
                     return Json(jsonData, JsonRequestBehavior.AllowGet);
                 }
+    
+                //强制设置为配置的值。
+                totalPrice = 0.01m;
 
-                //try
-                //{
-                //    //强制设置为配置的值。
-                //    string testingAmount = System.Configuration.ConfigurationManager.AppSettings["TenPayV3_Testing_Amount"];
-                //    decimal.TryParse(testingAmount, out totalPrice);
-                //}
-                //catch
-                //{
-
-                //}
 
                 if (isFirstRecharge)
                 {

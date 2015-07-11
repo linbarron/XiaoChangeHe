@@ -513,6 +513,31 @@ and  dateAdd(hh,5,b.DiningDate)>=getdate() and b.MemberCardNo=c.Uid";
 
         }
         #endregion EmptyOrder
+
+
+
+        public bool UpdateOrderAsPaid(Guid orderId)
+        {
+            bool result = false;
+
+            try
+            {
+                DbCommand cmd = null;
+                string sql = @"UPDATE [CrmRstCloud].[dbo].[Orders] SET Status = 1 WHERE Id = @Id;";
+
+                cmd = db.GetSqlStringCommand(sql);
+
+                db.AddInParameter(cmd, "Id", DbType.Guid, orderId);
+
+                result = ExecSql(cmd) > 0;
+            }
+            catch
+            {
+
+            }
+
+            return result;
+        }
     }
 
     

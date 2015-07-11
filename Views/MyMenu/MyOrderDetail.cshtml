@@ -8,11 +8,9 @@
 
     decimal PrepayAccount = ViewBag.PrepayAccount;
 }
-
 @using System.Activities.Statements
 @using WitBird.XiaoChangHe.Models.Info
 @model IEnumerable<MyOrderDetail>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,14 +26,13 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="wap-font-scale" content="no" />
     <!--引入css和js-->
-
     <link href="~/NewContent/css/common.css" rel="stylesheet" type="text/css" />
     <link href="~/NewContent/style/ydxx.css" rel="stylesheet" type="text/css">
-
     <script src="~/NewContent/js/jquery.js"></script>
     <script src="~/NewContent/js/ydxx.js"></script>
     <script type="text/javascript" src="~/NewContent/js/date.js"></script>
     <script type="text/javascript" src="~/NewContent/js/iscroll.js"></script>
+    <script language="javascript" src="http://res.mail.qq.com/mmr/static/lib/js/lazyloadv3.js" type="text/javascript"></script>
     <!--  下面是日期插件js-->
     <script type="text/javascript">
         $(function () {
@@ -56,37 +53,6 @@
                     $(this).val(this.defaultValue);
             });
 
-
-            $("body").click(function () {
-
-                var maskWidth = $(document).width();
-
-                //遮照层的高度
-                var maskHeight = $(document).height();
-                //浏览器纵向滚动条距离上边界的值
-                var browserScrollTop = $(window).scrollTop();
-
-                //浏览器横向滚动条距离左边界的值
-                var browserScrollLeft = $(window).scrollLeft();
-                function popPayDialog() {
-                    popWindow = $(".popWindow");
-                    $('.mask').fadeIn().width(maskWidth).height(maskHeight);
-                    browserWidth = $(window).width();
-                    browserHeight = $(window).height();
-                    positionLeft = browserWidth / 2 - 125 + browserScrollLeft;
-                    positionTop = browserHeight / 2 - 125 + browserScrollTop;
-                    popWindow.animate({
-                        'left': positionLeft + 'px',
-                        'top': positionTop + 'px'
-                    }, 10);
-                    popWindow.show().animate({
-                        'left': positionLeft + 'px',
-                        'top': positionTop + 'px'
-                    }, 500);
-
-                }
-            });
-
             $(".close").click(function () {
                 $(".mask,.popWindow").fadeOut();
             });
@@ -102,247 +68,145 @@
 
         });
     </script>
-    
+
     <style>
-        .mask {
-            height: 100%;
-            width: 100%;
-            background: #000;
-            position: absolute;
-            left: 0px;
-            top: 0px;
-            opacity: 0.5;
-            filter: alpha(opacity=90); /* IE */
-            -moz-opacity: 0.9; /* Moz + FF */
-            display: none;
-            z-indent: 9;
-        }
+        .mask { height: 100%; width: 100%; background: #000; position: absolute; left: 0px; top: 0px; opacity: 0.5; filter: alpha(opacity=90); /* IE */ -moz-opacity: 0.9; /* Moz + FF */ display: none; z-indent: 9; }
 
-        .popWindow {
-            height: 240px;
-            width: 240px;
-            position: absolute;
-            left: 0px;
-            top: 0px;
-            background: #fff;
-            z-index: 100;
-            padding-left: 10px;
-            border-radius: 5px 5px;
-            text-align: left;
-            display: none;
-        }
+        .popWindow { height: 240px; width: 240px; position: absolute; left: 0px; top: 0px; background: #fff; z-index: 100; padding-left: 10px; border-radius: 5px 5px; text-align: left; display: none; }
 
-        .dqye {
-            line-height: 40px;
-            text-align: left;
-            font-size: 16px;
-            color: #ed3a2e;
-        }
+        .dqye { line-height: 40px; text-align: left; font-size: 16px; color: #ed3a2e; }
 
-        .yfje {
-            line-height: 40px;
-            text-align: left;
-            font-size: 16px;
-            color: #666;
-        }
+        .yfje { line-height: 40px; text-align: left; font-size: 16px; color: #666; }
 
-        span.cz {
-            color: #ed3a2e;
-            font-size: 16px;
-        }
+        span.cz { color: #ed3a2e; font-size: 16px; }
 
-        span.buzu {
-            color: #ed3a2e;
-            font-size: 16px;
-        }
+        span.buzu { color: #ed3a2e; font-size: 16px; }
 
-        .yfje span.yue {
-            color: #333;
-            font-size: 16px;
-        }
+        .yfje span.yue { color: #333; font-size: 16px; }
 
-        .dqye {
-            margin-top: 30px;
-        }
+        .dqye { margin-top: 30px; }
 
-        .liji {
-            height: 30px;
-            width: 100px;
-            border-radius: 5px 5px;
-            background: #ed3a2e;
-            float: left;
-            margin-left: 20px;
-            text-align: center;
-            color: #fff;
-            line-height: 30px;
-            margin-top: 10px;
-        }
+        .liji { height: 30px; width: 100px; border-radius: 5px 5px; background: #ed3a2e; float: left; margin-left: 20px; text-align: center; color: #fff; line-height: 30px; margin-top: 10px; }
 
-        .zhifu {
-            height: 30px;
-            width: 100px;
-            border-radius: 5px 5px;
-            background: #38b324;
-            float: left;
-            line-height: 30px;
-            color: #fff;
-            margin-left: 10px;
-            text-align: center;
-            margin-top: 10px;
-        }
+        .zhifu { height: 30px; width: 100px; border-radius: 5px 5px; background: #38b324; float: left; line-height: 30px; color: #fff; margin-left: 10px; text-align: center; margin-top: 10px; }
 
-        .close {
-            height: 20px;
-            width: 20px;
-            background: url(/NewContent/images/cha.png);
-            background-size: 100% 100%;
-            position: absolute;
-            top: 2px;
-            right: 2px;
-        }
+        .close { height: 20px; width: 20px; background: url(/NewContent/images/cha.png); background-size: 100% 100%; position: absolute; top: 2px; right: 2px; }
 
-        .sm {
-            color: #248be1;
-            margin-top: 10px;
-            line-height: 20px;
-        }
+        .sm { color: #248be1; margin-top: 10px; line-height: 20px; }
 
-        .sm span {
-            color: #ed3a2e;
-        }
+            .sm span { color: #ed3a2e; }
+        .loading { text-align: center; background-color: burlywood; bottom: 0; position: fixed; width: 100%; }
     </style>
 </head>
-    <body>
-        
-        <div class="container">
-            <form method="POST" action="SubmitOrder">
-                @if (Model != null)
+<body>
+
+    <div class="container">
+        <form method="POST" action="SubmitOrder">
+            @if (Model != null)
+            {
+                foreach (MyOrderDetail item in Model)
                 {
-                    foreach (MyOrderDetail item in Model)
+
+                    if (string.IsNullOrEmpty(orderid))
                     {
-
-                        if (string.IsNullOrEmpty(orderid))
-                        {
-                            orderid = item.OrderId.ToString();
+                        orderid = item.OrderId.ToString();
+                        <input type="hidden" id="SourceAccountId" value="@ViewBag.SourceAccountId" />
                             <!-- 店铺名字 可点击-->
-                            <a href="~/company/Rst/@ViewBag.RestaurantId">
-                                <div class="header2">@item.RstName<span class="header_r">></span></div>
-                            </a>
+                        <a href="javascript:void(0);">
+                            <div class="header2">@item.RstName<span class="header_r">></span></div>
+                        </a>
                             <!--选择用餐时间-->
-                            <div class="header3" style="position: relative;">
-                                选择用餐时间
-                                <input id="endTime"/><span class="header_r">></span>
+                        <div class="header3" style="position: relative;">
+                            选择用餐时间
+                            <input id="endTime" /><span class="header_r">></span>
+                        </div>
+                        <div class="header3">
+                            <span style="color: #999;">
+                                <input type="text" placeholder="请输入姓名" id="ContactName" value="@item.ContactName" style="width: 24%;" />
+                            </span>
+                            <div class="sex">
+                                <input type="hidden" id="sexval" value="0" name="sex" />
+                                <img class="img1" src="~/NewContent/images/11.png" height="30">
+                                <img class="img2" src="~/NewContent/images/10.png" height="30">
                             </div>
-                            <div class="header3">
-                                <span style="color: #999;">
-                                    <input type="text" placeholder="请输入姓名" id="ContactName" value="@item.ContactName" style="width: 24%;" /></span>
-                                <div class="sex">
-                                    <input type="hidden" id="sexval" value="0" name="sex"/>
-                                    <img class="img1" src="~/NewContent/images/11.png" height="30">
-                                    <img class="img2" src="~/NewContent/images/10.png" height="30">
-                                </div>
-                            </div>
-                            <div class="header3" style="color: #999;">
-                                <input type="text" id="ContactPhone" placeholder="输入预定手机号码"/>
-                            </div>
-                            <div class="header3" style="color: #999; line-height: 50px; height: 50px;">
-                                <input type="text" id="PersonCount" placeholder="填写用餐人数"/><span style="color: #000;"> 人</span>
-                            </div>
-                            <div class="huise"></div>
+                        </div>
+                        <div class="header3" style="color: #999;">
+                            <input type="text" id="ContactPhone" placeholder="输入预定手机号码" value="@item.ContactPhone" />
+                        </div>
+                        <div class="header3" style="color: #999; line-height: 50px; height: 50px;">
+                            <input type="text" id="PersonCount" placeholder="填写用餐人数" value="@item.PersonCount" /><span style="color: #000;"> 人</span>
+                        </div>
+                        <div class="huise"></div>
                             <!-- 菜品清单标题-->
-                            <div class="header3" style="font-weight: bold; margin-bottom: 10px;">
-                                <span style="color: red; font-size: 15px;">|</span> 菜品清单
-                            </div>
+                        <div class="header3" style="font-weight: bold; margin-bottom: 10px;">
+                            <span style="color: red; font-size: 15px;">|</span> 菜品清单
+                        </div>
 
-                            totalprice = item.total;
-                            viptotalprice = ViewBag.MemberPriceTotal;
-                        }
-
-                        if (orderid.Equals(item.OrderId.ToString()))
-                        {
-                            if (item.proId != null && item.proId != new Guid("00000000-0000-0000-0000-000000000000"))
-                            {
-                                <div class="content2">
-                                    <img src="/Order/GetImages/@item.proId" width="30%" height="122px">
-                                    <!--菜品名字-->
-                                    <span class="sz">@item.ProductName</span> <span class="xz">
-                                                                                  <!-- 菜品价格-->
-                                                                                  <span style="font-size: 18px;">@(item.UnitPrice*item.ProductCount)</span><span style="font-size: 13px;"> 元</span></span>
-                                    <!--菜品数量-->
-                                    <span class="xy">x@(item.ProductCount)</span>
-                                </div>
-                            }
-                        }
-
+                        totalprice = item.total;
+                        viptotalprice = ViewBag.MemberPriceTotal;
                     }
+
+                    if (orderid.Equals(item.OrderId.ToString()))
+                    {
+                        if (item.proId != null && item.proId != new Guid("00000000-0000-0000-0000-000000000000"))
+                        {
+                            <div class="content2">
+                                <img src="/Order/GetImages/@item.proId" width="30%" height="122px">
+                                <!--菜品名字-->
+                                <span class="sz">@item.ProductName</span> <span class="xz">
+                                    <!-- 菜品价格-->
+                                    <span style="font-size: 18px;">@(item.UnitPrice * item.ProductCount)</span><span style="font-size: 13px;"> 元</span>
+                                </span>
+                                <!--菜品数量-->
+                                <span class="xy">x@(item.ProductCount)</span>
+                            </div>
+                        }
+                    }
+
+                }
 
                     <!-- 底部遮罩层提示语-->
-                    <div class="footer">
-                         @if (PrepayAccount == 0)
-                         {
+                <div class="footer">
+                    @if (PrepayAccount == 0)
+                    {
                         <div class="zhe"><span style="opacity: 1;">如升级为储值微会员，当前可优惠@(totalprice - viptotalprice)元且可享受 ( 充1000再送300 ) 的优惠！</span></div>
-                         }
-                        <!-- 合计价格-->
-                        <span class="heji">合计：@totalprice ¥</span> 
-                        <div class="fukuan" onclick="SubmitOrder();">确认付款</div>
-                    </div>
-                }
-                
-                <div class="mask"></div>
-
-            </form>
-            <div class="popWindow hide">
-                @if (PrepayAccount > 0)
-                {
-                    <style>
-                        .yfje {
-                            line-height: 30px;
-                        }
-                    </style>
-                    <div class="dqye" style="line-height: 30px;text-align: left;font-size: 16px;color: #666;">原价:<span class="zong" style="text-decoration:line-through">@totalprice</span></div>
-                    <div class="yfje"><span class="cz">储值会员价：<span class="hyj">@viptotalprice</span></span></div>
-                }
-                else
-                {
-                    <div class="dqye">原价:<span class="zong">@totalprice</span></div>
-                }
-                <div class="yfje">账户余额：<span class="yue">@PrepayAccount</span>　<span class="buzu">余额不足</span></div>
-                <div class="yfje">微信支付金额：<span class="weixin">@totalprice</span></div>
-                <span class="sm">如升级为储值会员，当前可优惠<span>@(totalprice - viptotalprice)</span>并可享受充<span>1000</span>送<span>300</span>的优惠。</span>
-                <div style="clear: both;"></div>
-                <div class="liji" style="margin-left: 11px;" onclick=" window.location.href='/member/prerecharge/CB824E58-E2CA-4C95-827A-CA62D528C6A7/@ViewBag.SourceAccountId' ">立即充值</div>
-                <div class="zhifu" onclick="payBillInfo();">确认支付</div>
-                <div class="close"></div>
-            </div>
-
-            <div id="datePlugin"></div>
-            <!--效果html结束-->
-            <div class="clear"></div>
-            <!-- 日期插件部分div结束，不能删哦-->
-        </div>
-    
-        <script type="text/javascript">
-            function SubmitOrder() {
-                $.post("SubmitOrder", {
-                    DiningDate: $("#endTime").val(),
-                    ContactName: $("#ContactName").val(),
-                    ContactPhone: $("#ContactPhone").val(),
-                    PersonCount: $("#PersonCount").val(),
-                    OrderId: '@orderid',
-                    sex: $("#sexval").val()
-                }, function(msg) {
-                    if (msg == '') {
-                        // 更新订单成功，弹出支付窗口
-                        popPayDialog();
-                    } else {
-                        alert(msg);
                     }
-                });
+                    <!-- 合计价格-->
+                    <span class="heji">合计：@totalprice ¥</span>
+                    <div class="fukuan" onclick="SubmitOrder();">确认付款</div>
+                </div>
             }
-        </script>
 
-    </body>
+            <div class="mask"></div>
+        </form>
+        <div class="popWindow hide">
+            @if (PrepayAccount > 0)
+            {
+                <style>
+                    .yfje { line-height: 30px; }
+                </style>
+                <div class="dqye" style="line-height: 30px;text-align: left;font-size: 16px;color: #666;">原价:<span class="zong" style="text-decoration:line-through">@totalprice</span></div>
+                <div class="yfje"><span class="cz">储值会员价：<span class="hyj">@viptotalprice</span></span></div>
+            }
+            else
+            {
+                <div class="dqye">原价:<span class="zong">@totalprice</span></div>
+            }
+            <div class="yfje">账户余额：<span class="yue">@PrepayAccount</span>　<span class="buzu">余额不足</span></div>
+            <div class="yfje">微信支付金额：<span class="weixin">@totalprice</span></div>
+            <span class="sm">如升级为储值会员，当前可优惠<span>@(totalprice - viptotalprice)</span>并可享受充<span>1000</span>送<span>300</span>的优惠。</span>
+            <div style="clear: both;"></div>
+            <div class="liji" style="margin-left: 11px;" onclick=" window.location.href='/member/prerecharge/CB824E58-E2CA-4C95-827A-CA62D528C6A7/@ViewBag.SourceAccountId' ">立即充值</div>
+            <div class="zhifu" onclick="postBillInfo();">确认支付</div>
+            <div class="close"></div>
+        </div>
 
+        <div id="datePlugin"></div>
+        <!--效果html结束-->
+        <div class="clear"></div>
+        <!-- 日期插件部分div结束，不能删哦-->
+    </div>
+</body>
 </html>
 <script>
     function add(id) {
@@ -399,6 +263,52 @@
         });
     }
 
+    function SubmitOrder() {
+        $.post("SubmitOrder", {
+            DiningDate: $("#endTime").val(),
+            ContactName: $("#ContactName").val(),
+            ContactPhone: $("#ContactPhone").val(),
+            PersonCount: $("#PersonCount").val(),
+            OrderId: '@orderid',
+            SourceAccountId: $('#SourceAccountId').val(),
+            sex: $("#sexval").val()
+        }, function (msg) {
+            if (msg == '') {
+                // 更新订单成功，弹出支付窗口
+                popPayDialog();
+            } else {
+                alert(msg);
+            }
+        });
+    }
+
+
+    var maskWidth = $(document).width();
+
+    //遮照层的高度
+    var maskHeight = $(document).height();
+    //浏览器纵向滚动条距离上边界的值
+    var browserScrollTop = $(window).scrollTop();
+
+    //浏览器横向滚动条距离左边界的值
+    var browserScrollLeft = $(window).scrollLeft();
+    function popPayDialog() {
+        popWindow = $(".popWindow");
+        $('.mask').fadeIn().width(maskWidth).height(maskHeight);
+        browserWidth = $(window).width();
+        browserHeight = $(window).height();
+        positionLeft = browserWidth / 2 - 125 + browserScrollLeft;
+        positionTop = browserHeight / 2 - 125 + browserScrollTop;
+        popWindow.animate({
+            'left': positionLeft + 'px',
+            'top': positionTop + 'px'
+        }, 10);
+        popWindow.show().animate({
+            'left': positionLeft + 'px',
+            'top': positionTop + 'px'
+        }, 500);
+
+    }
 
     function callPayApi(a, t, n, p, ps) {
         WeixinJSBridge.invoke('getBrandWCPayRequest', {
@@ -410,15 +320,14 @@
             "paySign": ps
         }, function (res) {
             if (res.err_msg == "get_brand_wcpay_request:ok") {
-                window.location = "/member/info?id=@(ViewBag.CompanyId)&name=@(ViewBag.SourceAccountId)";
+                window.location = "/NewOrder/Detail/@ViewBag.CompanyId/@ViewBag.SourceAccountId?orderId=@(ViewBag.OrderId)";
             }
             else {
-                window.location = "/member/prerecharge?id=@(ViewBag.CompanyId)&name=@(ViewBag.SourceAccountId)";
+                window.location = "/MyMenu/prepareorder?MemberCardNo=@(ViewBag.Uid)&OrderId=@(ViewBag.OrderId)&SourceAccountId=@(ViewBag.SourceAccountid)&RstType=@(ViewBag.RstType)";
             }
         });
     }
 
-    //string code, string uid, string name, string tel, string amount, bool isFirstRecharge
     function postBillInfo() {
         //var loading = $('<div style="text-align: center;background-color: burlywood;bottom: 0;position: fixed;width: 100%;">正在发起支付请求，请稍后...</div>');
         var loading = document.createElement("div");
@@ -444,5 +353,4 @@
             });
     }
 </script>
-
 
