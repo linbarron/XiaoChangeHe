@@ -71,9 +71,9 @@
     {
      <nav class="MyMenuBut">
           <a href="javascript:void(0);" onclick="myMenu()">确定</a>
-@*        <a href="/MyMenu/MyOrderDetail?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(ViewBag.OrderId)&SourceAccountId=@(ViewBag.SourceAccountId)&ComypanyId=@(ViewBag.ComypanyId)&RstType=@(ViewBag.RstType)">确定 </a>*@
+@*        <a href="/MyMenu/prepareorder?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(ViewBag.OrderId)&SourceAccountId=@(ViewBag.SourceAccountId)&ComypanyId=@(ViewBag.ComypanyId)&RstType=@(ViewBag.RstType)">确定 </a>*@
     </nav>
-       // window.location.href = "/MyMenu/MyOrderDetail?MemberCardNo=" + MemberCardNo + "&OrderId=" + orderid + "&SourceAccountI=" + SourceAccountId + "&ComypanyId =" + CompanyId + "&RstType=" + Type + "";
+       // window.location.href = "/MyMenu/prepareorder?MemberCardNo=" + MemberCardNo + "&OrderId=" + orderid + "&SourceAccountI=" + SourceAccountId + "&ComypanyId =" + CompanyId + "&RstType=" + Type + "";
 
     }else{
    <nav class="MyMenuBut">
@@ -178,7 +178,7 @@
             
              });
             
-            window.location.href = "/MyMenu/MyOrderDetail?MemberCardNo=" + MemberCardNo + "&OrderId=" + orderid + "&SourceAccountId=" + SourceAccountId + "&ComypanyId =" + ComypanyId + "&RstType=" + RstType + "";
+            window.location.href = "/MyMenu/prepareorder?MemberCardNo=" + MemberCardNo + "&OrderId=" + orderid + "&SourceAccountId=" + SourceAccountId + "&ComypanyId =" + ComypanyId + "&RstType=" + RstType + "";
 
         }
 
