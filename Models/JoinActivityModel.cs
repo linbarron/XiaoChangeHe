@@ -9,6 +9,9 @@ namespace WitBird.XiaoChangHe.Models
     public class JoinActivityModel
     {
         [Required]
+        public string FromUserName { get; set; }
+
+        [Required]
         public string VerifyCode { get; set; }
     }
 }

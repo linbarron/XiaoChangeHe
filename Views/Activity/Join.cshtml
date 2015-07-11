@@ -24,12 +24,14 @@
     <div class="container">
         @using (Html.BeginForm())
         {
+            @Html.HiddenFor(model => model.FromUserName)
+
             <!--  会员号码 和number-->
             <div class="content">
                 <span class="span_l">认证会员号：</span> <span class="span_r">NO.770638</span>
                 <!-- 输入邀请码输入框-->
                 <div class="content-bottom">
-                    <input type="text" placeholder="请输入邀请码" />         <!--立即验证按钮   -->
+                    @Html.TextBoxFor(model => model.VerifyCode, new { @placeholder = "请输入邀请码" })
                     <input type="submit" class="submit" value="立即验证" />
                 </div>
             </div>

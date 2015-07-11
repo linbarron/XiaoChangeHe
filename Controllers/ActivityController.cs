@@ -15,7 +15,7 @@ namespace WitBird.XiaoChangHe.Controllers
         /// </summary>
         /// <param name="id">1.进行中的活动。2.已经结束的活动</param>
         /// <returns></returns>
-        public ActionResult Index(string id)
+        public ActionResult Index(string id, string fromUserName)
         {
             int state = 1;
             if (!string.IsNullOrEmpty(id))
@@ -45,7 +45,7 @@ namespace WitBird.XiaoChangHe.Controllers
         /// 活动详情
         /// </summary>
         /// <returns></returns>
-        public ActionResult Detail(string id)
+        public ActionResult Detail(string id, string fromUserName)
         {
             var intId = 0;
             if (int.TryParse(id, out intId))
@@ -56,6 +56,8 @@ namespace WitBird.XiaoChangHe.Controllers
 
                 if (activity != null)
                 {
+                    ViewBag.FromUserName = fromUserName;
+
                     return View(activity);
                 }
                 else
@@ -75,9 +77,12 @@ namespace WitBird.XiaoChangHe.Controllers
         /// 活动详情页“立即加入”之后的页面
         /// </summary>
         /// <returns></returns>
-        public ActionResult Join()
+        public ActionResult Join(string fromUserName)
         {
-            return View();
+            var model = new JoinActivityModel();
+            model.FromUserName = fromUserName;
+
+            return View(model);
         }
 
         /// <summary>
@@ -93,9 +98,9 @@ namespace WitBird.XiaoChangHe.Controllers
 
             if (ModelState.IsValid)
             {
-                var pass = verifyCodes.Any(v => v.Equals(model.VerifyCode, StringComparison.OrdinalIgnoreCase));
+                var pass = verifyCodes.FirstOrDefault(v => v.Equals(model.VerifyCode, StringComparison.OrdinalIgnoreCase));
 
-                if (pass)
+                if (pass != null)
                 {
                     #region 在这里面去给用户加钱
 
@@ -104,15 +109,20 @@ namespace WitBird.XiaoChangHe.Controllers
                     #endregion
 
                     //验证功过并且钱加好了之后跳转到这个页面，让用户分享
+                    ViewBag.VerifyCode = pass;
                     result = View("Pass");
                 }
                 else//验证失败
                 {
+                    ViewBag.FromUserName = model.FromUserName;
+
                     result = View("Failed");
                 }
             }
             else
             {
+                ViewBag.FromUserName = model.FromUserName;
+
                 result = View("Failed");
             }
 
