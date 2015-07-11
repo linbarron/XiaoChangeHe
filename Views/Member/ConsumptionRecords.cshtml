@@ -15,67 +15,72 @@
     <link href="~/Content/public.css" rel="stylesheet" />
     <link href="~/Content/member.css" rel="stylesheet" />
     <script src="/Scripts/jquery-1.7.1.min.js"></script>
+    <style>
+        .header_img { width: 96%; margin: 2% 2%; }
+            .header_img img { width: 100%; }
+    </style>
 </head>
 <body>
-
-    <form id="payment">
-        <div>
-            @if (Model != null && Model.Count() > 0)
+    <div class="container">
+        <div class="header_img">
+            @if (ViewBag.AccountMoney == 0)
             {
-                <nav id="img">
-                    <span id="uid"><span style="font-size:15px;margin-right: -10px;">NO.</span> @(ViewBag.Uid)</span>
+                <img src="~/NewContent/images/w.png" />
 
-                    @if (ViewBag.PrepayAccount == 0)
-                    {
-                        @*<img src="~/Content/images/vipw.png" />*@
-                        <img src="~/Content/images/@(ViewBag.CompanyId)w.png" />
-
-                    }
-                    else
-                    {
-                        @* <img src="~/Content/images/viph.png" />*@
-                        <img src="~/Content/images/@(ViewBag.CompanyId)h.png" />
-                    }
-
-
-                </nav>
-                    foreach (PrepayRecord info in Model)
-                    {
-
-                        <ol style="padding: 0px; border:1px solid #808080">
-                            <li>
-                                <label for="name">订单编号:</label>
-                                <span id="BillPayId" style="color:#d32502">@(info.SId)</span>
-                            </li>
-                            <li>
-                                <label for="name">消费金额:</label>
-                                <span id="AddMoney" style="color:#d32502">¥@(info != null ? Math.Abs(Convert.ToInt32(info.AddMoney)) : 0)</span>
-                            </li>
-                            @* <li>
-                                    <label for="PrepayMoney">付款金额:</label>
-                                     <span id="PrepayMoney" style="color:red" >@(info != null ? info.PrepayMoney : 0)</span>
-                                </li>
-                                 <li>
-                                    <label for="PresentMoney">赠送金额:</label>
-                                      <span id="PresentMoney" style="color:red" >@(info != null ? info.PresentMoney : 0)</span>
-                                </li>*@
-
-                            <li>
-                                <label for="PrepayDate">消费时间:</label>
-                                <span id="PrepayDate" style="color:#d32502">@(info != null ? info.PrepayDate : new DateTime())</span>
-                            </li>
-
-                        </ol>
-                }
             }
             else
             {
-                <span>暂未查询到消费记录</span>
+                <img src="~/NewContent/images/chu.png" />
             }
-            
-        </div>
-    </form>
+            <div style="padding-left: 20px;
+  color: #fff;
+  font-family: 微软雅黑;
+  margin-top: -40px;
+  float: left;
+  position: absolute;">NO.@(ViewBag.Uid)</div>
+</div>
 
+<form id="payment">
+    <div>
+        @if (Model != null && Model.Count() > 0)
+        {
+            foreach (PrepayRecord info in Model)
+            {
+
+                <ol style="padding: 0px; border:1px solid #808080">
+                    <li>
+                        <label for="name">订单编号:</label>
+                        <span id="BillPayId" style="color:#d32502">@(info.SId)</span>
+                    </li>
+                    <li>
+                        <label for="name">消费金额:</label>
+                        <span id="AddMoney" style="color:#d32502">¥@(info != null ? Math.Abs(Convert.ToInt32(info.AddMoney)) : 0)</span>
+                    </li>
+                    @* <li>
+                            <label for="PrepayMoney">付款金额:</label>
+                             <span id="PrepayMoney" style="color:red" >@(info != null ? info.PrepayMoney : 0)</span>
+                        </li>
+                         <li>
+                            <label for="PresentMoney">赠送金额:</label>
+                              <span id="PresentMoney" style="color:red" >@(info != null ? info.PresentMoney : 0)</span>
+                        </li>*@
+
+                    <li>
+                        <label for="PrepayDate">消费时间:</label>
+                        <span id="PrepayDate" style="color:#d32502">@(info != null ? info.PrepayDate : new DateTime())</span>
+                    </li>
+
+                </ol>
+            }
+        }
+        else
+        {
+            <span>暂未查询到消费记录</span>
+        }
+
+    </div>
+</form>
+</div>
 </body>
 
 </html>
