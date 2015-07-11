@@ -216,7 +216,7 @@ where Id=@ProductId";
 
                     product.ProductId = Guid.Parse(reader["ProductId"].ToString());
                     product.ProductName = reader["ProductName"].ToString();
-                    product.Image = (byte[])reader["ThumbImage"];
+                    product.Image = reader["ThumbImage"] == DBNull.Value ? null : (byte[])reader["ThumbImage"];
                 }
             }
 
