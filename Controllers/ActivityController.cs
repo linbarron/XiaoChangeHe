@@ -39,7 +39,7 @@ namespace WitBird.XiaoChangHe.Controllers
             ViewBag.State = state;
 
             ViewBag.CompanyId = id;
-            ViewBag.Name = name;
+            ViewBag.SourceAccountId = name;
 
             return View(list);
         }
@@ -60,7 +60,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 if (activity != null)
                 {
                     ViewBag.CompanyId = id;
-                    ViewBag.Name = name;
+                    ViewBag.SourceAccountId = name;
 
                     return View(activity);
                 }
@@ -96,7 +96,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 if (!string.IsNullOrEmpty(uid))
                 {
                     ViewBag.CompanyId = id;
-                    ViewBag.Name = name;
+                    ViewBag.SourceAccountId = name;
                     ViewBag.Uid = uid;
 
                     result = View(model);
@@ -144,7 +144,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 else//验证失败
                 {
                     ViewBag.CompanyId = id;
-                    ViewBag.Name = name;
+                    ViewBag.SourceAccountId = name;
 
                     result = View("Failed");
                 }
@@ -152,7 +152,7 @@ namespace WitBird.XiaoChangHe.Controllers
             else
             {
                 ViewBag.CompanyId = id;
-                ViewBag.Name = name;
+                ViewBag.SourceAccountId = name;
 
                 result = View("Failed");
             }
