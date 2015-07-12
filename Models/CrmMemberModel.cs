@@ -68,6 +68,7 @@ a.Password,a.Idcard,a.Birthday,a.TypeId,a.RegDate,a.ExpiredDate,a.UseState,a.Sex
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 return null;
             }
         }
@@ -360,5 +361,118 @@ LastConsumeMoney = @LastConsumeMoney WHERE Uid = @Uid;";
         }
 
         #endregion
+
+
+        public PrepayRecord HasJoinedOnlineVipGroup(string uid)
+        {
+            PrepayRecord prepayRecord = null;
+
+            try
+            {
+                string sql = @"select top 1 * from PrepayRecord where Uid=@Uid and UserId='JoinVipGroup';";
+                DbCommand cmd = db.GetSqlStringCommand(sql);
+
+                db.AddInParameter(cmd, "Uid", DbType.String, uid);
+
+                using (var reader = db.ExecuteReader(cmd))
+                {
+                    while (reader.Read())
+                    {
+                        prepayRecord = new PrepayRecord()
+                        {
+                            AddMoney = reader.TryGetValue("AddMoney", 0m),
+                            AsureDate = reader.TryGetValue("AsureDate", DateTime.Now),
+                            BillPayId = reader.TryGetValue("BillPayId", Guid.Empty),
+                            DiscountlMoeny = reader.TryGetValue("DiscountlMoeny", 0m),
+                            PayByScore = reader.TryGetValue("PayByScore", 0),
+                            PayModel = reader.TryGetValue("PayModel", "02"),
+                            PrepayDate = reader.TryGetValue("PrepayDate", DateTime.Now),
+                            PrepayMoney = reader.TryGetValue("PrepayMoney", 0m),
+                            PresentMoney = reader.TryGetValue("PresentMoney", 0m),
+                            PromotionId = reader.TryGetValue("PromotionId", 0),
+                            RecMoney = reader.TryGetValue("RecMoney", 0m),
+                            RecordId = reader.TryGetValue("RecordId", 0),
+                            RState = reader.TryGetValue("RState", ""),
+                            RstId = reader.TryGetValue("RstId", Constants.CompanyId),
+                            ScoreVip = reader.TryGetValue("ScoreVip", 0),
+                            SId = reader.TryGetValue("SId", DateTime.Now.ToString("HHmmss") +
+                            Senparc.Weixin.MP.TenPayLibV3.TenPayV3Util.BuildRandomStr(28)),
+                            Uid = reader.TryGetValue("Uid", ""),
+                            UserId = reader.TryGetValue("UserId", "System")
+                        };
+
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+            }
+
+            return prepayRecord;
+        }
+
+        public bool JoinOnlineVipGroup(string uid, string verifyCode)
+        {
+            bool result = false;
+
+            try
+            {
+                PrepayRecordModel prepayRecordModel = new PrepayRecordModel();
+                CrmMemberModel crmMemberModel = new CrmMemberModel();
+
+                PrepayRecord prepayRecord = null;
+                PrepayAccount prepayAccount = null;
+
+                prepayRecord = new PrepayRecord();
+                prepayRecord.AddMoney = 30m;
+                prepayRecord.AsureDate = DateTime.Now;
+                prepayRecord.BillPayId = Guid.Empty;
+                prepayRecord.DiscountlMoeny = 0;
+                prepayRecord.PayByScore = 0;
+                prepayRecord.PayModel = "00";
+                prepayRecord.PrepayDate = DateTime.Now;
+                prepayRecord.PrepayMoney = 0;
+                prepayRecord.PresentMoney = 30m;
+                prepayRecord.PromotionId = 0;
+                prepayRecord.RecMoney = 0;
+                prepayRecord.RecordId = -1;
+                prepayRecord.RState = "";
+                prepayRecord.RstId = Guid.Empty;
+                prepayRecord.ScoreVip = 0;
+                prepayRecord.SId = verifyCode;
+                prepayRecord.Uid = uid;
+                prepayRecord.UserId = "JoinVipGroup";
+
+                prepayAccount = crmMemberModel.GetPrepayAccount(uid);
+                if (prepayAccount != null)
+                {
+                    prepayAccount.PresentMoney += 30m;
+                    prepayAccount.TotalPresent += 30m;
+                    prepayAccount.TotalMoney += 30m;
+                }
+
+                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
+                {
+                    if (crmMemberModel.UpdatePrepayAccount(prepayAccount) &&
+                        prepayRecordModel.AddPrepayRecord(prepayRecord))
+                    {
+                        result = true;
+                        scope.Complete();
+                    }
+                    else
+                    {
+                        scope.Dispose();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+            }
+
+            return result;
+        }
     }
 }

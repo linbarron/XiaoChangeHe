@@ -58,7 +58,26 @@ namespace WitBird.XiaoChangHe.Models
             }
             catch(Exception innerEx)
             {
+                Logger.Log(innerEx);
                 Exception ex = new Exception("参数转换错误，参数名：" + parameterName, innerEx);
+                throw ex;
+            }
+
+            return returnValue;
+        }
+
+        public static T TryGetValue<T>(this IDataReader reader, int index, T defaultValue)
+        {
+            T returnValue = defaultValue;
+
+            try
+            {
+                returnValue = (reader[index] is T) ? (T)reader[index] : defaultValue;
+            }
+            catch(Exception innerEx)
+            {
+                Logger.Log(innerEx);
+                Exception ex = new Exception("参数转换错误，Index：" + index, innerEx);
                 throw ex;
             }
 

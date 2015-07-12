@@ -72,8 +72,6 @@ namespace WitBird.XiaoChangHe.Models
             }
         }
 
-
-
         public List<PrepayRecord> getRechargeRecordListInfoData(string Uid)
         {
             List<PrepayRecord> list = null;

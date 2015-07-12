@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
 using System.Linq;
+using System.Transactions;
 using System.Web;
 using System.Web.Mvc;
 using WitBird.XiaoChangeHe.Core;
 using WitBird.XiaoChangHe.Models;
+using WitBird.XiaoChangHe.Models.Info;
 
 namespace WitBird.XiaoChangHe.Controllers
 {
@@ -123,41 +127,67 @@ namespace WitBird.XiaoChangHe.Controllers
         {
             ActionResult result = null;
 
-            var verifyCodes = new string[] { "M2J6", "N4W2", "YW45", "32KU", "L624", "8B8C", "92M2", "9P62", "C9X6", "527H", "5C32", "LP52", "5W2Q", "HK66", "67AM", "E6R3" };
-
-            if (ModelState.IsValid)
+            try
             {
-                var pass = verifyCodes.FirstOrDefault(v => v.Equals(model.VerifyCode, StringComparison.OrdinalIgnoreCase));
 
-                if (pass != null)
+                var verifyCodes = new string[] { "M2J6", "N4W2", "YW45", "32KU", "L624", "8B8C", "92M2", "9P62", "C9X6", "527H", "5C32", "LP52", "5W2Q", "HK66", "67AM", "E6R3" };
+                CrmMemberModel crmMemberModel = new CrmMemberModel();
+
+                string  uid = crmMemberModel.getCrmMemberListInfoData(name).First().Uid;
+
+                PrepayRecord prepayRecord = crmMemberModel.HasJoinedOnlineVipGroup(uid);
+
+                if (prepayRecord == null)
                 {
-                    #region 在这里面去给用户加钱
+                    if (ModelState.IsValid)
+                    {
+                        var pass = verifyCodes.FirstOrDefault(v => v.Equals(model.VerifyCode, StringComparison.OrdinalIgnoreCase));
 
-                    //TODO 加钱
+                        if (pass != null)
+                        {
+                            #region 在这里面去给用户加钱
 
-                    #endregion
+                            if (crmMemberModel.JoinOnlineVipGroup(uid, pass))
+                            {
+                                //验证功过并且钱加好了之后跳转到这个页面，让用户分享
+                                ViewBag.VerifyCode = pass;
+                                result = View("Pass");
+                            }
 
-                    //验证功过并且钱加好了之后跳转到这个页面，让用户分享
-                    ViewBag.VerifyCode = pass;
+                            #endregion
+
+                        }
+                        else//验证失败
+                        {
+                            ViewBag.CompanyId = id;
+                            ViewBag.SourceAccountId = name;
+
+                            result = View("Failed");
+                        }
+                    }
+                    else
+                    {
+                        ViewBag.CompanyId = id;
+                        ViewBag.SourceAccountId = name;
+
+                        result = View("Failed");
+                    }
+                }
+                else
+                {
+                    ViewBag.VerifyCode = prepayRecord.SId;
                     result = View("Pass");
                 }
-                else//验证失败
-                {
-                    ViewBag.CompanyId = id;
-                    ViewBag.SourceAccountId = name;
 
-                    result = View("Failed");
-                }
             }
-            else
+            catch (Exception ex)
             {
-                ViewBag.CompanyId = id;
-                ViewBag.SourceAccountId = name;
-
-                result = View("Failed");
+                Logger.Log(ex);
+                result = Content("页面加载出错");
             }
 
             return result;
         }
+
     }
 }
