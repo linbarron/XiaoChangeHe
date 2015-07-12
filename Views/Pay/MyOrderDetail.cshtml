@@ -298,7 +298,7 @@
         var isEmpty = IsEmpty("用餐时间", date) || IsEmpty("联系人", name) || IsEmpty("联系电话", phone) || IsEmpty("用餐人数", pCount);
 
         if (!isEmpty) {
-            $.post("SubmitOrder", {
+            $.post("/mymenu/SubmitOrder", {
                 DiningDate: date,
                 ContactName: name,
                 ContactPhone: phone,

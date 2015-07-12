@@ -369,6 +369,7 @@ and r.RstType='01' and b.MemberCardNo=@OrderId";
              }
              catch (Exception ex)
              {
+                 Logger.Log(ex);
                  return null;
              }
          }

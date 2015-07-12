@@ -76,107 +76,113 @@ namespace WitBird.XiaoChangHe.Controllers
         //}
         public ActionResult Begin(string id, string name, string type = null, string CityId = null, string CityName = null)
         {
-            Session["SourceAccountId"] = name;
-            Session["CompanyId"] = id;
-            ViewBag.CompanyId = id;
-            OrderModel odm = new OrderModel();
-            CrmMemberModel cdb = new CrmMemberModel();
-            List<CrmMember> crm = cdb.getCrmMemberListInfoData(name);
-            ViewBag.MemberCardNo = crm.First().Uid;
-
-            Session["CrmMember"] = crm.First();
-
-            //  Session["MemberCardNo"] = crm.First().Uid;
-            if (!string.IsNullOrEmpty(CityName)) { ViewBag.cityName = CityName; }
-
-            //根据type来判断是否是快捷预定(Quick)或智能点餐（Auto）
-            if (string.IsNullOrEmpty(type) && type != "Quick" && type != "Auto")
+            try
             {
-                //判断该用户在该店面预定的时间是否小于当前时间，如果是，弹出“我的订单”选择“修改”
-                //或者“新预定”框体。修改默认显示当前订单内容   如果订单是未完成状态则直接跳转到点餐页面
+                Session["SourceAccountId"] = name;
+                Session["CompanyId"] = id;
+                ViewBag.CompanyId = id;
+                OrderModel odm = new OrderModel();
+                CrmMemberModel cdb = new CrmMemberModel();
+                List<CrmMember> crm = cdb.getCrmMemberListInfoData(name);
+                ViewBag.MemberCardNo = crm.First().Uid;
 
-                //  ViewBag.CompanyId = id;
+                Session["CrmMember"] = crm.First();
 
-                Order info = new Order();
-                List<Order> unFinOrder = odm.SelUnFinValidOrder(crm.First().Uid);
-                int status = 0;
-                if (unFinOrder.Count > 0)
+                //  Session["MemberCardNo"] = crm.First().Uid;
+                if (!string.IsNullOrEmpty(CityName)) { ViewBag.cityName = CityName; }
+
+                //根据type来判断是否是快捷预定(Quick)或智能点餐（Auto）
+                if (string.IsNullOrEmpty(type) && type != "Quick" && type != "Auto")
                 {
-                    for (int i = 0; i < unFinOrder.Count; i++)
+                    //判断该用户在该店面预定的时间是否小于当前时间，如果是，弹出“我的订单”选择“修改”
+                    //或者“新预定”框体。修改默认显示当前订单内容   如果订单是未完成状态则直接跳转到点餐页面
+
+                    //  ViewBag.CompanyId = id;
+
+                    Order info = new Order();
+                    List<Order> unFinOrder = odm.SelUnFinValidOrder(crm.First().Uid);
+                    int status = 0;
+                    if (unFinOrder.Count > 0)
                     {
-                        DateTime bookTime = unFinOrder[i].DiningDate;
-
-                        if (DateTime.Now < bookTime.AddHours(5))
+                        for (int i = 0; i < unFinOrder.Count; i++)
                         {
-                            ViewBag.RecOrder = 1;
-                            status = 1;
-                            break;
-                            //return RedirectToAction("MY", "Order", new { id = id, name = name });
-                        }
+                            DateTime bookTime = unFinOrder[i].DiningDate;
 
-                    }
-                }
-                if (status != 1)
-                {
-                    List<Order> order = odm.selOrderId(crm.First().Uid);
-                    ViewBag.isCurTime = 0;
-                    if (order.Count > 0)
-                    {
-                        for (int i = 0; i < order.Count; i++)
-                        {
-                            DateTime bookTime = order[i].DiningDate;
-
-                            if (DateTime.Now < bookTime)
+                            if (DateTime.Now < bookTime.AddHours(5))
                             {
-                                ViewBag.isCurTime = 1;
+                                ViewBag.RecOrder = 1;
+                                status = 1;
                                 break;
                                 //return RedirectToAction("MY", "Order", new { id = id, name = name });
                             }
 
                         }
                     }
+                    if (status != 1)
+                    {
+                        List<Order> order = odm.selOrderId(crm.First().Uid);
+                        ViewBag.isCurTime = 0;
+                        if (order.Count > 0)
+                        {
+                            for (int i = 0; i < order.Count; i++)
+                            {
+                                DateTime bookTime = order[i].DiningDate;
+
+                                if (DateTime.Now < bookTime)
+                                {
+                                    ViewBag.isCurTime = 1;
+                                    break;
+                                    //return RedirectToAction("MY", "Order", new { id = id, name = name });
+                                }
+
+                            }
+                        }
+                    }
                 }
-            }
-            List<FastFoodOrder> FastFoodOrder = null;
+                List<FastFoodOrder> FastFoodOrder = null;
 
-            //如果为自动点餐和快捷点餐。如果还有未过期的订单则跳转到订单详情 ViewBag.AutoOrderCount=1 有订单
-            ViewBag.AutoOrderCount = 0;
-            if (!string.IsNullOrEmpty(type) && type == "Auto" || type == "Quick")
-            {
-
-                FastFoodOrder = odm.selOrderByMemberId(crm.First().Uid);
-                if (FastFoodOrder.Count > 0)
+                //如果为自动点餐和快捷点餐。如果还有未过期的订单则跳转到订单详情 ViewBag.AutoOrderCount=1 有订单
+                ViewBag.AutoOrderCount = 0;
+                if (!string.IsNullOrEmpty(type) && type == "Auto" || type == "Quick")
                 {
-                    ViewBag.AutoOrderCount = 1;
-                    ViewBag.OrderId = FastFoodOrder.First().Id;
+
+                    FastFoodOrder = odm.selOrderByMemberId(crm.First().Uid);
+                    if (FastFoodOrder != null && FastFoodOrder.Count > 0)
+                    {
+                        ViewBag.AutoOrderCount = 1;
+                        ViewBag.OrderId = FastFoodOrder.First().Id;
+                    }
                 }
+
+                string dm = Session["begindm"] != null ? Session["begindm"].ToString() : "";
+                // if (string.IsNullOrEmpty(dm))
+                //  {
+
+                //  List<RestaurantAbstract> p = null;
+                // object obj = System.Web.HttpRuntime.Cache.Get("id" + id);
+                // if (obj != null)
+                // {
+                //   p = obj as List<RestaurantAbstract>;
+                // }
+                // if (p == null)
+                // {
+                RestaurantModel rdb = new RestaurantModel();
+                CityId = string.IsNullOrEmpty(CityId) ? "510100" : CityId;
+                List<RestaurantAbstract> p = rdb.getRestaurentState(id, CityId);//rdb.getRestaurantListInfoData(id);
+                // System.Web.HttpRuntime.Cache.Add("id" + id, p, null, DateTime.Now.AddHours(2),
+                // TimeSpan.Zero, CacheItemPriority.Normal, null);
+                //  }
+                ViewBag.SourceAccountId = name;
+                ViewBag.type = type;
+                return View(p);
+                // }
+                //  return RedirectToAction("Index","Order", new { SourceAccountId = id, RestaurantId = dm });
             }
-
-
-
-            string dm = Session["begindm"] != null ? Session["begindm"].ToString() : "";
-            // if (string.IsNullOrEmpty(dm))
-            //  {
-
-            //  List<RestaurantAbstract> p = null;
-            // object obj = System.Web.HttpRuntime.Cache.Get("id" + id);
-            // if (obj != null)
-            // {
-            //   p = obj as List<RestaurantAbstract>;
-            // }
-            // if (p == null)
-            // {
-            RestaurantModel rdb = new RestaurantModel();
-            CityId = string.IsNullOrEmpty(CityId) ? "510100" : CityId;
-            List<RestaurantAbstract> p = rdb.getRestaurentState(id, CityId);//rdb.getRestaurantListInfoData(id);
-            // System.Web.HttpRuntime.Cache.Add("id" + id, p, null, DateTime.Now.AddHours(2),
-            // TimeSpan.Zero, CacheItemPriority.Normal, null);
-            //  }
-            ViewBag.SourceAccountId = name;
-            ViewBag.type = type;
-            return View(p);
-            // }
-            //  return RedirectToAction("Index","Order", new { SourceAccountId = id, RestaurantId = dm });
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                return Content("页面加载错误");
+            }
         }
 
         public string getCity(string lat = null, string log = null)
