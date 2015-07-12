@@ -23,7 +23,7 @@ namespace WitBird.XiaoChangHe
         /// <summary>
         /// 一般log
         /// </summary>
-        public const string LogPath = HttpContext.Current.Request.PhysicalApplicationPath + "log";
+        public static string LogPath = HttpContext.Current.Request.PhysicalApplicationPath + "log";
 
         /// <summary>
         /// 支付log
