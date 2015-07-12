@@ -60,7 +60,7 @@ body{
 	height: auto;
 	width: 100%;
   border-bottom:1px solid #ccc;
- 
+ margin-top:0px;
 }
 .content-img {
 	width: 25%;
