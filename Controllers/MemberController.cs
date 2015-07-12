@@ -253,8 +253,7 @@ namespace WitBird.XiaoChangHe.Controllers
             {
                 if (string.IsNullOrEmpty(code))
                 {
-                    var jsonData = new { IsSuccess = false, Message = "您拒绝了授权" };
-                    return Json(jsonData, JsonRequestBehavior.AllowGet);
+                    throw new ArgumentException("您拒绝了授权");
                 }
 
                 string timeStamp = "";
@@ -266,8 +265,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 var openIdResult = OAuthApi.GetAccessToken(TenPayV3Info.AppId, TenPayV3Info.AppSecret, code);
                 if (openIdResult.errcode != ReturnCode.请求成功)
                 {
-                    var jsonData = new { IsSuccess = false, Message = "错误：" + openIdResult.errmsg };
-                    return Json(jsonData, JsonRequestBehavior.AllowGet);
+                    throw new ArgumentException("微信AccessToken错误，" + openIdResult.errcode);
                 }
 
                 PrepayRecordModel prepayRecordModel = new PrepayRecordModel();
@@ -282,20 +280,17 @@ namespace WitBird.XiaoChangHe.Controllers
 
                 if (!decimal.TryParse(amount, out totalPrice))
                 {
-                    var jsonData = new { IsSuccess = false, Message = "金额错误" };
-                    return Json(jsonData, JsonRequestBehavior.AllowGet);
+                    throw new ArgumentException("充值金额错误，" + amount);
                 }
 
                 if (isFirstRecharge && totalPrice != 1000)
                 {
-                    var jsonData = new { IsSuccess = false, Message = "金额错误" };
-                    return Json(jsonData, JsonRequestBehavior.AllowGet);
+                    throw new ArgumentException("充值金额错误，" + amount);
                 }
 
                 if (!isFirstRecharge && totalPrice != 500 && totalPrice != 1000)
                 {
-                    var jsonData = new { IsSuccess = false, Message = "金额错误" };
-                    return Json(jsonData, JsonRequestBehavior.AllowGet);
+                    throw new ArgumentException("充值金额错误，" + amount);
                 }
     
                 //强制设置为配置的值。
@@ -353,14 +348,12 @@ namespace WitBird.XiaoChangHe.Controllers
 
                 if (!prepayRecordModel.AddPrepayRecord(prepayRecord))
                 {
-                    var jsonData = new { IsSuccess = false, Message = "充值数据插入失败" };
-                    return Json(jsonData, JsonRequestBehavior.AllowGet);
+                    throw new Exception("消费记录插入失败");
                 }
 
                 if (!billPayModel.AddBillPay(billPay))
                 {
-                    var jsonData = new { IsSuccess = false, Message = "充值数据插入失败" };
-                    return Json(jsonData, JsonRequestBehavior.AllowGet);
+                    throw new Exception("交易订单数据记录插入失败");
                 }
 
 
@@ -410,8 +403,9 @@ namespace WitBird.XiaoChangHe.Controllers
             }
             catch (Exception ex)
             {
-                var jsonData = new { IsSuccess = false, Message = "请求发生错误，请返回重新尝试.\r\n" + ex.Message };//"请求发生错误，请返回重新尝试" };
-                return Json(jsonData, JsonRequestBehavior.AllowGet);
+                Logger.Log("调用订单支付：" + ex.ToString());
+                var failedData = new { IsSuccess = false, Message = "支付请求失败，请重新尝试。如多次遇到此问题，请联系客服" };
+                return Json(failedData, JsonRequestBehavior.AllowGet);
             }
 
             var jsonResult = new
@@ -550,15 +544,13 @@ namespace WitBird.XiaoChangHe.Controllers
                 return_msg = ex.ToString();
             }
 
-            var fileStream = System.IO.File.OpenWrite(Server.MapPath("~/1.txt"));
-            fileStream.Write(Encoding.Default.GetBytes(res), 0, Encoding.Default.GetByteCount(res));
-            fileStream.Close();
-
             string xml = string.Format(@"<xml>
    <return_code><![CDATA[{0}]]></return_code>
    <return_msg><![CDATA[{1}]]></return_msg>
 </xml>", return_code, return_msg);
 
+            Logger.Log(LoggingLevel.WxPay, res);
+            Logger.Log(LoggingLevel.WxPay, xml);
             return Content(xml, "text/xml");
         }
 

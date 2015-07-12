@@ -84,13 +84,15 @@ namespace WitBird.XiaoChangHe.Controllers
                 ViewBag.SourceAccountId = SourceAccountId;
                 ViewBag.OrderId = OrderId;
                 ViewBag.MemberCardNo = MemberCardNo;
+
+                MyMenuModel odb = new MyMenuModel();
                 CrmMemberModel cdb1 = new CrmMemberModel();
-                ViewBag.PrepayAccount = 0;
+
                 decimal dec = cdb1.GetPrepayAccount(MemberCardNo).AccountMoney;
                 ViewBag.PrepayAccount = dec;
+
                 string RestaurantId = Session["begindm"] != null ? Session["begindm"].ToString() : "";
                 ViewBag.RestaurantId = RestaurantId;
-                MyMenuModel odb = new MyMenuModel();
 
                 List<MyOrderDetail> detail = odb.getMyOrderDetailListData(MemberCardNo, OrderId, RstType);
                 // ViewBag.MyOrderDetail = detail;
@@ -116,11 +118,10 @@ namespace WitBird.XiaoChangHe.Controllers
             }
             catch (Exception ex)
             {
-                return Content("订单信息获取错误:\r\rn" + ex.Message);
+                Logger.Log(ex);
+                return Content("订单信息获取失败");
             }
         }
-
-
 
         public ActionResult PrepareOrder(string MemberCardNo, string OrderId, string SourceAccountId,
             string ComypanyId = null, string Type = null, string RstType = null)
@@ -186,15 +187,13 @@ namespace WitBird.XiaoChangHe.Controllers
 
                         if (string.IsNullOrEmpty(code))
                         {
-                            var jsonData = new { IsSuccess = false, Message = "您拒绝了授权" };
-                            return Json(jsonData, JsonRequestBehavior.AllowGet);
+                            throw new ArgumentException("您拒绝了授权");
                         }
                         //通过，用code换取access_token
                         var openIdResult = OAuthApi.GetAccessToken(TenPayV3Info.AppId, TenPayV3Info.AppSecret, code);
                         if (openIdResult.errcode != ReturnCode.请求成功)
                         {
-                            var jsonData = new { IsSuccess = false, Message = "支付错误：" + openIdResult.errmsg };
-                            return Json(jsonData, JsonRequestBehavior.AllowGet);
+                            throw new ArgumentException("微信AccessToken错误，" + openIdResult.errcode);
                         }
                         openid = openIdResult.openid;
                     }
@@ -250,14 +249,12 @@ namespace WitBird.XiaoChangHe.Controllers
                     {
                         if (!prepayRecordModel.AddPrepayRecord(prepayRecord))
                         {
-                            var failedData = new { IsSuccess = false, Message = "支付失败" };
-                            return Json(failedData, JsonRequestBehavior.AllowGet);
+                            throw new Exception("消费记录插入失败");
                         }
 
                         if (!billPayModel.AddBillPay(billPay))
                         {
-                            var failedData = new { IsSuccess = false, Message = "支付失败" };
-                            return Json(failedData, JsonRequestBehavior.AllowGet);
+                            throw new Exception("交易订单数据记录插入失败");
                         }
 
                         if (isOnlinePay)
@@ -347,8 +344,7 @@ namespace WitBird.XiaoChangHe.Controllers
 
                             if (!crmMemberModel.UpdatePrepayAccount(prepayAccount) && orderModel.UpdateOrderAsPaid(Guid.Parse(orderId)))
                             {
-                                var failedData = new { IsSuccess = false, Message = "支付失败" };
-                                return Json(failedData, JsonRequestBehavior.AllowGet);
+                                throw new Exception("更新账户余额失败或者更新订单状态为已支付失败");
                             }
                             else
                             {
@@ -366,8 +362,9 @@ namespace WitBird.XiaoChangHe.Controllers
             }
             catch (Exception ex)
             {
-                var jsonData = new { IsSuccess = false, Message = "请求发生错误，请返回重新尝试.\r\n" + ex.Message };//"请求发生错误，请返回重新尝试" };
-                return Json(jsonData, JsonRequestBehavior.AllowGet);
+                Logger.Log("调用订单支付：" + ex.ToString());
+                var failedData = new { IsSuccess = false, Message = "支付请求失败，请重新尝试。如多次遇到此问题，请联系客服" };
+                return Json(failedData, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -384,7 +381,6 @@ namespace WitBird.XiaoChangHe.Controllers
 
             try
             {
-
                 resHandler.SetKey(TenPayV3Info.Key);
                 //验证请求是否从微信发过来（安全）
                 if (resHandler.IsTenpaySign())
@@ -498,15 +494,13 @@ namespace WitBird.XiaoChangHe.Controllers
                 return_msg = ex.ToString();
             }
 
-            var fileStream = System.IO.File.OpenWrite(Server.MapPath("~/1.txt"));
-            fileStream.Write(Encoding.Default.GetBytes(res), 0, Encoding.Default.GetByteCount(res));
-            fileStream.Close();
-
             string xml = string.Format(@"<xml>
    <return_code><![CDATA[{0}]]></return_code>
    <return_msg><![CDATA[{1}]]></return_msg>
 </xml>", return_code, return_msg);
 
+            Logger.Log(LoggingLevel.WxPay, res);
+            Logger.Log(LoggingLevel.WxPay, xml);
             return Content(xml, "text/xml");
 
         }
@@ -598,7 +592,8 @@ namespace WitBird.XiaoChangHe.Controllers
             }
             catch (Exception ex)
             {
-                msg = "出错了！";
+                msg = "提交订单失败";
+                Logger.Log(LoggingLevel.Normal, ex);
             }
             return Json(msg);
         }

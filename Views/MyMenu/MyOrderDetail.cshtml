@@ -118,7 +118,7 @@
                             <!--选择用餐时间-->
                         <div class="header3" style="position: relative;">
                             选择用餐时间
-                            <input id="endTime" /><span class="header_r">></span>
+                            <input id="endTime" value ="@item.DiningDate.ToString()" /><span class="header_r">></span>
                         </div>
                         <div class="header3">
                             <span style="color: #999;">
@@ -264,24 +264,45 @@
     }
 
     function SubmitOrder() {
-        $.post("SubmitOrder", {
-            DiningDate: $("#endTime").val(),
-            ContactName: $("#ContactName").val(),
-            ContactPhone: $("#ContactPhone").val(),
-            PersonCount: $("#PersonCount").val(),
-            OrderId: '@orderid',
-            SourceAccountId: $('#SourceAccountId').val(),
-            sex: $("#sexval").val()
-        }, function (msg) {
-            if (msg == '') {
-                // 更新订单成功，弹出支付窗口
-                popPayDialog();
-            } else {
-                alert(msg);
-            }
-        });
+        var date = $("#endTime").val();
+        var name = $("#ContactName").val();
+        var phone = $("#ContactPhone").val();
+        var pCount = $("#PersonCount").val();
+        var orderId = '@orderid';
+        var sname = $('#SourceAccountId').val();
+        var sex = $("#sexval").val();
+
+        var isEmpty = IsEmpty("用餐时间", date) || IsEmpty("联系人", name) || IsEmpty("联系电话", phone) || IsEmpty("用餐人数", pCount);
+
+        if (!isEmpty) {
+            $.post("SubmitOrder", {
+                DiningDate: date,
+                ContactName: name,
+                ContactPhone: phone,
+                PersonCount: pCount,
+                OrderId: orderId,
+                SourceAccountId: sname,
+                sex: sex
+            }, function (msg) {
+                if (msg == '') {
+                    // 更新订单成功，弹出支付窗口
+                    popPayDialog();
+                } else {
+                    alert(msg);
+                }
+            });
+        }
     }
 
+    function IsEmpty(name, value){
+        if (value == '' || value == 'undefined' || value == 'NaN') {
+            alert(name + '不能为空。');
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
     var maskWidth = $(document).width();
 
