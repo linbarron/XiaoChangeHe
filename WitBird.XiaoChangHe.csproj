@@ -889,7 +889,6 @@
     <Content Include="Views\SelTableInfo\SelTableInfo.cshtml" />
     <Content Include="Views\Company\Message.cshtml" />
     <Content Include="Views\Shared\myOrder.cshtml" />
-    <Content Include="Views\MyMenu\MyOrderDetail.cshtml" />
     <Content Include="Views\Order\QuickOrder.cshtml" />
     <Content Include="Views\ProductType\Index.cshtml" />
     <Content Include="Views\Product\getProductByProductTypeId.cshtml" />
@@ -911,7 +910,7 @@
     <Content Include="Views\NewOrder\Detail.cshtml" />
     <Content Include="Views\NewOrder\MoneyBack.cshtml" />
     <Content Include="Views\NewOrder\My.cshtml" />
-    <Content Include="Views\Member\Recharge.cshtml" />
+    <Content Include="Views\Pay\Recharge.cshtml" />
     <Content Include="Views\Specials\RestaurantSpecials.cshtml" />
     <Content Include="Views\Activity\Index.cshtml" />
     <Content Include="Views\Member\Info - Copy.cshtml" />
@@ -919,6 +918,7 @@
     <Content Include="Views\Activity\Join.cshtml" />
     <Content Include="Views\Activity\Pass.cshtml" />
     <Content Include="Views\Activity\Failed.cshtml" />
+    <Content Include="Views\Pay\MyOrderDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -7,6 +7,7 @@
     decimal viptotalprice = new decimal(0);
 
     decimal PrepayAccount = ViewBag.PrepayAccount;
+    decimal TotalAmount = ViewBag.TotalAmount;
 }
 @using System.Activities.Statements
 @using WitBird.XiaoChangHe.Models.Info
@@ -118,7 +119,7 @@
                             <!--选择用餐时间-->
                         <div class="header3" style="position: relative;">
                             选择用餐时间
-                            <input id="endTime" value ="@item.DiningDate.ToString()" /><span class="header_r">></span>
+                            <input id="endTime" value="" /><span class="header_r">></span>
                         </div>
                         <div class="header3">
                             <span style="color: #999;">
@@ -185,18 +186,40 @@
                 <style>
                     .yfje { line-height: 30px; }
                 </style>
-                <div class="dqye" style="line-height: 30px;text-align: left;font-size: 16px;color: #666;">原价:<span class="zong" style="text-decoration:line-through">@totalprice</span></div>
-                <div class="yfje"><span class="cz">储值会员价：<span class="hyj">@viptotalprice</span></span></div>
+                <div class="dqye" style="line-height: 30px;text-align: left;font-size: 16px;color: #666;">原价:<span class="zong" style="text-decoration:line-through">￥ @totalprice</span></div>
+                <div class="yfje"><span class="cz">储值会员价：<span class="hyj">￥ @viptotalprice</span></span></div>
             }
             else
             {
-                <div class="dqye">原价:<span class="zong">@totalprice</span></div>
+                <div class="dqye">原价:<span class="zong">￥ @totalprice</span></div>
             }
-            <div class="yfje">账户余额：<span class="yue">@PrepayAccount</span>　<span class="buzu">余额不足</span></div>
-            <div class="yfje">微信支付金额：<span class="weixin">@totalprice</span></div>
-            <span class="sm">如升级为储值会员，当前可优惠<span>@(totalprice - viptotalprice)</span>并可享受充<span>1000</span>送<span>300</span>的优惠。</span>
+            <div class="yfje">
+                账户余额：<span class="yue">￥ @TotalAmount</span>
+                @if ((PrepayAccount > 0 && (viptotalprice - TotalAmount) > 0) ||
+                PrepayAccount <= 0 && (totalprice - TotalAmount) > 0)
+                {
+                    <span class="buzu">余额不足</span>
+                }
+            </div>
+            @{
+                if (PrepayAccount > 0)
+                {
+                    if (TotalAmount < viptotalprice)
+                    {
+                        <div class="yfje">微信支付金额：<span class="weixin">￥ @(viptotalprice - TotalAmount)</span></div>
+                    }
+                }
+                else
+                {
+                    if (TotalAmount < totalprice)
+                    {
+                        <div class="yfje">微信支付金额：<span class="weixin">￥ @(totalprice - TotalAmount)</span></div>
+                    }
+                    <span class="sm">如升级为储值会员，当前可优惠<span>￥ @(totalprice - viptotalprice)</span>并可享受充<span>1000</span>送<span>300</span>的优惠。</span>
+                }
+            }
             <div style="clear: both;"></div>
-            <div class="liji" style="margin-left: 11px;" onclick=" window.location.href='/member/prerecharge/CB824E58-E2CA-4C95-827A-CA62D528C6A7/@ViewBag.SourceAccountId' ">立即充值</div>
+            <div class="liji" style="margin-left: 11px;" onclick="window.location.href='/pay/prerecharge/CB824E58-E2CA-4C95-827A-CA62D528C6A7/@ViewBag.SourceAccountId'">立即充值</div>
             <div class="zhifu" onclick="postBillInfo();">确认支付</div>
             <div class="close"></div>
         </div>
@@ -294,7 +317,7 @@
         }
     }
 
-    function IsEmpty(name, value){
+    function IsEmpty(name, value) {
         if (value == '' || value == 'undefined' || value == 'NaN') {
             alert(name + '不能为空。');
             return true;
@@ -344,7 +367,7 @@
                 window.location = "/NewOrder/Detail/@ViewBag.CompanyId/@ViewBag.SourceAccountId?orderId=@(ViewBag.OrderId)";
             }
             else {
-                window.location = "/MyMenu/prepareorder?MemberCardNo=@(ViewBag.Uid)&OrderId=@(ViewBag.OrderId)&SourceAccountId=@(ViewBag.SourceAccountid)&RstType=@(ViewBag.RstType)";
+                window.location = "/pay/prepareorder?MemberCardNo=@(ViewBag.Uid)&OrderId=@(ViewBag.OrderId)&SourceAccountId=@(ViewBag.SourceAccountid)&RstType=@(ViewBag.RstType)";
             }
         });
     }
@@ -355,7 +378,7 @@
         $(loading).addClass("loading");
         loading.innerHTML = "正在发起支付请求，请稍后...";
         document.body.appendChild(loading);
-        $.post("/mymenu/PreparePay",
+        $.post("/pay/PreparePay",
             { uid: '@ViewBag.Uid', orderId: '@ViewBag.OrderId', RstType: '@ViewBag.RstType', code: '@ViewBag.Code' },
             function (data) {
                 $(loading).remove();
@@ -369,7 +392,7 @@
                 }
                 else {
                     alert(data.Message);
-                    window.location = "/MyMenu/prepareorder?MemberCardNo=@(ViewBag.Uid)&OrderId=@(ViewBag.OrderId)&SourceAccountId=@(ViewBag.SourceAccountid)&RstType=@(ViewBag.RstType)";
+                    window.location = "/pay/prepareorder?MemberCardNo=@(ViewBag.Uid)&OrderId=@(ViewBag.OrderId)&SourceAccountId=@(ViewBag.SourceAccountid)&RstType=@(ViewBag.RstType)";
                 }
             });
     }
