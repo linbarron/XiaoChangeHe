@@ -49,24 +49,16 @@
 
                 <ol style="padding: 0px; border:1px solid #808080">
                     <li>
-                        <label for="name">订单编号:</label>
-                        <span id="BillPayId" style="color:#d32502">@(info.SId)</span>
+                        <label for="name">订单:</label>
+                        <span id="BillPayId" style="color:#d32502;font-size:13px;">@(info.SId.Replace("-", ""))</span>
                     </li>
                     <li>
-                        <label for="name">消费金额:</label>
-                        <span id="AddMoney" style="color:#d32502">¥@(info != null ? Math.Abs(Convert.ToInt32(info.AddMoney)) : 0)</span>
+                        <label for="name">金额:</label>
+                        <span id="AddMoney" style="color:#d32502">¥@(info.AddMoney)</span>
                     </li>
-                    @* <li>
-                            <label for="PrepayMoney">付款金额:</label>
-                             <span id="PrepayMoney" style="color:red" >@(info != null ? info.PrepayMoney : 0)</span>
-                        </li>
-                         <li>
-                            <label for="PresentMoney">赠送金额:</label>
-                              <span id="PresentMoney" style="color:red" >@(info != null ? info.PresentMoney : 0)</span>
-                        </li>*@
 
                     <li>
-                        <label for="PrepayDate">消费时间:</label>
+                        <label for="PrepayDate">时间:</label>
                         <span id="PrepayDate" style="color:#d32502">@(info != null ? info.PrepayDate : new DateTime())</span>
                     </li>
 

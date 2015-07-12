@@ -34,7 +34,7 @@ namespace WitBird.XiaoChangHe.Controllers
         //            ViewBag.BookTime = data;
         //        }
         //    }
-            
+
         //    OrderModel odb = new OrderModel();
         //    ViewBag.ProductListData = odb.getProductListInfoData(RestaurantId);
         //    Session["begindm"] = RestaurantId;
@@ -56,7 +56,7 @@ namespace WitBird.XiaoChangHe.Controllers
         //            FastFoodOrder = odm.selOrderByMemberId(crm.First().Uid);
         //        }
         //        else { order = odm.SelUnFinValidOrder(crm.First().Uid); }
-               
+
         //        string OrderId = "";
         //        if ((order != null && order.Count > 0) || (FastFoodOrder != null && FastFoodOrder.Count > 0))
         //        {
@@ -67,15 +67,16 @@ namespace WitBird.XiaoChangHe.Controllers
         //            List<MyMenu> mymenu = myMenu.getMyMenuListData(MemberCardNo, OrderId);
         //            ViewBag.MyMenuListData = mymenu;
         //        }
-               
-               
+
+
         //    }
-           
-           
+
+
         //    return View();
         //}
         public ActionResult Begin(string id, string name, string type = null, string CityId = null, string CityName = null)
         {
+            Session["SourceAccountId"] = name;
             Session["CompanyId"] = id;
             ViewBag.CompanyId = id;
             OrderModel odm = new OrderModel();
@@ -85,17 +86,17 @@ namespace WitBird.XiaoChangHe.Controllers
 
             Session["CrmMember"] = crm.First();
 
-          //  Session["MemberCardNo"] = crm.First().Uid;
+            //  Session["MemberCardNo"] = crm.First().Uid;
             if (!string.IsNullOrEmpty(CityName)) { ViewBag.cityName = CityName; }
 
             //根据type来判断是否是快捷预定(Quick)或智能点餐（Auto）
-            if (string.IsNullOrEmpty(type) && type != "Quick" && type!= "Auto")
+            if (string.IsNullOrEmpty(type) && type != "Quick" && type != "Auto")
             {
                 //判断该用户在该店面预定的时间是否小于当前时间，如果是，弹出“我的订单”选择“修改”
                 //或者“新预定”框体。修改默认显示当前订单内容   如果订单是未完成状态则直接跳转到点餐页面
-               
-              //  ViewBag.CompanyId = id;
-              
+
+                //  ViewBag.CompanyId = id;
+
                 Order info = new Order();
                 List<Order> unFinOrder = odm.SelUnFinValidOrder(crm.First().Uid);
                 int status = 0;
@@ -139,8 +140,9 @@ namespace WitBird.XiaoChangHe.Controllers
             List<FastFoodOrder> FastFoodOrder = null;
 
             //如果为自动点餐和快捷点餐。如果还有未过期的订单则跳转到订单详情 ViewBag.AutoOrderCount=1 有订单
-             ViewBag.AutoOrderCount=0;
-            if (!string.IsNullOrEmpty(type) && type == "Auto"||type=="Quick") {
+            ViewBag.AutoOrderCount = 0;
+            if (!string.IsNullOrEmpty(type) && type == "Auto" || type == "Quick")
+            {
 
                 FastFoodOrder = odm.selOrderByMemberId(crm.First().Uid);
                 if (FastFoodOrder.Count > 0)
@@ -149,27 +151,27 @@ namespace WitBird.XiaoChangHe.Controllers
                     ViewBag.OrderId = FastFoodOrder.First().Id;
                 }
             }
-           
-            
-            
+
+
+
             string dm = Session["begindm"] != null ? Session["begindm"].ToString() : "";
             // if (string.IsNullOrEmpty(dm))
             //  {
 
-          //  List<RestaurantAbstract> p = null;
-           // object obj = System.Web.HttpRuntime.Cache.Get("id" + id);
-           // if (obj != null)
-           // {
-             //   p = obj as List<RestaurantAbstract>;
-           // }
-           // if (p == null)
-           // {
-                RestaurantModel rdb = new RestaurantModel();
-               CityId= string.IsNullOrEmpty(CityId) ? "510100": CityId ;
-                List<RestaurantAbstract> p = rdb.getRestaurentState(id, CityId);//rdb.getRestaurantListInfoData(id);
-               // System.Web.HttpRuntime.Cache.Add("id" + id, p, null, DateTime.Now.AddHours(2),
-               // TimeSpan.Zero, CacheItemPriority.Normal, null);
-          //  }
+            //  List<RestaurantAbstract> p = null;
+            // object obj = System.Web.HttpRuntime.Cache.Get("id" + id);
+            // if (obj != null)
+            // {
+            //   p = obj as List<RestaurantAbstract>;
+            // }
+            // if (p == null)
+            // {
+            RestaurantModel rdb = new RestaurantModel();
+            CityId = string.IsNullOrEmpty(CityId) ? "510100" : CityId;
+            List<RestaurantAbstract> p = rdb.getRestaurentState(id, CityId);//rdb.getRestaurantListInfoData(id);
+            // System.Web.HttpRuntime.Cache.Add("id" + id, p, null, DateTime.Now.AddHours(2),
+            // TimeSpan.Zero, CacheItemPriority.Normal, null);
+            //  }
             ViewBag.SourceAccountId = name;
             ViewBag.type = type;
             return View(p);
@@ -177,23 +179,25 @@ namespace WitBird.XiaoChangHe.Controllers
             //  return RedirectToAction("Index","Order", new { SourceAccountId = id, RestaurantId = dm });
         }
 
-        public string getCity(string lat=null,string log=null )
+        public string getCity(string lat = null, string log = null)
         {
             WebClient client = new WebClient();
             client.Encoding = UTF8Encoding.UTF8;
-            Byte[] json = client.DownloadData("http://api.map.baidu.com/geocoder?location="+lat+","+log+"&output=json&key=99nS1krBR1GsM3pm7pnuxUuk");
+            Byte[] json = client.DownloadData("http://api.map.baidu.com/geocoder?location=" + lat + "," + log + "&output=json&key=99nS1krBR1GsM3pm7pnuxUuk");
             string a = System.Text.Encoding.UTF8.GetString(json);
             return a;
 
-          
+
         }
-        public int getTableTotal(string id) {
-            int status=0;
+        public int getTableTotal(string id)
+        {
+            int status = 0;
             SelTableInfoModel info1 = new SelTableInfoModel();
             List<SelTableCount> data = info1.SelTableInfo(id);
             if (data.Count > 0)
-               // ViewBag.total = data;
-                if (data.First().total > 0) {
+                // ViewBag.total = data;
+                if (data.First().total > 0)
+                {
                     status = 1;
                 }
             return status;
@@ -201,24 +205,24 @@ namespace WitBird.XiaoChangHe.Controllers
 
         public FileContentResult GetBigImages(string id)
         {
-             OrderModel odb = new OrderModel();
+            OrderModel odb = new OrderModel();
             if (!string.IsNullOrEmpty(id))
             {
-               
+
                 List<Product> list = odb.getImageProductListInfoData(id);
                 if (list != null && list.Count > 0)
                 {
                     Product info = list.First();
-                    if (info != null )
+                    if (info != null)
                     {
                         if (info.OriginalImage != null)
                         {
                             return File(info.OriginalImage, "jpg", "image_" + id + ".jpg");
                         }
-                        
+
 
                     }
-                   
+
                 }
             }
             List<ReceiveOrder1> list1 = odb.getDefauleImage(id);
@@ -253,7 +257,7 @@ namespace WitBird.XiaoChangHe.Controllers
             OrderModel odb = new OrderModel();
             if (!string.IsNullOrEmpty(id))
             {
-               
+
                 List<Product> list = odb.getBigImageProductListInfoData(id);
                 if (list != null && list.Count > 0)
                 {
@@ -290,7 +294,7 @@ namespace WitBird.XiaoChangHe.Controllers
         {
             if (!string.IsNullOrEmpty(id))
             {
-               RestaurantModel rm=new RestaurantModel();
+                RestaurantModel rm = new RestaurantModel();
                 List<RestaurantAbstract> list = rm.getImageRst(id);
                 if (list != null && list.Count > 0)
                 {
@@ -307,22 +311,23 @@ namespace WitBird.XiaoChangHe.Controllers
 
                 }
             }
-            return File(new byte[] {}, "jpg", "image_" + id + ".jpg");
+            return File(new byte[] { }, "jpg", "image_" + id + ".jpg");
         }
- //       public ActionResult Quick(string id, string name) {
- //           Guid OrderId = this.SaveOrders("Insert", name);
- //              CrmMemberModel cdb = new CrmMemberModel();
- //           List<CrmMember> crm = cdb.getCrmMemberListInfoData(name);
- //           if (OrderId != new Guid("00000000-0000-0000-0000-000000000000")){
- //// /book/book?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(ViewBag.OrderId)&SourceAccountId=@(ViewBag.SourceAccountId)
- //             return RedirectToAction("book","book", new { MemberCardNo = crm.First().Uid, OrderId = OrderId,SourceAccountId=name });
+        //       public ActionResult Quick(string id, string name) {
+        //           Guid OrderId = this.SaveOrders("Insert", name);
+        //              CrmMemberModel cdb = new CrmMemberModel();
+        //           List<CrmMember> crm = cdb.getCrmMemberListInfoData(name);
+        //           if (OrderId != new Guid("00000000-0000-0000-0000-000000000000")){
+        //// /book/book?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(ViewBag.OrderId)&SourceAccountId=@(ViewBag.SourceAccountId)
+        //             return RedirectToAction("book","book", new { MemberCardNo = crm.First().Uid, OrderId = OrderId,SourceAccountId=name });
 
- //           }
- //               return View();
- //       }
+        //           }
+        //               return View();
+        //       }
 
-        public Guid SaveOrders(string type, string SourceAccountId,string bookTime=null,string isQuick=null,string peopleCont=null,string Remark=null,string OrderId=null)
+        public Guid SaveOrders(string type, string SourceAccountId, string bookTime = null, string isQuick = null, string peopleCont = null, string Remark = null, string OrderId = null)
         {
+            Session["SourceAccountId"] = SourceAccountId;
             int i;
             OrderModel odm = new OrderModel();
             CrmMemberModel cdb = new CrmMemberModel();
@@ -330,9 +335,9 @@ namespace WitBird.XiaoChangHe.Controllers
             List<Order> order = null;
             List<FastFoodOrder> FastFoodOrder = null;
             Order info = new Order();
-           
+
             //isQuick=="Quick" 表明此订单为快捷预定  isQuick==null表明为预定订单  isQuick=Auto 表明是智能点餐
-            if (string.IsNullOrEmpty(isQuick) )
+            if (string.IsNullOrEmpty(isQuick))
             {
 
                 order = odm.SelUnFinValidOrder(crm.First().Uid);
@@ -347,18 +352,26 @@ namespace WitBird.XiaoChangHe.Controllers
             if ((order != null && order.Count > 0))
             {
                 type = "Update";
-               //  i = odm.SaveOrders(type, info);
+                //  i = odm.SaveOrders(type, info);
 
                 return order.First().Id;
 
             }
-            if ((FastFoodOrder != null && FastFoodOrder.Count > 0)) {
-              
+            if ((FastFoodOrder != null && FastFoodOrder.Count > 0))
+            {
+
                 type = "UpdateFastFood";
                 info.CreateDate = DateTime.Now;
-                info.Id = new Guid(OrderId);
+                if (string.IsNullOrEmpty(OrderId))
+                {
+                    info.Id = Guid.NewGuid();
+                }
+                else
+                {
+                    info.Id = new Guid(OrderId);
+                }
                 info.Remark = Remark;
-                i = odm.SaveOrders(type, info); 
+                i = odm.SaveOrders(type, info);
                 return FastFoodOrder.First().Id;
             }
 
@@ -414,7 +427,7 @@ namespace WitBird.XiaoChangHe.Controllers
             }
             if (i == 1)
             {
-              
+
                 return info.Id;
             }
 
@@ -423,7 +436,7 @@ namespace WitBird.XiaoChangHe.Controllers
         }
 
 
-        public int SaveOrderDetails(string type, string productId, string unitPrice, string orderId, string productCount, string useStatus = null, string MemberCardNo = null, string RstType=null)
+        public int SaveOrderDetails(string type, string productId, string unitPrice, string orderId, string productCount, string useStatus = null, string MemberCardNo = null, string RstType = null)
         {
             int i;
             OrderDetailsModel odm = new OrderDetailsModel();
@@ -433,17 +446,19 @@ namespace WitBird.XiaoChangHe.Controllers
             List<MyOrderDetail> detail = null;
             if (MemberCardNo != null)
             {
-               detail = odb.getMyOrderDetailListData(MemberCardNo, orderId, RstType);
+                detail = odb.getMyOrderDetailListData(MemberCardNo, orderId, RstType);
             }
-            if (orderD.Count > 0 && useStatus!="04")
+            if (orderD.Count > 0 && useStatus != "04")
             {
                 type = "Update";
                 info.ProductCount = Convert.ToInt32(productCount);
                 info.CreateDate = DateTime.Now;
                 info.ProductId = new Guid(productId);
                 info.OrderId = new Guid(orderId);
-                info.TotalPrice = Convert.ToDecimal(unitPrice) * Convert.ToInt32(productCount);                  
-            }else {
+                info.TotalPrice = Convert.ToDecimal(unitPrice) * Convert.ToInt32(productCount);
+            }
+            else
+            {
                 if (useStatus == "04")
                 {
                     if (detail != null && detail.Count > 0)
@@ -466,12 +481,12 @@ namespace WitBird.XiaoChangHe.Controllers
                 info.CreateDate = DateTime.Now;
                 info.ProductCount = Convert.ToInt32(productCount);
                 if (useStatus != "04") { info.UseState = "00"; } else { info.UseState = useStatus; }
-              
-                
+
+
             }
             i = odm.SaveOrderDetails(type, info);
             return i;
-           
+
         }
 
         public int DelOrderDetails(string productId, string orderId)
@@ -482,7 +497,7 @@ namespace WitBird.XiaoChangHe.Controllers
         }
 
 
-        public ActionResult My(string id,string name)
+        public ActionResult My(string id, string name)
         {
             ViewBag.ComypanyId = id;
             ViewBag.SourceAccountId = name;
@@ -506,47 +521,48 @@ namespace WitBird.XiaoChangHe.Controllers
             //        return View("myOrder");
 
             //    }
-                string MemberCardNo = crm.First().Uid;
-                ViewBag.MemberCardNo = crm.First().Uid;
+            string MemberCardNo = crm.First().Uid;
+            ViewBag.MemberCardNo = crm.First().Uid;
 
-                MyMenuModel odb = new MyMenuModel();
+            MyMenuModel odb = new MyMenuModel();
 
-                List<MyOrder> myOrder = odb.getMyOrderListData(MemberCardNo);
-                List<MyOrder> myQuickOrder = odb.getMyOrderListData(MemberCardNo, "FastFood");
-                if (myQuickOrder != null && myQuickOrder.Count > 0)
-                {
-                    ViewBag.MyQuickOrderListData = myQuickOrder;
-                }
-                if (myOrder != null && myOrder.Count > 0)
-                {
-                    ViewBag.MyOrderListData = myOrder;
-                }
-                //decimal sum = 0;
-                //if (myOrder.Count > 0)
-                //{
-                //    for (int i = 0; i < myOrder.Count; i++)
-                //    {
-                //        sum += myOrder[i].UnitPrice*myOrder[i].;
-                //    }
-                //}
-                //ViewBag.total = sum;
-          //  }
+            List<MyOrder> myOrder = odb.getMyOrderListData(MemberCardNo);
+            List<MyOrder> myQuickOrder = odb.getMyOrderListData(MemberCardNo, "FastFood");
+            if (myQuickOrder != null && myQuickOrder.Count > 0)
+            {
+                ViewBag.MyQuickOrderListData = myQuickOrder;
+            }
+            if (myOrder != null && myOrder.Count > 0)
+            {
+                ViewBag.MyOrderListData = myOrder;
+            }
+            //decimal sum = 0;
+            //if (myOrder.Count > 0)
+            //{
+            //    for (int i = 0; i < myOrder.Count; i++)
+            //    {
+            //        sum += myOrder[i].UnitPrice*myOrder[i].;
+            //    }
+            //}
+            //ViewBag.total = sum;
+            //  }
 
 
             return View("myOrder");
         }
 
 
-        public ActionResult Quick(string id, string name) {
+        public ActionResult Quick(string id, string name)
+        {
 
             ViewBag.CompanyId = id;
             ViewBag.SourceAccountId = name;
-            return RedirectToAction("Begin", "Order", new { id = id, name = name ,type="Quick"});
-           // return View();
+            return RedirectToAction("Begin", "Order", new { id = id, name = name, type = "Quick" });
+            // return View();
         }
-        public ActionResult QuickOrder(string SourceAccountId, string RestaurantId,  string Date = null, string Time = null)
+        public ActionResult QuickOrder(string SourceAccountId, string RestaurantId, string Date = null, string Time = null)
         {
-            string BookTime="";
+            string BookTime = "";
             if (Time.Equals("0"))
             {
                 DateTime data = Convert.ToDateTime(Date);
@@ -557,7 +573,7 @@ namespace WitBird.XiaoChangHe.Controllers
             {
                 DateTime data = Convert.ToDateTime(Date);
                 data = data.AddHours(16);
-                BookTime =data.ToString();
+                BookTime = data.ToString();
             }
             Session["begindm"] = RestaurantId;
             Guid OrderId = this.SaveOrders("Insert", SourceAccountId, BookTime, "Quick");
@@ -574,26 +590,27 @@ namespace WitBird.XiaoChangHe.Controllers
         }
 
 
-         ///<summary>
+        ///<summary>
         ///显示省、城市
         ///</summary>
         ///<param name="Model"></param>
         /// <returns></returns>
-        public string Get_Province_By_Province(string id=null)
+        public string Get_Province_By_Province(string id = null)
         {
             Province p = new Province();
             ProvinceModel model = new ProvinceModel();
             if (string.IsNullOrEmpty(id))
             {
                 p.ParentId = "###";
-               
+
             }
-            else {
+            else
+            {
                 p.ParentId = id;
-               
+
             }
             p.IsUse = true;
-            return model.Get_Province_By_Province(p,id);
+            return model.Get_Province_By_Province(p, id);
         }
 
 
@@ -602,12 +619,13 @@ namespace WitBird.XiaoChangHe.Controllers
         ///</summary>
         ///<param name="Model"></param>
         /// <returns></returns>
-        public string  getCityIdByCityName(string id = null)
+        public string getCityIdByCityName(string id = null)
         {
             ProvinceModel model = new ProvinceModel();
-            List<Province> List=model.getCityIdByCityName(id);
-            if(List.Count>0){
-                string id1=List.First().Id.ToString();
+            List<Province> List = model.getCityIdByCityName(id);
+            if (List.Count > 0)
+            {
+                string id1 = List.First().Id.ToString();
                 return id1;
             }
             return "510100";
@@ -626,7 +644,7 @@ namespace WitBird.XiaoChangHe.Controllers
             return View();
         }
 
-      
+
 
     }
 }

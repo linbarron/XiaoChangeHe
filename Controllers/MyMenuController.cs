@@ -162,12 +162,14 @@ namespace WitBird.XiaoChangHe.Controllers
                 if (orderDetails != null && orderDetails.Count > 0)
                 {
                     decimal totalPrice = 0;
+                    decimal totalVipPrice = 0;
 
                     for (int i = 0; i < orderDetails.Count; i++)
                     {
                         if (orderDetails[i].UnitPrice != 0)
                         {
-                            totalPrice += orderDetails[i].MemberPrice * orderDetails[i].ProductCount;
+                            totalPrice += orderDetails[i].UnitPrice * orderDetails[i].ProductCount;
+                            totalVipPrice += orderDetails[i].MemberPrice * orderDetails[i].ProductCount;
                         }
                     }
 
@@ -175,6 +177,13 @@ namespace WitBird.XiaoChangHe.Controllers
 
                     bool isOnlinePay = false;
                     string openid = "";
+
+                    //会员价
+                    if (prepayAccount.AccountMoney > 0)
+                    {
+                        totalPrice = totalVipPrice;
+                    }
+
                     if ((prepayAccount.AccountMoney + prepayAccount.PresentMoney) >= totalPrice)
                     {
                         // 余额支付
@@ -223,7 +232,7 @@ namespace WitBird.XiaoChangHe.Controllers
 
                     billPay = new BillPay();
                     //余额支付金额
-                    billPay.Cash = prepayAccount.AccountMoney + prepayAccount.PresentMoney;//(totalPrice - creditCard);
+                    billPay.Cash = totalPrice - creditCard;
                     billPay.Change = 0;
                     billPay.Coupons = 0;
                     billPay.CouponsNo = "";
@@ -325,22 +334,32 @@ namespace WitBird.XiaoChangHe.Controllers
                             decimal presentMoney = prepayAccount.PresentMoney;
                             decimal cash = billPay.Cash;
 
-                            //如果充值余额已经足够支付
-                            if (accountMoney >= cash)
+                            Logger.Log("accountMoney: " + accountMoney);
+                            Logger.Log("presentMoney: " + presentMoney);
+                            Logger.Log("cash: " + cash);
+                            
+                            if (presentMoney >= cash)
                             {
-                                prepayAccount.AccountMoney = accountMoney - cash;
-                            }
-                            //如果赠送金额足够支付
-                            else if (presentMoney >= cash)
-                            {
+                                //如果赠送金额足够支付
+                                //Logger.Log("presentMoney >= cash");
                                 prepayAccount.PresentMoney = presentMoney - cash;
+                            }
+                            else if (accountMoney >= cash)
+                            {
+                                //如果充值余额已经足够支付
+                                //Logger.Log("accountMoney >= cash");
+                                prepayAccount.AccountMoney = accountMoney - cash;
                             }
                             else
                             {
-                                // 优先使用充值余额，不够的用赠送金额支付
-                                prepayAccount.AccountMoney = 0;
-                                prepayAccount.PresentMoney -= cash - accountMoney;
+                                // 优先使用赠送金额，不够的用充值余额支付
+                                //Logger.Log("accountMoney + presentMoney >= cash");
+                                prepayAccount.PresentMoney = 0;
+                                prepayAccount.AccountMoney -= cash - presentMoney;
                             }
+
+                            //Logger.Log("prepayAccount.AccountMoney: " + prepayAccount.AccountMoney);
+                            //Logger.Log("prepayAccount.PresentMoney: " + prepayAccount.PresentMoney);
 
                             if (!crmMemberModel.UpdatePrepayAccount(prepayAccount) && orderModel.UpdateOrderAsPaid(Guid.Parse(orderId)))
                             {
@@ -583,6 +602,10 @@ namespace WitBird.XiaoChangHe.Controllers
             {
                 CrmMemberModel cdb1 = new CrmMemberModel();
 
+                if (string.IsNullOrEmpty(order.SourceAccountId))
+                {
+                    order.SourceAccountId = Session["SourceAccountId"] as string;
+                }
                 var currentUser = cdb1.getCrmMemberListInfoData(order.SourceAccountId).FirstOrDefault();
                 decimal dec = cdb1.GetPrepayAccount(currentUser.Uid).AccountMoney;
                 if (!SubmitOrderDBModel.UpdateOrderInfo(order))

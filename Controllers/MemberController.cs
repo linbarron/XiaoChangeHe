@@ -41,6 +41,7 @@ namespace WitBird.XiaoChangHe.Controllers
 
         public ActionResult Info(string id, string name)
         {
+            Session["SourceAccountId"] = name;
             CrmMember model = null;
 
             ViewBag.AccountMoney = 0;
@@ -103,6 +104,7 @@ namespace WitBird.XiaoChangHe.Controllers
 
         public ActionResult SaveMem(string CompanyId, string SourceAccountId, string id, string name, string phone, string sex, string bir, string addr)
         {
+            Session["SourceAccountId"] = SourceAccountId;
             CrmMemberModel cdb = new CrmMemberModel();
             int i = cdb.Save(id, name, phone, sex, bir, addr);
             if (i == 1)
@@ -124,6 +126,7 @@ namespace WitBird.XiaoChangHe.Controllers
             List<PrepayRecord> p = null;
             try
             {
+                Session["SourceAccountId"] = name;
                 CrmMemberModel cmm = new CrmMemberModel();
                 List<CrmMember> crm = cmm.getCrmMemberListInfoData(name);
                 ViewBag.PrepayAccount = 0;
