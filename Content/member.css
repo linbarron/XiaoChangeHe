@@ -1,11 +1,11 @@
 ﻿body {margin:5px;}
 form#payment ol a {display:block;margin:0;padding:0;}
 form#payment ol li {list-style:none;height:2.5em;background-color:#FFF;margin-bottom:2px;-moz-border-radius:5px;-webkit-border-radius:5px;-khtml-border-radius:5px;border-radius:5px;line-height:2.5em;padding-left:1em;}
-form#payment label {font-size:1.2em;color:#666;}
+form#payment label {font-size:14px;color:#666;}
 form#payment nav#img {display:block;list-style-type:decimal;-webkit-margin-before:1em;-webkit-margin-after:1em;-webkit-margin-start:0;-webkit-margin-end:0;text-align:center;}
 form#payment span#uid {float:left;position:absolute;margin-left:1.5em;margin-top:125px;font-weight:700;color:#fff;font-size:12px;padding:40px -40px;}
 form#payment nav img {height:10em;}
-form#payment ol li span {font-size:1.1em;color:#666;outline:none;text-align:right;padding:0;}
+form#payment ol li span {font-size:15px;color:#666;outline:none;text-align:right;padding:0;}
 form#payment ol li input:not([type=radio]) {font-size:1.2em;color:#333;outline:none;border:none;padding:0;}
 .img_right {float:right;padding:.5em;}
 #mCopyright.footFix {margin-top:0;}

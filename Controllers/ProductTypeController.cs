@@ -12,9 +12,10 @@ namespace WitBird.XiaoChangHe.Controllers
     {
         //
         // GET: /ProductType/
-        public ActionResult Index(string SourceAccountId, string RestaurantId, string Status = null, string Date = null, string Time = null, string Type = null, string IsOrder = null, string MemberCardNo = null, string Orderid=null)
+        public ActionResult Index(string SourceAccountId, string RestaurantId, string Status = null, string Date = null, string Time = null, string Type = null, string IsOrder = null, string MemberCardNo = null, string Orderid = null)
         {
-              ProductTypeModel ptm = new ProductTypeModel();
+            Session["SourceAccountId"] = SourceAccountId;
+            ProductTypeModel ptm = new ProductTypeModel();
             if (Date != null & Time != null)
             {
                 if (Time.Equals("0"))
@@ -39,20 +40,19 @@ namespace WitBird.XiaoChangHe.Controllers
                 i = om.EmptyOrder(Orderid);
 
             }
-             List <ProductType> pt=null;
-             if (!string.IsNullOrEmpty(RestaurantId) && RestaurantId.ToUpper() == "0E71D411-EFE0-4964-8E3D-2901E0823815")
-             {
-                 List<ProductType> onept = ptm.getOneProductType(RestaurantId);
-                 ViewBag.FirstMenus = onept;
-                if(onept!=null&&onept.Count()>0)
-                 pt = ptm.getProductTypebyId(RestaurantId, onept.First().TypeId.ToString());
+            List<ProductType> pt = null;
+            if (!string.IsNullOrEmpty(RestaurantId) && RestaurantId.ToUpper() == "0E71D411-EFE0-4964-8E3D-2901E0823815")
+            {
+                List<ProductType> onept = ptm.getOneProductType(RestaurantId);
+                ViewBag.FirstMenus = onept;
+                if (onept != null && onept.Count() > 0)
+                    pt = ptm.getProductTypebyId(RestaurantId, onept.First().TypeId.ToString());
 
-             }
-             else
-             {
-
-                 pt = ptm.getProductType(RestaurantId);
-             }
+            }
+            else
+            {
+                pt = ptm.getProductType(RestaurantId);
+            }
             Session["begindm"] = RestaurantId;
             string RestaurantId1 = Session["begindm"] != null ? Session["begindm"].ToString() : "";
             ViewBag.SourceAccountId = SourceAccountId;
@@ -80,7 +80,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 System.Web.HttpRuntime.Cache.Add("ProductType" + TypeId, p, null, DateTime.Now.AddHours(2),
                 TimeSpan.Zero, CacheItemPriority.Normal, null);
             }
-           
+
             return View(p);
         }
 

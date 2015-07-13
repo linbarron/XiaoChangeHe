@@ -131,7 +131,7 @@
                 //}
 
                 InitEvent();
-
+                hasLoadSp = true;
             });
 
         }
@@ -186,7 +186,7 @@
             alert("你还未点菜！");
             return;
         }
-        window.location.href = "/MyMenu/prepareorder?MemberCardNo=" + MemberCardNo + "&OrderId=" + orderid + "&SourceAccountI=" + SourceAccountId + "&ComypanyId =" + CompanyId + "&RstType=" + Type + "";
+        window.location.href = "/pay/prepareorder?MemberCardNo=" + MemberCardNo + "&OrderId=" + orderid + "&SourceAccountI=" + SourceAccountId + "&ComypanyId =" + CompanyId + "&RstType=" + Type + "";
 
     }
 

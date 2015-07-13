@@ -51,11 +51,10 @@ namespace WitBird.XiaoChangHe.Controllers
                 }
 
                 string OrderId = "";
-                if (order != null && order.Count > 0 || FastFoodOrder != null && FastFoodOrder.Count > 0)
+                if ((order != null && order.Count > 0) || (FastFoodOrder != null && FastFoodOrder.Count > 0))
                 {
-
-                    ViewBag.OrderId = order != null && order.Count > 0 ? order.First().Id : FastFoodOrder.First().Id;
                     OrderId = order != null && order.Count > 0 ? order.First().Id.ToString() : FastFoodOrder.First().Id.ToString();
+                    ViewBag.OrderId = OrderId;
                     /* 显示用户已点菜数量*/
                     MyMenuModel myMenu = new MyMenuModel();
                     List<MyMenu> mymenu = myMenu.getMyMenuListData(MemberCardNo, OrderId, Type);

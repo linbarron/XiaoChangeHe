@@ -97,7 +97,7 @@ function loadAuto(Id, RstType) {
         } else if ('@(ViewBag.AutoOrderCount)' != null && '@(ViewBag.AutoOrderCount)' == 1) {
             str = "<p style=\"float: left;  margin-top: -20px; margin-left: 10px;  color: red;margin-bottom: 0px;\">您已有未消费的订单</p>" +
                 "<a href=\"/AutoMenuIndex/AutoMenuIndex/" + Id + "/@(ViewBag.SourceAccountId)?Status=1&Type=Auto&CompanyId=@(ViewBag.CompanyId)&RstType=" + RstType + "&IsOrder=@(ViewBag.AutoOrderCount)&IsNewOrder=NewOrder&orderId=@(ViewBag.OrderId)&MemberCardNo=@(ViewBag.MemberCardNo)\"  class=\"but\">新预定</a> " +
-                    "<a href=\"/MyMenu/prepareorder/?Orderid=@(ViewBag.OrderId)&SourceAccountId=@(ViewBag.SourceAccountId)&MemberCardNo=@(ViewBag.MemberCardNo)&RstType=FastFood\"  class=\"but\">查看订单</a> ";
+                    "<a href=\"/pay/prepareorder/?Orderid=@(ViewBag.OrderId)&SourceAccountId=@(ViewBag.SourceAccountId)&MemberCardNo=@(ViewBag.MemberCardNo)&RstType=FastFood\"  class=\"but\">查看订单</a> ";
             var unit = "%";
             sAlert(str, 80, 20, unit);
         }
@@ -110,7 +110,7 @@ function loadQuick(Id, RstType) {
     } else if ('@(ViewBag.AutoOrderCount)' != null && '@(ViewBag.AutoOrderCount)' == 1) {
         str = "<p style=\"float: left;  margin-top: -20px; margin-left: 10px;  color: red;margin-bottom: 0px;\">您已有未消费的订单</p>" +
 "  <a href=\"/ProductType/Index?SourceAccountId=@(ViewBag.SourceAccountId)&RestaurantId=" + Id + "&Status=1&Type=FastFood&IsOrder=@(ViewBag.AutoOrderCount)&MemberCardNo=@(ViewBag.MemberCardNo)&Orderid=@(ViewBag.OrderId)\" class=\"but\">新预定</a>  " +
-"<a href=\"/MyMenu/prepareorder/?Orderid=@(ViewBag.OrderId)&SourceAccountId=@(ViewBag.SourceAccountId)&MemberCardNo=@(ViewBag.MemberCardNo)&RstType=FastFood\"  class=\"but\">查看订单</a> ";
+"<a href=\"/pay/prepareorder/?Orderid=@(ViewBag.OrderId)&SourceAccountId=@(ViewBag.SourceAccountId)&MemberCardNo=@(ViewBag.MemberCardNo)&RstType=FastFood\"  class=\"but\">查看订单</a> ";
             var unit = "%";
             sAlert(str, 80, 20, unit);
     }

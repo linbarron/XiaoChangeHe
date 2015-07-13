@@ -69,7 +69,7 @@
                     window.location = "/member/info?id=@(ViewBag.CompanyId)&name=@(ViewBag.SourceAccountId)";
                 }
                 else {
-                    window.location = "/member/prerecharge?id=@(ViewBag.CompanyId)&name=@(ViewBag.SourceAccountId)";
+                    window.location = "/pay/prerecharge?id=@(ViewBag.CompanyId)&name=@(ViewBag.SourceAccountId)";
                 }
             });
         }
@@ -81,7 +81,7 @@
             $(loading).addClass("loading");
             loading.innerHTML = "正在发起支付请求，请稍后...";
             document.body.appendChild(loading);
-            $.post("/member/recharge",
+            $.post("/pay/recharge",
                 { Code: '@ViewBag.Code', uid: '@ViewBag.Uid', name: $('#name').val(), tel: $('#tel').val(), amount: $('#amount').val(), isFirstRecharge: '@ViewBag.IsFirstRecharge' },
                 function (data) {
                     $(loading).remove();
@@ -90,7 +90,7 @@
                     }
                     else {
                         alert(data.Message);
-                        window.location = "/member/prerecharge?id=@(ViewBag.CompanyId)&name=@(ViewBag.SourceAccountId)";
+                        window.location = "/pay/prerecharge?id=@(ViewBag.CompanyId)&name=@(ViewBag.SourceAccountId)";
                     }
                 });
         }
@@ -102,7 +102,7 @@
     <div class="container">
         @if (Model != null)
         {
-            <form id="rechageForm" action="/member/rechage" method="post">
+            <form id="rechageForm" action="/pay/rechage" method="post">
                 <input type="hidden" value="@Model.Uid" name="uid" />
                 <div class="content1">&nbsp;&nbsp;会员号 <span>NO.@Model.Uid</span></div>
                 <div class="content1">

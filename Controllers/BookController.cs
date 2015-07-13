@@ -56,7 +56,7 @@ namespace WitBird.XiaoChangHe.Controllers
             //   return RedirectToAction("MyMenu", "MyMenu", new { MemberCardNo = MemberCardNo, OrderId = orderid ,SourceAccountId=SourceAccountId});
 
             return RedirectToAction("MyOrderDetail", "MyMenu", new { MemberCardNo = MemberCardNo, OrderId = orderid, SourceAccountId = SourceAccountId, ComypanyId = ComypanyId });
-            // <a href="/MyMenu/MyOrderDetail?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(item.OrderId)&SourceAccountId= @(ViewBag.SourceAccountId)&type='detail'&ComypanyId=@( ViewBag.ComypanyId)" style="color:#ccc">
+            // <a href="/pay/MyOrderDetail?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(item.OrderId)&SourceAccountId= @(ViewBag.SourceAccountId)&type='detail'&ComypanyId=@( ViewBag.ComypanyId)" style="color:#ccc">
 
 
         }
@@ -81,7 +81,7 @@ namespace WitBird.XiaoChangHe.Controllers
         //    //   return RedirectToAction("MyMenu", "MyMenu", new { MemberCardNo = MemberCardNo, OrderId = orderid ,SourceAccountId=SourceAccountId});
 
         //    return RedirectToAction("MyOrderDetail", "MyMenu", new { MemberCardNo = MemberCardNo, OrderId = orderid, SourceAccountId = SourceAccountId, ComypanyId = ComypanyId });
-        //    // <a href="/MyMenu/MyOrderDetail?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(item.OrderId)&SourceAccountId= @(ViewBag.SourceAccountId)&type='detail'&ComypanyId=@( ViewBag.ComypanyId)" style="color:#ccc">
+        //    // <a href="/pay/MyOrderDetail?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(item.OrderId)&SourceAccountId= @(ViewBag.SourceAccountId)&type='detail'&ComypanyId=@( ViewBag.ComypanyId)" style="color:#ccc">
 
 
         //}
