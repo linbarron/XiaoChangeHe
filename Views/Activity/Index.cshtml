@@ -28,13 +28,13 @@
         {
             <ul>
                 <li class="bg1">进行中活动</li>
-                <li><a href="/activity/index/2">已结束活动</a></li>
+                <li><a href="/activity/index/@ViewBag.CompanyId/@ViewBag.SourceAccountId?activityState=2">已结束活动</a></li>
             </ul>
         }
         else//当前页面是已经结束的活动
         {
             <ul>
-                <li><a href="/activity">进行中活动</a></li>
+                <li><a href="/activity/index/@ViewBag.CompanyId/@ViewBag.SourceAccountId?activityState=1">进行中活动</a></li>
                 <li class="bg1">已结束活动</li>
             </ul>
         }

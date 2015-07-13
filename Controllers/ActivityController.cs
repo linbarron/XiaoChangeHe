@@ -176,7 +176,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 else
                 {
                     ViewBag.VerifyCode = prepayRecord.SId;
-                    result = View("Pass");
+                    result = View("Failed");
                 }
 
             }
