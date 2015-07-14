@@ -91,7 +91,7 @@ namespace WitBird.XiaoChangHe.Controllers
 
             var userManager = new UserManager();
             var orderManager = new OrderManager();
-            var crmMemberModel = new crmMemberModel();
+            var crmMemberModel = new CrmMemberModel();
 
             Guid companyGuid = Guid.Empty;
             if (Guid.TryParse(id, out companyGuid))
