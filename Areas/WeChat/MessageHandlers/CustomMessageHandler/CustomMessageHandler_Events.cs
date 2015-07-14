@@ -132,8 +132,8 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                         var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
                         strongResponseMessage.Articles.Add(new Article
                         {
-                            Title = "会员支付",
-                            Description = "点击发起微信支付测试",
+                            Title = "会员充值",
+                            Description = "充值成为储值会员",
                             PicUrl = ImgUrl + "wxbeginorder.jpg",
                             Url = string.Format(Constants.HostDomain + "/member/PreRecharge/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}?type=Quick", requestMessage.FromUserName)
                         });

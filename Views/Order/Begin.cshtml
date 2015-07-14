@@ -37,7 +37,7 @@
             {
                 foreach (RestaurantAbstract item in Model)
                 {
-                    if (item == null) continue;
+                    if (item == null) { continue; }
                     var clickEvent = string.Format("load('{0}');",item.Id);
                     //饭店类型 “01”--快餐店  “02”---正常店
                     if (item.RstType == "01")
@@ -59,9 +59,10 @@
                             <a href="javascript:void(0);" onclick=" @clickEvent ">
                                 <div class="footer1">
                                     <img src="~/NewContent/images/dc.png" width="15">立即点菜</div>
-                            </a><a href="ksdc.html">
-                                <div class="footer2">
-                                    <img src="~/NewContent/images/yh.png" width="15">今日特惠</div>
+                            </a><a href="javascript:void(0);" onclick=" @clickEvent ">
+                                <div class=" footer2">
+    <img src="~/NewContent/images/yh.png" width="15">今日特惠
+</div>
                             </a>
                             <a href="@(item.MapUrl)">
                                 <div class="footer3">

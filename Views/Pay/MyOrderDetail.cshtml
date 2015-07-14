@@ -296,8 +296,11 @@
         var sex = $("#sexval").val();
 
         var isEmpty = IsEmpty("用餐时间", date) || IsEmpty("联系人", name) || IsEmpty("联系电话", phone) || IsEmpty("用餐人数", pCount);
+        var isDateValid = IsDateValid(date);
+        var isPhoneValid = IsPhoneValid(phone);
+        var isPersonCountValid = IsPersonCountValid(count);
 
-        if (!isEmpty) {
+        if (!isEmpty && isPhoneValid && isDateValid && isPersonCountValid) {
             $.post("/mymenu/SubmitOrder", {
                 DiningDate: date,
                 ContactName: name,
@@ -324,6 +327,38 @@
         }
         else {
             return false;
+        }
+    }
+    function IsPhoneValid(phone) {
+        if (/^13d{9}$/g.test(tel) || (/^15[8,9]d{8}$/g.test(tel))) {
+            return true;
+        }
+        else {
+            alert("手机号码输入错误");
+            return false;
+        }
+    }
+    function IsPersonCountValid(count) {
+        var pCount = Number(count);
+        if (pCount <= 0)
+        {
+            alert("用餐人数不能小于1人");
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    function IsDateValid(date) {
+        var dt = Date(date);
+
+        if (dt < Date.now) {
+            alert("用餐时间不能小于当前时间");
+            return false;
+        }
+        else {
+            return true;
         }
     }
 

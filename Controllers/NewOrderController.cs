@@ -82,10 +82,11 @@ namespace WitBird.XiaoChangHe.Controllers
             var userManager = new UserManager();
             var orderManager = new OrderManager();
 
+            string uid = "";
             Guid companyGuid = Guid.Empty;
             if (Guid.TryParse(id, out companyGuid))
             {
-                var uid = userManager.GetUid(companyGuid, name);
+                uid = userManager.GetUid(companyGuid, name);
                 if (!string.IsNullOrEmpty(uid))
                 {
                     var list = orderManager.GetUserOrders(uid);
@@ -104,6 +105,7 @@ namespace WitBird.XiaoChangHe.Controllers
 
             ViewBag.CompanyId = id;
             ViewBag.SourceAccountId = name;
+            ViewBag.Uid = uid;
 
             return result;
         }

@@ -76,23 +76,49 @@
 
         //string code, string uid, string name, string tel, string amount, bool isFirstRecharge
         function postBillInfo() {
-            //var loading = $('<div style="text-align: center;background-color: burlywood;bottom: 0;position: fixed;width: 100%;">正在发起支付请求，请稍后...</div>');
-            var loading = document.createElement("div");
-            $(loading).addClass("loading");
-            loading.innerHTML = "正在发起支付请求，请稍后...";
-            document.body.appendChild(loading);
-            $.post("/pay/recharge",
-                { Code: '@ViewBag.Code', uid: '@ViewBag.Uid', name: $('#name').val(), tel: $('#tel').val(), amount: $('#amount').val(), isFirstRecharge: '@ViewBag.IsFirstRecharge' },
-                function (data) {
-                    $(loading).remove();
-                    if (data.IsSuccess) {
-                        callPayApi(data.appId, data.timeStamp, data.nonceStr, data.package, data.paySign);
-                    }
-                    else {
-                        alert(data.Message);
-                        window.location = "/pay/prerecharge?id=@(ViewBag.CompanyId)&name=@(ViewBag.SourceAccountId)";
-                    }
-                });
+            var name = $('#name').val();
+            var tel = $('#tel').val();
+
+            var isEmpty = IsEmpty("姓名", name) || IsEmpty("电话", tel);
+            var isPhoneValid = IsPhoneValid(tel);
+
+            if (!isEmpty && isPhoneValid) {
+                var loading = document.createElement("div");
+                $(loading).addClass("loading");
+                loading.innerHTML = "正在发起支付请求，请稍后...";
+                document.body.appendChild(loading);
+                $.post("/pay/recharge",
+                    { Code: '@ViewBag.Code', uid: '@ViewBag.Uid', name: name, tel: tel, amount: $('#amount').val(), isFirstRecharge: '@ViewBag.IsFirstRecharge' },
+                    function (data) {
+                        $(loading).remove();
+                        if (data.IsSuccess) {
+                            callPayApi(data.appId, data.timeStamp, data.nonceStr, data.package, data.paySign);
+                        }
+                        else {
+                            alert(data.Message);
+                            window.location = "/pay/prerecharge?id=@(ViewBag.CompanyId)&name=@(ViewBag.SourceAccountId)";
+                        }
+                    });
+            }
+        }
+
+        function IsEmpty(name, value) {
+            if (value == '' || value == 'undefined' || value == 'NaN') {
+                alert(name + '不能为空。');
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        function IsPhoneValid(phone) {
+            if (/^13d{9}$/g.test(tel) || (/^15[8,9]d{8}$/g.test(tel))) {
+                return true;
+            }
+            else {
+                alert("手机号码输入错误");
+                return false;
+            }
         }
 
     </script>
