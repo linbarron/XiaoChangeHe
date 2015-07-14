@@ -55,14 +55,14 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                     {
                         var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
 
-                                    Article article = new Article();
+                        Article article = new Article();
 
-                        article.Title = "点击查看正在进行的活动";
-                        article.Description = "点击查看正在进行的活动";
-                        article.PicUrl = "http://test.xgdg.cn/Images/1.jpg";
+                        article.Title = "小场合活动·微观时代";
+                        article.Description = "小场合活动·微观时代";
+                        article.PicUrl = "http://test.xgdg.cn/NewContent/images/chu.png";
                         article.Url = string.Format(Constants.HostDomain + "/Activity/Index/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}?activityState=1", requestMessage.FromUserName);
 
-                                    strongResponseMessage.Articles.Add(article);
+                        strongResponseMessage.Articles.Add(article);
 
                         reponseMessage = strongResponseMessage;
                     }

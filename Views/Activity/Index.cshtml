@@ -38,17 +38,20 @@
                 <li class="bg1">已结束活动</li>
             </ul>
         }
-        <!-- 进行中活动和已结束活动按钮-->
-        <!--内容区域开始-->
         <div class="content">
-            <a href="../Activity/View/1">
-                <div class="content-img">
-                    <!-- 最大的图片-->
-                    <img src="~/NewContent/images/chu.png">
-                    <!-- 最大的图片提示语-->
-                    <div class="zhe" style="position:relative;width:97%">亲, 熊孩子在家不？</div>
-                </div>
-            </a>
+            @if (Model != null && Model.Count > 0)
+            {
+                var topActivity = Model.First();
+                <a href="/Activity/Detail/@ViewBag.CompanyId/@ViewBag.SourceAccountId/?activityId=@topActivity.Id">
+                    <div class="content-img">
+                        <img src="@topActivity.ImageUrl">
+                    </div>
+                </a>
+            }
+            else
+            {
+                <div>暂无活动</div>
+            }
             @if (Model != null && Model.Count > 0)
             {
                 foreach (var activity in Model)
@@ -65,7 +68,6 @@
     </div>
 </body>
 </html>
-
 
 
 
