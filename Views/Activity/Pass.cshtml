@@ -19,7 +19,6 @@
     <meta name="wap-font-scale" content="no" />
     <!--引入css-->
     <link href="/NewUI/style/tg.css" rel="stylesheet" type="text/css">
-
 </head>
 <body>
     <div class="container">
@@ -29,8 +28,23 @@
             <br /><span class="content-center"> (把惊喜传递给更多小伙伴吧^_^)</span>
         </div>
     </div>
-    <!-- 立即分享按钮-->
-    <div class="fenx">立即分享</div>
+    <div class="fenx" onclick="showTip()">立即分享</div>
+    <div id="tip" style="width:100%;height:100%;position:absolute;background:#333;top:0;left:0;display:none">
+        <div style="margin:20px;border-radius:5px;background:#fff;padding:10px;">
+            <div>温馨提示</div>
+            <div style="line-height:30px;">■ 点击右上角→“查看公众号”免费关注</div>
+            <div style="line-height:30px;">■ 点击右上角→分享到朋友圈</div>
+            <div id="closeTip" style="margin:10px;text-align:center" onclick="closeTip()">关闭</div>
+        </div>
     </div>
+    <script src="~/NewContent/js/jquery.js"></script>
+    <script type="text/javascript">
+        function showTip() {
+            $('#tip').show();
+        }
+        function closeTip() {
+            $('#tip').hide();
+        }
+    </script>
 </body>
 </html>
