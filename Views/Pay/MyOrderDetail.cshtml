@@ -73,7 +73,23 @@
     <style>
         .mask { height: 100%; width: 100%; background: #000; position: absolute; left: 0px; top: 0px; opacity: 0.5; filter: alpha(opacity=90); /* IE */ -moz-opacity: 0.9; /* Moz + FF */ display: none; z-indent: 9; }
 
-        .popWindow { height: 240px; width: 240px; position: absolute; left: 0px; top: 0px; background: #fff; z-index: 100; padding-left: 10px; border-radius: 5px 5px; text-align: left; display: none; }
+        /*.popWindow { height: 240px; width: 240px; position: absolute; left: 0px; top: 0px; background: #fff; z-index: 100; padding-left: 10px; border-radius: 5px 5px; text-align: left; display: none; }*/
+        
+.popWindow{
+	height:240px;
+	width:240px;
+	position:fixed;
+	left:50%;
+	top:50%;
+	margin-left:-120px;
+	margin-top:-120px;
+	background:#fff;
+	z-index:100;
+    padding-left:10px;
+	border-radius:5px 5px;
+	text-align:left;
+	display:none;
+	}
 
         .dqye { line-height: 40px; text-align: left; font-size: 16px; color: #ed3a2e; }
 
@@ -296,11 +312,9 @@
         var sex = $("#sexval").val();
 
         var isEmpty = IsEmpty("用餐时间", date) || IsEmpty("联系人", name) || IsEmpty("联系电话", phone) || IsEmpty("用餐人数", pCount);
-        var isDateValid = IsDateValid(date);
         var isPhoneValid = IsPhoneValid(phone);
-        var isPersonCountValid = IsPersonCountValid(count);
 
-        if (!isEmpty && isPhoneValid && isDateValid && isPersonCountValid) {
+        if (!isEmpty && isPhoneValid) {
             $.post("/mymenu/SubmitOrder", {
                 DiningDate: date,
                 ContactName: name,
@@ -330,35 +344,12 @@
         }
     }
     function IsPhoneValid(phone) {
-        if (/^13d{9}$/g.test(tel) || (/^15[8,9]d{8}$/g.test(tel))) {
+        if (phone.length == 11) {
             return true;
         }
         else {
             alert("手机号码输入错误");
             return false;
-        }
-    }
-    function IsPersonCountValid(count) {
-        var pCount = Number(count);
-        if (pCount <= 0)
-        {
-            alert("用餐人数不能小于1人");
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
-
-    function IsDateValid(date) {
-        var dt = Date(date);
-
-        if (dt < Date.now) {
-            alert("用餐时间不能小于当前时间");
-            return false;
-        }
-        else {
-            return true;
         }
     }
 
@@ -372,20 +363,24 @@
     //浏览器横向滚动条距离左边界的值
     var browserScrollLeft = $(window).scrollLeft();
     function popPayDialog() {
-        popWindow = $(".popWindow");
+        //popWindow = $(".popWindow");
+        //$('.mask').fadeIn().width(maskWidth).height(maskHeight);
+        //browserWidth = $(window).width();
+        //browserHeight = $(window).height();
+        //positionLeft = browserWidth / 2 - 125 + browserScrollLeft;
+        //positionTop = browserHeight / 2 - 125 + browserScrollTop;
+        //popWindow.animate({
+        //    'left': positionLeft + 'px',
+        //    'top': positionTop + 'px'
+        //}, 10);
+        //popWindow.show().animate({
+        //    'left': positionLeft + 'px',
+        //    'top': positionTop + 'px'
+        //}, 500);
+
+        popWindow=$(".popWindow");
         $('.mask').fadeIn().width(maskWidth).height(maskHeight);
-        browserWidth = $(window).width();
-        browserHeight = $(window).height();
-        positionLeft = browserWidth / 2 - 125 + browserScrollLeft;
-        positionTop = browserHeight / 2 - 125 + browserScrollTop;
-        popWindow.animate({
-            'left': positionLeft + 'px',
-            'top': positionTop + 'px'
-        }, 10);
-        popWindow.show().animate({
-            'left': positionLeft + 'px',
-            'top': positionTop + 'px'
-        }, 500);
+        popWindow.show(); 
 
     }
 
