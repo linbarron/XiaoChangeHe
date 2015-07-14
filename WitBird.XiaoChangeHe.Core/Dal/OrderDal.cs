@@ -21,7 +21,7 @@ namespace WitBird.XiaoChangeHe.Core.Dal
 select Id AS OrderId,ContactName,ContactPhone,DiningDate,DiningDate,CreateDate,Status,RstId AS RestaurantId,PersonCount
 from orders
 where MemberCardNo=@MemberCardNo
-order by CreateDate desc";
+order by orders.DiningDate desc";
 
                 SqlCmd.Parameters.AddWithValue(@"MemberCardNo", memberCardNo);
 

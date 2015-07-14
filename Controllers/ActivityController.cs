@@ -91,6 +91,7 @@ namespace WitBird.XiaoChangHe.Controllers
 
             var userManager = new UserManager();
             var orderManager = new OrderManager();
+            var crmMemberModel = new CrmMemberModel();
 
             Guid companyGuid = Guid.Empty;
             if (Guid.TryParse(id, out companyGuid))
@@ -102,8 +103,17 @@ namespace WitBird.XiaoChangHe.Controllers
                     ViewBag.CompanyId = id;
                     ViewBag.SourceAccountId = name;
                     ViewBag.Uid = uid;
+                    PrepayRecord prepayRecord = crmMemberModel.HasJoinedOnlineVipGroup(uid);
 
+                    if (prepayRecord != null)
+                    {
+                        ViewBag.VerifyCode = prepayRecord.SId;
+                        result = View("Pass");
+                    }
+                    else
+                    {
                     result = View(model);
+                }
                 }
                 else
                 {

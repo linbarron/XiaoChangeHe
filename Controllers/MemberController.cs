@@ -63,10 +63,13 @@ namespace WitBird.XiaoChangHe.Controllers
                     var prepayAccount = cmModel.GetPrepayAccount(model.Uid);
                     var memberScore = cmsModel.SelCrmMemberScoreInfo(model.Uid).FirstOrDefault();
 
-                    if (prepayAccount != null && memberScore != null)
+                    if (prepayAccount != null)
                     {
                         ViewBag.AccountMoney = prepayAccount.AccountMoney;
                         ViewBag.PresentMoney = prepayAccount.PresentMoney;
+                    }
+                    if(memberScore != null)
+                    {
                         ViewBag.Score = memberScore.Score;
                     }
                 }

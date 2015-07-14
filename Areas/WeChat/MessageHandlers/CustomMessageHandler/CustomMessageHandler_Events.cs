@@ -55,14 +55,14 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                     {
                         var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
 
-                        Article article = new Article();
+                                    Article article = new Article();
 
                         article.Title = "点击查看正在进行的活动";
                         article.Description = "点击查看正在进行的活动";
                         article.PicUrl = "http://test.xgdg.cn/Images/1.jpg";
                         article.Url = string.Format(Constants.HostDomain + "/Activity/Index/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}?activityState=1", requestMessage.FromUserName);
 
-                        strongResponseMessage.Articles.Add(article);
+                                    strongResponseMessage.Articles.Add(article);
 
                         reponseMessage = strongResponseMessage;
                     }
@@ -102,8 +102,8 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                         var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
                         strongResponseMessage.Articles.Add(new Article
                         {
-                            Title = "会员支付",
-                            Description = "点击发起微信支付测试",
+                            Title = "会员充值",
+                            Description = "充值成为储值会员",
                             PicUrl = ImgUrl + "wxbeginorder.jpg",
                             Url = string.Format(Constants.HostDomain + "/member/PreRecharge/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}?type=Quick", requestMessage.FromUserName)
                         });
