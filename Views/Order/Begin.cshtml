@@ -37,6 +37,7 @@
             {
                 foreach (RestaurantAbstract item in Model)
                 {
+                    if (item == null) continue;
                     var clickEvent = string.Format("load('{0}');",item.Id);
                     //饭店类型 “01”--快餐店  “02”---正常店
                     if (item.RstType == "01")
@@ -52,7 +53,7 @@
                         <div class="content-content">
                             <span class="content-l">@(item != null ? item.Name : "")</span><span style="display: none;" class="content-r">
                                 <img src="~/NewContent/images/dw.png" width="10">1.3km</span>
-                            <br />联系电话：@(item != null ? item.ContactPhone : "")<br />地址：@(item != null ? item.Address : "")
+                            <br />联系电话：<a href="tel:@(item.ContactPhone)">@item.ContactPhone</a><br />地址：@item.Address
                         </div>
                         <div class="footer">
                             <a href="javascript:void(0);" onclick=" @clickEvent ">
