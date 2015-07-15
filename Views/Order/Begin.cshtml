@@ -43,35 +43,31 @@
                         clickEvent = string.Format("loadQuick('{0}', '{1}'); ", item.Id, item.RstType);
                     }
                     <div class="content">
-                        <a href="~/company/Rst/@item.Id">
-                            <div class="content-img">
-                                <img id="Rstimg" src="/Order/GetImagesRst/@(item.Id)" />
-                            </div>
-
-                            <div class="content-content">
-                                <span class="content-l">@(item != null ? item.Name : "")</span><span style="display: none;" class="content-r">
-                                    <img src="~/NewContent/images/dw.png" width="10">1.3km
-                                </span>
-                                <br />联系电话：<a href="tel:@(item.ContactPhone)">@item.ContactPhone</a><br />地址：@item.Address
-                            </div>
-                            <div class="footer">
-                                <a href="javascript:void(0);" onclick="@clickEvent">
-                                    <div class="footer1">
-                                        <img src="~/NewContent/images/dc.png" width="15">立即点菜
-                                    </div>
-                                </a><a href="javascript:void(0);" onclick="@clickEvent ">
-                                    <div class=" footer2">
-                                        <img src="~/NewContent/images/yh.png" width="15">今日特惠
-                                    </div>
-                                </a>
-                                <a href="@(item.MapUrl)">
-                                    <div class="footer3">
-                                        <img src="~/NewContent/images/dh.png" width="15">导航到店
-                                    </div>
-                                </a>
-                            </div>
-
-                        </a>
+                        <div class="content-img">
+                            <a href="~/company/Rst/@item.Id"><img id="Rstimg" src="/Order/GetImagesRst/@(item.Id)" /> </a>
+                        </div>
+                        <div class="content-content">
+                            <span class="content-l">@(item != null ? item.Name : "")</span><span style="display: none;" class="content-r">
+                                <img src="~/NewContent/images/dw.png" width="10">1.3km
+                            </span>
+                            <br />联系电话：<a href="tel:@(item.ContactPhone)">@item.ContactPhone</a><br />地址：@item.Address
+                        </div>
+                        <div class="footer">
+                            <a href="javascript:void(0);" onclick="@clickEvent">
+                                <div class="footer1">
+                                    <img src="~/NewContent/images/dc.png" width="15">立即点菜
+                                </div>
+                            </a><a href="javascript:void(0);" onclick="@clickEvent ">
+                                <div class=" footer2">
+                                    <img src="~/NewContent/images/yh.png" width="15">今日特惠
+                                </div>
+                            </a>
+                            <a href="@(item.MapUrl)">
+                                <div class="footer3">
+                                    <img src="~/NewContent/images/dh.png" width="15">导航到店
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 }
             }
