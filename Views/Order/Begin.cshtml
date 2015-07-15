@@ -10,7 +10,7 @@
     <title>选择预定店面</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, minimum-scale=1,maximum-scale=1,initial-scale=1,user-scalable=no" />
-    <meta name="wap-font-scale" content="no"/>
+    <meta name="wap-font-scale" content="no" />
     <meta name="format-detection" content="telephone=no">
     <meta name="format-detection" content="email=no">
     <link href="/NewContent/style/yddm.css" rel="stylesheet" type="text/css">
@@ -23,8 +23,6 @@
             color: #666;
         }
     </style>
-
-
 </head>
 <body>
     @{
@@ -38,310 +36,312 @@
                 foreach (RestaurantAbstract item in Model)
                 {
                     if (item == null) { continue; }
-                    var clickEvent = string.Format("load('{0}');",item.Id);
+                    var clickEvent = string.Format("load('{0}');", item.Id);
                     //饭店类型 “01”--快餐店  “02”---正常店
                     if (item.RstType == "01")
                     {
-                        clickEvent = string.Format("loadQuick('{0}', '{1}'); ",item.Id,item.RstType);
+                        clickEvent = string.Format("loadQuick('{0}', '{1}'); ", item.Id, item.RstType);
                     }
-                <div class="content">
-                    <a  href="~/company/Rst/@item.Id">
-                        <div class="content-img">
-                            <img id="Rstimg" src="/Order/GetImagesRst/@(item.Id)"/>
-                        </div>
+                    <div class="content">
+                        <a href="~/company/Rst/@item.Id">
+                            <div class="content-img">
+                                <img id="Rstimg" src="/Order/GetImagesRst/@(item.Id)" />
+                            </div>
 
-                        <div class="content-content">
-                            <span class="content-l">@(item != null ? item.Name : "")</span><span style="display: none;" class="content-r">
-                                <img src="~/NewContent/images/dw.png" width="10">1.3km</span>
-                            <br />联系电话：<a href="tel:@(item.ContactPhone)">@item.ContactPhone</a><br />地址：@item.Address
-                        </div>
-                        <div class="footer">
-                            <a href="javascript:void(0);" onclick=" @clickEvent ">
-                                <div class="footer1">
-                                    <img src="~/NewContent/images/dc.png" width="15">立即点菜</div>
-                            </a><a href="javascript:void(0);" onclick=" @clickEvent ">
-                                <div class=" footer2">
-    <img src="~/NewContent/images/yh.png" width="15">今日特惠
-</div>
-                            </a>
-                            <a href="@(item.MapUrl)">
-                                <div class="footer3">
-                                    <img src="~/NewContent/images/dh.png" width="15">导航到店</div>
-                            </a>
-                        </div>
+                            <div class="content-content">
+                                <span class="content-l">@(item != null ? item.Name : "")</span><span style="display: none;" class="content-r">
+                                    <img src="~/NewContent/images/dw.png" width="10">1.3km
+                                </span>
+                                <br />联系电话：<a href="tel:@(item.ContactPhone)">@item.ContactPhone</a><br />地址：@item.Address
+                            </div>
+                            <div class="footer">
+                                <a href="javascript:void(0);" onclick="@clickEvent">
+                                    <div class="footer1">
+                                        <img src="~/NewContent/images/dc.png" width="15">立即点菜
+                                    </div>
+                                </a><a href="javascript:void(0);" onclick="@clickEvent ">
+                                    <div class=" footer2">
+                                        <img src="~/NewContent/images/yh.png" width="15">今日特惠
+                                    </div>
+                                </a>
+                                <a href="@(item.MapUrl)">
+                                    <div class="footer3">
+                                        <img src="~/NewContent/images/dh.png" width="15">导航到店
+                                    </div>
+                                </a>
+                            </div>
 
-                    </a>
-                </div>
-        }
-    }
+                        </a>
+                    </div>
+                }
+            }
         </div>
     </form>
 
-</body>
-<script>
-    function load(id) {
 
-        if ('@(ViewBag.isCurTime)' != null && '@(ViewBag.isCurTime)' == 0 && ' @ViewBag.type' != "Auto") {
+    <script>
+        function load(id) {
 
-            window.location.href = "/SelTableInfo/SelTableInfo?SourceAccountId=@(ViewBag.SourceAccountId)&RestaurantId=" + id + "&Status=1";
+            if ('@(ViewBag.isCurTime)' != null && '@(ViewBag.isCurTime)' == 0 && ' @ViewBag.type' != "Auto") {
 
-        } else if ('@(ViewBag.isCurTime)' != null && '@(ViewBag.isCurTime)' == 1) {
-            str = "<a href=\"/SelTableInfo/SelTableInfo?SourceAccountId=@(ViewBag.SourceAccountId)&RestaurantId=" + id + "&Status=1\" class=\"but\">新预定</a>" +
-                    "<a href=\"/Order/MY/@( ViewBag.CompanyId)/@(ViewBag.SourceAccountId)\"  class=\"but\">查看订单</a>";
-            var unit = "%";
-            sAlert(str, 80, 20, unit);
-        }
+                window.location.href = "/SelTableInfo/SelTableInfo?SourceAccountId=@(ViewBag.SourceAccountId)&RestaurantId=" + id + "&Status=1";
 
-}
-function loadAuto(Id, RstType) {
-    if ('@(ViewBag.AutoOrderCount)' != null && '@(ViewBag.AutoOrderCount)' == 0) {
-            window.location.href = "/AutoMenuIndex/AutoMenuIndex/" + Id + "/@(ViewBag.SourceAccountId)?Status=1&Type=Auto&CompanyId=@(ViewBag.CompanyId)&RstType=" + RstType + "&IsOrder=@(ViewBag.AutoOrderCount)";
-        } else if ('@(ViewBag.AutoOrderCount)' != null && '@(ViewBag.AutoOrderCount)' == 1) {
-            str = "<p style=\"float: left;  margin-top: -20px; margin-left: 10px;  color: red;margin-bottom: 0px;\">您已有未消费的订单</p>" +
-                "<a href=\"/AutoMenuIndex/AutoMenuIndex/" + Id + "/@(ViewBag.SourceAccountId)?Status=1&Type=Auto&CompanyId=@(ViewBag.CompanyId)&RstType=" + RstType + "&IsOrder=@(ViewBag.AutoOrderCount)&IsNewOrder=NewOrder&orderId=@(ViewBag.OrderId)&MemberCardNo=@(ViewBag.MemberCardNo)\"  class=\"but\">新预定</a> " +
-                    "<a href=\"/pay/prepareorder/?Orderid=@(ViewBag.OrderId)&SourceAccountId=@(ViewBag.SourceAccountId)&MemberCardNo=@(ViewBag.MemberCardNo)&RstType=FastFood\"  class=\"but\">查看订单</a> ";
-            var unit = "%";
-            sAlert(str, 80, 20, unit);
-        }
-}
-
-function loadQuick(Id, RstType) {
-    console.log(Id);
-    if ('@(ViewBag.AutoOrderCount)' != null && '@(ViewBag.AutoOrderCount)' == 0) {
-        window.location.href = "/ProductType/Index?SourceAccountId=@(ViewBag.SourceAccountId)&RestaurantId=" + Id + "&Status=1&Type=FastFood&IsOrder=@(ViewBag.AutoOrderCount)&MemberCardNo=@(ViewBag.MemberCardNo)&Orderid=@(ViewBag.OrderId)";
-    } else if ('@(ViewBag.AutoOrderCount)' != null && '@(ViewBag.AutoOrderCount)' == 1) {
-        str = "<p style=\"float: left;  margin-top: -20px; margin-left: 10px;  color: red;margin-bottom: 0px;\">您已有未消费的订单</p>" +
-"  <a href=\"/ProductType/Index?SourceAccountId=@(ViewBag.SourceAccountId)&RestaurantId=" + Id + "&Status=1&Type=FastFood&IsOrder=@(ViewBag.AutoOrderCount)&MemberCardNo=@(ViewBag.MemberCardNo)&Orderid=@(ViewBag.OrderId)\" class=\"but\">新预定</a>  " +
-"<a href=\"/pay/prepareorder/?Orderid=@(ViewBag.OrderId)&SourceAccountId=@(ViewBag.SourceAccountId)&MemberCardNo=@(ViewBag.MemberCardNo)&RstType=FastFood\"  class=\"but\">查看订单</a> ";
-            var unit = "%";
-            sAlert(str, 80, 20, unit);
-    }
-    console.log("dfdf");
-}
-
-function tabCity() {
-    $.ajaxSetup({ cache: false });
-    $.ajaxSetup({ async: false, });
-    var str;
-    $.get("/Order/Get_Province_By_Province", function (m) {
-        str = m;
-    })
-
-    var height = document.documentElement.clientHeight;
-    var width = document.documentElement.clientWidth;
-    var unit = "px";
-    sAlert(str, width - 30, height / 3, unit);
-}
-
-
-function GetCity(id) {
-    $.get("/Order/Get_Province_By_Province", { id: id }, function (m) {
-        $("#msgTxts").html(m);
-
-    })
-}
-function page(id, name) {
-    window.location.href = "/Order/Begin?id=@(ViewBag.CompanyId)&name=@(ViewBag.SourceAccountId)&CityId=" + id + "&CityName=" + name + "";
-    //   $.get("/Order/Begin", { id: '@(ViewBag.CompanyId)', name: '@(ViewBag.SourceAccountId)', CityId: id }, function (m) {
-    $("#msgDiv").remove();
-    $("#bgDiv").remove();
-
-    // })
-}
-function sAlert(str, msgw, msgh, unit) {
-    var msgw, msgh, bordercolor;
-    msgw = msgw;//提示窗口的宽度
-    msgh = msgh;//提示窗口的高度
-    // bordercolor = "#1da507";//提示窗口的边框颜色
-    //  titlecolor = "#1da507";//提示窗口的标题颜色
-
-    var sWidth, sHeight;
-    sWidth = document.body.offsetWidth;
-    sHeight = document.body.offsetHeight;
-
-    var bgObj = document.createElement("div");
-    bgObj.setAttribute('id', 'bgDiv');
-    bgObj.style.position = "absolute";
-    bgObj.style.top = "0";
-    bgObj.style.background = "#777";
-    bgObj.style.filter = "progid:DXImageTransform.Microsoft.Alpha(style=3,opacity=25,finishOpacity=75";
-    bgObj.style.opacity = "0.6";
-    bgObj.style.left = "0";
-    bgObj.style.width = sWidth + "px";
-    bgObj.style.height = sHeight + "px";
-    document.body.appendChild(bgObj);
-    var msgObj = document.createElement("div")
-    msgObj.setAttribute("id", "msgDiv");
-    msgObj.setAttribute("align", "center");
-    msgObj.style.position = "absolute";
-    msgObj.style.background = "white";
-    // msgObj.innerHTML = "<img src='/Content/images/tanchu_bg.png' style=' width: 100%;height:100%;'/>  ";
-    msgObj.style.font = "12px/1.6em Verdana, Geneva, Arial, Helvetica, sans-serif";
-    msgObj.style.border = "1px solid " + bordercolor;
-    msgObj.style.width = msgw + unit;
-    msgObj.style.height = msgh + unit;
-    //  msgObj.style.top = (document.documentElement.scrollTop + (sHeight - msgh) / 2) + "px";
-    //  msgObj.style.left = (sWidth - msgw) / 2 + "px";
-    msgObj.style.top = "30" + unit;
-    msgObj.style.left = "8" + unit;
-
-    var title = document.createElement("h4");
-    title.setAttribute("id", "msgTitle");
-    title.setAttribute("align", "right");
-    title.style.margin = "0";
-    title.style.padding = "3px";
-    title.style.background = bordercolor;
-    title.style.filter = "progid:DXImageTransform.Microsoft.Alpha(startX=20, startY=20, finishX=100, finishY=100,style=1,opacity=75,finishOpacity=100);";
-    title.style.opacity = "0.75";
-    title.style.border = "1px solid " + bordercolor;
-    title.style.height = "18px";
-    title.style.font = "12px Verdana, Geneva, Arial, Helvetica, sans-serif";
-    title.style.color = "white";
-    title.style.cursor = "pointer";
-    //  title.innerHTML = "关闭";
-    title.innerHTML = "<img src='/Content/images/close.png' style='position: absolute; right: -6%;   top: -8%;  width: 40px;'/>  ";
-    title.onclick = function () {
-        document.body.removeChild(bgObj);
-        document.getElementById("msgDiv").removeChild(title);
-        document.body.removeChild(msgObj);
-    }
-    document.body.appendChild(msgObj);
-    document.getElementById("msgDiv").appendChild(title);
-    var txt = document.createElement("span");
-    txt.style.margin = "1em 0"
-    txt.setAttribute("id", "msgTxt");
-    txt.innerHTML = str;
-    document.getElementById("msgDiv").appendChild(txt);
-    var strs = document.createElement("span");
-    strs.style.margin = "1em 0"
-    strs.setAttribute("id", "msgTxts");
-    strs.innerHTML = "";
-    document.getElementById("msgDiv").appendChild(strs);
-
-}
-
-</script>
-<script>
-    $(function () {
-        return;
-        $.ajaxSetup({ cache: false });
-        $.ajaxSetup({ async: false, });
-        var IsDis = $(".IsDis");
-        var status = 1;
-        for (var i = 0; i < IsDis.length; i++) {
-            var id = IsDis[i].id;
-            IsBook(id);
-            //alert(2);
-            //等于0不接受预定否则接受预定
-            //alert(IsDis[i].value);
-
-            if (IsDis[i].value == 0) {
-                $("#" + id).parents("li").find(".isBook").html("不接受预定");
-                //$("#" + id).parents("li").find(".MyMenuBut1").html("查看菜品");
-                //var url = $("#" + id).parents("li").find(".MyMenuBut1").attr('href');
-                //status = 0;
-                //$("#" + id).parents("li").find(".MyMenuBut1").attr('href', url + "&Status=" + status);
-                $("#" + id).parents("li").find(".selectMenu").show();
-
-                $("#" + id).parents("li").find(".start").hide();
-
-
-            } else {
-                $("#" + id).parents("li").find(".selectMenu").hide();
-                $("#" + id).parents("li").find(".start").show();
-
-                $("#" + id).parents("li").find(".isBook").html("接受预定");
+            } else if ('@(ViewBag.isCurTime)' != null && '@(ViewBag.isCurTime)' == 1) {
+                str = "<a href=\"/SelTableInfo/SelTableInfo?SourceAccountId=@(ViewBag.SourceAccountId)&RestaurantId=" + id + "&Status=1\" class=\"but\">新预定</a>" +
+                        "<a href=\"/Order/MY/@( ViewBag.CompanyId)/@(ViewBag.SourceAccountId)\"  class=\"but\">查看订单</a>";
+                var unit = "%";
+                sAlert(str, 80, 20, unit);
             }
 
         }
-
-    })
-
-    function IsBook(id) {
-        //alert(1);
-        $.ajaxSetup({ cache: false });
-        $.get("/Order/getTableTotal", { id: id }, function (msg) {
-            //alert(msg);
-            $("#" + id).val(msg);
-            //alert($("#" + id).val());
-        })
-    }
-</script>
-<script>
-    function getLocation() {
-        // debugger;
-
-        if (navigator && navigator.geolocation) {  //判断是否支持地理定位  
-
-            navigator.geolocation.getCurrentPosition(showPosition, showError, { timeout: 24 * 1000000 });
-        } else {
-
-            alert('定位失败，请检查网络设置');
+        function loadAuto(Id, RstType) {
+            if ('@(ViewBag.AutoOrderCount)' != null && '@(ViewBag.AutoOrderCount)' == 0) {
+                window.location.href = "/AutoMenuIndex/AutoMenuIndex/" + Id + "/@(ViewBag.SourceAccountId)?Status=1&Type=Auto&CompanyId=@(ViewBag.CompanyId)&RstType=" + RstType + "&IsOrder=@(ViewBag.AutoOrderCount)";
+            } else if ('@(ViewBag.AutoOrderCount)' != null && '@(ViewBag.AutoOrderCount)' == 1) {
+                str = "<p style=\"float: left;  margin-top: -20px; margin-left: 10px;  color: red;margin-bottom: 0px;\">您已有未消费的订单</p>" +
+                    "<a href=\"/AutoMenuIndex/AutoMenuIndex/" + Id + "/@(ViewBag.SourceAccountId)?Status=1&Type=Auto&CompanyId=@(ViewBag.CompanyId)&RstType=" + RstType + "&IsOrder=@(ViewBag.AutoOrderCount)&IsNewOrder=NewOrder&orderId=@(ViewBag.OrderId)&MemberCardNo=@(ViewBag.MemberCardNo)\"  class=\"but\">新预定</a> " +
+                        "<a href=\"/pay/prepareorder/?Orderid=@(ViewBag.OrderId)&SourceAccountId=@(ViewBag.SourceAccountId)&MemberCardNo=@(ViewBag.MemberCardNo)&RstType=FastFood\"  class=\"but\">查看订单</a> ";
+                var unit = "%";
+                sAlert(str, 80, 20, unit);
+            }
         }
-    }
 
-    //获取经纬度并显示  
-    function showPosition(position) {
-        $.ajaxSetup({ cache: false });
-        $.ajaxSetup({ async: false, });
-        var lat = position.coords.latitude;
-        var log = position.coords.longitude;
-        var cityid, cityname;
-        $.get("/Order/getCity", { lat: lat, log: log }, function (m) {
-            var obj = eval("(" + m + ")");
-            var city = obj.result.addressComponent.city;
-            $("#city").val(city);
+        function loadQuick(Id, RstType) {
+            console.log(Id);
+            if ('@(ViewBag.AutoOrderCount)' != null && '@(ViewBag.AutoOrderCount)' == 0) {
+                window.location.href = "/ProductType/Index?SourceAccountId=@(ViewBag.SourceAccountId)&RestaurantId=" + Id + "&Status=1&Type=FastFood&IsOrder=@(ViewBag.AutoOrderCount)&MemberCardNo=@(ViewBag.MemberCardNo)&Orderid=@(ViewBag.OrderId)";
+            } else if ('@(ViewBag.AutoOrderCount)' != null && '@(ViewBag.AutoOrderCount)' == 1) {
+                str = "<p style=\"float: left;  margin-top: -20px; margin-left: 10px;  color: red;margin-bottom: 0px;\">您已有未消费的订单</p>" +
+        "  <a href=\"/ProductType/Index?SourceAccountId=@(ViewBag.SourceAccountId)&RestaurantId=" + Id + "&Status=1&Type=FastFood&IsOrder=@(ViewBag.AutoOrderCount)&MemberCardNo=@(ViewBag.MemberCardNo)&Orderid=@(ViewBag.OrderId)\" class=\"but\">新预定</a>  " +
+        "<a href=\"/pay/prepareorder/?Orderid=@(ViewBag.OrderId)&SourceAccountId=@(ViewBag.SourceAccountId)&MemberCardNo=@(ViewBag.MemberCardNo)&RstType=FastFood\"  class=\"but\">查看订单</a> ";
+                var unit = "%";
+                sAlert(str, 80, 20, unit);
+            }
+            console.log("dfdf");
+        }
 
-            $.get("/Order/getCityIdByCityName", { id: city }, function (s) {
-
-                cityid = s;
-                cityname = city;
+        function tabCity() {
+            $.ajaxSetup({ cache: false });
+            $.ajaxSetup({ async: false, });
+            var str;
+            $.get("/Order/Get_Province_By_Province", function (m) {
+                str = m;
             })
-        })
-        window.location.href = "/Order/Begin?id=@(ViewBag.CompanyId)&name=@(ViewBag.SourceAccountId)&CityId=" + cityid + "&CityName=" + cityname + "";
-    }
-    //错误处理函数  
-    function showError(error) {
-        switch (error.code) {
-            case error.PERMISSION_DENIED:
-                // alert("用户拒绝  .")
-                $("#city").val("成都");
-                break;
-            case error.POSITION_UNAVAILABLE:
-                // alert("无法提供定位服务 .")
-                $("#city").val("成都");
-                break;
-            case error.TIMEOUT:
-                // alert("连接超时 ")
-                $("#city").val("成都");
-                break;
-            case error.UNKNOWN_ERROR:
-                //alert("未知错误")
-                $("#city").val("成都");
-                break;
+
+            var height = document.documentElement.clientHeight;
+            var width = document.documentElement.clientWidth;
+            var unit = "px";
+            sAlert(str, width - 30, height / 3, unit);
         }
-    }
 
 
-    function GetQueryString(CityId) {
+        function GetCity(id) {
+            $.get("/Order/Get_Province_By_Province", { id: id }, function (m) {
+                $("#msgTxts").html(m);
 
-        var reg = new RegExp("(^|&)" + CityId + "=([^&]*)(&|$)");
-        var r = window.location.search.substr(1).match(reg);
-        if (r != null) return unescape(r[2]); return null;
+            })
+        }
+        function page(id, name) {
+            window.location.href = "/Order/Begin?id=@(ViewBag.CompanyId)&name=@(ViewBag.SourceAccountId)&CityId=" + id + "&CityName=" + name + "";
+            //   $.get("/Order/Begin", { id: '@(ViewBag.CompanyId)', name: '@(ViewBag.SourceAccountId)', CityId: id }, function (m) {
+            $("#msgDiv").remove();
+            $("#bgDiv").remove();
 
-    }
+            // })
+        }
+        function sAlert(str, msgw, msgh, unit) {
+            var msgw, msgh, bordercolor;
+            msgw = msgw;//提示窗口的宽度
+            msgh = msgh;//提示窗口的高度
+            // bordercolor = "#1da507";//提示窗口的边框颜色
+            //  titlecolor = "#1da507";//提示窗口的标题颜色
 
-    //$(function () {
-    //    var myurl = GetQueryString("CityId");
-    //    if (myurl != null && myurl.toString().length > 1) {
+            var sWidth, sHeight;
+            sWidth = document.body.offsetWidth;
+            sHeight = document.body.offsetHeight;
 
-    //    } else {
-    //        getLocation();
-    //    }
+            var bgObj = document.createElement("div");
+            bgObj.setAttribute('id', 'bgDiv');
+            bgObj.style.position = "absolute";
+            bgObj.style.top = "0";
+            bgObj.style.background = "#777";
+            bgObj.style.filter = "progid:DXImageTransform.Microsoft.Alpha(style=3,opacity=25,finishOpacity=75";
+            bgObj.style.opacity = "0.6";
+            bgObj.style.left = "0";
+            bgObj.style.width = sWidth + "px";
+            bgObj.style.height = sHeight + "px";
+            document.body.appendChild(bgObj);
+            var msgObj = document.createElement("div")
+            msgObj.setAttribute("id", "msgDiv");
+            msgObj.setAttribute("align", "center");
+            msgObj.style.position = "absolute";
+            msgObj.style.background = "white";
+            // msgObj.innerHTML = "<img src='/Content/images/tanchu_bg.png' style=' width: 100%;height:100%;'/>  ";
+            msgObj.style.font = "12px/1.6em Verdana, Geneva, Arial, Helvetica, sans-serif";
+            msgObj.style.border = "1px solid " + bordercolor;
+            msgObj.style.width = msgw + unit;
+            msgObj.style.height = msgh + unit;
+            //  msgObj.style.top = (document.documentElement.scrollTop + (sHeight - msgh) / 2) + "px";
+            //  msgObj.style.left = (sWidth - msgw) / 2 + "px";
+            msgObj.style.top = "30" + unit;
+            msgObj.style.left = "8" + unit;
+
+            var title = document.createElement("h4");
+            title.setAttribute("id", "msgTitle");
+            title.setAttribute("align", "right");
+            title.style.margin = "0";
+            title.style.padding = "3px";
+            title.style.background = bordercolor;
+            title.style.filter = "progid:DXImageTransform.Microsoft.Alpha(startX=20, startY=20, finishX=100, finishY=100,style=1,opacity=75,finishOpacity=100);";
+            title.style.opacity = "0.75";
+            title.style.border = "1px solid " + bordercolor;
+            title.style.height = "18px";
+            title.style.font = "12px Verdana, Geneva, Arial, Helvetica, sans-serif";
+            title.style.color = "white";
+            title.style.cursor = "pointer";
+            //  title.innerHTML = "关闭";
+            title.innerHTML = "<img src='/Content/images/close.png' style='position: absolute; right: -6%;   top: -8%;  width: 40px;'/>  ";
+            title.onclick = function () {
+                document.body.removeChild(bgObj);
+                document.getElementById("msgDiv").removeChild(title);
+                document.body.removeChild(msgObj);
+            }
+            document.body.appendChild(msgObj);
+            document.getElementById("msgDiv").appendChild(title);
+            var txt = document.createElement("span");
+            txt.style.margin = "1em 0"
+            txt.setAttribute("id", "msgTxt");
+            txt.innerHTML = str;
+            document.getElementById("msgDiv").appendChild(txt);
+            var strs = document.createElement("span");
+            strs.style.margin = "1em 0"
+            strs.setAttribute("id", "msgTxts");
+            strs.innerHTML = "";
+            document.getElementById("msgDiv").appendChild(strs);
+
+        }
+
+    </script>
+    <script>
+        $(function () {
+            return;
+            $.ajaxSetup({ cache: false });
+            $.ajaxSetup({ async: false, });
+            var IsDis = $(".IsDis");
+            var status = 1;
+            for (var i = 0; i < IsDis.length; i++) {
+                var id = IsDis[i].id;
+                IsBook(id);
+                //alert(2);
+                //等于0不接受预定否则接受预定
+                //alert(IsDis[i].value);
+
+                if (IsDis[i].value == 0) {
+                    $("#" + id).parents("li").find(".isBook").html("不接受预定");
+                    //$("#" + id).parents("li").find(".MyMenuBut1").html("查看菜品");
+                    //var url = $("#" + id).parents("li").find(".MyMenuBut1").attr('href');
+                    //status = 0;
+                    //$("#" + id).parents("li").find(".MyMenuBut1").attr('href', url + "&Status=" + status);
+                    $("#" + id).parents("li").find(".selectMenu").show();
+
+                    $("#" + id).parents("li").find(".start").hide();
 
 
-    //});
-</script>
+                } else {
+                    $("#" + id).parents("li").find(".selectMenu").hide();
+                    $("#" + id).parents("li").find(".start").show();
+
+                    $("#" + id).parents("li").find(".isBook").html("接受预定");
+                }
+
+            }
+
+        })
+
+        function IsBook(id) {
+            //alert(1);
+            $.ajaxSetup({ cache: false });
+            $.get("/Order/getTableTotal", { id: id }, function (msg) {
+                //alert(msg);
+                $("#" + id).val(msg);
+                //alert($("#" + id).val());
+            })
+        }
+    </script>
+    <script>
+        function getLocation() {
+            // debugger;
+
+            if (navigator && navigator.geolocation) {  //判断是否支持地理定位
+
+                navigator.geolocation.getCurrentPosition(showPosition, showError, { timeout: 24 * 1000000 });
+            } else {
+
+                alert('定位失败，请检查网络设置');
+            }
+        }
+
+        //获取经纬度并显示
+        function showPosition(position) {
+            $.ajaxSetup({ cache: false });
+            $.ajaxSetup({ async: false, });
+            var lat = position.coords.latitude;
+            var log = position.coords.longitude;
+            var cityid, cityname;
+            $.get("/Order/getCity", { lat: lat, log: log }, function (m) {
+                var obj = eval("(" + m + ")");
+                var city = obj.result.addressComponent.city;
+                $("#city").val(city);
+
+                $.get("/Order/getCityIdByCityName", { id: city }, function (s) {
+
+                    cityid = s;
+                    cityname = city;
+                })
+            })
+            window.location.href = "/Order/Begin?id=@(ViewBag.CompanyId)&name=@(ViewBag.SourceAccountId)&CityId=" + cityid + "&CityName=" + cityname + "";
+        }
+        //错误处理函数
+        function showError(error) {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    // alert("用户拒绝  .")
+                    $("#city").val("成都");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    // alert("无法提供定位服务 .")
+                    $("#city").val("成都");
+                    break;
+                case error.TIMEOUT:
+                    // alert("连接超时 ")
+                    $("#city").val("成都");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    //alert("未知错误")
+                    $("#city").val("成都");
+                    break;
+            }
+        }
+
+
+        function GetQueryString(CityId) {
+
+            var reg = new RegExp("(^|&)" + CityId + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]); return null;
+
+        }
+
+        //$(function () {
+        //    var myurl = GetQueryString("CityId");
+        //    if (myurl != null && myurl.toString().length > 1) {
+
+        //    } else {
+        //        getLocation();
+        //    }
+
+
+        //});
+    </script>
+</body>
 </html>
-
-
