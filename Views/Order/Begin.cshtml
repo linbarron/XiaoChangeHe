@@ -50,7 +50,7 @@
                             <span class="content-l">@(item != null ? item.Name : "")</span><span style="display: none;" class="content-r">
                                 <img src="~/NewContent/images/dw.png" width="10">1.3km
                             </span>
-                            <br />联系电话：<a href="tel:@(item.ContactPhone)">@item.ContactPhone</a><br />地址：@item.Address
+                            <br />联系电话：<a href="tel:@(item.ContactPhone)" style="font-weight:bold;color:#6ee4f6;">@item.ContactPhone</a><br />地址：@item.Address
                         </div>
                         <div class="footer">
                             <a href="javascript:void(0);" onclick="@clickEvent">
