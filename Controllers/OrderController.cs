@@ -505,7 +505,7 @@ namespace WitBird.XiaoChangHe.Controllers
 
         public ActionResult My(string id, string name)
         {
-            ViewBag.ComypanyId = id;
+            ViewBag.CompanyId = id;
             ViewBag.SourceAccountId = name;
             OrderModel odm = new OrderModel();
             CrmMemberModel cdb = new CrmMemberModel();

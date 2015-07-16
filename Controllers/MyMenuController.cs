@@ -23,7 +23,7 @@ namespace WitBird.XiaoChangHe.Controllers
         //
         // GET: /MyMenu/
 
-        public ActionResult MyMenu(string MemberCardNo, string OrderId, string SourceAccountId, string RstType = null, string ComypanyId = null)
+        public ActionResult MyMenu(string MemberCardNo, string OrderId, string SourceAccountId, string RstType = null, string CompanyId = null)
         {
 
             ViewBag.SourceAccountId = SourceAccountId;
@@ -50,7 +50,7 @@ namespace WitBird.XiaoChangHe.Controllers
 
             }
             ViewBag.RstType = RstType;
-            ViewBag.ComypanyId = ComypanyId;
+            ViewBag.CompanyId = CompanyId;
 
             return View();
         }

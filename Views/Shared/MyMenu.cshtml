@@ -71,9 +71,9 @@
     {
      <nav class="MyMenuBut">
           <a href="javascript:void(0);" onclick="myMenu()">确定</a>
-@*        <a href="/pay/prepareorder?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(ViewBag.OrderId)&SourceAccountId=@(ViewBag.SourceAccountId)&ComypanyId=@(ViewBag.ComypanyId)&RstType=@(ViewBag.RstType)">确定 </a>*@
+@*        <a href="/pay/prepareorder?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(ViewBag.OrderId)&SourceAccountId=@(ViewBag.SourceAccountId)&CompanyId=@(ViewBag.CompanyId)&RstType=@(ViewBag.RstType)">确定 </a>*@
     </nav>
-       // window.location.href = "/pay/prepareorder?MemberCardNo=" + MemberCardNo + "&OrderId=" + orderid + "&SourceAccountI=" + SourceAccountId + "&ComypanyId =" + CompanyId + "&RstType=" + Type + "";
+       // window.location.href = "/pay/prepareorder?MemberCardNo=" + MemberCardNo + "&OrderId=" + orderid + "&SourceAccountId=" + SourceAccountId + "&CompanyId =" + CompanyId + "&RstType=" + Type + "";
 
     }else{
    <nav class="MyMenuBut">
@@ -170,7 +170,7 @@
 
             $.ajaxSetup({ async: false });
             var SourceAccountId = '@ViewBag.SourceAccountId';
-            var ComypanyId = '@(ViewBag.ComypanyId)';
+            var CompanyId = '@(ViewBag.CompanyId)';
             var MemberCardNo = '@ViewBag.MemberCardNo';
             var RstType = '@(ViewBag.RstType)';
             var  remark = $("#remark").val();
@@ -178,7 +178,7 @@
             
              });
             
-            window.location.href = "/pay/prepareorder?MemberCardNo=" + MemberCardNo + "&OrderId=" + orderid + "&SourceAccountId=" + SourceAccountId + "&ComypanyId =" + ComypanyId + "&RstType=" + RstType + "";
+            window.location.href = "/pay/prepareorder?MemberCardNo=" + MemberCardNo + "&OrderId=" + orderid + "&SourceAccountId=" + SourceAccountId + "&CompanyId =" + CompanyId + "&RstType=" + RstType + "";
 
         }
 

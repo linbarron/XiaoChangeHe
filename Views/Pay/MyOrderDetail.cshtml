@@ -311,10 +311,8 @@
         var sname = $('#SourceAccountId').val();
         var sex = $("#sexval").val();
 
-        var isEmpty = IsEmpty("用餐时间", date) || IsEmpty("联系人", name) || IsEmpty("联系电话", phone) || IsEmpty("用餐人数", pCount);
-        var isPhoneValid = IsPhoneValid(phone);
 
-        if (!isEmpty && isPhoneValid) {
+        if (!(IsEmpty("用餐时间", date) || IsEmpty("联系人", name) || IsEmpty("联系电话", phone) || IsEmpty("用餐人数", pCount)) && IsPhoneValid(phone)) {
             $.post("/mymenu/SubmitOrder", {
                 DiningDate: date,
                 ContactName: name,
@@ -343,14 +341,16 @@
             return false;
         }
     }
-    function IsPhoneValid(phone) {
-        if (phone.length == 11) {
-            return true;
+    function IsPhoneValid(value) {
+        var length = value.length;
+        var mobile = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
+        var isValid = (length == 11 && mobile.test(value));
+
+        if (!isValid) {
+            alert('手机号码输入有误');
         }
-        else {
-            alert("手机号码输入错误");
-            return false;
-        }
+
+        return isValid;
     }
 
     var maskWidth = $(document).width();

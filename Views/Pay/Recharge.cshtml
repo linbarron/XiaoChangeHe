@@ -79,10 +79,7 @@
             var name = $('#name').val();
             var tel = $('#tel').val();
 
-            var isEmpty = IsEmpty("姓名", name) || IsEmpty("电话", tel);
-            var isPhoneValid = IsPhoneValid(tel);
-
-            if (!isEmpty && isPhoneValid) {
+            if (!(IsEmpty("姓名", name) || IsEmpty("电话", tel)) && IsPhoneValid(tel)) {
                 var loading = document.createElement("div");
                 $(loading).addClass("loading");
                 loading.innerHTML = "正在发起支付请求，请稍后...";
@@ -111,14 +108,16 @@
                 return false;
             }
         }
-        function IsPhoneValid(phone) {
-            if (/^13d{9}$/g.test(tel) || (/^15[8,9]d{8}$/g.test(tel))) {
-                return true;
+        function IsPhoneValid(value) {
+            var length = value.length;
+            var mobile = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
+            var isValid = (length == 11 && mobile.test(value));
+
+            if (!isValid) {
+                alert('手机号码输入有误');
             }
-            else {
-                alert("手机号码输入错误");
-                return false;
-            }
+
+            return isValid;
         }
 
     </script>

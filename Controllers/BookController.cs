@@ -52,11 +52,11 @@ namespace WitBird.XiaoChangHe.Controllers
             order.CreateDate = DateTime.Now;
             int i = odm.SaveOrders("Update", order);
             string RestaurantId = Session["begindm"] != null ? Session["begindm"].ToString() : "";
-            string ComypanyId = Session["CompanyId"] != null ? Session["CompanyId"].ToString() : "";
+            string CompanyId = Session["CompanyId"] != null ? Session["CompanyId"].ToString() : "";
             //   return RedirectToAction("MyMenu", "MyMenu", new { MemberCardNo = MemberCardNo, OrderId = orderid ,SourceAccountId=SourceAccountId});
 
-            return RedirectToAction("MyOrderDetail", "MyMenu", new { MemberCardNo = MemberCardNo, OrderId = orderid, SourceAccountId = SourceAccountId, ComypanyId = ComypanyId });
-            // <a href="/pay/MyOrderDetail?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(item.OrderId)&SourceAccountId= @(ViewBag.SourceAccountId)&type='detail'&ComypanyId=@( ViewBag.ComypanyId)" style="color:#ccc">
+            return RedirectToAction("MyOrderDetail", "MyMenu", new { MemberCardNo = MemberCardNo, OrderId = orderid, SourceAccountId = SourceAccountId, CompanyId = CompanyId });
+            // <a href="/pay/MyOrderDetail?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(item.OrderId)&SourceAccountId= @(ViewBag.SourceAccountId)&type='detail'&CompanyId=@( ViewBag.CompanyId)" style="color:#ccc">
 
 
         }
@@ -77,11 +77,11 @@ namespace WitBird.XiaoChangHe.Controllers
         //    order.CreateDate = DateTime.Now;
         //    int i = odm.SaveOrders("Update", order);
         //    string RestaurantId = Session["begindm"] != null ? Session["begindm"].ToString() : "";
-        //    string ComypanyId = Session["CompanyId"] != null ? Session["CompanyId"].ToString() : "";
+        //    string CompanyId = Session["CompanyId"] != null ? Session["CompanyId"].ToString() : "";
         //    //   return RedirectToAction("MyMenu", "MyMenu", new { MemberCardNo = MemberCardNo, OrderId = orderid ,SourceAccountId=SourceAccountId});
 
-        //    return RedirectToAction("MyOrderDetail", "MyMenu", new { MemberCardNo = MemberCardNo, OrderId = orderid, SourceAccountId = SourceAccountId, ComypanyId = ComypanyId });
-        //    // <a href="/pay/MyOrderDetail?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(item.OrderId)&SourceAccountId= @(ViewBag.SourceAccountId)&type='detail'&ComypanyId=@( ViewBag.ComypanyId)" style="color:#ccc">
+        //    return RedirectToAction("MyOrderDetail", "MyMenu", new { MemberCardNo = MemberCardNo, OrderId = orderid, SourceAccountId = SourceAccountId, CompanyId = CompanyId });
+        //    // <a href="/pay/MyOrderDetail?MemberCardNo=@(ViewBag.MemberCardNo)&OrderId=@(item.OrderId)&SourceAccountId= @(ViewBag.SourceAccountId)&type='detail'&CompanyId=@( ViewBag.CompanyId)" style="color:#ccc">
 
 
         //}

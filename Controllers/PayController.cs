@@ -404,7 +404,7 @@ namespace WitBird.XiaoChangHe.Controllers
 
         #region Order
         public ActionResult MyOrderDetail(string code, string state, string MemberCardNo, string OrderId, string SourceAccountId,
-            string ComypanyId = null, string Type = null, string RstType = null)
+            string CompanyId = null, string Type = null, string RstType = null)
         {
             try
             {
@@ -457,10 +457,10 @@ namespace WitBird.XiaoChangHe.Controllers
         }
 
         public ActionResult PrepareOrder(string MemberCardNo, string OrderId, string SourceAccountId,
-            string ComypanyId = null, string Type = null, string RstType = null)
+            string CompanyId = null, string Type = null, string RstType = null)
         {
-            const string Format = "MemberCardNo={0}&OrderId={1}&SourceAccountId={2}&ComypanyId={3}&Type={4}&RstType={5}";
-            string paras = string.Format(Format, MemberCardNo, OrderId, SourceAccountId, ComypanyId, Type, RstType);
+            const string Format = "MemberCardNo={0}&OrderId={1}&SourceAccountId={2}&CompanyId={3}&Type={4}&RstType={5}";
+            string paras = string.Format(Format, MemberCardNo, OrderId, SourceAccountId, CompanyId, Type, RstType);
             var returnUrl = Constants.HostDomain + "/pay/MyOrderDetail?" + paras + "&showwxpaytitle=1";
             var state = "";
             var url = OAuthApi.GetAuthorizeUrl(TenPayV3Info.AppId, returnUrl, state, OAuthScope.snsapi_userinfo);
