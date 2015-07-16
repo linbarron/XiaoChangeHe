@@ -694,7 +694,7 @@ namespace WitBird.XiaoChangHe.Controllers
                             //Logger.Log("prepayAccount.AccountMoney: " + prepayAccount.AccountMoney);
                             //Logger.Log("prepayAccount.PresentMoney: " + prepayAccount.PresentMoney);
 
-                            if (!crmMemberModel.UpdatePrepayAccount(prepayAccount) && !orderModel.UpdateOrderAsPaid(Guid.Parse(orderId)))
+                            if (!crmMemberModel.UpdatePrepayAccount(prepayAccount) && !orderModel.UpdateOrderStatus(Guid.Parse(orderId), true))
                             {
                                 throw new Exception("更新账户余额失败或者更新订单状态为已支付失败");
                             }
@@ -807,7 +807,7 @@ namespace WitBird.XiaoChangHe.Controllers
                                         {
                                             res = "更新用户账户信息未成功";
                                         }
-                                        else if (!orderModel.UpdateOrderAsPaid(Guid.Parse(prepayRecord.SId)))
+                                        else if (!orderModel.UpdateOrderStatus(Guid.Parse(prepayRecord.SId), true))
                                         {
                                             res = "更新订单状态为已支付失败";
                                         }
