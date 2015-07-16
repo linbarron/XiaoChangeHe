@@ -30,14 +30,4 @@ $(function () {
         $(this).siblings().next("ul").hide();
 
     });
-
-    var l1 = $(".level1>li").length;
-    for (var i = 1; i <= l1; i++) {
-        var s = i * 30;
-        $(".level1>li").eq(i).css({ "margin-top": s, "background": "#f2f2f2" });
-    }
-    $(".level1>li").click(function () {
-        $(this).css("background", "#fff").siblings("li").css("background", "#f2f2f2");
-    });
-    $(".level1>li:eq(1)").css({ "background": "#fff" });
 });
