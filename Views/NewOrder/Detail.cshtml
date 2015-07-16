@@ -14,6 +14,7 @@
     <meta name="format-detection" content="email=no">
     <link href="~/NewContent/style/index2.css" rel="stylesheet" type="text/css">
     <link href="~/NewContent/style/ddxq(yfk).css" rel="stylesheet" type="text/css">
+    <script src="~/NewContent/js/jquery.js"></script>
 </head>
 <body>
     <div class="container">
@@ -71,7 +72,7 @@
 
         <div class="footer">
             <a href="#shang"><div class="footer_l" onclick="ShowDiv('MyDiv','fade')">修改订单</div> </a><a href="sqtk.html">
-                <div class="footer_r">申请退款</div>
+                <div class="footer_r" onclick="CancelOrder()">申请退款</div>
             </a>
         </div>
     </div>
@@ -81,12 +82,42 @@
     <div id="MyDiv" class="white_content">
         <div style="  cursor: default; height: 40px;color:#666;">
 
-            订单为已支付状态，若此时修改订单，本次订单将作废，金额会在24小时内退回你的账户，点击“确认修改”回到之前点菜状态进行订单修改。
+            订单为已支付状态，若此时修改订单，本次订单将作废，金额会在24小时内退回你的账户余额，点击“确认修改”回到之前点菜状态进行订单修改。
             <div style="border-top:1px solid #ccc;margin-top:6%;">
-                <div class="queren">确认修改</div>
+                <div class="queren" onclick="EditOrder();">确认修改</div>
                 <div class="quxiao" style="font-size: 16px;" onclick="CloseDiv('MyDiv','fade')">取消</div>
             </div>
         </div>
     </div>
+    <script>
+    function CancelOrder() {
+        $.post("/neworder/CancelOrder", {
+            Uid: @ViewBag.Uid,
+            SourceAccountId: @ViewBag.SourceAccountId,
+            IsEdit: false
+        }, function (msg) {
+            if (msg == 'SUCCESS') {
+                window.location = "/Member/Info/CB824E58-E2CA-4C95-827A-CA62D528C6A7/@ViewBag.SourceAccountId";
+            } else {
+                alert("申请退款失败");
+            }
+        });
+    }
+
+    function EditOrder() {
+
+        $.post("/neworder/CancelOrder", {
+            Uid: @ViewBag.Uid,
+            SourceAccountId: @ViewBag.SourceAccountId,
+            IsEdit: true
+        }, function (msg) {
+            if (msg == 'SUCCESS') {
+                window.location = "/order/begin/CB824E58-E2CA-4C95-827A-CA62D528C6A7/@ViewBag.SourceAccountId?type=Quick";
+            } else {
+                alert("订单修改失败");
+            }
+        });
+    }
+    </script>
 </body>
 </html>

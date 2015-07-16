@@ -516,18 +516,24 @@ and  dateAdd(hh,5,b.DiningDate)>=getdate() and b.MemberCardNo=c.Uid";
         #endregion EmptyOrder
 
 
-
-        public bool UpdateOrderAsPaid(Guid orderId)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public bool UpdateOrderStatus(Guid orderId, bool status)
         {
             bool result = false;
 
             try
             {
                 DbCommand cmd = null;
-                string sql = @"UPDATE [CrmRstCloud].[dbo].[Orders] SET Status = 1 WHERE Id = @Id;";
+                string sql = @"UPDATE [CrmRstCloud].[dbo].[Orders] SET Status = @Status WHERE Id = @Id;";
 
                 cmd = db.GetSqlStringCommand(sql);
 
+                db.AddInParameter(cmd, "Status", DbType.Boolean, status);
                 db.AddInParameter(cmd, "Id", DbType.Guid, orderId);
 
                 result = ExecSql(cmd) > 0;

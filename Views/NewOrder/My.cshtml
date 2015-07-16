@@ -50,7 +50,7 @@
                         }
                         else
                         {
-                            string url = "/pay/prepareorder?uid=" + ViewBag.Uid + "&OrderId=" +
+                            string url = "/pay/prepareorder?MemberCardNo=" + ViewBag.Uid + "&OrderId=" +
                                 order.OrderId + "&SourceAccountId=" + ViewBag.SourceAccountId + "&CompanyId =" + ViewBag.CompanyId + "&RstType=Quick";
                             <div class="fuk"><a href="@url">确认付款</a></div>
                         }
