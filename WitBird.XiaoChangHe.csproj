@@ -194,8 +194,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\JumpController.cs" />
     <Compile Include="Controllers\PayController.cs" />
     <Compile Include="Controllers\PayTestController.cs" />
+    <Compile Include="Extensions\AttentionAttribute.cs" />
     <Compile Include="Models\BillPayModel.cs" />
     <Content Include="Areas\WeChat\Content\danktooltip\css\darktooltip.min.css" />
     <Content Include="Areas\WeChat\Content\danktooltip\js\jquery.darktooltip.min.js" />
@@ -338,6 +340,7 @@
     <Compile Include="Models\Info\Province.cs" />
     <Compile Include="Models\Info\RandomProduct.cs" />
     <Compile Include="Models\JoinActivityModel.cs" />
+    <Compile Include="Models\JumpModel.cs" />
     <Compile Include="Models\Logger.cs" />
     <Compile Include="Models\ModelExtensions\CrmMemberExtension.cs" />
     <Compile Include="Models\NewsModel.cs" />
@@ -919,6 +922,7 @@
     <Content Include="Views\Activity\Pass.cshtml" />
     <Content Include="Views\Activity\Failed.cshtml" />
     <Content Include="Views\Pay\MyOrderDetail.cshtml" />
+    <Content Include="Views\Jump\To.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

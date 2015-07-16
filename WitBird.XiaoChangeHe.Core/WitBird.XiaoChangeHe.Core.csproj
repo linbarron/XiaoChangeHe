@@ -53,6 +53,7 @@
     <Compile Include="Dal\UserDal.cs" />
     <Compile Include="Entity\Activity.cs" />
     <Compile Include="Entity\ActivityDetail.cs" />
+    <Compile Include="Entity\FamousMan.cs" />
     <Compile Include="Entity\OrderDetail.cs" />
     <Compile Include="Entity\OrderSummary.cs" />
     <Compile Include="Entity\Product.cs" />

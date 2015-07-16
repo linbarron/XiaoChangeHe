@@ -7,6 +7,8 @@ using System.Transactions;
 using System.Web;
 using System.Web.Mvc;
 using WitBird.XiaoChangeHe.Core;
+using WitBird.XiaoChangeHe.Core.Entity;
+using WitBird.XiaoChangHe.Extensions;
 using WitBird.XiaoChangHe.Models;
 using WitBird.XiaoChangHe.Models.Info;
 
@@ -19,7 +21,7 @@ namespace WitBird.XiaoChangHe.Controllers
         /// </summary>
         /// <param name="id">1.进行中的活动。2.已经结束的活动</param>
         /// <returns></returns>
-        public ActionResult Index(string id, string name, string activityState)
+        public ActionResult Index(string activityState)
         {
             int state = 1;
             if (!string.IsNullOrEmpty(activityState))
@@ -42,9 +44,6 @@ namespace WitBird.XiaoChangHe.Controllers
 
             ViewBag.State = state;
 
-            ViewBag.CompanyId = id;
-            ViewBag.SourceAccountId = name;
-
             return View(list);
         }
 
@@ -52,7 +51,7 @@ namespace WitBird.XiaoChangHe.Controllers
         /// 活动详情
         /// </summary>
         /// <returns></returns>
-        public ActionResult Detail(string id, string name, string activityId)
+        public ActionResult Detail(string activityId)
         {
             var intId = 0;
             if (int.TryParse(activityId, out intId))
@@ -63,9 +62,6 @@ namespace WitBird.XiaoChangHe.Controllers
 
                 if (activity != null)
                 {
-                    ViewBag.CompanyId = id;
-                    ViewBag.SourceAccountId = name;
-
                     return View(activity);
                 }
                 else
@@ -83,7 +79,8 @@ namespace WitBird.XiaoChangHe.Controllers
         /// 活动详情页“立即加入”之后的页面
         /// </summary>
         /// <returns></returns>
-        public ActionResult Join(string id, string name)
+        [Attention]
+        public ActionResult Join()
         {
             ActionResult result = null;
 
@@ -93,57 +90,53 @@ namespace WitBird.XiaoChangHe.Controllers
             var orderManager = new OrderManager();
             var crmMemberModel = new CrmMemberModel();
 
-            Guid companyGuid = Guid.Empty;
-            if (Guid.TryParse(id, out companyGuid))
+            var uid = userManager.GetUid(Constants.CompanyId, Request.Cookies["FromUserName"].Value);
+
+            ViewBag.Uid = uid;
+            PrepayRecord prepayRecord = crmMemberModel.HasJoinedOnlineVipGroup(uid);
+
+            if (prepayRecord != null)
             {
-                var uid = userManager.GetUid(companyGuid, name);
+                ViewBag.VerifyCode = prepayRecord.SId;
 
-                if (!string.IsNullOrEmpty(uid))
-                {
-                    ViewBag.CompanyId = id;
-                    ViewBag.SourceAccountId = name;
-                    ViewBag.Uid = uid;
-                    PrepayRecord prepayRecord = crmMemberModel.HasJoinedOnlineVipGroup(uid);
-
-                    if (prepayRecord != null)
-                    {
-                        ViewBag.VerifyCode = prepayRecord.SId;
-                        result = View("Pass");
-                    }
-                    else
-                    {
-                    result = View(model);
-                }
-                }
-                else
-                {
-                    result = Redirect("/");
-                }
+                result = View("Pass");
             }
             else
             {
-                result = Redirect("/");
+                result = View(model);
             }
+
 
             return result;
         }
+
+        private readonly static List<FamousMan> FamousManList = new List<FamousMan>
+        {
+            new FamousMan { Name = "只能说声真有你的", WeiboUrl = "http://weibo.com/andyhaicheng" },
+            new FamousMan { Name = "我一讲你就笑", WeiboUrl = "http://weibo.com/u/2084348103" },
+            new FamousMan { Name = "新浪科技", WeiboUrl = "http://weibo.com/sinatech" },
+            new FamousMan { Name = "留几手", WeiboUrl = "http://weibo.com/nimui" },
+            new FamousMan { Name = "ROC1013", WeiboUrl = "http://weibo.com/836897179" }
+        };
+
+        private readonly static Random random = new Random();
 
         /// <summary>
         /// 提交验证码
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Join(string id, string name, JoinActivityModel model)
+        [Attention]
+        public ActionResult Join(JoinActivityModel model)
         {
             ActionResult result = null;
 
             try
             {
-
                 var verifyCodes = new string[] { "M2J6", "N4W2", "YW45", "32KU", "L624", "8B8C", "92M2", "9P62", "C9X6", "527H", "5C32", "LP52", "5W2Q", "HK66", "67AM", "E6R3" };
                 CrmMemberModel crmMemberModel = new CrmMemberModel();
 
-                string  uid = crmMemberModel.getCrmMemberListInfoData(name).First().Uid;
+                string uid = crmMemberModel.getCrmMemberListInfoData(Request.Cookies["FromUserName"].Value).First().Uid;
 
                 PrepayRecord prepayRecord = crmMemberModel.HasJoinedOnlineVipGroup(uid);
 
@@ -165,28 +158,28 @@ namespace WitBird.XiaoChangHe.Controllers
                             }
 
                             #endregion
-
                         }
                         else//验证失败
                         {
-                            ViewBag.CompanyId = id;
-                            ViewBag.SourceAccountId = name;
+                            var famous = FamousManList[random.Next(FamousManList.Count)];
 
-                            result = View("Failed");
+                            result = View("Failed", famous);
                         }
                     }
                     else
                     {
-                        ViewBag.CompanyId = id;
-                        ViewBag.SourceAccountId = name;
+                        var famous = FamousManList[random.Next(FamousManList.Count)];
 
-                        result = View("Failed");
+                        result = View("Failed", famous);
                     }
                 }
                 else
                 {
                     ViewBag.VerifyCode = prepayRecord.SId;
-                    result = View("Failed");
+
+                    var famous = FamousManList[random.Next(FamousManList.Count)];
+
+                    result = View("Failed", famous);
                 }
 
             }

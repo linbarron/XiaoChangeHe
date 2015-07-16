@@ -60,7 +60,7 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                         article.Title = "小场合活动·微观时代";
                         article.Description = "小场合活动·微观时代";
                         article.PicUrl = "http://test.xgdg.cn/NewContent/images/chu.png";
-                        article.Url = string.Format(Constants.HostDomain + "/Activity/Index/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}?activityState=1", requestMessage.FromUserName);
+                        article.Url = string.Format(Constants.HostDomain + "/Jump/To?fromUserName={0}&url=/Activity/Index?activityState=1", requestMessage.FromUserName);
 
                         strongResponseMessage.Articles.Add(article);
 
