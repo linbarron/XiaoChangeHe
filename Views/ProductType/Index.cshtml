@@ -363,20 +363,31 @@
             $(".s_left").click(function () {
                 var t = $(this).siblings("input");
                 if (t.val() > 1)
-                    t.val(parseInt(t.val()) - 1);
+                    t.val(parseInt(t.val()));
                 jian($(this).data("pid"));
             });
 
-            $(".yuan-bottom").click(function () {
-
+            $(".yuan-bottom img").click(function () {
                 console.log(this);
 
-                $(this).parent().find(".right_q").show();
-                $(this).hide();
+                $(this).parent().siblings(".right_q").show();
+                $(this).parent().hide();
 
-                add($(this).data("pid"));
+                add($(this).parent("").data("pid"));
+
+            });
+            $(".content_img").click(function () {
+                $(".zhe,.datu").show();
+                var s = $(this).children("img").attr("src");
+                var s2 = "http:\/\/test.xgdg.cn" + s;
+                $(".datu").attr("src", s2)
+            });
+            $(".zhe").click(function () {
+                $(".zhe,.datu").hide();
             });
         }
     </script>
+    <div class="the"></div>
+    <img class="datu" src="" />
 </body>
 </html>

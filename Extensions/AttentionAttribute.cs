@@ -16,7 +16,7 @@ namespace WitBird.XiaoChangHe.Extensions
 
             if (fromUserNameCookie == null || string.IsNullOrEmpty(fromUserNameCookie.Value))
             {
-                filterContext.Result = new RedirectResult("http://mp.weixin.qq.com/s?__biz=MzIwMDAyNzMyNQ==&mid=210058631&idx=1&sn=c08e417ead02a0eac025ec90714f1c73#rd");
+                filterContext.Result = new RedirectResult(WeChatConstat.AttentionUsUrl);
             }
             else
             {
@@ -26,7 +26,7 @@ namespace WitBird.XiaoChangHe.Extensions
 
                 if (string.IsNullOrEmpty(uid))
                 {
-                    filterContext.Result = new RedirectResult("http://mp.weixin.qq.com/s?__biz=MzIwMDAyNzMyNQ==&mid=210058631&idx=1&sn=c08e417ead02a0eac025ec90714f1c73#rd");
+                    filterContext.Result = new RedirectResult(WeChatConstat.AttentionUsUrl);
                 }
             }
         }

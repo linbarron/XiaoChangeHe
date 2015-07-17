@@ -199,6 +199,7 @@
     <Compile Include="Controllers\PayTestController.cs" />
     <Compile Include="Extensions\AttentionAttribute.cs" />
     <Compile Include="Models\BillPayModel.cs" />
+    <Compile Include="WeChatConstat.cs" />
     <Content Include="Areas\WeChat\Content\danktooltip\css\darktooltip.min.css" />
     <Content Include="Areas\WeChat\Content\danktooltip\js\jquery.darktooltip.min.js" />
     <Content Include="Areas\WeChat\Content\darktooltip.min.css" />
