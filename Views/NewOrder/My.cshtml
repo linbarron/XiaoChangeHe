@@ -31,6 +31,7 @@
                             <div class="content_img"><img src="~/NewContent/images/1.png"></div>
                             <div class="content_title">
                                 <span class="title_l">@order.RestaurantName</span>
+                                <span class="title_r">@string.Format("{0}", order.Status ? "已付款" : "未付款")</span>
                                 @if (order.PersonCount.HasValue)
                                 {
                                     <br /><span>散座（@order.PersonCount.Value.ToString() 人）</span>
@@ -46,15 +47,20 @@
                         <span>订单金额：<span class="money">@order.TotalMoney.ToString("0.00")元</span></span>
                         @if (order.Status)
                         {
-                            <div><a href="/NewOrder/Detail/@ViewBag.CompanyId/@ViewBag.SourceAccountId?orderId=@order.OrderId">查看订单</a></div>
+                            <div class="fuk" onclick="toUrl('/NewOrder/Detail/@ViewBag.CompanyId/@ViewBag.SourceAccountId?orderId=@order.OrderId')">查看订单</div>
                         }
                         else
                         {
                             string url = "/pay/prepareorder?MemberCardNo=" + ViewBag.Uid + "&OrderId=" +
                                 order.OrderId + "&SourceAccountId=" + ViewBag.SourceAccountId + "&CompanyId =" + ViewBag.CompanyId + "&RstType=Quick";
-                            <div class="fuk"><a href="@url">确认付款</a></div>
+                            <div class="fuk" onclick="toUrl('@url')">确认付款</div>
                         }
                     </div>
+                    <script>
+                        function toUrl(url) {
+                            window.location.href = url;
+                        }
+                    </script>
                 </div>
             }
         }
