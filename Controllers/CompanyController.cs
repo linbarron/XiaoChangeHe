@@ -51,6 +51,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 }
             }
             ViewData["special"] = SpecialsModel.GetTodayByRestaurantId(new Guid(id));
+            ViewData["AllSpecial"] = SpecialsModel.GetAllByRestaurantId(new Guid(id));
             ViewData["RestaurantImages"] = RestaurantImageDBModel.GetRestaurantImages(new Guid(id));
             return View(p);
         }
