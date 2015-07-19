@@ -23,7 +23,7 @@ var bar = function (id,title,data){
 	this.width = 200;
 	
 	//背景图片位置
-	this.bgimg = 'images/plan.gif';
+	this.bgimg = '/NewContent/images/plan.gif';
 	
 	//动画速度
 	this.speed = 1000;
@@ -32,7 +32,7 @@ var bar = function (id,title,data){
 	var num_all = 0;
 	this.show = function (){
 		//添加一个table对象
-		$("#"+this.id).append("<table width='"+this.width+"' cellpadding=0 cellspacing=6 border=0 style='font-size:12px; color:#666;' ></table>")
+		$("#"+this.id).append("<table width='104%' cellpadding=0 cellspacing=6 border=0 style='font-size:12px; color:#666;' ></table>")
 
 		$("#"+this.id+" table").append("<tr><td colspan=3 align='center' ><span style='font:900 14px ;color:#444;'>"+this.title+"</span></td></tr>")
 
@@ -67,7 +67,7 @@ var bar = function (id,title,data){
 			{
 				div='';
 			}
-			$("#"+that.id+" table").append("<tr><td width='20%' align='right' >"+n[0]+"：</td><td width='20%' bgcolor='#fffae2' style='background:#fff;'>"+div+" "+n[1]+"("+bili+"%)</td></tr>")
+			$("#"+that.id+" table").append("<tr><td width='20%' align='right' >"+n[0]+"：</td><td width='60%' bgcolor='#fffae2' style='background:none;'>"+div+" "+n[1]+"("+bili+"%)</td></tr>")
 		})
 		
 		this.play();
@@ -76,6 +76,7 @@ var bar = function (id,title,data){
 	this.play = function (){
 		var that = this;		
 		$("#"+this.id+" div").each(function(i,n){
+		
 			if($(n).attr('fag'))
 			{
 				$(n).animate( { width: $(n).attr('fag')+'%'}, that.speed )

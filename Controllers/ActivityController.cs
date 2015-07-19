@@ -192,5 +192,19 @@ namespace WitBird.XiaoChangHe.Controllers
             return result;
         }
 
+        public ActionResult Tjt()
+        {
+            StatManager statManager = new StatManager();
+
+            StatResult model = statManager.GetStatResult();
+            if (model != null)
+            {
+                return View(model);
+            }
+            else
+            {
+                return Redirect("/");
+            }
+        }
     }
 }

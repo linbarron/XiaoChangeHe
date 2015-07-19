@@ -1,0 +1,82 @@
+﻿@model WitBird.XiaoChangeHe.Core.Entity.StatResult
+@{
+    Layout = null;
+}
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>数据统计</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1,maximum-scale=1,initial-scale=1,user-scalable=no" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="yes" name="apple-touch-fullscreen" />
+    <meta content="telephone=no" name="format-detection" />
+    <meta content="email=no" name="format-detection" />
+    <meta content="black" name="apple-mobile-web-app-staimagess-bar-style">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="wap-font-scale" content="no" />
+    <!--引入css和js-->
+    <link href="/NewContent/style/tjt.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div class="container">
+        @if (Model.GuestPair != null)
+        {
+            <div class="title"><center> "最有缘分嘉宾" 统计图</center></div>
+            <div class="content">
+                <div class="tou">
+                    <!--两个有缘嘉宾头像背景-->
+                    <div class="tou_l" style=" background:url('/NewContent/images/tou1.png') no-repeat;"></div>
+                    <div class="tou_r" style=" background:url('/NewContent/images/tou2.png') no-repeat;"></div>
+                </div>
+                <div class="name">
+                    <!--  两个有缘嘉宾名字-->
+                    <div class="name1">@Model.GuestPair.GuestName1</div><div class="name2">@Model.GuestPair.GuestName2</div>
+                </div>
+                <div class="title-center"> <center>菜品相同率:63%(共计 @Model.GuestPair.Count 种相同菜品)</center></div>
+                <!--  统计图，绿色， width:63% 控制其长度，值63%-->
+                <div style="width:90%;margin-left:3%;border-radius:5px;height:25px;background:#3d3d3d;float:left;margin-top:10px;padding-right:5px;padding-left:5px;">
+                    <div style="width:63%;background:#65aa29;height:20px;margin-top:2.5px;font-size:12px;text-align:right;line-height:20px;">63%</div>
+                </div>
+            </div>
+        }
+
+        <!-- 菜品统计图-->
+        @if (Model.DishList != null && Model.DishList.Count > 0)
+        {
+            <div class="title"><center>"最受欢迎十大菜品" 统计图：</center></div>
+            <div class="content2">
+                <div id="show"></div>
+            </div>
+            <script src="/NewContent/js/jquery.js"></script>
+            <script src="/NewContent/js/tjt.js"></script>
+            <script>
+                $(function () {
+                    var data = [];
+
+                    @for (int i = 0; i < Model.DishList.Count; i++)
+                    {
+         <text>data[@i] = ['@Model.DishList[i].Name', '@Model.DishList[i].Count'];</text>
+                    }
+
+                    var title = '调查问卷';
+                    var bar1 = new bar();
+                    bar1.id = 'show';
+
+                    bar1.data = data;
+                    bar1.show();
+                })
+            </script>
+        }
+
+    </div>
+    <!--底部版权标识-->
+    <div class="footer">
+        <img src="/NewContent/images/wpt.JPG" width="29" height="24">
+        <!--底部版权标识-->
+        <span class="wpt">微跑堂</span> ©成都微跑堂网络科技有限公司
+    </div>
+</body>
+</html>

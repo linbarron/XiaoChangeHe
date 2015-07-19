@@ -924,6 +924,7 @@
     <Content Include="Views\Activity\Failed.cshtml" />
     <Content Include="Views\Pay\MyOrderDetail.cshtml" />
     <Content Include="Views\Jump\To.cshtml" />
+    <Content Include="Views\Activity\Tjt.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
