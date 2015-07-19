@@ -12,6 +12,7 @@ body{
  text-align:center;
  font-size:18px;
  line-height:40px;
+
 	}
 .header_l{
  float:left;	
@@ -48,22 +49,26 @@ body{
   width:96%;
   height:140px;
    margin-left:2%;
- 
+ position:relative;
    margin-top:60px;
    border-top:1px solid #ccc;
 	}
-input{
+#VerifyCode{
   height:40px;
   width:120px;	
-  margin-top:20px;
+  
+  position:absolute;
+  left:4px;
   color:#ccc;
   font-size:15px;
   text-indent:5px;
+   top:30px;
 	}	
-.submit{
+input.submit{
   height:40px;
   width:120px;	
-  margin-top:23px;
+  right:10px;
+  top:35px;
   color:#fff;
   font-size:15px;
   text-indent:5px;
@@ -72,5 +77,7 @@ input{
 	line-height:40px;
 	text-align:center;
 	border-radius:5px;
+	position:absolute;
+	border:none;
 	}	
   a{text-decoration:none;color:#fff;}	
