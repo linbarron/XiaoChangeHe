@@ -19,6 +19,8 @@ namespace WitBird.XiaoChangeHe.Core.Entity
         public string GuestName2 { get; set; }
 
         public int Count { get; set; }
+
+        public float TotalCount { get; set; }
     }
 
     public class Dish

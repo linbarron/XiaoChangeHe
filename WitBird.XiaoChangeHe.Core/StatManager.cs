@@ -43,6 +43,7 @@ namespace WitBird.XiaoChangeHe.Core
                         result.GuestPair.GuestName1 = mediaGuests.First(v => v.Id == topPair.GuestId1).RealName;
                         result.GuestPair.GuestName2 = mediaGuests.First(v => v.Id == topPair.GuestId2).RealName;
                         result.GuestPair.Count = topPair.Count;
+                        result.GuestPair.TotalCount = (float)guestDishes.GroupBy(v => v.ProductId).Count() / guests.Count;
                     }
                 }
                 #endregion

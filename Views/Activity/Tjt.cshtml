@@ -35,10 +35,14 @@
                     <!--  两个有缘嘉宾名字-->
                     <div class="name1">@Model.GuestPair.GuestName1</div><div class="name2">@Model.GuestPair.GuestName2</div>
                 </div>
-                <div class="title-center"> <center>菜品相同率:63%(共计 @Model.GuestPair.Count 种相同菜品)</center></div>
+                @{
+            var percent = 100 * ((float)Model.GuestPair.Count / Model.GuestPair.TotalCount);
+            var percentText = string.Format("{0:N1}%", percent);
+                }
+                <div class="title-center"> <center>菜品相同率: @percentText (共计 @Model.GuestPair.Count 种相同菜品)</center></div>
                 <!--  统计图，绿色， width:63% 控制其长度，值63%-->
                 <div style="width:90%;margin-left:3%;border-radius:5px;height:25px;background:#3d3d3d;float:left;margin-top:10px;padding-right:5px;padding-left:5px;">
-                    <div style="width:63%;background:#65aa29;height:20px;margin-top:2.5px;font-size:12px;text-align:right;line-height:20px;">63%</div>
+                    <div style="width:@percent;background:#65aa29;height:20px;margin-top:2.5px;font-size:12px;text-align:right;line-height:20px;">@percentText</div>
                 </div>
             </div>
         }
