@@ -32,13 +32,12 @@
     <link href="~/NewContent/style/index2.css" rel="stylesheet" type="text/css">
     <link href="~/NewContent/css/lunbo.css" type="text/css" rel="stylesheet" />
     <style type="text/css">
-        .otherspec
-        {
-            display:none;
+        .otherspec {
+            display: none;
         }
-        .showitem
-        {
-            display:block;
+
+        .showitem {
+            display: block;
         }
     </style>
 </head>
@@ -157,7 +156,7 @@
         {
             foreach (var spec in AllSpecial)
             {
-                <div class="content_5">
+                <div class="content_5 otherspec">
                     <!-- 商品图片-->
                     <div class="content_5_l">
                         <img src="/Order/GetImages/@(spec.ProductId)">
@@ -210,7 +209,6 @@
     </script>
     <script type="text/javascript">
         function showall() {
-            console.log("dddd")
             $(".otherspec").toggleClass("showitem");
         }
     </script>

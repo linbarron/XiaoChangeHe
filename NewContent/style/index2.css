@@ -87,7 +87,7 @@ margin-right:10px;
 .content{
   margin-top:80px;
   width:100%;
-  height:300px;
+  height: 225px;
  
 	}
 .content_1{
@@ -140,10 +140,11 @@ a{
 .content_5{
    width:100%;
    height:100px;
-   margin-top:	-60px;
+   position:relative;
    border-bottom:1px solid #ccc;
    color:#666;
- 
+   float:left;
+     margin-top: 10px;
 	}	
 .content_5_l{
    width:30%;
@@ -168,19 +169,20 @@ a{
 .y_s{
   float:right;	
  margin-right:3%;
+
 	}	
 .z_x{
   float:left;
   position:absolute;
   left:32%;
-  margin-top:20%;	
+ bottom:10px;	
   
 	}	
 .y_x{
   right:0;
   float:right;
   position:absolute;
-  margin-top:20%;	
+ bottom:10px;
    right:3%;	
 	}	
  
