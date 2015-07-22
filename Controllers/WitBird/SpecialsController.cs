@@ -30,25 +30,25 @@ namespace WitBird.XiaoChangHe.Controllers.WitBird
                     #region 原來邏輯
 
                     OrderModel odm = new OrderModel();
-                    List<Order> order = null;
-                    List<FastFoodOrder> FastFoodOrder = null;
+                    Order order = null;
+                    Order FastFoodOrder = null;
                     //Type == "FastFood"表明此店为快餐店。
                     if (!string.IsNullOrEmpty(Type) && Type == "FastFood")
                     {
 
-                        FastFoodOrder = odm.selOrderByMemberId(crmMember.Uid);
+                        FastFoodOrder = odm.SelectUnFinishedFastFoodOrder(crmMember.Uid);
                     }
                     else
                     {
-                        order = odm.SelUnFinValidOrder(crmMember.Uid);
+                        order = odm.SelectUnFinishedOrder(crmMember.Uid);
                     }
 
                     string OrderId = "";
-                    if (order != null && order.Count > 0 || FastFoodOrder != null && FastFoodOrder.Count > 0)
+                    if (order != null || FastFoodOrder != null)
                     {
 
-                        ViewBag.OrderId = order != null && order.Count > 0 ? order.First().Id : FastFoodOrder.First().Id;
-                        OrderId = order != null && order.Count > 0 ? order.First().Id.ToString() : FastFoodOrder.First().Id.ToString();
+                        OrderId = (order != null ? order.Id.ToString() : FastFoodOrder.Id.ToString());
+                        ViewBag.OrderId = OrderId;
                         /* 显示用户已点菜数量*/
                         MyMenuModel myMenu = new MyMenuModel();
                         List<MyMenu> mymenu = myMenu.getMyMenuListData(crmMember.Uid, OrderId, Type);

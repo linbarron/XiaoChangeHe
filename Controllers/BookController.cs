@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using WitBird.XiaoChangeHe.Core;
 using WitBird.XiaoChangHe.Models;
 using WitBird.XiaoChangHe.Models.Info;
 namespace WitBird.XiaoChangHe.Controllers
@@ -48,7 +49,7 @@ namespace WitBird.XiaoChangHe.Controllers
             order.ContactPhone = phone;
             order.Sex = Convert.ToBoolean(sex);
             order.Remark = remark;
-            order.Status = true;
+            order.Status = OrderStatus.New;
             order.CreateDate = DateTime.Now;
             int i = odm.SaveOrders("Update", order);
             string RestaurantId = Session["begindm"] != null ? Session["begindm"].ToString() : "";

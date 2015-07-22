@@ -15,7 +15,7 @@ namespace WitBird.XiaoChangHe.Models.Info
         public int ProductCount { get; set; }
         public Guid ProductId { get; set; }
         public DateTime DiningDate { get; set; }
-        public bool status { get; set; }
+        public string status { get; set; }
         
     }
 }

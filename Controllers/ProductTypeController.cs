@@ -37,6 +37,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 OrderModel om = new OrderModel();
                 int i;
                 i = odm.EmptyOrderDetails(MemberCardNo, Orderid);
+                i = om.EmptyOrderStatus(Orderid);
                 i = om.EmptyOrder(Orderid);
 
             }

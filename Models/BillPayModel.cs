@@ -34,23 +34,23 @@ namespace WitBird.XiaoChangHe.Models
                         billPay = new BillPay()
                         {
                             PayId = payId,
-                            Cash = reader.TryGetValue("Cash", 0m),
-                            Change = reader.TryGetValue("Change", 0m),
-                            Coupons = reader.TryGetValue("Coupons", 0m),
-                            CouponsNo = reader.TryGetValue("CouponsNo", ""),
-                            CreateDate = reader.TryGetValue("CreateDate", DateTime.Now),
-                            CreditCard = reader.TryGetValue("CreditCard", 0m),
-                            MemberCard = reader.TryGetValue("MemberCard", 0m),
-                            MemberCardNo = reader.TryGetValue("MemberCardNo", ""),
-                            PaidIn = reader.TryGetValue("PaidIn", 0m),
-                            PayState = reader.TryGetValue("PayState", BillPayState.NotPaid),
-                            Receivable = reader.TryGetValue("Receivable", 0m),
-                            Remark = reader.TryGetValue("Remark", ""),
-                            Remove = reader.TryGetValue("Remove", 0m),
-                            UserId = reader.TryGetValue("UserId", Guid.Empty),
-                            UserName = reader.TryGetValue("UserName", ""),
-                            RstId = reader.TryGetValue("RstId", Guid.Empty),
-                            Discount = reader.TryGetValue("Discount", 0m)
+                            Cash = reader.TryGetValue<Decimal>("Cash"),
+                            Change = reader.TryGetValue<Decimal>("Change"),
+                            Coupons = reader.TryGetValue<Decimal>("Coupons"),
+                            CouponsNo = reader.TryGetValue<String>("CouponsNo"),
+                            CreateDate = reader.TryGetValue<DateTime>("CreateDate"),
+                            CreditCard = reader.TryGetValue<Decimal>("CreditCard"),
+                            MemberCard = reader.TryGetValue<Decimal>("MemberCard"),
+                            MemberCardNo = reader.TryGetValue<String>("MemberCardNo"),
+                            PaidIn = reader.TryGetValue<Decimal>("PaidIn"),
+                            PayState = reader.TryGetValue<String>("PayState"),
+                            Receivable = reader.TryGetValue<Decimal>("Receivable"),
+                            Remark = reader.TryGetValue<String>("Remark"),
+                            Remove = reader.TryGetValue<Decimal>("Remove"),
+                            UserId = reader.TryGetValue<Guid>("UserId"),
+                            UserName = reader.TryGetValue<String>("UserName"),
+                            RstId = reader.TryGetValue<Guid>("RstId"),
+                            Discount = reader.TryGetValue<Decimal>("Discount")
                         };
                     }
                 }

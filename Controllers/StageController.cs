@@ -79,10 +79,10 @@ namespace WitBird.XiaoChangHe.Controllers
             AutoMenusModel am = new AutoMenusModel();
             string RestaurantId = id;
             //判断此用户有没有有效的订单。如果有则显示有订单的菜。
-            List<FastFoodOrder> FastFoodOrder = null;
+            Order FastFoodOrder = null;
             OrderModel odm = new OrderModel();
-                FastFoodOrder = odm.selOrderByMemberId(crm.First().Uid);
-                if (FastFoodOrder.Count > 0)
+                FastFoodOrder = odm.SelectUnFinishedFastFoodOrder(crm.First().Uid);
+                if (FastFoodOrder != null)
                 {
                     //ViewBag.OrderId = FastFoodOrder.First().Id;
                    // return View(FastFoodOrder);

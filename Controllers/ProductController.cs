@@ -37,23 +37,23 @@ namespace WitBird.XiaoChangHe.Controllers
                 ViewBag.MemberCardNo = crm.First().Uid;
                 string MemberCardNo = crm.First().Uid;
                 OrderModel odm = new OrderModel();
-                List<Order> order = null;
-                List<FastFoodOrder> FastFoodOrder = null;
+                Order order = null;
+                Order FastFoodOrder = null;
                 //Type == "FastFood"表明此店为快餐店。
                 if (!string.IsNullOrEmpty(Type) && Type == "FastFood")
                 {
 
-                    FastFoodOrder = odm.selOrderByMemberId(crm.First().Uid);
+                    FastFoodOrder = odm.SelectUnFinishedFastFoodOrder(crm.First().Uid);
                 }
                 else
                 {
-                    order = odm.SelUnFinValidOrder(crm.First().Uid);
+                    order = odm.SelectUnFinishedOrder(crm.First().Uid);
                 }
 
                 string OrderId = "";
-                if ((order != null && order.Count > 0) || (FastFoodOrder != null && FastFoodOrder.Count > 0))
+                if (order != null || FastFoodOrder != null)
                 {
-                    OrderId = order != null && order.Count > 0 ? order.First().Id.ToString() : FastFoodOrder.First().Id.ToString();
+                    OrderId = order != null ? order.Id.ToString() : FastFoodOrder.Id.ToString();
                     ViewBag.OrderId = OrderId;
                     /* 显示用户已点菜数量*/
                     MyMenuModel myMenu = new MyMenuModel();

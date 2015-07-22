@@ -136,7 +136,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 var orderManager = new OrderManager();
                 var order = orderManager.GetOrderSummary(Guid.Parse(orderId));
 
-                if (order != null && order.Status)
+                if (order != null)
                 {
                     OrderModel orderModel = new OrderModel();
 
@@ -179,12 +179,12 @@ namespace WitBird.XiaoChangHe.Controllers
 
                         bool success = false;
 
-                        success = success && prepayRecordModel.AddPrepayRecord(newPrepayRecord);
+                        success = prepayRecordModel.AddPrepayRecord(newPrepayRecord);
                         success = success && crmMemberModel.UpdatePrepayAccount(prepayAccount);
 
                         if (isEdit)
                         {
-                            success = orderModel.UpdateOrderStatus(Guid.Parse(orderId), false);
+                            success = orderModel.UpdateOrderStatus(Guid.Parse(orderId), OrderStatus.Cancelled);
                         }
                         else
                         {

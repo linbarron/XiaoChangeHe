@@ -91,15 +91,15 @@ a.Password,a.Idcard,a.Birthday,a.TypeId,a.RegDate,a.ExpiredDate,a.UseState,a.Sex
                     {
                         prepayAccount = new PrepayAccount()
                         {
-                            AccountMoney = reader.TryGetValue("AccountMoney", 0m),
-                            LastConsumeDate = reader.TryGetValue("LastConsumeDate", DateTime.Now),
-                            LastConsumeMoney = reader.TryGetValue("LastConsumeMoney", 0m),
-                            LastPresentMoney = reader.TryGetValue("LastPresentMoney", 0m),
-                            PAId = reader.TryGetValue("PAId", 0),
-                            PresentMoney = reader.TryGetValue("PresentMoney", 0m),
-                            TotalMoney = reader.TryGetValue("TotalMoney", 0m),
-                            TotalPresent = reader.TryGetValue("TotalPresent", 0m),
-                            uid = reader.TryGetValue("Uid", uid)
+                            AccountMoney = reader.TryGetValue<Decimal>("AccountMoney"),
+                            LastConsumeDate = reader.TryGetValue<DateTime>("LastConsumeDate"),
+                            LastConsumeMoney = reader.TryGetValue<Decimal>("LastConsumeMoney"),
+                            LastPresentMoney = reader.TryGetValue<Decimal>("LastPresentMoney"),
+                            PAId = reader.TryGetValue<int>("PAId"),
+                            PresentMoney = reader.TryGetValue<Decimal>("PresentMoney"),
+                            TotalMoney = reader.TryGetValue<Decimal>("TotalMoney"),
+                            TotalPresent = reader.TryGetValue<Decimal>("TotalPresent"),
+                            uid = reader.TryGetValue<String>("Uid")
                         };
                     }
                 }
@@ -380,25 +380,24 @@ LastConsumeMoney = @LastConsumeMoney WHERE Uid = @Uid;";
                     {
                         prepayRecord = new PrepayRecord()
                         {
-                            AddMoney = reader.TryGetValue("AddMoney", 0m),
-                            AsureDate = reader.TryGetValue("AsureDate", DateTime.Now),
-                            BillPayId = reader.TryGetValue("BillPayId", Guid.Empty),
-                            DiscountlMoeny = reader.TryGetValue("DiscountlMoeny", 0m),
-                            PayByScore = reader.TryGetValue("PayByScore", 0),
-                            PayModel = reader.TryGetValue("PayModel", "02"),
-                            PrepayDate = reader.TryGetValue("PrepayDate", DateTime.Now),
-                            PrepayMoney = reader.TryGetValue("PrepayMoney", 0m),
-                            PresentMoney = reader.TryGetValue("PresentMoney", 0m),
-                            PromotionId = reader.TryGetValue("PromotionId", 0),
-                            RecMoney = reader.TryGetValue("RecMoney", 0m),
-                            RecordId = reader.TryGetValue("RecordId", 0),
-                            RState = reader.TryGetValue("RState", ""),
-                            RstId = reader.TryGetValue("RstId", Constants.CompanyId),
-                            ScoreVip = reader.TryGetValue("ScoreVip", 0),
-                            SId = reader.TryGetValue("SId", DateTime.Now.ToString("HHmmss") +
-                            Senparc.Weixin.MP.TenPayLibV3.TenPayV3Util.BuildRandomStr(28)),
-                            Uid = reader.TryGetValue("Uid", ""),
-                            UserId = reader.TryGetValue("UserId", "System")
+                            AddMoney = reader.TryGetValue<Decimal?>("AddMoney"),
+                            AsureDate = reader.TryGetValue<DateTime?>("AsureDate"),
+                            BillPayId = reader.TryGetValue<Guid?>("BillPayId"),
+                            DiscountlMoeny = reader.TryGetValue<Decimal?>("DiscountlMoeny"),
+                            PayByScore = reader.TryGetValue<Int32?>("PayByScore"),
+                            PayModel = reader.TryGetValue<String>("PayModel"),
+                            PrepayDate = reader.TryGetValue<DateTime?>("PrepayDate"),
+                            PrepayMoney = reader.TryGetValue<Decimal?>("PrepayMoney"),
+                            PresentMoney = reader.TryGetValue<Decimal?>("PresentMoney"),
+                            PromotionId = reader.TryGetValue<Int32?>("PromotionId"),
+                            RecMoney = reader.TryGetValue<Decimal?>("RecMoney"),
+                            RecordId = reader.TryGetValue<Int32>("RecordId"),
+                            RState = reader.TryGetValue<String>("RState"),
+                            RstId = reader.TryGetValue<Guid?>("RstId"),
+                            ScoreVip = reader.TryGetValue<Int32?>("ScoreVip"),
+                            SId = reader.TryGetValue<String>("SId"),
+                            Uid = reader.TryGetValue<String>("Uid"),
+                            UserId = reader.TryGetValue<String>("UserId")
                         };
 
                         break;

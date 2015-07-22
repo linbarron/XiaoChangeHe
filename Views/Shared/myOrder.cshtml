@@ -3,6 +3,7 @@
     Layout = "";
 }
 @using WitBird.XiaoChangHe.Models.Info;
+@using WitBird.XiaoChangeHe.Core;
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -118,7 +119,7 @@
                             }
 
                         </a>   
-                        @if (item.status == false)
+                        @if (item.status == OrderStatus.New)
                         {
                         <div  style="margin:5% 30%; text-align: center; cursor: pointer;" onclick="cancel('@item.OrderId');">
                             <img src="~/Content/images/ico_quxiao.png" />

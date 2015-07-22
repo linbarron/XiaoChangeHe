@@ -68,15 +68,15 @@ namespace WitBird.XiaoChangHe.Controllers
             ViewBag.RestaurantId = RestaurantId;
             /* 显示用户已点菜数量*/
             OrderModel odm = new OrderModel();
-            List<FastFoodOrder> FastFoodOrder = null;
+            Order FastFoodOrder = null;
             ViewBag.OrderId = null;
-            FastFoodOrder = odm.selOrderByMemberId(crm.First().Uid);
-            if ( FastFoodOrder != null && FastFoodOrder.Count > 0)
+            FastFoodOrder = odm.SelectUnFinishedFastFoodOrder(crm.First().Uid);
+            if ( FastFoodOrder != null)
             {
                 if (Type == "Auto") { Type = "FastFood"; }
                
-                string OrderId =FastFoodOrder.First().Id.ToString();
-                ViewBag.OrderId = FastFoodOrder.First().Id;
+                string OrderId =FastFoodOrder.Id.ToString();
+                ViewBag.OrderId = FastFoodOrder.Id;
                 /* 显示用户已点菜数量*/
                 MyMenuModel myMenu = new MyMenuModel();
                 List<MyMenu> myAutoMenu = myMenu.getMyMenuListData(crm.First().Uid, OrderId, Type);

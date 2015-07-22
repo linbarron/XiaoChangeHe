@@ -1,6 +1,7 @@
 ﻿@model List<WitBird.XiaoChangeHe.Core.Entity.OrderSummary>
 
 @using WitBird.XiaoChangHe.Models.Info;
+@using WitBird.XiaoChangeHe.Core;
 @{
     Layout = null;
 }
@@ -31,7 +32,33 @@
                             <div class="content_img"><img src="~/NewContent/images/1.png"></div>
                             <div class="content_title">
                                 <span class="title_l">@order.RestaurantName</span>
-                                <span class="title_r">@string.Format("{0}", order.Status ? "已付款" : "未付款")</span>
+                                @{
+                string orderStatus = "未付款";
+
+                switch (order.Status)
+                {
+                    case OrderStatus.Cancelled:
+                        orderStatus = "已取消";
+                        break;
+                    case OrderStatus.Complete:
+                        orderStatus = "已完成";
+                        break;
+                    case OrderStatus.Confirmed:
+                        orderStatus = "已出菜";
+                        break;
+                    case OrderStatus.Paid:
+                        orderStatus = "已付款";
+                        break;
+                    case OrderStatus.Refunded:
+                        orderStatus = "已退款";
+                        break;
+                    case OrderStatus.New:
+                    default:
+                        orderStatus = "未付款";
+                        break;
+                }
+                <span class="title_r">@orderStatus</span>
+                                }
                                 @if (order.PersonCount.HasValue)
                                 {
                                     <br /><span>散座（@order.PersonCount.Value.ToString() 人）</span>
@@ -39,13 +66,14 @@
                                 @if (order.DiningDate != null)
                                 {
                                     <br />@order.DiningDate.Value.ToString("yyyy-MM-dd ddd hh:mm")
+
                                 }
                             </div>
                         </div>
                     </div>
                     <div class="footer">
                         <span>订单金额：<span class="money">@order.TotalMoney.ToString("0.00")元</span></span>
-                        @if (order.Status)
+                        @if (order.Status != OrderStatus.New)
                         {
                             <div class="fuk" onclick="toUrl('/NewOrder/Detail/@ViewBag.CompanyId/@ViewBag.SourceAccountId?orderId=@order.OrderId')">查看订单</div>
                         }

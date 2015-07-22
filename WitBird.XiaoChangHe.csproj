@@ -196,7 +196,6 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\JumpController.cs" />
     <Compile Include="Controllers\PayController.cs" />
-    <Compile Include="Controllers\PayTestController.cs" />
     <Compile Include="Extensions\AttentionAttribute.cs" />
     <Compile Include="Models\BillPayModel.cs" />
     <Compile Include="WeChatConstat.cs" />

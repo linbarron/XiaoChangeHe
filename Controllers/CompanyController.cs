@@ -37,16 +37,16 @@ namespace WitBird.XiaoChangHe.Controllers
                     ViewBag.MemberCardNo = crmMember.Uid;
                     ViewBag.SourceAccountId = crmMember.SourceAccountId;
 
-                    List<FastFoodOrder> FastFoodOrder = null;
+                    Order FastFoodOrder = null;
 
                     //如果为自动点餐和快捷点餐。如果还有未过期的订单则跳转到订单详情 ViewBag.AutoOrderCount=1 有订单
                     ViewBag.AutoOrderCount = 0;
                     OrderModel odm = new OrderModel();
-                    FastFoodOrder = odm.selOrderByMemberId(crmMember.Uid);
-                    if (FastFoodOrder.Count > 0)
+                    FastFoodOrder = odm.SelectUnFinishedFastFoodOrder(crmMember.Uid);
+                    if (FastFoodOrder != null)
                     {
                         ViewBag.AutoOrderCount = 1;
-                        ViewBag.OrderId = FastFoodOrder.First().Id;
+                        ViewBag.OrderId = FastFoodOrder.Id;
                     }
                 }
             }

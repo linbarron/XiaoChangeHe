@@ -18,10 +18,12 @@ namespace WitBird.XiaoChangeHe.Core.Dal
                 var SqlCmd = new SqlCommand();
                 SqlCmd.Connection = SqlConn;
                 SqlCmd.CommandText = @"
-select Id AS OrderId,ContactName,ContactPhone,DiningDate,DiningDate,CreateDate,Status,RstId AS RestaurantId,PersonCount
-from orders
-where MemberCardNo=@MemberCardNo
-order by orders.DiningDate desc";
+select o.Id AS OrderId,o.ContactName,o.ContactPhone,o.DiningDate,o.DiningDate,o.CreateDate,
+o.Status,o.RstId AS RestaurantId,o.PersonCount, os.OrderStatus, os.LastUpdateTime
+from orders o
+left join OrderStatus os on os.OrderId = o.Id
+where o.MemberCardNo=@MemberCardNo
+order by o.DiningDate desc;";
 
                 SqlCmd.Parameters.AddWithValue(@"MemberCardNo", memberCardNo);
 
@@ -40,9 +42,9 @@ order by orders.DiningDate desc";
                     {
                         summary.PersonCount = Convert.ToInt32(reader["PersonCount"]);
                     }
-                    if (reader["Status"] != DBNull.Value)
+                    if (reader["OrderStatus"] != DBNull.Value)
                     {
-                        summary.Status = Convert.ToBoolean(reader["Status"]);
+                        summary.Status = Convert.ToString(reader["OrderStatus"]);
                     }
                     if (reader["DiningDate"] != DBNull.Value)
                     {
@@ -85,9 +87,11 @@ order by orders.DiningDate desc";
                 var SqlCmd = new SqlCommand();
                 SqlCmd.Connection = SqlConn;
                 SqlCmd.CommandText = @"
-select Id as OrderId,ContactName,ContactPhone,DiningDate,CreateDate,Status,sex,PersonCount
-from Orders
-where Id=@OrderId";
+select o.Id AS OrderId,o.ContactName,o.ContactPhone,o.DiningDate,o.DiningDate,o.CreateDate,
+o.Status,o.RstId AS RestaurantId,o.PersonCount, os.OrderStatus, os.LastUpdateTime
+from orders o
+left join OrderStatus os on os.OrderId = o.Id
+where o.Id=@OrderId";
 
                 SqlCmd.Parameters.AddWithValue(@"OrderId", orderId);
 
@@ -118,9 +122,9 @@ where Id=@OrderId";
                     {
                         summary.ContactPhone = reader["ContactPhone"].ToString();
                     }
-                    if (reader["Status"] != DBNull.Value)
+                    if (reader["OrderStatus"] != DBNull.Value)
                     {
-                        summary.Status = Convert.ToBoolean(reader["Status"]);
+                        summary.Status = Convert.ToString(reader["OrderStatus"]);
                     }
                     if (reader["DiningDate"] != DBNull.Value)
                     {

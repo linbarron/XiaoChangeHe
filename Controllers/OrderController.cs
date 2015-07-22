@@ -10,6 +10,7 @@ using System.Net;
 using System.Text;
 using System.IO;
 using System.Web.Hosting;
+using WitBird.XiaoChangeHe.Core;
 namespace WitBird.XiaoChangHe.Controllers
 {
     public class OrderController : Controller
@@ -100,57 +101,47 @@ namespace WitBird.XiaoChangHe.Controllers
                     //  ViewBag.CompanyId = id;
 
                     Order info = new Order();
-                    List<Order> unFinOrder = odm.SelUnFinValidOrder(crm.First().Uid);
+                    Order unFinishedOrder = odm.SelectUnFinishedOrder(crm.First().Uid);
                     int status = 0;
-                    if (unFinOrder.Count > 0)
+                    if (unFinishedOrder != null)
                     {
-                        for (int i = 0; i < unFinOrder.Count; i++)
+                        DateTime bookTime = unFinishedOrder.DiningDate;
+
+                        if (DateTime.Now < bookTime.AddHours(5))
                         {
-                            DateTime bookTime = unFinOrder[i].DiningDate;
-
-                            if (DateTime.Now < bookTime.AddHours(5))
-                            {
-                                ViewBag.RecOrder = 1;
-                                status = 1;
-                                break;
-                                //return RedirectToAction("MY", "Order", new { id = id, name = name });
-                            }
-
+                            ViewBag.RecOrder = 1;
+                            status = 1;
+                            //return RedirectToAction("MY", "Order", new { id = id, name = name });
                         }
                     }
                     if (status != 1)
                     {
-                        List<Order> order = odm.selOrderId(crm.First().Uid);
+                        Order paidOrder = odm.SelectPaidOrder(crm.First().Uid);
                         ViewBag.isCurTime = 0;
-                        if (order.Count > 0)
+                        if (paidOrder != null)
                         {
-                            for (int i = 0; i < order.Count; i++)
-                            {
-                                DateTime bookTime = order[i].DiningDate;
+                            DateTime bookTime = paidOrder.DiningDate;
 
-                                if (DateTime.Now < bookTime)
-                                {
-                                    ViewBag.isCurTime = 1;
-                                    break;
-                                    //return RedirectToAction("MY", "Order", new { id = id, name = name });
-                                }
+                            if (DateTime.Now < bookTime)
+                            {
+                                ViewBag.isCurTime = 1;
 
                             }
                         }
                     }
                 }
-                List<FastFoodOrder> FastFoodOrder = null;
+                Order FastFoodOrder = null;
 
                 //如果为自动点餐和快捷点餐。如果还有未过期的订单则跳转到订单详情 ViewBag.AutoOrderCount=1 有订单
                 ViewBag.AutoOrderCount = 0;
-                if (!string.IsNullOrEmpty(type) && type == "Auto" || type == "Quick")
+                if (!string.IsNullOrEmpty(type) && (type == "Auto" || type == "Quick"))
                 {
 
-                    FastFoodOrder = odm.selOrderByMemberId(crm.First().Uid);
-                    if (FastFoodOrder != null && FastFoodOrder.Count > 0)
+                    FastFoodOrder = odm.SelectUnFinishedFastFoodOrder(crm.First().Uid);
+                    if (FastFoodOrder != null)
                     {
                         ViewBag.AutoOrderCount = 1;
-                        ViewBag.OrderId = FastFoodOrder.First().Id;
+                        ViewBag.OrderId = FastFoodOrder.Id;
                     }
                 }
 
@@ -338,32 +329,31 @@ namespace WitBird.XiaoChangHe.Controllers
             OrderModel odm = new OrderModel();
             CrmMemberModel cdb = new CrmMemberModel();
             List<CrmMember> crm = cdb.getCrmMemberListInfoData(SourceAccountId);
-            List<Order> order = null;
-            List<FastFoodOrder> FastFoodOrder = null;
+            Order order = null;
+            Order FastFoodOrder = null;
             Order info = new Order();
 
             //isQuick=="Quick" 表明此订单为快捷预定  isQuick==null表明为预定订单  isQuick=Auto 表明是智能点餐
             if (string.IsNullOrEmpty(isQuick))
             {
 
-                order = odm.SelUnFinValidOrder(crm.First().Uid);
+                order = odm.SelectUnFinishedOrder(crm.First().Uid);
             }
-            //isQuick == "FastFood"表明此店为快餐店。
-            if (!string.IsNullOrEmpty(isQuick) && isQuick == "FastFood" || isQuick == "Auto")
+            else
             {
 
-                FastFoodOrder = odm.selOrderByMemberId(crm.First().Uid);
+                FastFoodOrder = odm.SelectUnFinishedFastFoodOrder(crm.First().Uid);
             }
 
-            if ((order != null && order.Count > 0))
+            if (order != null)
             {
                 type = "Update";
                 //  i = odm.SaveOrders(type, info);
 
-                return order.First().Id;
+                return order.Id;
 
             }
-            if ((FastFoodOrder != null && FastFoodOrder.Count > 0))
+            else if (FastFoodOrder != null)
             {
 
                 type = "UpdateFastFood";
@@ -378,7 +368,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 }
                 info.Remark = Remark;
                 i = odm.SaveOrders(type, info);
-                return FastFoodOrder.First().Id;
+                return FastFoodOrder.Id;
             }
 
         //if ((order!=null&&order.Count > 0)||(FastFoodOrder != null && FastFoodOrder.Count > 0))
@@ -423,7 +413,7 @@ namespace WitBird.XiaoChangHe.Controllers
 
                 }
 
-                info.Status = false;
+                info.Status = OrderStatus.New;
                 info.ReserveType = "01";
                 string RestaurantId = Session["begindm"] != null ? Session["begindm"].ToString() : "";
                 info.RstId = new Guid(RestaurantId);

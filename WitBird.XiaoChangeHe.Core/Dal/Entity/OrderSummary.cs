@@ -19,7 +19,7 @@ namespace WitBird.XiaoChangeHe.Core.Dal.Entity
 
         public decimal TotalMoney { get; set; }
 
-        public bool Status { get; set; }
+        public string Status { get; set; }
 
         public DateTime? DiningDate { get; set; }
 

@@ -48,9 +48,9 @@ namespace WitBird.XiaoChangHe.Models
 
     public static class ExtensionMethod
     {
-        public static T TryGetValue<T>(this IDataReader reader, string parameterName, T defaultValue)
+        public static T TryGetValue<T>(this IDataReader reader, string parameterName)
         {
-            T returnValue = defaultValue;
+            T returnValue = default(T);
 
             try
             {
@@ -66,13 +66,13 @@ namespace WitBird.XiaoChangHe.Models
             return returnValue;
         }
 
-        public static T TryGetValue<T>(this IDataReader reader, int index, T defaultValue)
+        public static T TryGetValue<T>(this IDataReader reader, int index)
         {
-            T returnValue = defaultValue;
+            T returnValue = default(T);
 
             try
             {
-                returnValue = (reader[index] is T) ? (T)reader[index] : defaultValue;
+                returnValue = (T)(reader[index]);
             }
             catch(Exception innerEx)
             {

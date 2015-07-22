@@ -39,7 +39,10 @@ namespace WitBird.XiaoChangHe.Models
                 string strSql = @"select s.RstId,
 (s.TableCount*s.MaxTime*(cast(s.Rnoon as int)+cast(s.Reven as int))-(select SUM(isnull(o.TableCount,0))
  from Orders o 
- where o.Status='1' and o.RstId=s.RstId)) as total from ReceiveOrder s 
+left join OrderStatus os on os.OrderId = o.Id
+ where 
+(os.OrderStatus='Paid' or os.OrderStatus='Confirmed')
+and o.RstId=s.RstId)) as total from ReceiveOrder s 
  where s.RstId=@RstId";
                 tableAccessor = db.CreateSqlStringAccessor(strSql,ipmapper, MapBuilder<SelTableCount>.MapAllProperties()
                      .Map(t => t.RstId).ToColumn("RstId")

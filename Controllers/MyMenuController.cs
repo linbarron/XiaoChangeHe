@@ -72,11 +72,12 @@ namespace WitBird.XiaoChangHe.Controllers
             //{emptyOrdersDetail
 
             i = odm.EmptyOrderDetails(MemberCardNo, orderId);
+            i = om.EmptyOrderStatus(orderId);
+            i = om.EmptyOrder(orderId);
             //  if (i == 1)
             //  {
             if (string.IsNullOrEmpty(type))
             {
-                i = om.EmptyOrder(orderId);
             }
             // }
             // }

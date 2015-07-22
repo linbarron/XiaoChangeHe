@@ -63,6 +63,7 @@
     <Compile Include="Entity\OrderSummary.cs" />
     <Compile Include="Entity\Product.cs" />
     <Compile Include="Entity\StatResult.cs" />
+    <Compile Include="OrderStatus.cs" />
     <Compile Include="StatManager.cs" />
     <Compile Include="OrderManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -38,19 +38,23 @@ public class MyMenuModel : DbHelper
             IParameterMapper ipmapper = new getMyMenuListDataParameterMapper();
             DataAccessor<MyMenu> tableAccessor;
             string strSql = @"select od.UnitPrice,od.ProductCount,o.status,p.MemberPrice,
-p.ProductName,p.Id , o.DiningDate ,od.UseState,
+p.ProductName,p.Id , o.DiningDate ,od.UseState, os.OrderStatus,
 (select sum(os.ProductCount) from OrderDetails os where os.OrderId=o.Id) totalcount
-from Orders o ,OrderDetails od,Product p,Restaurant r  where
+from Orders o ,OrderDetails od,Product p,Restaurant r  
+left join OrderStatus os on os.OrderId = o.Id
+where
  o.Id=od.OrderId and od.ProductId=p.Id  and r.RstType='02' and r.Id=o.RstId and
-o.MemberCardNo=@MemberCardNo and o.id=@OrderId and o.status=0 and dateAdd(hh,5,o.DiningDate)>=getdate() order by p.Code asc";
+o.MemberCardNo=@MemberCardNo and o.id=@OrderId and os.OrderStatus='New' and dateAdd(hh,5,o.DiningDate)>=getdate() order by p.Code asc";
             if (!string.IsNullOrEmpty(Type) && Type == "FastFood")
             {
                 strSql = @"select od.UnitPrice,od.ProductCount,o.status,p.MemberPrice,
-p.ProductName,p.Id , o.DiningDate ,od.UseState,
+p.ProductName,p.Id , o.DiningDate ,od.UseState, os.OrderStatus,
 (select sum(os.ProductCount) from OrderDetails os where os.OrderId=o.Id) totalcount
-from Orders o ,OrderDetails od,Product p ,Restaurant r where
+from Orders o ,OrderDetails od,Product p ,Restaurant r
+left join OrderStatus os on os.OrderId = o.Id
+where
  o.Id=od.OrderId and od.ProductId=p.Id and o.MemberCardNo=@MemberCardNo and o.id=@OrderId 
-and o.status=0  and r.RstType='01' and r.Id=o.RstId order by p.Code asc";
+and os.OrderStatus='New'  and r.RstType='01' and r.Id=o.RstId order by p.Code asc";
             }
 
             tableAccessor = db.CreateSqlStringAccessor(strSql, ipmapper, MapBuilder<MyMenu>.MapAllProperties()
@@ -59,7 +63,7 @@ and o.status=0  and r.RstType='01' and r.Id=o.RstId order by p.Code asc";
                  .Map(t => t.ProductCount).ToColumn("ProductCount")
                  .Map(t => t.ProductId).ToColumn("Id")
                  .Map(t => t.DiningDate).ToColumn("DiningDate")
-                 .Map(t => t.status).ToColumn("status")
+                 .Map(t => t.status).ToColumn("OrderStatus")
                  .Map(t => t.totalcount).ToColumn("totalcount")
                  .Map(t => t.MemberPrice).ToColumn("MemberPrice")
                   .Map(t => t.UseState).ToColumn("UseState")
@@ -108,15 +112,15 @@ and o.status=0  and r.RstType='01' and r.Id=o.RstId order by p.Code asc";
                  //     where r.Id=o.RstId and o.MemberCardNo=@MemberCardNo and r.RstType=01 ";
                  //and o.status=0  
 
-                strSql = @"select r.Name,o.PersonCount,o.DiningDate,o.Id ,o.status,r.RstType ,od.ProductId,p.ProductName" +
-                " from Restaurant r, Orders  o left join OrderDetails od on o.Id=od.OrderId,Product p"+
+                strSql = @"select r.Name,o.PersonCount,o.DiningDate,o.Id ,o.status, os.OrderStatus, r.RstType ,od.ProductId,p.ProductName" +
+                " from Restaurant r, Orders  o left join OrderDetails od on o.Id=od.OrderId left join OrderStatus os on os.OrderId = o.Id,Product p"+
             " where r.Id=o.RstId and o.MemberCardNo=@MemberCardNo  and od.productid=p.id" +
             "  and r.RstType=01 ";
             }
             else
             {
-                strSql = @"select r.Name,o.PersonCount,o.DiningDate,o.Id ,o.status,r.RstType ,od.ProductId,p.ProductName" +
-                 " from Restaurant r, Orders  o left join OrderDetails od on o.Id=od.OrderId,Product p" +
+                strSql = @"select r.Name,o.PersonCount,o.DiningDate,o.Id ,o.status, os.OrderStatus, r.RstType ,od.ProductId,p.ProductName" +
+                 " from Restaurant r, Orders  o left join OrderDetails od on o.Id=od.OrderId left join OrderStatus os on os.OrderId = o.Id,Product p" +
              " where r.Id=o.RstId and o.MemberCardNo=@MemberCardNo  and od.productid=p.id" +
              "  and r.RstType=02 ";
               //  strSql = @"select r.Name,o.PersonCount,o.DiningDate,o.Id ,o.status,r.RstType from Restaurant r, Orders o 
@@ -127,7 +131,7 @@ and o.status=0  and r.RstType='01' and r.Id=o.RstId order by p.Code asc";
                  .Map(t => t.OrderId).ToColumn("Id")
                  .Map(t => t.PersonCount).ToColumn("PersonCount")
                  .Map(t => t.name).ToColumn("name")
-                 .Map(t => t.status).ToColumn("status")
+                 .Map(t => t.status).ToColumn("OrderStatus")
                   .Map(t => t.RstType).ToColumn("RstType")
                    .Map(t => t.ProductId).ToColumn("ProductId")
                     .Map(t => t.ProductName).ToColumn("ProductName")
@@ -228,16 +232,17 @@ and o.status=0  and r.RstType='01' and r.Id=o.RstId order by p.Code asc";
 
             if (!string.IsNullOrEmpty(Type) && Type == "FastFood")
             {
-                strSql = @"select a.DiningDate,a.PersonCount,a.id,p.id as proId,a.status,p.MemberPrice,
+                strSql = @"
+select a.DiningDate,a.PersonCount,a.id,p.id as proId,a.status, a.OrderStatus, p.MemberPrice,
 a.ContactName,a.ContactPhone,od.ProductCount,od.UnitPrice,od.UseState,
 p.ProductName,a.Name,a.Address,a.RstPhone,a.Remark,a.total,cl.CodeTypeListName,a.RstType 
  from 
-(select o.DiningDate,o.PersonCount,o.id,o.status,r.RstType,
-o.ContactName,o.ContactPhone,r.Name,r.Address,r.ContactPhone as RstPhone,o.Remark,
+(select o.DiningDate,o.PersonCount,o.id,o.status, os.OrderStatus, r.RstType, o.ContactName,o.ContactPhone,r.Name,r.Address,r.ContactPhone as RstPhone,o.Remark,
 (select SUM(isnull(s.UnitPrice,0)*isnull(s.ProductCount,0))  from OrderDetails s where s.OrderId=o.Id) as total  
 from Orders o,Restaurant r where o.RstId=r.Id and o.MemberCardNo=@MemberCardNo 
 and o.id=@OrderId and r.RstType=01) a 
 left join OrderDetails od on a.Id=od.OrderId
+left join OrderStatus os on os.OrderId = a.Id 
 left join Product  p on od.ProductId=p.Id  , S_CodeList cl where cl.CodeTypeListValue=p.Unit 
 and cl.CodeType='ProductUnit'  order by a.id 
 ";//o.status=0
@@ -245,16 +250,17 @@ and cl.CodeType='ProductUnit'  order by a.id
             }
             else
             {
-                strSql = @"select a.DiningDate,a.PersonCount,a.id,p.id as proId,a.status, p.MemberPrice,
+                strSql = @"select a.DiningDate,a.PersonCount,a.id,p.id as proId,a.status, a.OrderStatus p.MemberPrice,
 a.ContactName,a.ContactPhone,od.ProductCount,od.UnitPrice,od.UseState,
 p.ProductName,a.Name,a.Address,a.RstPhone,a.Remark,a.total,cl.CodeTypeListName,a.RstType
  from 
-(select o.DiningDate,o.PersonCount,o.id,o.status, r.RstType,
+(select o.DiningDate,o.PersonCount,o.id,o.status, os.OrderStatus r.RstType,
 o.ContactName,o.ContactPhone,r.Name,r.Address,r.ContactPhone as RstPhone,o.Remark,
 (select SUM(isnull(s.UnitPrice,0)*isnull(s.ProductCount,0))  from OrderDetails s where s.OrderId=o.Id) as total  
 from Orders o,Restaurant r where o.RstId=r.Id and o.MemberCardNo=@MemberCardNo 
-and o.id=@OrderId and dateAdd(hh,5,o.DiningDate)>=getdate()and o.status=1 and r.RstType=02 ) a 
+and o.id=@OrderId and dateAdd(hh,5,o.DiningDate)>=getdate()and os.OrderStatus <> 'New' and r.RstType=02 ) a 
 left join OrderDetails od on a.Id=od.OrderId
+left join OrderStatus os on os.OrderId = a.Id
 left join Product  p on od.ProductId=p.Id , S_CodeList cl where cl.CodeTypeListValue=p.Unit 
 and cl.CodeType='ProductUnit' order by a.id 
 ";
@@ -276,7 +282,8 @@ and cl.CodeType='ProductUnit' order by a.id
                  .Map(t => t.total).ToColumn("total")
                  .Map(t => t.proId).ToColumn("proId")
                  .Map(t => t.status).ToColumn("status")
-                   .Map(t => t.UseState).ToColumn("UseState")
+                 .Map(t => t.OrderStaus).ToColumn("OrderStatus")
+                 .Map(t => t.UseState).ToColumn("UseState")
                 .Build());
             list = tableAccessor.Execute(new string[] { MemberCardNo, OrderId }).ToList();
             return list;
