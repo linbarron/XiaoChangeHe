@@ -18,6 +18,9 @@
     <link href="~/NewContent/style/index2.css" rel="stylesheet" type="text/css">
     <link href="~/NewContent/style/wddd.css" rel="stylesheet" type="text/css">
     <script src="~/NewContent/js/jquery.js"></script>
+    <style>
+        .content { margin-top: 0px; }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -81,23 +84,41 @@
                         {
                             string url = "/pay/prepareorder?MemberCardNo=" + ViewBag.Uid + "&OrderId=" +
                                 order.OrderId + "&SourceAccountId=" + ViewBag.SourceAccountId + "&CompanyId =" + ViewBag.CompanyId + "&RstType=Quick";
+                            <div class="fuk" onclick="CancelOrder('@order.OrderId');">取消订单</div>
                             <div class="fuk" onclick="toUrl('@url')">确认付款</div>
                         }
                     </div>
-                    <script>
-                        function toUrl(url) {
-                            window.location.href = url;
-                        }
-                    </script>
                 </div>
             }
         }
         else
         {
             <div>
-                <a href="/order/begin/@ViewBag.CompanyId/@ViewBag.SourceAccountId">你还没下单，去点餐</a>
+                @*<a href="/order/begin/@ViewBag.CompanyId/@ViewBag.SourceAccountId">你还没下单，去点餐</a>*@
             </div>
         }
     </div>
+    <script>
+    function toUrl(url) {
+        window.location.href = url;
+    }
+    function CancelOrder(orderId) {
+        if (confirm("您确认取消订单吗？")){
+            $.post("/neworder/CancelOrder", {
+                Uid: @ViewBag.Uid,
+                OrderId: orderId,
+                IsEdit: true
+            }, function (msg) {
+                if (msg == 'SUCCESS') {
+                    alert("订单取消成功");
+                    window.location = window.location;//"/order/begin/CB824E58-E2CA-4C95-827A-CA62D528C6A7/@ViewBag.SourceAccountId?type=Quick";
+                } else {
+                    alert("订单取消失败");
+                }
+            });
+        }
+    }
+    </script>
+
 </body>
 </html>

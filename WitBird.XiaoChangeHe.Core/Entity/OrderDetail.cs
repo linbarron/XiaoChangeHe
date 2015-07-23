@@ -24,5 +24,7 @@ namespace WitBird.XiaoChangeHe.Core.Entity
         public string Backlog { get; set; }
 
         public int? PersonCount { get; set; }
+
+        public string Status { get; set; }
     }
 }

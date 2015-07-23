@@ -537,7 +537,7 @@ and  dateAdd(hh,5,b.DiningDate)>=getdate() and b.MemberCardNo=c.Uid";
 
                 db.AddInParameter(cmd, "PrepayPrice", DbType.Decimal, info.PrepayPrice);
                 db.AddInParameter(cmd, "Remark", DbType.String, info.Remark);
-                db.AddInParameter(cmd, "Status", DbType.Boolean, info.Status);
+                db.AddInParameter(cmd, "Status", DbType.Boolean, false);
 
                 db.AddInParameter(cmd, "OperatorId", DbType.Guid, info.OperatorId);
                 db.AddInParameter(cmd, "OperatorName", DbType.String, info.OperatorName);
@@ -632,6 +632,7 @@ and  dateAdd(hh,5,b.DiningDate)>=getdate() and b.MemberCardNo=c.Uid";
 
             try
             {
+                //Logger.Log(LoggingLevel.WxPay, "订单ID：" + orderId + ", 更新状态：" + orderStatus);
                 DbCommand cmd = null;
                 string sql = @"UPDATE [CrmRstCloud].[dbo].[OrderStatus] SET OrderStatus = @orderStatus WHERE OrderId = @orderId;";
 
@@ -641,10 +642,13 @@ and  dateAdd(hh,5,b.DiningDate)>=getdate() and b.MemberCardNo=c.Uid";
                 db.AddInParameter(cmd, "orderId", DbType.Guid, orderId);
 
                 result = ExecSql(cmd) > 0;
+
+                //Logger.Log(LoggingLevel.WxPay, "订单状态更新成功");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Logger.Log(ex);
+                //Logger.Log(LoggingLevel.WxPay, "订单状态更新失败");
+                Logger.Log(LoggingLevel.WxPay, ex);
             }
 
             return result;

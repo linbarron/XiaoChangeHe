@@ -133,6 +133,7 @@ namespace WitBird.XiaoChangHe.Controllers
 
             try
             {
+                bool success = true;
                 var orderManager = new OrderManager();
                 var order = orderManager.GetOrderSummary(Guid.Parse(orderId));
 
@@ -145,52 +146,61 @@ namespace WitBird.XiaoChangHe.Controllers
                         PrepayRecordModel prepayRecordModel = new PrepayRecordModel();
                         CrmMemberModel crmMemberModel = new CrmMemberModel();
 
-                        PrepayRecord prepayRecord = null;
-                        PrepayRecord newPrepayRecord = null;
-                        PrepayAccount prepayAccount = null;
-
-                        prepayAccount = crmMemberModel.GetPrepayAccount(uid);
-                        prepayRecord = prepayRecordModel.GetPrepayRecordByOrderId(orderId);
-
-                        newPrepayRecord = new PrepayRecord();
-
-                        newPrepayRecord.AddMoney = -prepayRecord.AddMoney;
-                        newPrepayRecord.AsureDate = DateTime.Now;
-                        newPrepayRecord.BillPayId = Guid.NewGuid();
-                        newPrepayRecord.DiscountlMoeny = 0;
-                        newPrepayRecord.PayByScore = 0;
-                        newPrepayRecord.PayModel = "02";
-                        newPrepayRecord.PrepayDate = DateTime.Now;
-                        newPrepayRecord.PrepayMoney = -0;
-                        newPrepayRecord.PresentMoney = 0;
-                        newPrepayRecord.PromotionId = 0;
-                        newPrepayRecord.RecMoney = 0;
-                        newPrepayRecord.RecordId = -1;
-                        newPrepayRecord.RState = "";
-                        newPrepayRecord.RstId = Constants.CompanyId;
-                        newPrepayRecord.ScoreVip = 0;
-                        newPrepayRecord.SId = orderId;
-                        newPrepayRecord.Uid = uid;
-                        newPrepayRecord.UserId = "System";
-
-                        prepayAccount.AccountMoney += newPrepayRecord.AddMoney.Value;
-                        newPrepayRecord.PrepayDate = DateTime.Now;
-                        newPrepayRecord.AsureDate = DateTime.Now;
-
-                        bool success = false;
-
-                        success = prepayRecordModel.AddPrepayRecord(newPrepayRecord);
-                        success = success && crmMemberModel.UpdatePrepayAccount(prepayAccount);
-
                         if (isEdit)
                         {
-                            success = orderModel.UpdateOrderStatus(Guid.Parse(orderId), OrderStatus.Cancelled);
+                            if (order.Status == OrderStatus.New)
+                            {
+                                success = orderModel.UpdateOrderStatus(Guid.Parse(orderId), OrderStatus.Cancelled);
+                            }
+                            else
+                            {
+                                success = false;
+                            }
                         }
                         else
                         {
-                            OrderDetailsModel odm = new OrderDetailsModel();
-                            success = success && odm.EmptyOrderDetails(uid, orderId) > 0;
-                            success = success && orderModel.EmptyOrder(orderId) > 0;
+                            if (OrderStatus.Paid == order.Status)
+                            {
+                                PrepayRecord prepayRecord = null;
+                                PrepayRecord newPrepayRecord = null;
+                                PrepayAccount prepayAccount = null;
+
+                                prepayAccount = crmMemberModel.GetPrepayAccount(uid);
+                                prepayRecord = prepayRecordModel.GetPrepayRecordByOrderId(orderId);
+
+                                newPrepayRecord = new PrepayRecord();
+
+                                newPrepayRecord.AddMoney = -prepayRecord.AddMoney;
+                                newPrepayRecord.AsureDate = DateTime.Now;
+                                newPrepayRecord.BillPayId = Guid.NewGuid();
+                                newPrepayRecord.DiscountlMoeny = 0;
+                                newPrepayRecord.PayByScore = 0;
+                                newPrepayRecord.PayModel = "02";
+                                newPrepayRecord.PrepayDate = DateTime.Now;
+                                newPrepayRecord.PrepayMoney = -0;
+                                newPrepayRecord.PresentMoney = 0;
+                                newPrepayRecord.PromotionId = 0;
+                                newPrepayRecord.RecMoney = 0;
+                                newPrepayRecord.RecordId = -1;
+                                newPrepayRecord.RState = "";
+                                newPrepayRecord.RstId = Constants.CompanyId;
+                                newPrepayRecord.ScoreVip = 0;
+                                newPrepayRecord.SId = orderId;
+                                newPrepayRecord.Uid = uid;
+                                newPrepayRecord.UserId = "System";
+
+                                prepayAccount.AccountMoney += newPrepayRecord.AddMoney.Value;
+                                newPrepayRecord.PrepayDate = DateTime.Now;
+                                newPrepayRecord.AsureDate = DateTime.Now;
+
+                                success = orderModel.UpdateOrderStatus(Guid.Parse(orderId), OrderStatus.Refunded);
+                                success = success && prepayRecordModel.AddPrepayRecord(newPrepayRecord);
+                                success = success && crmMemberModel.UpdatePrepayAccount(prepayAccount);
+                            }
+                            else
+                            {
+                                success = false;
+                            }
                         }
 
                         if (success)
@@ -198,11 +208,16 @@ namespace WitBird.XiaoChangHe.Controllers
                             result = Content("SUCCESS");
                             scope.Complete();
                         }
+                        else
+                        {
+                            result = Content("FAILED");
+                            scope.Dispose();
+                        }
                     }
                 }
                 else
                 {
-                    result = Content("SUCCESS");
+                    result = Content("FAILED");
                 }
             }
             catch (Exception ex)

@@ -22,9 +22,7 @@ namespace WitBird.XiaoChangHe.Models.Info
         public Guid OrderId { get; set; }
         public decimal total { get; set; }
         public Guid proId { get; set; }
-        public bool status { get; set; }
-        public string OrderStaus { get; set; }
-        public string CodeTypeListName { get; set; }
+        public string status { get; set; }
         public string  RstType{get;set;}
         public string UseState { get; set; }
     }

@@ -136,9 +136,9 @@ LastConsumeMoney = @LastConsumeMoney WHERE Uid = @Uid;";
 
                 result = ExecSql(cmd) > 0;
             }
-            catch
+            catch(Exception ex)
             {
-                throw;
+                Logger.Log(LoggingLevel.WxPay, ex);
             }
 
             return result;

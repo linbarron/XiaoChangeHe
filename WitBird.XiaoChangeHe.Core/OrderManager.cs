@@ -43,15 +43,8 @@ namespace WitBird.XiaoChangeHe.Core
             EntityModel.OrderSummary summary = null;
 
             OrderDal orderDal = new OrderDal();
-
-            var entity = orderDal.GetOrderSummary(orderId);
-            if (entity != null)
-            {
-                summary = new EntityModel.OrderSummary();
-
-                //todo
-            }
-
+            summary = orderDal.GetOrderSummary(orderId);
+            
             return summary;
         }
 
@@ -74,6 +67,7 @@ namespace WitBird.XiaoChangeHe.Core
                 detail.CreateTime = orderSummary.CreateTime;
                 detail.Backlog = orderSummary.Backlog;
                 detail.PersonCount = orderSummary.PersonCount;
+                detail.Status = orderSummary.Status;
 
                 var details = orderDal.GetOrderDetails(orderId);
 

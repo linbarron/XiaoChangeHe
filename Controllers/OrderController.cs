@@ -416,7 +416,14 @@ namespace WitBird.XiaoChangHe.Controllers
                 info.Status = OrderStatus.New;
                 info.ReserveType = "01";
                 string RestaurantId = Session["begindm"] != null ? Session["begindm"].ToString() : "";
-                info.RstId = new Guid(RestaurantId);
+                if (!string.IsNullOrEmpty(RestaurantId))
+                {
+                    info.RstId = new Guid(RestaurantId);
+                }
+                else
+                {
+                    info.RstId = Guid.NewGuid();
+                }
                 i = odm.SaveOrders(type, info);
                 //ViewBag.MemberCardNo = info.MemberCardNo;
                 //ViewBag.OrderId = info.Id;

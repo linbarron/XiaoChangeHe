@@ -82,9 +82,9 @@ namespace WitBird.XiaoChangHe.Controllers
                     }
                 }
             }
-            catch
+            catch(Exception ex)
             {
-
+                Logger.Log(LoggingLevel.WxPay, ex);
             }
             finally
             {
@@ -586,8 +586,6 @@ namespace WitBird.XiaoChangHe.Controllers
                     billPay.UserId = Guid.Empty;
                     billPay.UserName = orderDetails.First().ContactName;
 
-                    billPay.CreditCard = 0.01m;
-
                     using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
                     {
                         if (!prepayRecordModel.AddPrepayRecord(prepayRecord))
@@ -663,14 +661,11 @@ namespace WitBird.XiaoChangHe.Controllers
                         }
                         else
                         {
+                            Logger.Log(LoggingLevel.WxPay, "余额支付订单：" + orderId);
                             //余额支付
                             decimal accountMoney = prepayAccount.AccountMoney;
                             decimal presentMoney = prepayAccount.PresentMoney;
                             decimal cash = billPay.Cash;
-
-                            Logger.Log("accountMoney: " + accountMoney);
-                            Logger.Log("presentMoney: " + presentMoney);
-                            Logger.Log("cash: " + cash);
 
                             if (presentMoney >= cash)
                             {
@@ -695,16 +690,24 @@ namespace WitBird.XiaoChangHe.Controllers
                             //Logger.Log("prepayAccount.AccountMoney: " + prepayAccount.AccountMoney);
                             //Logger.Log("prepayAccount.PresentMoney: " + prepayAccount.PresentMoney);
 
-                            if (!crmMemberModel.UpdatePrepayAccount(prepayAccount) && !orderModel.UpdateOrderStatus(Guid.Parse(orderId), OrderStatus.Paid))
+                            if (!crmMemberModel.UpdatePrepayAccount(prepayAccount))
                             {
-                                throw new Exception("更新账户余额失败或者更新订单状态为已支付失败");
+                                throw new Exception("更新账户余额失败");
                             }
-                            else
+
+                            //Logger.Log(LoggingLevel.WxPay, "账户余额更新成功");
+
+                            if (!orderModel.UpdateOrderStatus(Guid.Parse(orderId), OrderStatus.Paid))
                             {
-                                scope.Complete();
-                                var offlinePayResult = new { IsSuccess = true, Message = "OfflinePay" };
-                                return Json(offlinePayResult, JsonRequestBehavior.AllowGet);
+                                throw new Exception("更新更新订单状态为已支付失败");
                             }
+                            //Logger.Log(LoggingLevel.WxPay, "更新更新订单状态为已支付成功");
+                            scope.Complete();
+
+                           // Logger.Log(LoggingLevel.WxPay, "提交事务成功");
+
+                            var offlinePayResult = new { IsSuccess = true, Message = "OfflinePay" };
+                            return Json(offlinePayResult, JsonRequestBehavior.AllowGet);
                         }
                     }
                 }
@@ -715,8 +718,8 @@ namespace WitBird.XiaoChangHe.Controllers
             }
             catch (Exception ex)
             {
-                Logger.Log("调用订单支付：" + ex.ToString());
-                var failedData = new { IsSuccess = false, Message = "支付请求失败，请重新尝试。如多次遇到此问题，请联系客服" };
+                Logger.Log(LoggingLevel.WxPay, "调用订单支付：" + ex.ToString());
+                var failedData = new { IsSuccess = false, Message = "支付失败，请重新尝试。如多次遇到此问题，请联系客服" };
                 return Json(failedData, JsonRequestBehavior.AllowGet);
             }
         }

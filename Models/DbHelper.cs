@@ -54,13 +54,15 @@ namespace WitBird.XiaoChangHe.Models
 
             try
             {
-                returnValue = (T)(reader[parameterName]);
+                if (reader[parameterName] != System.DBNull.Value)
+                {
+                    returnValue = (T)(reader[parameterName]);
+                }
             }
             catch(Exception innerEx)
             {
-                Logger.Log(innerEx);
                 Exception ex = new Exception("参数转换错误，参数名：" + parameterName, innerEx);
-                throw ex;
+                Logger.Log(ex);
             }
 
             return returnValue;
@@ -72,13 +74,15 @@ namespace WitBird.XiaoChangHe.Models
 
             try
             {
-                returnValue = (T)(reader[index]);
+                if (reader[index] != System.DBNull.Value)
+                {
+                    returnValue = (T)(reader[index]);
+                }
             }
             catch(Exception innerEx)
             {
-                Logger.Log(innerEx);
                 Exception ex = new Exception("参数转换错误，Index：" + index, innerEx);
-                throw ex;
+                Logger.Log(ex);
             }
 
             return returnValue;

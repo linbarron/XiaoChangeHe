@@ -88,9 +88,10 @@ order by o.DiningDate desc;";
                 SqlCmd.Connection = SqlConn;
                 SqlCmd.CommandText = @"
 select o.Id AS OrderId,o.ContactName,o.ContactPhone,o.DiningDate,o.DiningDate,o.CreateDate,
-o.Status,o.RstId AS RestaurantId,o.PersonCount, os.OrderStatus, os.LastUpdateTime
+o.Status,o.RstId AS RestaurantId,o.PersonCount, os.OrderStatus, os.LastUpdateTime, cm.Sex
 from orders o
 left join OrderStatus os on os.OrderId = o.Id
+left join CrmMember cm on cm.Uid = o.MemberCardNo
 where o.Id=@OrderId";
 
                 SqlCmd.Parameters.AddWithValue(@"OrderId", orderId);

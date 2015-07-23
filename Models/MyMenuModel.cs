@@ -7,6 +7,7 @@ using System.Web;
 using Microsoft.Practices.EnterpriseLibrary.Data;
 using WitBird.XiaoChangHe.Models;
 using WitBird.XiaoChangHe.Models.Info;
+using WitBird.XiaoChangHe;
 
 public class MyMenuModel : DbHelper
 {
@@ -198,15 +199,10 @@ and os.OrderStatus='New'  and r.RstType='01' and r.Id=o.RstId order by p.Code as
 
         public void AssignParameters(System.Data.Common.DbCommand command, object[] parameterValues)
         {
-            DbParameter ps0 = command.CreateParameter();
-            ps0.ParameterName = SqlPara + "MemberCardNo";
-            ps0.DbType = DbType.String;
-            ps0.Value = parameterValues[0];
-            command.Parameters.Add(ps0);
             DbParameter ps1 = command.CreateParameter();
             ps1.ParameterName = SqlPara + "OrderId";
             ps1.DbType = DbType.String;
-            ps1.Value = parameterValues[1];
+            ps1.Value = parameterValues[0];
             command.Parameters.Add(ps1);
         }
         #endregion
@@ -233,36 +229,34 @@ and os.OrderStatus='New'  and r.RstType='01' and r.Id=o.RstId order by p.Code as
             if (!string.IsNullOrEmpty(Type) && Type == "FastFood")
             {
                 strSql = @"
-select a.DiningDate,a.PersonCount,a.id,p.id as proId,a.status, a.OrderStatus, p.MemberPrice,
+select a.DiningDate,a.PersonCount,a.id,p.id as proId, os.OrderStatus as status, p.MemberPrice,
 a.ContactName,a.ContactPhone,od.ProductCount,od.UnitPrice,od.UseState,
-p.ProductName,a.Name,a.Address,a.RstPhone,a.Remark,a.total,cl.CodeTypeListName,a.RstType 
+p.ProductName,a.Name,a.Address,a.RstPhone,a.Remark,a.total,a.RstType 
  from 
-(select o.DiningDate,o.PersonCount,o.id,o.status, os.OrderStatus, r.RstType, o.ContactName,o.ContactPhone,r.Name,r.Address,r.ContactPhone as RstPhone,o.Remark,
+(select o.DiningDate,o.PersonCount,o.id,o.status, r.RstType, o.ContactName,o.ContactPhone,r.Name,r.Address,r.ContactPhone as RstPhone,o.Remark,
 (select SUM(isnull(s.UnitPrice,0)*isnull(s.ProductCount,0))  from OrderDetails s where s.OrderId=o.Id) as total  
-from Orders o,Restaurant r where o.RstId=r.Id and o.MemberCardNo=@MemberCardNo 
-and o.id=@OrderId and r.RstType=01) a 
+from Orders o,Restaurant r where o.RstId=r.Id
+and o.id=@OrderId) a 
 left join OrderDetails od on a.Id=od.OrderId
 left join OrderStatus os on os.OrderId = a.Id 
-left join Product  p on od.ProductId=p.Id  , S_CodeList cl where cl.CodeTypeListValue=p.Unit 
-and cl.CodeType='ProductUnit'  order by a.id 
+left join Product  p on od.ProductId=p.Id
 ";//o.status=0
 
             }
             else
             {
-                strSql = @"select a.DiningDate,a.PersonCount,a.id,p.id as proId,a.status, a.OrderStatus p.MemberPrice,
+                strSql = @"select a.DiningDate,a.PersonCount,a.id,p.id as proId, os.OrderStatus as status, p.MemberPrice,
 a.ContactName,a.ContactPhone,od.ProductCount,od.UnitPrice,od.UseState,
-p.ProductName,a.Name,a.Address,a.RstPhone,a.Remark,a.total,cl.CodeTypeListName,a.RstType
+p.ProductName,a.Name,a.Address,a.RstPhone,a.Remark,a.total,a.RstType
  from 
-(select o.DiningDate,o.PersonCount,o.id,o.status, os.OrderStatus r.RstType,
+(select o.DiningDate,o.PersonCount,o.id,o.status, r.RstType,
 o.ContactName,o.ContactPhone,r.Name,r.Address,r.ContactPhone as RstPhone,o.Remark,
 (select SUM(isnull(s.UnitPrice,0)*isnull(s.ProductCount,0))  from OrderDetails s where s.OrderId=o.Id) as total  
-from Orders o,Restaurant r where o.RstId=r.Id and o.MemberCardNo=@MemberCardNo 
-and o.id=@OrderId and dateAdd(hh,5,o.DiningDate)>=getdate()and os.OrderStatus <> 'New' and r.RstType=02 ) a 
+from Orders o,Restaurant r where o.RstId=r.Id
+and o.id=@OrderId) a 
 left join OrderDetails od on a.Id=od.OrderId
 left join OrderStatus os on os.OrderId = a.Id
-left join Product  p on od.ProductId=p.Id , S_CodeList cl where cl.CodeTypeListValue=p.Unit 
-and cl.CodeType='ProductUnit' order by a.id 
+left join Product  p on od.ProductId=p.Id
 ";
             }
             tableAccessor = db.CreateSqlStringAccessor(strSql, ipmapper, MapBuilder<MyOrderDetail>.MapAllProperties()
@@ -282,15 +276,15 @@ and cl.CodeType='ProductUnit' order by a.id
                  .Map(t => t.total).ToColumn("total")
                  .Map(t => t.proId).ToColumn("proId")
                  .Map(t => t.status).ToColumn("status")
-                 .Map(t => t.OrderStaus).ToColumn("OrderStatus")
                  .Map(t => t.UseState).ToColumn("UseState")
                 .Build());
-            list = tableAccessor.Execute(new string[] { MemberCardNo, OrderId }).ToList();
+            list = tableAccessor.Execute(new string[] { OrderId }).ToList();
             return list;
 
         }
         catch (Exception ex)
         {
+            Logger.Log(ex);
             return null;
         }
     }

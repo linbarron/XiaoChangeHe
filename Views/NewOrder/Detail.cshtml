@@ -2,7 +2,7 @@
 @{
     Layout = null;
 }
-
+@using WitBird.XiaoChangeHe.Core;
 <!doctype html>
 <html>
 <head>
@@ -21,7 +21,35 @@
 
         <div class="header2">
             <span class="jine">订单金额：　<span class="money">@Model.TotalMoney.ToString("0.00")元</span></span>
-            <span class="yifu">已付款</span>
+            @{
+                string orderStatus = "未付款";
+
+                switch (Model.Status)
+                {
+                    case OrderStatus.Cancelled:
+                        orderStatus = "已取消";
+                        break;
+                    case OrderStatus.Complete:
+                        orderStatus = "已完成";
+                        break;
+                    case OrderStatus.Confirmed:
+                        orderStatus = "已出菜";
+                        break;
+                    case OrderStatus.Paid:
+                        orderStatus = "已付款";
+                        break;
+                    case OrderStatus.Refunded:
+                        orderStatus = "已退款";
+                        break;
+                    case OrderStatus.New:
+                    default:
+                        orderStatus = "未付款";
+                        break;
+                }
+                <span class="yifu">
+                    @orderStatus
+                </span>
+            }
         </div>
         <div class="info">
             姓　　名：@Model.ContactName<br />
@@ -70,41 +98,45 @@
         }
         <div class="time">创建时间 @Model.CreateTime.ToString("yyyy-MM-dd hh:m:ss")</div>
 
-        <div class="footer">
-            <a href="#shang"><div class="footer_l" onclick="ShowDiv('MyDiv','fade')">修改订单</div> </a><a href="sqtk.html">
-                <div class="footer_r" onclick="CancelOrder()">申请退款</div>
-            </a>
-        </div>
+        @if (Model.Status == OrderStatus.Paid)
+        {
+            <div class="footer">
+                <div class="footer_r" onclick="RefundOrder()">申请退款</div>
+            </div>
+        }
     </div>
     <!--弹出层时背景层DIV-->
     <div id="fade" class="black_overlay">
     </div>
-    <div id="MyDiv" class="white_content">
-        <div style="  cursor: default; height: 40px;color:#666;">
+    @*<div id="MyDiv" class="white_content">
+            <div style="  cursor: default; height: 40px;color:#666;">
 
-            订单为已支付状态，若此时修改订单，本次订单将作废，金额会在24小时内退回你的账户余额，点击“确认修改”回到之前点菜状态进行订单修改。
-            <div style="border-top:1px solid #ccc;margin-top:6%;">
-                <div class="queren" onclick="EditOrder();">确认修改</div>
-                <div class="quxiao" style="font-size: 16px;" onclick="CloseDiv('MyDiv','fade')">取消</div>
+                订单为已支付状态，若此时修改订单，本次订单将作废，金额会在24小时内退回你的账户余额，点击“确认修改”回到之前点菜状态进行订单修改。
+                <div style="border-top:1px solid #ccc;margin-top:6%;">
+                    <div class="queren" onclick="EditOrder();">确认修改</div>
+                    <div class="quxiao" style="font-size: 16px;" onclick="CloseDiv('MyDiv','fade')">取消</div>
+                </div>
             </div>
-        </div>
-    </div>
+        </div>*@
     <script>
-    function CancelOrder() {
-        $.post("/neworder/CancelOrder", {
-            Uid: @ViewBag.Uid,
-            SourceAccountId: @ViewBag.SourceAccountId,
-            IsEdit: false
-        }, function (msg) {
-            if (msg == 'SUCCESS') {
-                window.location = "/Member/Info/CB824E58-E2CA-4C95-827A-CA62D528C6A7/@ViewBag.SourceAccountId";
-            } else {
-                alert("申请退款失败");
+        function RefundOrder() {
+            if (confirm("您确认申请退款吗？退款后，该订单将被取消")) {
+                $.post("/neworder/CancelOrder", {
+                    Uid: '@ViewBag.Uid',
+                    OrderId: '@Model.OrderId',
+                    IsEdit: false
+                }, function (msg) {
+                    if (msg == 'SUCCESS') {
+                        alert("申请退款成功，金额已退至您的余额账户，请在会员信息中查看。");
+                        window.location = window.location;
+                    } else {
+                        alert("申请退款失败");
+                    }
+                });
             }
-        });
-    }
+        }
 
-    function EditOrder() {
+        @*function EditOrder() {
 
         $.post("/neworder/CancelOrder", {
             Uid: @ViewBag.Uid,
@@ -117,7 +149,7 @@
                 alert("订单修改失败");
             }
         });
-    }
+    }*@
     </script>
 </body>
 </html>

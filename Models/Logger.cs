@@ -74,7 +74,7 @@ namespace WitBird.XiaoChangHe
             }
 
             string time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");//获取当前系统时间
-            string filename = path + "/" + DateTime.Now.ToString("yyyy-MM-dd") + ".log";//用日期对日志文件命名
+            string filename = path + "/" + DateTime.Now.ToString("yyyy-MM-dd") + ".txt";//用日期对日志文件命名
 
             //创建或打开日志文件，向日志文件末尾追加记录
             StreamWriter mySw = File.AppendText(filename);

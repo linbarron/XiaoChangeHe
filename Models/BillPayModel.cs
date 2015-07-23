@@ -55,9 +55,9 @@ namespace WitBird.XiaoChangHe.Models
                     }
                 }
             }
-            catch
+            catch(Exception ex)
             {
-                throw;
+                Logger.Log(LoggingLevel.WxPay, ex);
             }
 
             return billPay;
@@ -140,9 +140,9 @@ namespace WitBird.XiaoChangHe.Models
 
                 result = ExecSql(cmd) > 0;
             }
-            catch
+            catch(Exception ex)
             {
-
+                Logger.Log(LoggingLevel.WxPay, ex);
             }
 
             return result;
@@ -166,9 +166,9 @@ namespace WitBird.XiaoChangHe.Models
 
                 result = ExecSql(cmd) > 0;
             }
-            catch
+            catch(Exception ex)
             {
-
+                Logger.Log(LoggingLevel.WxPay, ex);
             }
 
             return result;
