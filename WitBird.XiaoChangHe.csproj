@@ -539,6 +539,7 @@
     <Content Include="Images\p800_201408121407826371996.jpg" />
     <Content Include="NewContent\css\common.css" />
     <Content Include="NewContent\css\lunbo.css" />
+    <Content Include="NewContent\css\wpt.css" />
     <Content Include="NewContent\images\1.png" />
     <Content Include="NewContent\images\10.png" />
     <Content Include="NewContent\images\11 %282%29.png" />
@@ -639,6 +640,7 @@
     <Content Include="NewContent\images\list2.png" />
     <Content Include="NewContent\images\list3.png" />
     <Content Include="NewContent\images\liwu.png" />
+    <Content Include="NewContent\images\lj.png" />
     <Content Include="NewContent\images\logon.png" />
     <Content Include="NewContent\images\love.png" />
     <Content Include="NewContent\images\map.png" />
@@ -684,6 +686,7 @@
     <Content Include="NewContent\images\yh.png" />
     <Content Include="NewContent\images\yj.png" />
     <Content Include="NewContent\images\youHuiBg.png" />
+    <Content Include="NewContent\images\zan.png" />
     <Content Include="NewContent\images\zhan_btn.png" />
     <Content Include="NewContent\images\zhongcan.png" />
     <Content Include="NewContent\js\cz.js" />
