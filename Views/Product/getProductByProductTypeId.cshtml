@@ -14,13 +14,19 @@
             <li>
                 <div class="content2">
                     <!-- 菜品图片-->
-                    <div class="content_img">
+                    <div class="content_img @(item.Popular ?　"zan":"")">
                         <img src="/Order/GetImages/@(item.Id)">
                     </div>
                     <!--菜品名称-->
                     <span class="img_title">@item.ProductName</span>
                     <!--菜品价格-->
                     <span class="img_money" id="rmb@(item.Id)" data-price="@item.Price">@(item.Price)元</span>
+                    <span class="member"><span>会员价：@(item.MemberPrice)</span>元</span>
+                    <span class="mala">麻辣指数:</span>
+                    @for (int j = 0; j < item.Hot; j++)
+                    {
+                        <div class="laj@(j+1)"></div>
+                    }
                     <!--加减按钮-->
                     <div class="content-z-bottom">
                         @{ bool hadOrder = false; }

@@ -1,0 +1,404 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    font-family: "微软雅黑";
+    color: #666;
+}
+
+.header {
+    width: 100%;
+    height: 40px;
+    background: #0A0A0A;
+    color: #fff;
+    text-align: center;
+    font-size: 18px;
+    line-height: 40px;
+}
+
+.header_l {
+    float: left;
+    font-size: 18px;
+    position: absolute;
+    left: 10px;
+}
+
+.header_r {
+    margin-top: 5px;
+    position: absolute;
+    right: 0px;
+}
+
+.left_top {
+    width: 25%;
+    height: 40px;
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    line-height: 40px;
+    text-align: center;
+    float: left;
+}
+
+.top_list {
+    width: 100%;
+    height: 40px;
+    float: left;
+    line-height: 40px;
+    text-align: center;
+    position: fixed;
+    background: #fff;
+    z-index: 100;
+    border-bottom: 1px solid #ccc;
+}
+
+.bg1 {
+    background: #e84538;
+    color: #fff;
+}
+
+.left_list {
+    width: 25%;
+    height: 100%;
+    background: #f2f2f2;
+    margin-top: 41px;
+}
+
+    .left_list ol {
+        list-style-type: none;
+        margin: 0px;
+        padding: 0px;
+        background: #f2f2f2;
+        height: 100%;
+        display: none;
+    }
+
+        .left_list ol li {
+            height: 40px;
+            width: 100%;
+            border-bottom-width: 1px;
+            border-bottom-style: solid;
+            border-bottom-color: #CCC;
+            text-indent: 5px;
+            line-height: 40px;
+            text-align: left;
+            font-size: 13px;
+        }
+
+
+.bg2 {
+    background: #fff;
+}
+
+.top_list ul {
+    margin: 0px;
+    padding: 0px;
+}
+
+    .top_list ul li {
+        float: left;
+        list-style-type: none;
+        height: 40px;
+        width: 24%;
+        position: relative;
+    }
+
+.r_bor {
+    border-right: 1px solid #ccc;
+}
+
+.shu {
+    width: 15px;
+    height: 15px;
+    border-radius: 50% 50%;
+    background: #e84538;
+    text-align: center;
+    line-height: 15px;
+    color: #fff;
+    text-indent: 0px;
+    position: absolute;
+    float: left;
+    margin-top: 12px;
+}
+
+.shu2 {
+    width: 20px;
+    height: 20px;
+    border-radius: 50% 50%;
+    background: #e84538;
+    text-align: center;
+    line-height: 20px;
+    color: #fff;
+    text-indent: 0px;
+    position: absolute;
+    float: left;
+    margin-top: -5px;
+}
+
+
+.content ul {
+    display: none;
+}
+
+.content_img {
+    width: 30%;
+    position: relative;
+    margin-top: -20px;
+    vertical-align: middle;
+}
+
+    .content_img img {
+        width: 100%;
+        height: 80px;
+    }
+
+.img_title {
+    position: absolute;
+    top: -5px;
+    left: 32%;
+    color: #e84538;
+    font-weight: bold;
+}
+
+.img_money {
+    position: absolute;
+    float: Left;
+    left: 32%;
+    top: 20px;
+    font-size: 14px;
+}
+
+.right_q {
+    float: right;
+    width: 80px;
+    height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    margin-right: 5px;
+    text-align: center;
+    line-height: 30px;
+    position: absolute;
+    margin-left: 58%;
+    margin-top: -20%;
+}
+
+.s_left {
+    float: left;
+    margin-left: 5px;
+    font-size: 35px;
+    line-height: 25px;
+    color: Red;
+}
+
+.s_right {
+    float: right;
+    margin-right: 5px;
+    font-size: 25px;
+    color: red;
+}
+
+.text_box {
+    width: 20px;
+    text-align: center;
+    border: none;
+}
+
+.content2 {
+    position: relative;
+    height: 80px;
+    margin-bottom: 80px;
+}
+
+.footer {
+    background-color: #303030;
+    height: 50px;
+    width: 100%;
+    position: fixed;
+    bottom: 0px;
+    float: left;
+    line-height: 40px;
+    color: #fff;
+    padding-top: 10px;
+}
+
+.footer_left {
+    width: 40px;
+    margin-left: 10px;
+    line-height: 40px;
+}
+
+    .footer_left img {
+        width: 100%;
+    }
+
+.money {
+    float: left;
+    position: absolute;
+    margin-left: 20px;
+}
+
+.footer_right {
+    width: 100px;
+    height: 40px;
+    background: #e84538;
+    float: right;
+    margin-top: -45px;
+    text-align: center;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.hah {
+    color: blue;
+}
+
+li {
+    list-style-type: none;
+}
+
+.menu {
+    width: 100%;
+    position: relative;
+}
+
+    .menu ul ul {
+        display: none;
+    }
+
+.hide {
+    display: none;
+}
+
+.level1 {
+    padding: 0px;
+    margin: 0;
+    line-height: 30px;
+    width: 24%;
+    float: left;
+    left: 0px;
+    height: 100%;
+    background: #f2f2f2;
+    margin-top: 40px;
+}
+
+    .level1 > li {
+        width: 100%;
+        height: 30px;
+        border: 1px solid #ccc;
+        position: fixed;
+        width: 24%;
+        z-index: 1000;
+    }
+
+.level2 {
+    height: 150px;
+    width: 74%;
+    position: absolute;
+    right: 0px;
+    top: 50px;
+    margin-bottom: 40px;
+}
+
+    .level2 li {
+        height: 80px;
+        width: 100%;
+        top: 0px;
+        border-bottom: 1px solid #ccc;
+        padding-top: 30px;
+    }
+
+a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.zhe {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: #000;
+    opacity: 0.8;
+    z-index: 1000;
+    display: none;
+}
+
+.datu {
+    position: fixed;
+    z-index: 1001;
+    opacity: 1;
+    width: 50%;
+    margin-top: 10%;
+    border: none;
+    display: none;
+}
+
+.content-z-bottom {
+    position: absolute;
+    right: 85px;
+    bottom: 60px;
+}
+
+.member {
+    position: absolute;
+    float: Left;
+    left: 32%;
+    bottom: 5px;
+    font-size: 12px;
+}
+
+    .member span {
+        color: #e84538;
+        font-size: 14px;
+    }
+
+.mala {
+    position: absolute;
+    float: Left;
+    left: 32%;
+    bottom: -14px;
+    font-size: 8px;
+}
+
+.laj1 {
+    width: 10%;
+    height: 25px;
+    background: url('../images/lj.png') no-repeat;
+    background-size: 50% 100%;
+    float: left;
+    position: absolute;
+    left: 53%;
+    bottom: -12px;
+}
+.laj2 {
+    width: 10%;
+    height: 25px;
+    background: blue;
+    float: left;
+    position: absolute;
+    left: 61%;
+    bottom: -12px;
+    background: url('../images/lj.png') no-repeat;
+    background-size: 50% 100%;
+}
+
+.laj3 {
+    width: 10%;
+    height: 25px;
+    background: blue;
+    float: left;
+    position: absolute;
+    left: 69%;
+    bottom: -12px;
+    background: url('../images/lj.png') no-repeat;
+    background-size: 50% 100%;
+}
+
+.zan {
+    position: absolute;
+    left: 10%;
+    opacity: 0.6;
+    top: 5px;
+}
