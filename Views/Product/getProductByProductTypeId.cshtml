@@ -14,9 +14,13 @@
             <li>
                 <div class="content2">
                     <!-- 菜品图片-->
-                    <div class="content_img @(item.Popular ?　"zan":"")">
+                    <div class="content_img">
                         <img src="/Order/GetImages/@(item.Id)">
                     </div>
+                    @if(item.Popular)
+                    {
+                        <div class="zan"><img src="~/NewContent/images/zan.png" width="30px"></div>
+                    }
                     <!--菜品名称-->
                     <span class="img_title">@item.ProductName</span>
                     <!--菜品价格-->
