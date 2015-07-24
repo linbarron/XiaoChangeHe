@@ -124,7 +124,7 @@
             </div>
             <!-- 今日特价更多-->
             <div class="content_4">
-                <span class="content_1_l" style="font-weight: bold;">今日特价</span>
+                <span class="content_1_l" id="jinTitle" style="font-weight: bold;">今日特价</span>
                 <span class="content_1_r" onclick="showall();">更多>> </span>
             </div>
 
@@ -210,6 +210,12 @@
     <script type="text/javascript">
         function showall() {
             $(".otherspec").toggleClass("showitem");
+            if ($(".otherspec").hasClass("showitem")) {
+                $("#jinTitle").text("全部特价")
+            }
+            else {
+                $("#jinTitle").text("今日特价")
+            }
         }
     </script>
 </body>

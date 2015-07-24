@@ -84,6 +84,7 @@
     <script>
         $(document).ready(function () {
             var RestaurantId = '@ViewBag.RestaurantId';
+            $("#Specials_left_list").html("");
             DisplaySpecialsListContent('', RestaurantId);
         });
         function DisplaySecondMenus(TypeId, RestaurantId) {
@@ -102,7 +103,6 @@
 
         function DisplaySpecialsListContent(TypeId, RestaurantId) {
             $("#left_list").fadeOut(10);
-            $("#Specials_left_list").html("");
             $.ajaxSetup({ async: false });
             var Status = '@ViewBag.Status';
             if (hasLoadSp) {
@@ -136,7 +136,7 @@
             $.post("/Product/getProductByProductTypeId",
                 { RestaurantId: RestaurantId, ProductTypeId: TypeId, SourceAccountId: SourceAccountId, Status: Status, Type: Type },
                 function (msg) {
-                    $(".level2").html('');
+                    $(".jiushuilevel").html('');
                     $("#li" + contentId).after(msg);
                     orderid = $("#OrderId").val();
                     MemberCardNo = $("#MemberCardNo").val();
