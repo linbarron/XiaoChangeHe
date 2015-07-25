@@ -46,8 +46,12 @@ namespace WitBird.XiaoChangHe.Models
                 //                string strSql = @"select p.AddMoney,p.BillPayId,p.PayModel,p.PrepayDate,p.PrepayMoney,p.PresentMoney,p.PromotionId,p.RecordId,p.RstId,p.SId,p.Uid,p.UserId 
                 //                                from PrepayRecord p where p.Uid=@Uid and  p.PrepayMoney<0  and p.PrepayDate between  dateadd (MM,-1,GETDATE()) and   getdate() order by p.PrepayDate desc";
 
-                string strSql = @"select top 10 *
-                                from PrepayRecord p where p.Uid=@Uid and  p.PrepayMoney<0 order by p.PrepayDate desc";
+                string strSql = @"
+                                select top 10 *
+                                from PrepayRecord p
+                                left join BillPay b on b.PayId = p.BillPayId
+                                where p.Uid=@Uid and  p.PrepayMoney<0   and b.PayState = '0x01'--0x01:支付成功 
+                                order by p.PrepayDate desc";
                 tableAccessor = db.CreateSqlStringAccessor(strSql, ipmapper, MapBuilder<PrepayRecord>.MapAllProperties()
                      .Map(t => t.Uid).ToColumn("Uid")
                      .Map(t => t.AddMoney).ToColumn("AddMoney")

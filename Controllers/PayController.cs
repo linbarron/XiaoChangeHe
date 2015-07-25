@@ -141,8 +141,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 }
 
                 //强制设置为配置的值。
-                totalPrice = 0.01m;
-
+                //totalPrice = 0.01m;
 
                 if (isFirstRecharge)
                 {
@@ -700,6 +699,11 @@ namespace WitBird.XiaoChangHe.Controllers
                             if (!orderModel.UpdateOrderStatus(Guid.Parse(orderId), OrderStatus.Paid))
                             {
                                 throw new Exception("更新更新订单状态为已支付失败");
+                            }
+
+                            if (!billPayModel.UpdateBillStateAsPaid(billPay.PayId, ""))
+                            {
+                                throw new Exception("更新交易流水订单为已支付失败");
                             }
                             //Logger.Log(LoggingLevel.WxPay, "更新更新订单状态为已支付成功");
                             scope.Complete();

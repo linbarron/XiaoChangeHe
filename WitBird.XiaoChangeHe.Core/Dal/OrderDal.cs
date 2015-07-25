@@ -88,55 +88,63 @@ order by o.DiningDate desc;";
                 SqlCmd.Connection = SqlConn;
                 SqlCmd.CommandText = @"
 select o.Id AS OrderId,o.ContactName,o.ContactPhone,o.DiningDate,o.DiningDate,o.CreateDate,
-o.Status,o.RstId AS RestaurantId,o.PersonCount, os.OrderStatus, os.LastUpdateTime, cm.Sex
+o.Status,o.RstId AS RestaurantId,o.PersonCount, os.OrderStatus, os.LastUpdateTime, cm.Sex, ps.PrepayMoney as TotalMoney
 from orders o
 left join OrderStatus os on os.OrderId = o.Id
 left join CrmMember cm on cm.Uid = o.MemberCardNo
+left join PrepayRecord pr on or.SId = o.Id
 where o.Id=@OrderId";
 
                 SqlCmd.Parameters.AddWithValue(@"OrderId", orderId);
 
-                var reader = SqlCmd.ExecuteReader();
-                if (reader.Read())
+                using (var reader = SqlCmd.ExecuteReader())
                 {
-                    summary = new OrderSummary();
+                    if (reader.Read())
+                    {
+                        summary = new OrderSummary();
 
-                    summary.OrderId = Guid.Parse(reader["OrderId"].ToString());
-                    summary.ContactName = reader["ContactName"].ToString();
-                    if (reader["sex"] != DBNull.Value)
-                    {
-                        int sexValue = Convert.ToInt32(reader["sex"]);
-                        if (sexValue == 0)
+                        summary.OrderId = Guid.Parse(reader["OrderId"].ToString());
+                        summary.ContactName = reader["ContactName"].ToString();
+                        if (reader["sex"] != DBNull.Value)
                         {
-                            summary.ContactName += "先生";
+                            int sexValue = Convert.ToInt32(reader["sex"]);
+                            if (sexValue == 1)
+                            {
+                                summary.ContactName += "先生";
+                            }
+                            else
+                            {
+                                summary.ContactName += "女士";
+                            }
                         }
-                        else if (sexValue == 1)
+                        if (reader["PersonCount"] != DBNull.Value)
                         {
-                            summary.ContactName += "女士";
+                            summary.PersonCount = Convert.ToInt32(reader["PersonCount"]);
                         }
+                        if (reader["ContactPhone"] != DBNull.Value)
+                        {
+                            summary.ContactPhone = reader["ContactPhone"].ToString();
+                        }
+                        if (reader["OrderStatus"] != DBNull.Value)
+                        {
+                            summary.Status = Convert.ToString(reader["OrderStatus"]);
+                        }
+                        if (reader["DiningDate"] != DBNull.Value)
+                        {
+                            summary.DiningDate = Convert.ToDateTime(reader["DiningDate"]);
+                        }
+
+                        if (reader["PrepayMoney"] != DBNull.Value)
+                        {
+                            summary.TotalMoney = Convert.ToInt32(reader["TotalMoney"]);
+                        }
+                        summary.CreateTime = Convert.ToDateTime(reader["CreateDate"]);
+                        summary.Backlog = "无";
                     }
-                    if (reader["PersonCount"] != DBNull.Value)
-                    {
-                        summary.PersonCount = Convert.ToInt32(reader["PersonCount"]);
-                    }
-                    if (reader["ContactPhone"] != DBNull.Value)
-                    {
-                        summary.ContactPhone = reader["ContactPhone"].ToString();
-                    }
-                    if (reader["OrderStatus"] != DBNull.Value)
-                    {
-                        summary.Status = Convert.ToString(reader["OrderStatus"]);
-                    }
-                    if (reader["DiningDate"] != DBNull.Value)
-                    {
-                        summary.DiningDate = Convert.ToDateTime(reader["DiningDate"]);
-                    }
-                    summary.CreateTime = Convert.ToDateTime(reader["CreateDate"]);
-                    summary.Backlog = "无";
                 }
             }
 
-            if (summary != null)
+            if (summary != null && summary.TotalMoney == 0)
             {
                 var details = this.GetOrderDetails(summary.OrderId);
                 if (details != null && details.Count > 0)
