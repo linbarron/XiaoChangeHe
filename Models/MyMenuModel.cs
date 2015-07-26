@@ -41,8 +41,7 @@ public class MyMenuModel : DbHelper
             string strSql = @"select od.UnitPrice,od.ProductCount,o.status,p.MemberPrice,
 p.ProductName,p.Id , o.DiningDate ,od.UseState, os.OrderStatus,
 (select sum(os.ProductCount) from OrderDetails os where os.OrderId=o.Id) totalcount
-from Orders o ,OrderDetails od,Product p,Restaurant r  
-left join OrderStatus os on os.OrderId = o.Id
+from Orders o left join OrderStatus os on os.OrderId = o.Id,OrderDetails od,Product p,Restaurant r  
 where
  o.Id=od.OrderId and od.ProductId=p.Id  and r.RstType='02' and r.Id=o.RstId and
 o.MemberCardNo=@MemberCardNo and o.id=@OrderId and os.OrderStatus='New' and dateAdd(hh,5,o.DiningDate)>=getdate() order by p.Code asc";
@@ -51,8 +50,7 @@ o.MemberCardNo=@MemberCardNo and o.id=@OrderId and os.OrderStatus='New' and date
                 strSql = @"select od.UnitPrice,od.ProductCount,o.status,p.MemberPrice,
 p.ProductName,p.Id , o.DiningDate ,od.UseState, os.OrderStatus,
 (select sum(os.ProductCount) from OrderDetails os where os.OrderId=o.Id) totalcount
-from Orders o ,OrderDetails od,Product p ,Restaurant r
-left join OrderStatus os on os.OrderId = o.Id
+from Orders o left join OrderStatus os on os.OrderId = o.Id,OrderDetails od,Product p ,Restaurant r
 where
  o.Id=od.OrderId and od.ProductId=p.Id and o.MemberCardNo=@MemberCardNo and o.id=@OrderId 
 and os.OrderStatus='New'  and r.RstType='01' and r.Id=o.RstId order by p.Code asc";
@@ -75,6 +73,7 @@ and os.OrderStatus='New'  and r.RstType='01' and r.Id=o.RstId order by p.Code as
         }
         catch (Exception ex)
         {
+            Logger.Log(ex);
             return null;
         }
     }

@@ -109,7 +109,38 @@ namespace WitBird.XiaoChangHe.Controllers
         }
 
 
+        public ActionResult GetTotalCountAndPrice(string uid, string orderId)
+        {
+            try
+            {
 
+                MyMenuModel myMenu = new MyMenuModel();
+                List<MyMenu> mymenu = myMenu.getMyMenuListData(uid, orderId, "FastFood");
+
+                var totalCount = 0;
+                var totalPrice = 0.00m;
+
+                if (mymenu != null)
+                {
+                    foreach (var item in mymenu)
+                    {
+                        totalCount += item.ProductCount;
+                        totalPrice += item.ProductCount * item.UnitPrice;
+                    }
+                }
+
+                var data = new { IsSuccessful = true, TotalCount = totalCount, TotalPrice = totalPrice };
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                var data = new { IsSuccessful = false };
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+
+
+        }
 
     }
 }

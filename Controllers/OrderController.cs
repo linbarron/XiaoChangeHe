@@ -324,114 +324,123 @@ namespace WitBird.XiaoChangHe.Controllers
 
         public Guid SaveOrders(string type, string SourceAccountId, string bookTime = null, string isQuick = null, string peopleCont = null, string Remark = null, string OrderId = null)
         {
-            Session["SourceAccountId"] = SourceAccountId;
             int i;
-            OrderModel odm = new OrderModel();
-            CrmMemberModel cdb = new CrmMemberModel();
-            List<CrmMember> crm = cdb.getCrmMemberListInfoData(SourceAccountId);
-            Order order = null;
-            Order FastFoodOrder = null;
-            Order info = new Order();
-
-            //isQuick=="Quick" 表明此订单为快捷预定  isQuick==null表明为预定订单  isQuick=Auto 表明是智能点餐
-            if (string.IsNullOrEmpty(isQuick))
+            try
             {
 
-                order = odm.SelectUnFinishedOrder(crm.First().Uid);
-            }
-            else
-            {
+                Session["SourceAccountId"] = SourceAccountId;
+                OrderModel odm = new OrderModel();
+                CrmMemberModel cdb = new CrmMemberModel();
+                List<CrmMember> crm = cdb.getCrmMemberListInfoData(SourceAccountId);
+                Order order = null;
+                Order FastFoodOrder = null;
+                Order info = new Order();
 
-                FastFoodOrder = odm.SelectUnFinishedFastFoodOrder(crm.First().Uid);
-            }
+                //isQuick=="Quick" 表明此订单为快捷预定  isQuick==null表明为预定订单  isQuick=Auto 表明是智能点餐
+                if (string.IsNullOrEmpty(isQuick))
+                {
 
-            if (order != null)
-            {
-                type = "Update";
-                //  i = odm.SaveOrders(type, info);
+                    order = odm.SelectUnFinishedOrder(crm.First().Uid);
+                }
+                else
+                {
 
-                return order.Id;
+                    FastFoodOrder = odm.SelectUnFinishedFastFoodOrder(crm.First().Uid);
+                }
 
-            }
-            else if (FastFoodOrder != null)
-            {
+                if (order != null)
+                {
+                    type = "Update";
+                    //  i = odm.SaveOrders(type, info);
 
-                type = "UpdateFastFood";
-                info.CreateDate = DateTime.Now;
-                if (string.IsNullOrEmpty(OrderId))
+                    return order.Id;
+
+                }
+                else if (FastFoodOrder != null)
+                {
+
+                    type = "UpdateFastFood";
+                    info.CreateDate = DateTime.Now;
+                    if (string.IsNullOrEmpty(OrderId))
+                    {
+                        info.Id = Guid.NewGuid();
+                    }
+                    else
+                    {
+                        info.Id = new Guid(OrderId);
+                    }
+                    info.Remark = Remark;
+                    i = odm.SaveOrders(type, info);
+                    return FastFoodOrder.Id;
+                }
+
+            //if ((order!=null&&order.Count > 0)||(FastFoodOrder != null && FastFoodOrder.Count > 0))
+                //{
+                //    type = "Update";
+                //   // i = odm.SaveOrders(type, info);
+
+            //    return order.First().Id;
+
+            //}
+                else
                 {
                     info.Id = Guid.NewGuid();
+                    //info.Id = crm.First().Uid;
+                    info.ContactName = string.IsNullOrEmpty(crm.First().MemberName) ? "" : crm.First().MemberName;
+                    info.ContactPhone = crm.First().Tel;
+                    info.MemberCardNo = crm.First().Uid;
+                    info.OperatorId = Guid.NewGuid();//new Guid("6E4DE867-4AF0-2DEA-FC5C-036EB8637CAB")
+                    info.OperatorName = "xxx";
+                    info.CreateDate = DateTime.Now;
+                    if (!string.IsNullOrEmpty(isQuick) && isQuick == "FastFood")
+                    {
+                        info.DiningDate = string.IsNullOrEmpty(bookTime) ? DateTime.Now : Convert.ToDateTime(bookTime);
+                        //if (!string.IsNullOrEmpty(bookTime))
+                        //{
+                        //    info.DiningDate = Convert.ToDateTime(bookTime);
+                        //}
+                        //else {
+                        //    info.DiningDate = Convert.ToDateTime("1997-10-1");
+                        //}
+                    }
+                    else if (!string.IsNullOrEmpty(isQuick) && isQuick == "Auto")
+                    {
+                        info.PersonCount = Convert.ToInt32(peopleCont);
+                        info.DiningDate = DateTime.Now;
+                        //info.DiningDate = string.IsNullOrEmpty(bookTime) ? DateTime.Now : Convert.ToDateTime(bookTime);
+
+                    }
+                    else
+                    {
+                        info.DiningDate = string.IsNullOrEmpty(bookTime) ? DateTime.Now : Convert.ToDateTime(bookTime);
+
+                    }
+
+                    info.Status = OrderStatus.New;
+                    info.ReserveType = "01";
+                    string RestaurantId = Session["begindm"] != null ? Session["begindm"].ToString() : "";
+                    if (!string.IsNullOrEmpty(RestaurantId))
+                    {
+                        info.RstId = new Guid(RestaurantId);
+                    }
+                    else
+                    {
+                        info.RstId = Guid.NewGuid();
+                    }
+                    i = odm.SaveOrders(type, info);
+                    //ViewBag.MemberCardNo = info.MemberCardNo;
+                    //ViewBag.OrderId = info.Id;
                 }
-                else
+                if (i == 1)
                 {
-                    info.Id = new Guid(OrderId);
+
+                    return info.Id;
                 }
-                info.Remark = Remark;
-                i = odm.SaveOrders(type, info);
-                return FastFoodOrder.Id;
             }
-
-        //if ((order!=null&&order.Count > 0)||(FastFoodOrder != null && FastFoodOrder.Count > 0))
-            //{
-            //    type = "Update";
-            //   // i = odm.SaveOrders(type, info);
-
-        //    return order.First().Id;
-
-        //}
-            else
+            catch(Exception ex)
             {
-                info.Id = Guid.NewGuid();
-                //info.Id = crm.First().Uid;
-                info.ContactName = string.IsNullOrEmpty(crm.First().MemberName) ? "" : crm.First().MemberName;
-                info.ContactPhone = crm.First().Tel;
-                info.MemberCardNo = crm.First().Uid;
-                info.OperatorId = Guid.NewGuid();//new Guid("6E4DE867-4AF0-2DEA-FC5C-036EB8637CAB")
-                info.OperatorName = "xxx";
-                info.CreateDate = DateTime.Now;
-                if (!string.IsNullOrEmpty(isQuick) && isQuick == "FastFood")
-                {
-                    info.DiningDate = string.IsNullOrEmpty(bookTime) ? DateTime.Now : Convert.ToDateTime(bookTime);
-                    //if (!string.IsNullOrEmpty(bookTime))
-                    //{
-                    //    info.DiningDate = Convert.ToDateTime(bookTime);
-                    //}
-                    //else {
-                    //    info.DiningDate = Convert.ToDateTime("1997-10-1");
-                    //}
-                }
-                else if (!string.IsNullOrEmpty(isQuick) && isQuick == "Auto")
-                {
-                    info.PersonCount = Convert.ToInt32(peopleCont);
-                    info.DiningDate = DateTime.Now;
-                    //info.DiningDate = string.IsNullOrEmpty(bookTime) ? DateTime.Now : Convert.ToDateTime(bookTime);
-
-                }
-                else
-                {
-                    info.DiningDate = string.IsNullOrEmpty(bookTime) ? DateTime.Now : Convert.ToDateTime(bookTime);
-
-                }
-
-                info.Status = OrderStatus.New;
-                info.ReserveType = "01";
-                string RestaurantId = Session["begindm"] != null ? Session["begindm"].ToString() : "";
-                if (!string.IsNullOrEmpty(RestaurantId))
-                {
-                    info.RstId = new Guid(RestaurantId);
-                }
-                else
-                {
-                    info.RstId = Guid.NewGuid();
-                }
-                i = odm.SaveOrders(type, info);
-                //ViewBag.MemberCardNo = info.MemberCardNo;
-                //ViewBag.OrderId = info.Id;
-            }
-            if (i == 1)
-            {
-
-                return info.Id;
+                Logger.Log(ex);
+                return new Guid("00000000-0000-0000-0000-000000000000");
             }
 
             return new Guid("00000000-0000-0000-0000-000000000000");
@@ -441,53 +450,62 @@ namespace WitBird.XiaoChangHe.Controllers
 
         public int SaveOrderDetails(string type, string productId, string unitPrice, string orderId, string productCount, string useStatus = null, string MemberCardNo = null, string RstType = null)
         {
-            int i;
-            OrderDetailsModel odm = new OrderDetailsModel();
-            OrderDetails info = new OrderDetails();
-            MyMenuModel odb = new MyMenuModel();
-            List<OrderDetails> orderD = odm.getOrderDetailInfoData(productId, orderId);
-            List<MyOrderDetail> detail = null;
-            if (MemberCardNo != null)
+            int i = 0;
+
+            try
             {
-                detail = odb.getMyOrderDetailListData(MemberCardNo, orderId, RstType);
-            }
-            if (orderD.Count > 0 && useStatus != "04")
-            {
-                type = "Update";
-                info.ProductCount = Convert.ToInt32(productCount);
-                info.CreateDate = DateTime.Now;
-                info.ProductId = new Guid(productId);
-                info.OrderId = new Guid(orderId);
-                info.TotalPrice = Convert.ToDecimal(unitPrice) * Convert.ToInt32(productCount);
-            }
-            else
-            {
-                if (useStatus == "04")
+
+                OrderDetailsModel odm = new OrderDetailsModel();
+                OrderDetails info = new OrderDetails();
+                MyMenuModel odb = new MyMenuModel();
+                List<OrderDetails> orderD = odm.getOrderDetailInfoData(productId, orderId);
+                List<MyOrderDetail> detail = null;
+                if (MemberCardNo != null)
                 {
-                    if (detail != null && detail.Count > 0)
+                    detail = odb.getMyOrderDetailListData(MemberCardNo, orderId, RstType);
+                }
+                if (orderD.Count > 0 && useStatus != "04")
+                {
+                    type = "Update";
+                    info.ProductCount = Convert.ToInt32(productCount);
+                    info.CreateDate = DateTime.Now;
+                    info.ProductId = new Guid(productId);
+                    info.OrderId = new Guid(orderId);
+                    info.TotalPrice = Convert.ToDecimal(unitPrice) * Convert.ToInt32(productCount);
+                }
+                else
+                {
+                    if (useStatus == "04")
                     {
-                        foreach (MyOrderDetail item1 in detail)
+                        if (detail != null && detail.Count > 0)
                         {
-                            if (item1.UseState == "04")
+                            foreach (MyOrderDetail item1 in detail)
                             {
-                                //已经有赠送的菜。（先删除已有的赠送菜，再添加现选择有赠送菜）
-                                int j = odm.DelGiftOrderDetails(useStatus, orderId);
+                                if (item1.UseState == "04")
+                                {
+                                    //已经有赠送的菜。（先删除已有的赠送菜，再添加现选择有赠送菜）
+                                    int j = odm.DelGiftOrderDetails(useStatus, orderId);
+                                }
                             }
                         }
                     }
+                    info.DetailsId = Guid.NewGuid();
+                    info.OrderId = new Guid(orderId);
+                    info.ProductId = new Guid(productId);
+                    info.UnitPrice = Convert.ToDecimal(unitPrice);
+                    info.TotalPrice = Convert.ToDecimal(unitPrice) * Convert.ToInt32(productCount);
+                    info.CreateDate = DateTime.Now;
+                    info.ProductCount = Convert.ToInt32(productCount);
+                    if (useStatus != "04") { info.UseState = "00"; } else { info.UseState = useStatus; }
                 }
-                info.DetailsId = Guid.NewGuid();
-                info.OrderId = new Guid(orderId);
-                info.ProductId = new Guid(productId);
-                info.UnitPrice = Convert.ToDecimal(unitPrice);
-                info.TotalPrice = Convert.ToDecimal(unitPrice) * Convert.ToInt32(productCount);
-                info.CreateDate = DateTime.Now;
-                info.ProductCount = Convert.ToInt32(productCount);
-                if (useStatus != "04") { info.UseState = "00"; } else { info.UseState = useStatus; }
-
-
+                i = odm.SaveOrderDetails(type, info);
             }
-            i = odm.SaveOrderDetails(type, info);
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                i = 0;
+            }
+
             return i;
 
         }
