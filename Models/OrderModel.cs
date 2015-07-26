@@ -263,7 +263,6 @@ from Orders o
 left join OrderStatus os on o.Id = os.OrderId
 left join CrmMember cm on cm.Uid = o.MemberCardNo
 where o.MemberCardNo = @Uid
-and dateAdd(hh,5,o.DiningDate)>=getdate()
 and os.OrderStatus = 'Paid';";
                 DbCommand cmd = db.GetSqlStringCommand(sql);
 
@@ -363,7 +362,6 @@ from Orders o
 left join OrderStatus os on o.Id = os.OrderId
 left join CrmMember cm on cm.Uid = o.MemberCardNo
 where o.MemberCardNo = @Uid
-and dateAdd(hh,5,o.DiningDate)>=getdate()
 and os.OrderStatus = 'New';";
                 DbCommand cmd = db.GetSqlStringCommand(sql);
 
