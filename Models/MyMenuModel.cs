@@ -24,7 +24,7 @@ public class MyMenuModel : DbHelper
             command.Parameters.Add(ps0);
             DbParameter ps1 = command.CreateParameter();
             ps1.ParameterName = SqlPara + "OrderId";
-            ps1.DbType = DbType.String;
+            ps1.DbType = DbType.Guid;
             ps1.Value = parameterValues[1];
             command.Parameters.Add(ps1);
         }

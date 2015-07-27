@@ -88,11 +88,11 @@ order by o.DiningDate desc;";
                 SqlCmd.Connection = SqlConn;
                 SqlCmd.CommandText = @"
 select o.Id AS OrderId,o.ContactName,o.ContactPhone,o.DiningDate,o.DiningDate,o.CreateDate,
-o.Status,o.RstId AS RestaurantId,o.PersonCount, os.OrderStatus, os.LastUpdateTime, cm.Sex, ps.PrepayMoney as TotalMoney
+o.Status,o.RstId AS RestaurantId,o.PersonCount, os.OrderStatus, os.LastUpdateTime, cm.Sex, pr.PrepayMoney as TotalMoney
 from orders o
 left join OrderStatus os on os.OrderId = o.Id
 left join CrmMember cm on cm.Uid = o.MemberCardNo
-left join PrepayRecord pr on or.SId = o.Id
+left join PrepayRecord pr on pr.SId = convert(nvarchar(50), o.Id)
 where o.Id=@OrderId";
 
                 SqlCmd.Parameters.AddWithValue(@"OrderId", orderId);
@@ -134,7 +134,7 @@ where o.Id=@OrderId";
                             summary.DiningDate = Convert.ToDateTime(reader["DiningDate"]);
                         }
 
-                        if (reader["PrepayMoney"] != DBNull.Value)
+                        if (reader["TotalMoney"] != DBNull.Value)
                         {
                             summary.TotalMoney = Convert.ToInt32(reader["TotalMoney"]);
                         }
