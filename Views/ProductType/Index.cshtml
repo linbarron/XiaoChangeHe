@@ -190,6 +190,7 @@
                 $("#" + id).css("display", "inline");
                 //$("#" + "pic" + id).css("display", "inline");
             }
+
             //用户已点菜数量
             var total = $("#totalcount").html();
             if (total == null || total == "") {
@@ -228,7 +229,6 @@
                     });
             } else {
                 if (orderid != "00000000-0000-0000-0000-000000000000") {
-                    var num1 = $("#" + id).val();
                     $.post("/Order/SaveOrderDetails", { type: "Insert", productId: productId, unitPrice: price, orderId: orderid, productCount: num1, MemberCardNo: '@ViewBag.MemberCardNo' },
                         function (msg1) {
                         if (msg1 == 1) {

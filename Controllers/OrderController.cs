@@ -453,6 +453,9 @@ namespace WitBird.XiaoChangHe.Controllers
             try
             {
 
+                int count = 1;
+                int.TryParse(productCount, out count);
+
                 OrderDetailsModel odm = new OrderDetailsModel();
                 OrderDetails info = new OrderDetails();
                 MyMenuModel odb = new MyMenuModel();
@@ -465,11 +468,11 @@ namespace WitBird.XiaoChangHe.Controllers
                 if (orderD.Count > 0 && useStatus != "04")
                 {
                     type = "Update";
-                    info.ProductCount = Convert.ToInt32(productCount);
+                    info.ProductCount = count;
                     info.CreateDate = DateTime.Now;
                     info.ProductId = new Guid(productId);
                     info.OrderId = new Guid(orderId);
-                    info.TotalPrice = Convert.ToDecimal(unitPrice) * Convert.ToInt32(productCount);
+                    info.TotalPrice = Convert.ToDecimal(unitPrice) * count;
                 }
                 else
                 {
@@ -491,9 +494,9 @@ namespace WitBird.XiaoChangHe.Controllers
                     info.OrderId = new Guid(orderId);
                     info.ProductId = new Guid(productId);
                     info.UnitPrice = Convert.ToDecimal(unitPrice);
-                    info.TotalPrice = Convert.ToDecimal(unitPrice) * Convert.ToInt32(productCount);
+                    info.TotalPrice = Convert.ToDecimal(unitPrice) * count;
                     info.CreateDate = DateTime.Now;
-                    info.ProductCount = Convert.ToInt32(productCount);
+                    info.ProductCount = count;
                     if (useStatus != "04") { info.UseState = "00"; } else { info.UseState = useStatus; }
                 }
                 i = odm.SaveOrderDetails(type, info);
