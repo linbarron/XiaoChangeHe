@@ -19,7 +19,7 @@
             <div class="content2">
                     <!-- 菜品图片-->
                     <div class="content_img">
-                        <img src="/Order/GetImages/@(item.ProductId)" id="@item.ProductId" >
+                        <img src="/Order/GetImages/@(item.ProductId)" imgid="@item.ProductId" >
                     </div>
                     <!--菜品名称-->
                     <span class="img_title">@item.Product.ProductName</span>
@@ -39,7 +39,7 @@
                                 {
                             <div class="right_q">
                                 <span class="s_left" data-pid="@item.Id">-</span>
-                                <input type="text" id="@item.Id" value="@item1.ProductCount" class="text_box" />
+                                <input type="text" id="@item.Id" value="@item1.ProductCount" class="text_box" readonly="readonly" style="outline:none;"/>
                                 <span class="s_right" data-pid="@item.Id">+</span>
                             </div>   
                                         {
@@ -54,7 +54,7 @@
                         {
                             <div class="right_q" style="display: none;">
                                 <span class="s_left" data-pid="@item.ProductId">-</span>
-                                <input type="text" id="@item.ProductId" value="1" class="text_box"/>
+                                <input type="text" id="@item.ProductId" value="1" class="text_box" readonly="readonly" style="outline:none;" />
                                 <span class="s_right" data-pid="@item.ProductId">+</span>
                             </div>  
                             <div class="yuan-bottom" data-pid="@item.ProductId" style="display: block;">

@@ -431,7 +431,7 @@
             $(".content_img").click(function () {
                 $(".zhe,.datu").show();
                 var img = $(this).children("img");
-                var imgId = img.attr("id");
+                var imgId = img.attr("imgid");
                 var s2 = "/Order/GetBigImages/" + imgId;
                 $(".datu").attr("src", s2)
                 $(".datu").attr("alt", "无大图");
