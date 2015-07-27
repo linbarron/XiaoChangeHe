@@ -113,22 +113,24 @@ namespace WitBird.XiaoChangHe.Controllers
         {
             try
             {
-
-                MyMenuModel myMenu = new MyMenuModel();
-                List<MyMenu> mymenu = myMenu.getMyMenuListData(uid, orderId, "FastFood");
-
                 var totalCount = 0;
                 var totalPrice = 0.00m;
 
-                if (mymenu != null)
+                if (!string.IsNullOrEmpty(uid) && !string.IsNullOrEmpty(orderId))
                 {
-                    foreach (var item in mymenu)
+                    MyMenuModel myMenu = new MyMenuModel();
+                    List<MyMenu> mymenu = myMenu.getMyMenuListData(uid, orderId, "FastFood");
+
+
+                    if (mymenu != null)
                     {
-                        totalCount += item.ProductCount;
-                        totalPrice += item.ProductCount * item.UnitPrice;
+                        foreach (var item in mymenu)
+                        {
+                            totalCount += item.ProductCount;
+                            totalPrice += item.ProductCount * item.UnitPrice;
+                        }
                     }
                 }
-
                 var data = new { IsSuccessful = true, TotalCount = totalCount, TotalPrice = totalPrice };
                 return Json(data, JsonRequestBehavior.AllowGet);
             }

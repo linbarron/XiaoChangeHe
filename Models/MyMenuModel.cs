@@ -67,7 +67,8 @@ and os.OrderStatus='New'  and r.RstType='01' and r.Id=o.RstId order by p.Code as
                  .Map(t => t.MemberPrice).ToColumn("MemberPrice")
                   .Map(t => t.UseState).ToColumn("UseState")
                 .Build());
-            list = tableAccessor.Execute(new string[] { MemberCardNo, OrderId }).ToList();
+            
+            list = tableAccessor.Execute(new object[] { MemberCardNo, Guid.Parse(OrderId) }).ToList();
             return list;
 
         }

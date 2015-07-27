@@ -113,14 +113,14 @@ order by OrderNo,a.OrderNo";
             {
                 DbParameter ps0 = command.CreateParameter();
                 ps0.ParameterName = SqlPara + "Id";
-                ps0.DbType = DbType.String;
+                ps0.DbType = DbType.Guid;
                 ps0.Value = parameterValues[0];
                 command.Parameters.Add(ps0);
             }
             #endregion
 
         }
-        public List<Product> getImageProductListInfoData(string id)
+        public List<Product> getOrginalImageProductListInfoData(string id)
         {
             List<Product> list = null;
             try
@@ -155,17 +155,18 @@ order by OrderNo,a.OrderNo";
                      .DoNotMap(t => t.OrderCount)
                      .DoNotMap(t => t.FavCount)
                     .Build());
-                list = tableAccessor.Execute(new string[] { id }).ToList();
+                list = tableAccessor.Execute(new object[] { Guid.Parse(id) }).ToList();
                 return list;
 
             }
             catch (Exception ex)
             {
+                Logger.Log("ID: " + id + "\r\n" + ex);
                 return null;
             }
         }
 
-        public List<Product> getBigImageProductListInfoData(string id)
+        public List<Product> getThumbImageProductListInfoData(string id)
         {
             List<Product> list = null;
             try
@@ -200,12 +201,13 @@ order by OrderNo,a.OrderNo";
                      .DoNotMap(t => t.OrderCount)
                      .DoNotMap(t => t.FavCount)
                     .Build());
-                list = tableAccessor.Execute(new string[] { id }).ToList();
+                list = tableAccessor.Execute(new object[] { Guid.Parse(id) }).ToList();
                 return list;
 
             }
             catch (Exception ex)
             {
+                Logger.Log("ID: " + id + "\r\n" + ex);
                 return null;
             }
         }
@@ -224,12 +226,13 @@ order by OrderNo,a.OrderNo";
                      .Map(t => t.DefaultImg).ToColumn("DefaultImg")
 
                     .Build());
-                list = tableAccessor.Execute(new string[] { id }).ToList();
+                list = tableAccessor.Execute(new object[] { Guid.Parse(id) }).ToList();
                 return list;
 
             }
             catch (Exception ex)
             {
+                Logger.Log("ID: " + id + "\r\n" + ex);
                 return null;
             }
         }

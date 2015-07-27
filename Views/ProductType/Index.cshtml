@@ -430,9 +430,14 @@
             });
             $(".content_img").click(function () {
                 $(".zhe,.datu").show();
-                var s = $(this).children("img").attr("src");
-                var s2 = "http:\/\/test.xgdg.cn" + s;
+                var img = $(this).children("img");
+                var imgId = img.attr("id");
+                var s2 = "/Order/GetBigImages/" + imgId;
                 $(".datu").attr("src", s2)
+                $(".datu").attr("alt", "无大图");
+            });
+            $(".datu").click(function () {
+                $(".zhe,.datu").hide();
             });
             $(".zhe").click(function () {
                 $(".zhe,.datu").hide();

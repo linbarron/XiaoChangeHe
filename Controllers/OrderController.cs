@@ -206,7 +206,7 @@ namespace WitBird.XiaoChangHe.Controllers
             if (!string.IsNullOrEmpty(id))
             {
 
-                List<Product> list = odb.getImageProductListInfoData(id);
+                List<Product> list = odb.getOrginalImageProductListInfoData(id);
                 if (list != null && list.Count > 0)
                 {
                     Product info = list.First();
@@ -216,8 +216,6 @@ namespace WitBird.XiaoChangHe.Controllers
                         {
                             return File(info.OriginalImage, "jpg", "image_" + id + ".jpg");
                         }
-
-
                     }
 
                 }
@@ -255,7 +253,7 @@ namespace WitBird.XiaoChangHe.Controllers
             if (!string.IsNullOrEmpty(id))
             {
 
-                List<Product> list = odb.getBigImageProductListInfoData(id);
+                List<Product> list = odb.getThumbImageProductListInfoData(id);
                 if (list != null && list.Count > 0)
                 {
                     Product info = list.First();
