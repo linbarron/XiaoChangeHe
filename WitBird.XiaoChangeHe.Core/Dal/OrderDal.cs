@@ -144,15 +144,6 @@ where o.Id=@OrderId";
                 }
             }
 
-            if (summary != null && summary.TotalMoney == 0)
-            {
-                var details = this.GetOrderDetails(summary.OrderId);
-                if (details != null && details.Count > 0)
-                {
-                    summary.TotalMoney = details.Sum(v => v.TotalPrice);
-                }
-            }
-
             return summary;
         }
 

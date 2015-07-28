@@ -68,6 +68,7 @@ namespace WitBird.XiaoChangeHe.Core
                 detail.Backlog = orderSummary.Backlog;
                 detail.PersonCount = orderSummary.PersonCount;
                 detail.Status = orderSummary.Status;
+                detail.TotalMoney = orderSummary.TotalMoney;
 
                 var details = orderDal.GetOrderDetails(orderId);
 
@@ -103,7 +104,10 @@ namespace WitBird.XiaoChangeHe.Core
                         }
                     }
 
-                    detail.TotalMoney = orderTotallMoney;
+                    if (detail.TotalMoney == 0)
+                    {
+                        detail.TotalMoney = orderTotallMoney;
+                    }
                 }
             }
 
