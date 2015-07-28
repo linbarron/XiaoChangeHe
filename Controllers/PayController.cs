@@ -82,7 +82,7 @@ namespace WitBird.XiaoChangHe.Controllers
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Log(LoggingLevel.WxPay, ex);
             }
@@ -435,10 +435,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 {
                     for (int i = 0; i < detail.Count; i++)
                     {
-                        if (detail[i].UnitPrice != 0)
-                        {
-                            sum += detail[i].MemberPrice * detail[i].ProductCount;
-                        }
+                        sum += detail[i].MemberPrice * detail[i].ProductCount;
                     }
                 }
                 ViewBag.MemberPriceTotal = sum;
@@ -499,11 +496,8 @@ namespace WitBird.XiaoChangHe.Controllers
 
                     for (int i = 0; i < orderDetails.Count; i++)
                     {
-                        if (orderDetails[i].UnitPrice != 0)
-                        {
-                            totalPrice += orderDetails[i].UnitPrice * orderDetails[i].ProductCount;
-                            totalVipPrice += orderDetails[i].MemberPrice * orderDetails[i].ProductCount;
-                        }
+                        totalPrice += orderDetails[i].UnitPrice * orderDetails[i].ProductCount;
+                        totalVipPrice += orderDetails[i].MemberPrice * orderDetails[i].ProductCount;
                     }
 
                     prepayAccount = crmMemberModel.GetPrepayAccount(uid);
@@ -708,7 +702,7 @@ namespace WitBird.XiaoChangHe.Controllers
                             //Logger.Log(LoggingLevel.WxPay, "更新更新订单状态为已支付成功");
                             scope.Complete();
 
-                           // Logger.Log(LoggingLevel.WxPay, "提交事务成功");
+                            // Logger.Log(LoggingLevel.WxPay, "提交事务成功");
 
                             var offlinePayResult = new { IsSuccess = true, Message = "OfflinePay" };
                             return Json(offlinePayResult, JsonRequestBehavior.AllowGet);
@@ -863,6 +857,168 @@ namespace WitBird.XiaoChangHe.Controllers
             Logger.Log(LoggingLevel.WxPay, xml);
             return Content(xml, "text/xml");
 
+        }
+
+        public ActionResult PayView(string id, string value)
+        {
+            string[] arrrec = value.Split(',');
+            if (arrrec.Length < 2)
+            {
+                ViewBag.Content = "非法链接！";
+                return View("Error");
+            }
+            //DateTime dt = new DateTime(long.Parse(arrrec[1]));
+            //if ((DateTime.Now - dt).TotalSeconds > 300) {
+            //    ViewBag.Content = "链接超时无效！";
+            //    return View("Error");
+            //} 
+            try
+            {
+                int recid = int.Parse(arrrec[0]);
+                PrepayRecordModel prepayRecordModel = new PrepayRecordModel();
+                BillPayModel billPayModel = new BillPayModel();
+                CrmMemberModel crmMemberModel = new CrmMemberModel();
+
+                PrepayRecord rec = prepayRecordModel.GetPrepayRecordByRecordIdAndSourceAccountId(recid, id);
+                BillPay billPay = billPayModel.GetBillPayById(rec.BillPayId.Value);
+                PrepayAccount acc = crmMemberModel.GetPrepayAccount(rec.Uid);
+
+                if (rec == null || rec.AddMoney > 0)
+                {
+                    ViewBag.Content = "记录无效！";
+                    return View("Error");
+                }
+                // rec.RState = "01";
+                //rec.AsureDate = DateTime.Now;
+
+                if (billPay == null || billPay.PayState == BillPayState.NotPaid)
+                {
+                    if ((DateTime.Now - rec.PrepayDate.Value).TotalSeconds > 300)
+                    {
+                        ViewBag.Content = "支付记录超时，请联系收银员重新发起结单请求！";
+                        return View("Error");
+                    }
+
+                    // acc.AccountMoney = acc.AccountMoney + rec.AddMoney;
+                    //acc.LastConsumeMoney = 0 - rec.AddMoney;
+                    //acc.LastConsumeDate = DateTime.Now;
+
+                    if ((rec.PrepayMoney + acc.AccountMoney < 0) || (rec.PresentMoney + acc.PresentMoney < 0))
+                    {
+                        ViewBag.Content = "余额不足！";
+                        return View("Error");
+                    }
+                }
+                ViewBag.Id = id;
+                ViewBag.Value = rec.RecordId + "," + DateTime.Now.Ticks;
+                return View(rec);
+            }
+            catch
+            {
+                ViewBag.Content = "系统错误！";
+                return View("Error");
+                //return Content("<strong font-size='14'>系统错误！</strong>");
+            }
+        }
+
+        public ActionResult PayAsure(string id, string value)
+        {
+            string[] arrrec = value.Split(',');
+            if (arrrec.Length < 2) return Content("非法链接！");
+            DateTime dt = new DateTime(long.Parse(arrrec[1]));
+            if ((DateTime.Now - dt).TotalSeconds > 300) return Content("链接超时无效！");
+            try
+            {
+                int recid = int.Parse(arrrec[0]);
+                PrepayRecordModel prepayRecordModel = new PrepayRecordModel();
+                BillPayModel billPayModel = new BillPayModel();
+                CrmMemberModel crmMemberModel = new CrmMemberModel();
+                OrderModel orderModel = new OrderModel();
+
+                PrepayRecord rec = prepayRecordModel.GetPrepayRecordByRecordIdAndSourceAccountId(recid, id);
+                BillPay billPay = billPayModel.GetBillPayById(rec.BillPayId.Value);
+                PrepayAccount acc = crmMemberModel.GetPrepayAccount(rec.Uid);
+                Models.Info.Order order = orderModel.selOrderByOrderId(Guid.Parse(rec.SId)).FirstOrDefault();
+
+                if (rec == null || rec.AddMoney > 0 || order == null) return Content("记录无效！");
+                if ((billPay != null && billPay.PayState == BillPayState.Paid) || order.Status == OrderStatus.Paid) return Content("该账单已支付！");
+                if ((DateTime.Now - rec.PrepayDate.Value).TotalSeconds > 300) return Content("支付记录超时，请联系收银员重新发起结单请求！");
+                rec.RState = "01";
+                rec.AsureDate = DateTime.Now;
+
+                if (acc.AccountMoney + rec.PrepayMoney < 0 || acc.PresentMoney + rec.PresentMoney < 0) return Content("余额不足");
+
+                acc.AccountMoney = acc.AccountMoney + rec.PrepayMoney.Value;
+                acc.LastConsumeMoney = 0 - rec.AddMoney;
+                acc.PresentMoney = acc.PresentMoney + rec.PresentMoney.Value;
+                acc.LastConsumeDate = DateTime.Now;
+
+                bool result = true;
+                if (billPay == null)
+                {
+                    decimal totalPrice = rec.PrepayMoney.Value + rec.PresentMoney.Value;
+                    decimal creditCard = totalPrice - (acc.AccountMoney + acc.PresentMoney);
+                    if (creditCard < 0) creditCard = 0;
+
+                    billPay = new BillPay();
+                    //余额支付金额
+                    billPay.Cash = totalPrice - creditCard;
+                    billPay.Change = 0;
+                    billPay.Coupons = 0;
+                    billPay.CouponsNo = "";
+                    billPay.CreateDate = DateTime.Now;
+                    //在线支付金额
+                    billPay.CreditCard = creditCard;
+                    billPay.Discount = 0;
+                    billPay.MemberCard = 0;
+                    billPay.MemberCardNo = "";
+                    billPay.PaidIn = totalPrice;
+                    billPay.PayId = rec.BillPayId.HasValue ? rec.BillPayId.Value : Guid.NewGuid();
+                    billPay.PayState = BillPayState.NotPaid;
+                    billPay.Receivable = totalPrice;
+                    billPay.Remark = "消费订单：" + rec.SId;
+                    billPay.Remove = 0;
+                    billPay.RstId = Constants.CompanyId;
+                    billPay.UserId = Guid.Empty;
+                    billPay.UserName = "";
+
+                    result = billPayModel.AddBillPay(billPay);
+                }
+
+                if (result)
+                {
+                    result = crmMemberModel.UpdatePrepayAccount(acc);
+                }
+
+                result = result && billPayModel.UpdateBillStateAsPaid(billPay.PayId, "");
+                result = result && orderModel.UpdateOrderStatus(order.Id, OrderStatus.Paid);
+
+                if (result)
+                {
+
+                    WxApiClass wxapi = new WxApiClass();
+                    if (wxapi.Logon())
+                    {
+                        wxapi.sendMessage("尊敬的会员：" + acc.uid + ",您已经支付订单：" + rec.SId
+                             + ",本次会员消费为您节省：￥" + rec.DiscountlMoeny.Value.ToString("F2")
+                            + ",支付：现金￥" + (0 - rec.PrepayMoney.Value).ToString("F2")
+                            + "/赠送￥" + (0 - rec.PresentMoney.Value).ToString("F2")
+                            + "/积分" + rec.PayByScore.Value.ToString("F2")
+                            + "。您的剩余金额为：现金" + acc.AccountMoney.ToString("F2")
+                            + "/赠送" + acc.PresentMoney.ToString("F2")
+                            //+ "，当前积分：" + currScore.ToString("F2")
+                            //+ (currScore > 50 ? "，您的积分大于50，下次可以使用积分消费！" : "")
+                            , id);
+                    }
+                    return Content("确认支付成功！");
+                }
+                else return Content("确认支付失败！错误号：1000");
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(LoggingLevel.WxPay, "PayAsure, ID=" + id + ", value=" + value + "\r\n" + ex);
+                return Content("确认支付失败！错误号：9900");
+            }
         }
 
         #endregion Order

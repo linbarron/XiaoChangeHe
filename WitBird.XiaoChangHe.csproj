@@ -198,6 +198,7 @@
     <Compile Include="Controllers\PayController.cs" />
     <Compile Include="Extensions\AttentionAttribute.cs" />
     <Compile Include="Models\BillPayModel.cs" />
+    <Compile Include="Models\WxApiClass.cs" />
     <Compile Include="WeChatConstat.cs" />
     <Content Include="Areas\WeChat\Content\danktooltip\css\darktooltip.min.css" />
     <Content Include="Areas\WeChat\Content\danktooltip\js\jquery.darktooltip.min.js" />
@@ -927,6 +928,8 @@
     <Content Include="Views\Pay\MyOrderDetail.cshtml" />
     <Content Include="Views\Jump\To.cshtml" />
     <Content Include="Views\Activity\Tjt.cshtml" />
+    <Content Include="Views\Pay\Error.cshtml" />
+    <Content Include="Views\Pay\PayView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

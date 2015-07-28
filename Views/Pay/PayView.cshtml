@@ -1,0 +1,78 @@
+﻿@model WitBird.XiaoChangHe.Models.Info.PrepayRecord
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>会员支付确认</title>
+    <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+    <script>
+        function pay() {
+            if (confirm("您确认支付该订单吗？")) {
+                $.get("/pay/PayAsure/?id=" + '@ViewBag.Id' + '&value=' + '@ViewBag.Value', function (ret) {
+                    alert(ret);
+                    document.location.reload();
+                });
+            }
+        }
+    </script>
+</head>
+<body>
+    <fieldset>
+        <legend>支付记录</legend>
+   
+        <div class="display-label">
+             会员号：
+        </div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.Uid)
+        </div>
+
+        <div class="display-label">
+             订单号：
+        </div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.SId)
+        </div>
+        <div class="display-label">
+             订单时间：
+        </div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.PrepayDate)
+        </div>
+    
+        <div class="display-label">
+            支付现金：
+        </div>
+        <div class="display-field">
+            ￥@string.Format("{0}",(0-Model.PrepayMoney.Value).ToString("F2"))
+        </div>
+        <div class="display-label">
+            支付赠送：
+        </div>
+        <div class="display-field">
+            ￥@string.Format("{0}",(0-Model.PresentMoney.Value).ToString("F2"))
+        </div>
+        
+        @if(Model.DiscountlMoeny>0){
+        <div class="display-label">
+            本次优惠：
+        </div>
+        <div class="display-field">
+            ￥@string.Format("{0}",Model.DiscountlMoeny.Value.ToString("F2"))
+        </div>
+        }
+    </fieldset>
+    <p>
+        @if(Model.RState=="00"){
+         <a href="javascript:void(0)" onclick="pay();" >确认支付</a>
+        }
+     
+    </p>
+</body>
+</html>

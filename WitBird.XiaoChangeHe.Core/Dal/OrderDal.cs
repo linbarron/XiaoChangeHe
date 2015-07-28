@@ -24,7 +24,7 @@ from orders o
 left join OrderStatus os on os.OrderId = o.Id
 left join PrepayRecord pr on pr.SId = convert(nvarchar(50), o.Id)
 where o.MemberCardNo=@MemberCardNo
-order by o.DiningDate desc;";
+order by o.CreateDate desc;";
 
                 SqlCmd.Parameters.AddWithValue(@"MemberCardNo", memberCardNo);
 
@@ -59,15 +59,6 @@ order by o.DiningDate desc;";
 
                     summary.CreateTime = Convert.ToDateTime(reader["CreateDate"]);
                     summary.Backlog = "无";
-
-                    if (summary.TotalMoney == 0)
-                    {
-                        var details = this.GetOrderDetails(summary.OrderId);
-                        if (details != null && details.Count > 0)
-                        {
-                            summary.TotalMoney = details.Sum(v => v.TotalPrice);
-                        }
-                    }
 
                     list.Add(summary);
                 }
@@ -115,7 +106,7 @@ where o.Id=@OrderId";
                         if (reader["sex"] != DBNull.Value)
                         {
                             int sexValue = Convert.ToInt32(reader["sex"]);
-                            if (sexValue == 1)
+                            if (sexValue == 0)
                             {
                                 summary.ContactName += "先生";
                             }

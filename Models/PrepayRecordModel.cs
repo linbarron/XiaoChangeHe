@@ -50,7 +50,7 @@ namespace WitBird.XiaoChangHe.Models
                                 select top 10 *
                                 from PrepayRecord p
                                 left join BillPay b on b.PayId = p.BillPayId
-                                where p.Uid=@Uid and  p.PrepayMoney<0   and b.PayState = '0x01'--0x01:支付成功 
+                                where p.Uid=@Uid and  p.PrepayMoney<=0 and b.PayState = '0x01'--0x01:支付成功 
                                 order by p.PrepayDate desc";
                 tableAccessor = db.CreateSqlStringAccessor(strSql, ipmapper, MapBuilder<PrepayRecord>.MapAllProperties()
                      .Map(t => t.Uid).ToColumn("Uid")
@@ -188,9 +188,9 @@ namespace WitBird.XiaoChangHe.Models
 
                 result = ExecSql(cmd) > 0;
             }
-            catch
+            catch(Exception ex)
             {
-
+                Logger.Log(ex);
             }
 
             return result;
@@ -235,9 +235,59 @@ namespace WitBird.XiaoChangHe.Models
                     }
                 }
             }
-            catch
+            catch(Exception ex)
             {
-                throw;
+                Logger.Log(ex);
+                return null;
+            }
+
+            return prepayRecord;
+        }
+
+        public PrepayRecord GetPrepayRecordByRecordIdAndSourceAccountId(int recordId, string sourceAccountId)
+        {
+            PrepayRecord prepayRecord = null;
+
+            try
+            {
+                string sql = @"select top 1 * from PrepayRecord pr left join CrmMember c on c.Uid = pr.Uid where RecordId=@RecordId and c.SourceAccountId = @SourceAccountId;";
+                DbCommand cmd = db.GetSqlStringCommand(sql);
+
+                db.AddInParameter(cmd, "RecordId", DbType.Int32, recordId);
+                db.AddInParameter(cmd, "SourceAccountId", DbType.String, sourceAccountId);
+
+                using (var reader = db.ExecuteReader(cmd))
+                {
+                    while (reader.Read())
+                    {
+                        prepayRecord = new PrepayRecord()
+                        {
+                            AddMoney = reader.TryGetValue<Decimal?>("AddMoney"),
+                            AsureDate = reader.TryGetValue<DateTime?>("AsureDate"),
+                            BillPayId = reader.TryGetValue<Guid?>("BillPayId"),
+                            DiscountlMoeny = reader.TryGetValue<Decimal?>("DiscountlMoeny"),
+                            PayByScore = reader.TryGetValue<Int32?>("PayByScore"),
+                            PayModel = reader.TryGetValue<String>("PayModel"),
+                            PrepayDate = reader.TryGetValue<DateTime?>("PrepayDate"),
+                            PrepayMoney = reader.TryGetValue<Decimal?>("PrepayMoney"),
+                            PresentMoney = reader.TryGetValue<Decimal?>("PresentMoney"),
+                            PromotionId = reader.TryGetValue<Int32?>("PromotionId"),
+                            RecMoney = reader.TryGetValue<Decimal?>("RecMoney"),
+                            RecordId = reader.TryGetValue<Int32>("RecordId"),
+                            RState = reader.TryGetValue<String>("RState"),
+                            RstId = reader.TryGetValue<Guid?>("RstId"),
+                            ScoreVip = reader.TryGetValue<Int32?>("ScoreVip"),
+                            SId = reader.TryGetValue<String>("SId"),
+                            Uid = reader.TryGetValue<String>("Uid"),
+                            UserId = reader.TryGetValue<String>("UserId")
+                        };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                return null;
             }
 
             return prepayRecord;

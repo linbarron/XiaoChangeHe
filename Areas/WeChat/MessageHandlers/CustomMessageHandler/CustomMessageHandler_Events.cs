@@ -54,12 +54,29 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                 case "ActivityClick":
                     {
                         var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
+                        string picUrl = Constants.HostDomain + "/NewContent/images/w.png";
+                        string uid = "";
 
+                        try
+                        {
+                            CrmMemberModel model = new CrmMemberModel();
+                            uid = model.getCrmMemberListInfoData(requestMessage.FromUserName).FirstOrDefault().Uid;
+                            var prepayAccount = model.GetPrepayAccount(uid);
+                            if (prepayAccount != null && prepayAccount.AccountMoney > 0)
+                            {
+                                picUrl = Constants.HostDomain + "/NewContent/images/chu.png";
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            LogException(ex);
+                            uid = ex.StackTrace;
+                        }
                         Article article = new Article();
 
                         article.Title = "小场合活动·微观时代";
                         article.Description = "小场合活动·微观时代";
-                        article.PicUrl = "http://test.xgdg.cn/NewContent/images/chu.png";
+                        article.PicUrl = picUrl;
                         article.Url = string.Format(Constants.HostDomain + "/Jump/To?fromUserName={0}&url=/Activity/Index?activityState=1", requestMessage.FromUserName);
 
                         strongResponseMessage.Articles.Add(article);
@@ -100,12 +117,30 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                 case "VipPay":
                     {
                         var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
+                        string picUrl = Constants.HostDomain + "/NewContent/images/w.png";
+                        string uid = "";
+
+                        try
+                        {
+                            CrmMemberModel model = new CrmMemberModel();
+                            uid = model.getCrmMemberListInfoData(requestMessage.FromUserName).FirstOrDefault().Uid;
+                            var prepayAccount = model.GetPrepayAccount(uid);
+                            if (prepayAccount != null && prepayAccount.AccountMoney > 0)
+                            {
+                                picUrl = Constants.HostDomain + "/NewContent/images/chu.png";
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            LogException(ex);
+                            uid = ex.StackTrace;
+                        }
                         strongResponseMessage.Articles.Add(new Article
                         {
-                            Title = "会员充值",
-                            Description = "充值成为储值会员",
-                            PicUrl = ImgUrl + "wxbeginorder.jpg",
-                            Url = string.Format(Constants.HostDomain + "/member/PreRecharge/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}?type=Quick", requestMessage.FromUserName)
+                            Title = "会员支付",
+                            Description = "",
+                            PicUrl = picUrl,
+                            Url = string.Format(Constants.HostDomain + "/pay/payview/?id={0}&value={1}", requestMessage.FromUserName, requestMessage.ToString())
                         });
                         reponseMessage = strongResponseMessage;
                     }
@@ -114,11 +149,30 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                     {
                         //NewOrder/My/CB824E58-E2CA-4C95-827A-CA62D528C6A7/ovYq8vgkV-hK11i_ftjaoRBM_IMM
                         var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
+                        string picUrl = Constants.HostDomain + "/NewContent/images/w.png";
+                        string uid = "";
+
+                        try
+                        {
+                            CrmMemberModel model = new CrmMemberModel();
+                            uid = model.getCrmMemberListInfoData(requestMessage.FromUserName).FirstOrDefault().Uid;
+                            var prepayAccount = model.GetPrepayAccount(uid);
+                            if (prepayAccount != null && prepayAccount.AccountMoney > 0)
+                            {
+                                picUrl = Constants.HostDomain + "/NewContent/images/chu.png";
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            LogException(ex);
+                            uid = ex.StackTrace;
+                        }
+
                         strongResponseMessage.Articles.Add(new Article
                         {
                             Title = "我的订单",
                             Description = "我的订单：",
-                            PicUrl = ImgUrl + "wxmembercard_h.png",
+                            PicUrl = picUrl,
                             Url = string.Format(Constants.HostDomain + "/NewOrder/My/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}", requestMessage.FromUserName)
                         });
                         reponseMessage = strongResponseMessage;

@@ -137,8 +137,8 @@ namespace WitBird.XiaoChangHe.Controllers
                 {
                     order.SourceAccountId = Session["SourceAccountId"] as string;
                 }
-                var currentUser = cdb1.getCrmMemberListInfoData(order.SourceAccountId).FirstOrDefault();
-                decimal dec = cdb1.GetPrepayAccount(currentUser.Uid).AccountMoney;
+                //var currentUser = cdb1.getCrmMemberListInfoData(order.SourceAccountId).FirstOrDefault();
+                //decimal dec = cdb1.GetPrepayAccount(currentUser.Uid).AccountMoney;
                 if (!SubmitOrderDBModel.UpdateOrderInfo(order))
                 {
                     msg = "提交订单失败！";

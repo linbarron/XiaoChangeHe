@@ -44,7 +44,7 @@ namespace WitBird.XiaoChangeHe.Core
 
             OrderDal orderDal = new OrderDal();
             summary = orderDal.GetOrderSummary(orderId);
-            
+
             return summary;
         }
 
@@ -75,10 +75,7 @@ namespace WitBird.XiaoChangeHe.Core
                 if (details != null)
                 {
                     var productIds = details.Select(v => v.ProductId).ToList();
-
                     var products = orderDal.GetProducts(productIds);
-
-                    decimal orderTotallMoney = 0;
 
                     if (products != null && products.Count > 0)
                     {
@@ -94,7 +91,6 @@ namespace WitBird.XiaoChangeHe.Core
                                 product.ProductId = subDetail.ProductId;
                                 product.UnitPrice = subDetail.UnitPrice;
                                 product.Count = subDetail.ProductCount;
-                                orderTotallMoney += subDetail.TotalPrice;//计算订单总金额
 
                                 product.ProductName = productDetail.ProductName;
                                 productDetail.Image = productDetail.Image;
@@ -102,11 +98,6 @@ namespace WitBird.XiaoChangeHe.Core
                                 detail.ProductList.Add(product);
                             }
                         }
-                    }
-
-                    if (detail.TotalMoney == 0)
-                    {
-                        detail.TotalMoney = orderTotallMoney;
                     }
                 }
             }

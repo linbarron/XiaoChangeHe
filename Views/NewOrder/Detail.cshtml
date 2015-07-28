@@ -90,7 +90,7 @@
                     <div class="content-img"><img src="/order/GetImages/@product.ProductId" width="100%" height="80"></div>
                     <div class="content-content">
                         <span class="s_z">@product.ProductName</span><br />
-                        <span class="x_z">@product.UnitPrice.ToString("0.00")<span style="font-size:14px"> 元</span></span>
+                        <span class="x_z">@*@product.UnitPrice.ToString("0.00")*@<span style="font-size:14px"> @*元*@</span></span>
                         <span class="x_y">@string.Format("x{0}", product.Count)</span>
                     </div>
                 </div>
