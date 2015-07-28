@@ -19,9 +19,10 @@ namespace WitBird.XiaoChangeHe.Core.Dal
                 SqlCmd.Connection = SqlConn;
                 SqlCmd.CommandText = @"
 select o.Id AS OrderId,o.ContactName,o.ContactPhone,o.DiningDate,o.DiningDate,o.CreateDate,
-o.Status,o.RstId AS RestaurantId,o.PersonCount, os.OrderStatus, os.LastUpdateTime
+o.Status,o.RstId AS RestaurantId,o.PersonCount, os.OrderStatus, os.LastUpdateTime, pr.PrepayMoney as TotalMoney
 from orders o
 left join OrderStatus os on os.OrderId = o.Id
+left join PrepayRecord pr on pr.SId = convert(nvarchar(50), o.Id)
 where o.MemberCardNo=@MemberCardNo
 order by o.DiningDate desc;";
 
@@ -50,15 +51,22 @@ order by o.DiningDate desc;";
                     {
                         summary.DiningDate = Convert.ToDateTime(reader["DiningDate"]);
                     }
+                    if (reader["TotalMoney"] != DBNull.Value)
+                    {
+                        summary.TotalMoney = Math.Abs(Convert.ToDecimal(reader["TotalMoney"]));
+                    }
                     summary.RestaurantId = Guid.Parse(reader["RestaurantId"].ToString());
 
                     summary.CreateTime = Convert.ToDateTime(reader["CreateDate"]);
                     summary.Backlog = "无";
 
-                    var details = this.GetOrderDetails(summary.OrderId);
-                    if (details != null && details.Count > 0)
+                    if (summary.TotalMoney == 0)
                     {
-                        summary.TotalMoney = details.Sum(v => v.TotalPrice);
+                        var details = this.GetOrderDetails(summary.OrderId);
+                        if (details != null && details.Count > 0)
+                        {
+                            summary.TotalMoney = details.Sum(v => v.TotalPrice);
+                        }
                     }
 
                     list.Add(summary);
