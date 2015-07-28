@@ -135,7 +135,7 @@ where o.Id=@OrderId";
 
                         if (reader["TotalMoney"] != DBNull.Value)
                         {
-                            summary.TotalMoney = Convert.ToInt32(reader["TotalMoney"]);
+                            summary.TotalMoney = Math.Abs(Convert.ToInt32(reader["TotalMoney"]));
                         }
                         summary.CreateTime = Convert.ToDateTime(reader["CreateDate"]);
                         summary.Backlog = "无";
