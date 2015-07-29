@@ -29,9 +29,10 @@ namespace WitBird.XiaoChangHe.Models.SubmitOrder
                     result = rowsAffected > 0;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 //TODO
+                Logger.Log(ex);
             }
             return result;
         }

@@ -293,6 +293,61 @@ namespace WitBird.XiaoChangHe.Models
             return prepayRecord;
         }
 
+        public PrepayRecord GetUserLastUnPaidComsumingPrepayRecordWithin5Minutes(string sourceAccountId)
+        {
+            PrepayRecord prepayRecord = null;
+
+            try
+            {
+                string sql = @"select top 1 * from PrepayRecord pr 
+                                left join CrmMember c on c.Uid = pr.Uid 
+                                left join BillPay bp on bp.PayId = pr.BillPayId
+                                where c.SourceAccountId = @SourceAccountId
+                                and pr.PrepayDate > dateadd (MINUTE,-5,GETDATE())
+                                and pr.PrepayMoney <= 0
+                                and (bp.PayState = '0x02' or bp.PayState is null)
+                                order by RecordId desc";
+                DbCommand cmd = db.GetSqlStringCommand(sql);
+
+                db.AddInParameter(cmd, "SourceAccountId", DbType.String, sourceAccountId);
+
+                using (var reader = db.ExecuteReader(cmd))
+                {
+                    while (reader.Read())
+                    {
+                        prepayRecord = new PrepayRecord()
+                        {
+                            AddMoney = reader.TryGetValue<Decimal?>("AddMoney"),
+                            AsureDate = reader.TryGetValue<DateTime?>("AsureDate"),
+                            BillPayId = reader.TryGetValue<Guid?>("BillPayId"),
+                            DiscountlMoeny = reader.TryGetValue<Decimal?>("DiscountlMoeny"),
+                            PayByScore = reader.TryGetValue<Int32?>("PayByScore"),
+                            PayModel = reader.TryGetValue<String>("PayModel"),
+                            PrepayDate = reader.TryGetValue<DateTime?>("PrepayDate"),
+                            PrepayMoney = reader.TryGetValue<Decimal?>("PrepayMoney"),
+                            PresentMoney = reader.TryGetValue<Decimal?>("PresentMoney"),
+                            PromotionId = reader.TryGetValue<Int32?>("PromotionId"),
+                            RecMoney = reader.TryGetValue<Decimal?>("RecMoney"),
+                            RecordId = reader.TryGetValue<Int32>("RecordId"),
+                            RState = reader.TryGetValue<String>("RState"),
+                            RstId = reader.TryGetValue<Guid?>("RstId"),
+                            ScoreVip = reader.TryGetValue<Int32?>("ScoreVip"),
+                            SId = reader.TryGetValue<String>("SId"),
+                            Uid = reader.TryGetValue<String>("Uid"),
+                            UserId = reader.TryGetValue<String>("UserId")
+                        };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                return null;
+            }
+
+            return prepayRecord;
+        }
+
         public PrepayRecord GetPrepayRecordByOrderId(string orderId)
         {
             PrepayRecord prepayRecord = null;

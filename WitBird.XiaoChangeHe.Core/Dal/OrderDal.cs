@@ -55,6 +55,14 @@ order by o.CreateDate desc;";
                     {
                         summary.TotalMoney = Math.Abs(Convert.ToDecimal(reader["TotalMoney"]));
                     }
+                    else
+                    {
+                        var details = this.GetOrderDetails(summary.OrderId);
+                        if (details != null && details.Count > 0)
+                        {
+                            summary.TotalMoney = details.Sum(v => v.TotalPrice);
+                        }
+                    }
                     summary.RestaurantId = Guid.Parse(reader["RestaurantId"].ToString());
 
                     summary.CreateTime = Convert.ToDateTime(reader["CreateDate"]);
@@ -134,7 +142,15 @@ where o.Id=@OrderId";
 
                         if (reader["TotalMoney"] != DBNull.Value)
                         {
-                            summary.TotalMoney = Math.Abs(Convert.ToInt32(reader["TotalMoney"]));
+                            summary.TotalMoney = Math.Abs(Convert.ToDecimal(reader["TotalMoney"]));
+                        }
+                        else
+                        {
+                            var details = this.GetOrderDetails(summary.OrderId);
+                            if (details != null && details.Count > 0)
+                            {
+                                summary.TotalMoney = details.Sum(v => v.TotalPrice);
+                            }
                         }
                         summary.CreateTime = Convert.ToDateTime(reader["CreateDate"]);
                         summary.Backlog = "无";
@@ -154,9 +170,10 @@ where o.Id=@OrderId";
                 var SqlCmd = new SqlCommand();
                 SqlCmd.Connection = SqlConn;
                 SqlCmd.CommandText = @"
-select ProductId, ProductCount,UnitPrice,TotalPrice
-from OrderDetails
-where OrderId=@OrderId";
+select o.ProductId, o.ProductCount, o.UnitPrice, o.TotalPrice, pr.PrepayMoney as TotalMoney
+from OrderDetails o
+left join PrepayRecord pr on pr.SId = convert(nvarchar(50), o.OrderId)
+where o.OrderId=@OrderId";
 
                 SqlCmd.Parameters.AddWithValue(@"OrderId", orderId);
 
@@ -168,7 +185,15 @@ where OrderId=@OrderId";
                     detail.ProductId = Guid.Parse(reader["ProductId"].ToString());
                     detail.UnitPrice = Convert.ToDecimal(reader["UnitPrice"]);
                     detail.ProductCount = Convert.ToInt32(reader["ProductCount"]);
-                    detail.TotalPrice = Convert.ToDecimal(reader["TotalPrice"]);
+
+                    if (reader["TotalMoney"] != DBNull.Value)
+                    {
+                        detail.TotalPrice = Math.Abs(Convert.ToDecimal(reader["TotalMoney"]));
+                    }
+                    else
+                    {
+                        detail.TotalPrice = Convert.ToDecimal(reader["TotalPrice"]);
+                    }
 
                     details.Add(detail);
                 }

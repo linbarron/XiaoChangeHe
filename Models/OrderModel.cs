@@ -473,7 +473,7 @@ and r.RstType='01';";
                 DataAccessor<Order> tableAccessor;
                 string strSql = @"select b.ContactName, b.ContactPhone,b.CreateDate,
 b.DiningDate,b.MemberCardNo,b.Id,b.OperatorId,b.OperatorName,b.PersonCount,b.PrepayPrice,b.Remark,b.ReserveType,
-b.Status, os.OrderStatus, b.TableCount, c.sex ,b.RstId from Orders b left join OrderStatus os on os.OrderId = b.Id, crmmember c where b.id=@OrderId and b.Status=0 
+b.Status, os.OrderStatus, b.TableCount, c.sex ,b.RstId, '01' as RstType from Orders b left join OrderStatus os on os.OrderId = b.Id, crmmember c where b.id=@OrderId and b.Status=0 
 and  dateAdd(hh,5,b.DiningDate)>=getdate() and b.MemberCardNo=c.Uid";
                 tableAccessor = db.CreateSqlStringAccessor(strSql, ipmapper, MapBuilder<Order>.MapAllProperties()
                      .Map(t => t.Id).ToColumn("Id")
@@ -492,6 +492,7 @@ and  dateAdd(hh,5,b.DiningDate)>=getdate() and b.MemberCardNo=c.Uid";
                      .Map(t => t.TableCount).ToColumn("TableCount")
                      .Map(t => t.Sex).ToColumn("Sex")
                      .Map(t => t.RstId).ToColumn("RstId")
+                     .Map(t => t.RstType).ToColumn("RstType")
                                    .Build());
                 list = tableAccessor.Execute(new string[] { orderId.ToString() }).ToList();
                 return list;
@@ -499,6 +500,7 @@ and  dateAdd(hh,5,b.DiningDate)>=getdate() and b.MemberCardNo=c.Uid";
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 return null;
             }
         }

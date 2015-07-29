@@ -95,34 +95,43 @@ namespace WitBird.XiaoChangHe.Controllers
         {
             ActionResult result = null;
 
-            var userManager = new UserManager();
-            var orderManager = new OrderManager();
-
-            string uid = "";
-            Guid companyGuid = Guid.Empty;
-            if (Guid.TryParse(id, out companyGuid))
+            try
             {
-                uid = userManager.GetUid(companyGuid, name);
-                if (!string.IsNullOrEmpty(uid))
-                {
-                    var list = orderManager.GetUserOrders(uid);
 
-                    result = View(list);
+                var userManager = new UserManager();
+                var orderManager = new OrderManager();
+
+                string uid = "";
+                Guid companyGuid = Guid.Empty;
+                if (Guid.TryParse(id, out companyGuid))
+                {
+                    uid = userManager.GetUid(companyGuid, name);
+                    if (!string.IsNullOrEmpty(uid))
+                    {
+                        var list = orderManager.GetUserOrders(uid);
+
+                        result = View(list);
+                    }
+                    else
+                    {
+                        result = Redirect("/");
+                    }
                 }
                 else
                 {
                     result = Redirect("/");
                 }
+
+                ViewBag.CompanyId = id;
+                ViewBag.SourceAccountId = name;
+                ViewBag.Uid = uid;
+
             }
-            else
+            catch (Exception ex)
             {
+                Logger.Log(ex);
                 result = Redirect("/");
             }
-
-            ViewBag.CompanyId = id;
-            ViewBag.SourceAccountId = name;
-            ViewBag.Uid = uid;
-
             return result;
         }
 

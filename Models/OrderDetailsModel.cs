@@ -208,8 +208,9 @@ select od.CreateDate,
                 db.AddInParameter(cmd, "CreateDate", DbType.DateTime, info.CreateDate);
                 return ExecSql(cmd);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Logger.Log(ex);
             }
             return 0;
         }
@@ -231,13 +232,22 @@ select od.CreateDate,
 
 
         #region DelOrderDetails
-        public int DelOrderDetails(string productId, string orderId) {
-            string sql = "delete from OrderDetails WHERE ProductId=@ProductId and OrderId=@OrderId";
-            DbCommand cmd = db.GetSqlStringCommand(sql);
-            db.AddInParameter(cmd, "OrderId", DbType.String, orderId);
-            db.AddInParameter(cmd, "ProductId", DbType.String, productId);
-            
-            return ExecSql(cmd);
+        public int DelOrderDetails(string productId, string orderId) 
+        {
+            try
+            {
+                string sql = "delete from OrderDetails WHERE ProductId=@ProductId and OrderId=@OrderId";
+                DbCommand cmd = db.GetSqlStringCommand(sql);
+                db.AddInParameter(cmd, "OrderId", DbType.String, orderId);
+                db.AddInParameter(cmd, "ProductId", DbType.String, productId);
+
+                return ExecSql(cmd);
+            }
+            catch(Exception ex)
+            {
+                Logger.Log(ex);
+                return 0;
+            }
             
         }
         #endregion DelOrderDetails

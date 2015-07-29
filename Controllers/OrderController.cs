@@ -435,7 +435,7 @@ namespace WitBird.XiaoChangHe.Controllers
                     return info.Id;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Log(ex);
                 return new Guid("00000000-0000-0000-0000-000000000000");
@@ -513,9 +513,17 @@ namespace WitBird.XiaoChangHe.Controllers
 
         public int DelOrderDetails(string productId, string orderId)
         {
+            try
+            {
 
-            OrderDetailsModel odm = new OrderDetailsModel();
-            return odm.DelOrderDetails(productId, orderId);
+                OrderDetailsModel odm = new OrderDetailsModel();
+                return odm.DelOrderDetails(productId, orderId);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                return 0;
+            }
         }
 
 

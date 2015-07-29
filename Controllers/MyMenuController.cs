@@ -141,12 +141,12 @@ namespace WitBird.XiaoChangHe.Controllers
                 //decimal dec = cdb1.GetPrepayAccount(currentUser.Uid).AccountMoney;
                 if (!SubmitOrderDBModel.UpdateOrderInfo(order))
                 {
-                    msg = "提交订单失败！";
+                    msg = "提交订单失败，请检查网络连接。如频繁不能提交，请联系客服";
                 }
             }
             catch (Exception ex)
             {
-                msg = "提交订单失败";
+                msg = "提交订单失败，请检查网络连接。如频繁不能提交，请联系客服";
                 Logger.Log(LoggingLevel.Normal, ex);
             }
             return Json(msg);

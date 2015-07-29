@@ -13,6 +13,7 @@ using System.Xml.Linq;
 using WitBird.XiaoChangeHe.Core;
 using WitBird.XiaoChangHe.Models;
 using WitBird.XiaoChangHe.Models.Info;
+using WitBird.XiaoChangHe.Models.Specials;
 
 namespace WitBird.XiaoChangHe.Controllers
 {
@@ -427,18 +428,33 @@ namespace WitBird.XiaoChangHe.Controllers
                 string RestaurantId = Session["begindm"] != null ? Session["begindm"].ToString() : "";
                 ViewBag.RestaurantId = RestaurantId;
 
+                var order = new OrderModel().selOrderByOrderId(Guid.Parse(OrderId)).FirstOrDefault();
                 List<MyOrderDetail> detail = odb.getMyOrderDetailListData(MemberCardNo, OrderId, RstType);
                 // ViewBag.MyOrderDetail = detail;
 
-                decimal sum = 0;
-                if (detail.Count > 0)
+                decimal totalPrice = 0;
+                decimal totalVipPrice = 0;
+                if (order != null && detail.Count > 0)
                 {
+                    var allTodaySpecials = SpecialsModel.GetTodayByRestaurantId(order.RstId);
+
                     for (int i = 0; i < detail.Count; i++)
                     {
-                        sum += detail[i].MemberPrice * detail[i].ProductCount;
+                        if (allTodaySpecials.Any(x => x.ProductId == detail[i].proId))
+                        {
+                            var special = allTodaySpecials.Where(x => x.ProductId == detail[i].proId).First();
+                            totalPrice += special.SpecPrice.Value * detail[i].ProductCount;
+                            totalVipPrice += special.SpecPrice.Value * detail[i].ProductCount;
+                        }
+                        else
+                        {
+                            totalPrice += detail[i].UnitPrice * detail[i].ProductCount;
+                            totalVipPrice += detail[i].MemberPrice * detail[i].ProductCount;
+                        }
                     }
                 }
-                ViewBag.MemberPriceTotal = sum;
+                ViewBag.TotalPrice = totalPrice;
+                ViewBag.MemberPriceTotal = totalVipPrice;
                 //获取该店面的就餐时间
                 ViewBag.Explain = "";
                 ReceiveOrderModel m = new ReceiveOrderModel();
@@ -486,18 +502,30 @@ namespace WitBird.XiaoChangHe.Controllers
                 Models.Info.PrepayRecord prepayRecord = null;
                 Models.Info.BillPay billPay = null;
                 Models.Info.PrepayAccount prepayAccount = null;
+                Models.Info.Order order = null;
 
                 orderDetails = odb.getMyOrderDetailListData(uid, orderId, RstType);
+                order = orderModel.selOrderByOrderId(Guid.Parse(orderId)).FirstOrDefault();
 
                 if (orderDetails != null && orderDetails.Count > 0)
                 {
+                    var allTodaySpecials = SpecialsModel.GetTodayByRestaurantId(order.RstId);
                     decimal totalPrice = 0;
                     decimal totalVipPrice = 0;
 
                     for (int i = 0; i < orderDetails.Count; i++)
                     {
-                        totalPrice += orderDetails[i].UnitPrice * orderDetails[i].ProductCount;
-                        totalVipPrice += orderDetails[i].MemberPrice * orderDetails[i].ProductCount;
+                        if (allTodaySpecials.Any(x => x.ProductId == orderDetails[i].proId))
+                        {
+                            var special = allTodaySpecials.Where(x => x.ProductId == orderDetails[i].proId).First();
+                            totalPrice += special.SpecPrice.Value * orderDetails[i].ProductCount;
+                            totalVipPrice += special.SpecPrice.Value * orderDetails[i].ProductCount;
+                        }
+                        else
+                        {
+                            totalPrice += orderDetails[i].UnitPrice * orderDetails[i].ProductCount;
+                            totalVipPrice += orderDetails[i].MemberPrice * orderDetails[i].ProductCount;
+                        }
                     }
 
                     prepayAccount = crmMemberModel.GetPrepayAccount(uid);
@@ -861,7 +889,7 @@ namespace WitBird.XiaoChangHe.Controllers
 
         public ActionResult PayView(string id, string value)
         {
-            string[] arrrec = value.Split(',');
+            string[] arrrec = value.Split('|');
             if (arrrec.Length < 2)
             {
                 ViewBag.Content = "非法链接！";

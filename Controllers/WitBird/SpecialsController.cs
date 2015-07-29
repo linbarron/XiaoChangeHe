@@ -59,9 +59,10 @@ namespace WitBird.XiaoChangHe.Controllers.WitBird
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 //TODO
+                Logger.Log(ex);
             }
             ViewBag.Status = Status;
             return PartialView(model);

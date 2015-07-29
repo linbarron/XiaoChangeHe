@@ -11,6 +11,7 @@ using Senparc.Weixin.MP.MessageHandlers;
 using WitBird.XiaoChangHe.Areas.WeChat.Utilities;
 using WitBird.XiaoChangHe.Models;
 using WitBird.XiaoChangeHe.Core;
+using WitBird.XiaoChangHe.Models.Info;
 
 namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
 {
@@ -116,7 +117,6 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                     break;
                 case "VipPay":
                     {
-                        var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
                         string picUrl = Constants.HostDomain + "/NewContent/images/w.png";
                         string uid = "";
 
@@ -133,16 +133,43 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                         catch (Exception ex)
                         {
                             LogException(ex);
-                            uid = ex.StackTrace;
                         }
-                        strongResponseMessage.Articles.Add(new Article
+                        var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
+
+                        DateTime dt = DateTime.Now.AddMinutes(-5);
+                        PrepayRecord rec = new PrepayRecordModel().GetUserLastUnPaidComsumingPrepayRecordWithin5Minutes(requestMessage.FromUserName);
+                        string description = string.Empty;
+                        string title = string.Empty;
+                        string url = "";
+
+                        if (rec != null)
                         {
-                            Title = "会员支付",
-                            Description = "",
-                            PicUrl = picUrl,
-                            Url = string.Format(Constants.HostDomain + "/pay/payview/?id={0}&value={1}", requestMessage.FromUserName, requestMessage.ToString())
-                        });
-                        reponseMessage = strongResponseMessage;
+                            title = "账单" + rec.SId + "支付确认";
+                            description = "您本次的消费:现金￥" + (0 - rec.PrepayMoney.Value).ToString() +
+                                 "/赠送￥" + (0 - rec.PresentMoney.Value).ToString() +
+                                 (rec.PayByScore > 0 ? "/积分" + rec.PayByScore.ToString() : "") +
+                                 (rec.DiscountlMoeny > 0 ? ",本次优惠：" + rec.DiscountlMoeny.ToString() : "") +
+                                  ",账单时间：" + rec.PrepayDate.Value.ToString("yyyy-MM-dd HH:mm:ss") + "，点击本条消息，完成支付！";
+                            url = string.Format(Constants.HostDomain + "/pay/payview/{0}/{1}", requestMessage.FromUserName, rec.RecordId + "|" + DateTime.Now.Ticks);
+
+                            strongResponseMessage.Articles.Add(new Article
+                            {
+                                Title = title,
+                                Description = description,
+                                PicUrl = "",
+                                Url = url
+                            });
+                            reponseMessage = strongResponseMessage;
+                        }
+                        else
+                        {
+                            description = "未查询到未结账单，可能原因为：\n1.您没有未结账单。\n2.您的账单还未生成。\n3.为保护您账号安全，您的生成的账单已经超期！";
+                            
+                            var result = CreateResponseMessage<ResponseMessageText>();
+                            result.Content = description;
+
+                            reponseMessage = result;
+                        }
                     }
                     break;
                 case "MyOrder"://我的订单
@@ -280,6 +307,28 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
             var responseMessage = base.CreateResponseMessage<ResponseMessageText>();
             responseMessage.Content = "事件之弹出地理位置选择器";
             return responseMessage;
+        }
+
+        private string getSingMessage(string from, string to, string value, string desciption, string url, string imgUrl)
+        {
+            string stt = "<xml>" +
+                "<ToUserName><![CDATA[{0}]]></ToUserName>" +
+                "<FromUserName><![CDATA[{1}]]></FromUserName>" +
+                "<CreateTime>12345678</CreateTime>" +
+                "<MsgType><![CDATA[news]]></MsgType>" +
+                "<ArticleCount>1</ArticleCount>" +
+                "<Articles>" +
+                "<item>" +
+                "<Title><![CDATA[{2}]]></Title> " +
+                "<Description><![CDATA[{3}]]></Description>" +
+                "<PicUrl><![CDATA[{5}]]></PicUrl>" +
+                "<Url><![CDATA[{4}]]></Url>" +
+                "</item>" +
+                "</Articles>" +
+                "</xml> ";
+            string a = string.Format(stt, from, to, value, desciption, url, imgUrl);
+            //this.WriteTextLog("retimg", a, DateTime.Now);
+            return a;
         }
     }
 }
