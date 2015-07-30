@@ -196,6 +196,66 @@ namespace WitBird.XiaoChangHe.Models
             return result;
         }
 
+        public bool UpdatePrepayRecord(PrepayRecord prepayRecord)
+        {
+            bool result = false;
+
+            try
+            {
+                DbCommand cmd = null;
+                string sql = @"
+                                UPDATE [dbo].[PrepayRecord]
+                                SET [Uid] = @Uid
+                                    ,[PrepayMoney] = @PrepayMoney
+                                    ,[PresentMoney] = @PresentMoney
+                                    ,[AddMoney] = @AddMoney
+                                    ,[PrepayDate] = @PrepayDate
+                                    ,[PromotionId] = @PromotionId
+                                    ,[PayModel] = @PayModel
+                                    ,[UserId] = @UserId
+                                    ,[SId] = @SId
+                                    ,[BillPayId] = @BillPayId 
+                                    ,[RstId] = @RstId
+                                    ,[ScoreVip] = @ScoreVip
+                                    ,[PayByScore] = @PayByScore
+                                    ,[RState] = @RState
+                                    ,[AsureDate] = @AsureDate
+                                    ,[RecMoney] = @RecMoney
+                                    ,[DiscountlMoeny] = @DiscountlMoeny
+                                WHERE RecordId = @RecordId
+                ";
+
+                cmd = db.GetSqlStringCommand(sql);
+
+                db.AddInParameter(cmd, "Uid", DbType.String, prepayRecord.Uid);
+                db.AddInParameter(cmd, "PrepayMoney", DbType.Decimal, prepayRecord.PrepayMoney);
+                db.AddInParameter(cmd, "PresentMoney", DbType.Decimal, prepayRecord.PresentMoney);
+                db.AddInParameter(cmd, "AddMoney", DbType.Decimal, prepayRecord.AddMoney);
+                db.AddInParameter(cmd, "PrepayDate", DbType.DateTime, prepayRecord.PrepayDate);
+                db.AddInParameter(cmd, "PromotionId", DbType.Int32, prepayRecord.PromotionId);
+                db.AddInParameter(cmd, "PayModel", DbType.String, prepayRecord.PayModel);
+                db.AddInParameter(cmd, "UserId", DbType.String, prepayRecord.UserId);
+                db.AddInParameter(cmd, "SId", DbType.String, prepayRecord.SId);
+                db.AddInParameter(cmd, "BillPayId", DbType.Guid, prepayRecord.BillPayId);
+                db.AddInParameter(cmd, "RstId", DbType.Guid, prepayRecord.RstId);
+                db.AddInParameter(cmd, "ScoreVip", DbType.Int32, prepayRecord.ScoreVip);
+                db.AddInParameter(cmd, "PayByScore", DbType.Int32, prepayRecord.PayByScore);
+                db.AddInParameter(cmd, "RState", DbType.String, prepayRecord.RState);
+                db.AddInParameter(cmd, "AsureDate", DbType.DateTime, prepayRecord.AsureDate);
+                db.AddInParameter(cmd, "RecMoney", DbType.Decimal, prepayRecord.RecMoney);
+                db.AddInParameter(cmd, "DiscountlMoeny", DbType.Decimal, prepayRecord.DiscountlMoeny);
+                db.AddInParameter(cmd, "RecordId", DbType.Int32, prepayRecord.RecordId);
+
+                result = ExecSql(cmd) > 0;
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+            }
+
+            return result;
+        }
+
         public PrepayRecord GetPrepayRecordByBillPayId(Guid billPayId)
         {
             PrepayRecord prepayRecord = null;

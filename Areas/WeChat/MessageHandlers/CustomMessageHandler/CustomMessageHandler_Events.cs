@@ -144,19 +144,19 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
 
                         if (rec != null)
                         {
-                            title = "账单" + rec.SId + "支付确认";
+                            title = "支付确认";
                             description = "您本次的消费:现金￥" + (0 - rec.PrepayMoney.Value).ToString() +
                                  "/赠送￥" + (0 - rec.PresentMoney.Value).ToString() +
                                  (rec.PayByScore > 0 ? "/积分" + rec.PayByScore.ToString() : "") +
                                  (rec.DiscountlMoeny > 0 ? ",本次优惠：" + rec.DiscountlMoeny.ToString() : "") +
                                   ",账单时间：" + rec.PrepayDate.Value.ToString("yyyy-MM-dd HH:mm:ss") + "，点击本条消息，完成支付！";
-                            url = string.Format(Constants.HostDomain + "/pay/payview/{0}/{1}", requestMessage.FromUserName, rec.RecordId + "|" + DateTime.Now.Ticks);
+                            url = string.Format(Constants.HostDomain + "/pay/payview/?id={0}&value={1}", requestMessage.FromUserName, rec.RecordId + "|" + DateTime.Now.Ticks);
 
                             strongResponseMessage.Articles.Add(new Article
                             {
                                 Title = title,
                                 Description = description,
-                                PicUrl = "",
+                                PicUrl = picUrl,
                                 Url = url
                             });
                             reponseMessage = strongResponseMessage;

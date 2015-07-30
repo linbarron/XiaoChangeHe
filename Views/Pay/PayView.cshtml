@@ -1,4 +1,5 @@
 ﻿@model WitBird.XiaoChangHe.Models.Info.PrepayRecord
+@using WitBird.XiaoChangHe.Models
 
 @{
     Layout = null;
@@ -10,69 +11,82 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>会员支付确认</title>
-    <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+    <script src="~/NewContent/js/jquery-1.9.1.js"></script>
     <script>
-        function pay() {
-            if (confirm("您确认支付该订单吗？")) {
-                $.get("/pay/PayAsure/?id=" + '@ViewBag.Id' + '&value=' + '@ViewBag.Value', function (ret) {
+    function pay() {
+        if (confirm("您确认支付该订单吗？")) {
+            $.get("/pay/PayAsure/?id=" + '@ViewBag.Id&recid=@ViewBag.RecId&datetimeticks=@ViewBag.DateTimeTicks', function (ret) {
+
+                if (ret == "success") {
+                    alert("订单支付成功");
+                    window.location = "/NewOrder/Detail/@Constants.CompanyId/@ViewBag.Id?orderId=@ViewBag.OrderId";
+                }
+                else {
                     alert(ret);
                     document.location.reload();
-                });
-            }
+                }
+            });
         }
+    }
     </script>
 </head>
 <body>
     <fieldset>
         <legend>支付记录</legend>
-   
+
         <div class="display-label">
-             会员号：
+            会员号：
         </div>
         <div class="display-field">
             @Html.DisplayFor(model => model.Uid)
         </div>
 
         <div class="display-label">
-             订单号：
+            订单号：
         </div>
         <div class="display-field">
             @Html.DisplayFor(model => model.SId)
         </div>
         <div class="display-label">
-             订单时间：
+            订单时间：
         </div>
         <div class="display-field">
             @Html.DisplayFor(model => model.PrepayDate)
         </div>
-    
+
         <div class="display-label">
             支付现金：
         </div>
         <div class="display-field">
-            ￥@string.Format("{0}",(0-Model.PrepayMoney.Value).ToString("F2"))
+            ￥@string.Format("{0}", (0 - Model.PrepayMoney.Value).ToString("F2"))
         </div>
         <div class="display-label">
             支付赠送：
         </div>
         <div class="display-field">
-            ￥@string.Format("{0}",(0-Model.PresentMoney.Value).ToString("F2"))
+            ￥@string.Format("{0}", (0 - Model.PresentMoney.Value).ToString("F2"))
         </div>
-        
-        @if(Model.DiscountlMoeny>0){
-        <div class="display-label">
-            本次优惠：
-        </div>
-        <div class="display-field">
-            ￥@string.Format("{0}",Model.DiscountlMoeny.Value.ToString("F2"))
-        </div>
+
+        @if (Model.DiscountlMoeny > 0)
+        {
+            <div class="display-label">
+                本次优惠：
+            </div>
+            <div class="display-field">
+                ￥@string.Format("{0}", Model.DiscountlMoeny.Value.ToString("F2"))
+            </div>
         }
     </fieldset>
     <p>
-        @if(Model.RState=="00"){
-         <a href="javascript:void(0)" onclick="pay();" >确认支付</a>
+        @if (ViewBag.PayState == "0x02")
+        {
+            <a href="javascript:void(0)" onclick="pay();">确认支付</a>
         }
-     
+        else
+        {
+            <span>该订单已支付</span>
+        }
+
     </p>
 </body>
 </html>
