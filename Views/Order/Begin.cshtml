@@ -94,9 +94,9 @@
             if ('@(ViewBag.AutoOrderCount)' != null && '@(ViewBag.AutoOrderCount)' == 0) {
                 window.location.href = "/AutoMenuIndex/AutoMenuIndex/" + Id + "/@(ViewBag.SourceAccountId)?Status=1&Type=Auto&CompanyId=@(ViewBag.CompanyId)&RstType=" + RstType + "&IsOrder=@(ViewBag.AutoOrderCount)";
             } else if ('@(ViewBag.AutoOrderCount)' != null && '@(ViewBag.AutoOrderCount)' == 1) {
-                str = "<p style=\"float: left;  margin-top: -20px; margin-left: 10px;  color: red;margin-bottom: 0px;\">您已有未消费的订单</p>" +
-                    "<a href=\"/AutoMenuIndex/AutoMenuIndex/" + Id + "/@(ViewBag.SourceAccountId)?Status=1&Type=Auto&CompanyId=@(ViewBag.CompanyId)&RstType=" + RstType + "&IsOrder=@(ViewBag.AutoOrderCount)&IsNewOrder=NewOrder&orderId=@(ViewBag.OrderId)&MemberCardNo=@(ViewBag.MemberCardNo)\"  class=\"but\">新预定</a> " +
-                        "<a href=\"/pay/prepareorder/?Orderid=@(ViewBag.OrderId)&SourceAccountId=@(ViewBag.SourceAccountId)&MemberCardNo=@(ViewBag.MemberCardNo)&RstType=FastFood\"  class=\"but\">查看订单</a> ";
+                str = "<p>您已有未消费的订单</p>" +
+                    "<a href=\"/AutoMenuIndex/AutoMenuIndex/" + Id + "/@(ViewBag.SourceAccountId)?Status=1&Type=Auto&CompanyId=@(ViewBag.CompanyId)&RstType=" + RstType + "&IsOrder=@(ViewBag.AutoOrderCount)&IsNewOrder=NewOrder&orderId=@(ViewBag.OrderId)&MemberCardNo=@(ViewBag.MemberCardNo)\"  class=\"but yuding\">新预定</a> " +
+                        "<a href=\"/pay/prepareorder/?Orderid=@(ViewBag.OrderId)&SourceAccountId=@(ViewBag.SourceAccountId)&MemberCardNo=@(ViewBag.MemberCardNo)&RstType=FastFood\"  class=\"but chakan\">查看订单</a> ";
                 var unit = "%";
                 sAlert(str, 80, 20, unit);
             }
@@ -107,9 +107,9 @@
             if ('@(ViewBag.AutoOrderCount)' != null && '@(ViewBag.AutoOrderCount)' == 0) {
                 window.location.href = "/ProductType/Index?SourceAccountId=@(ViewBag.SourceAccountId)&RestaurantId=" + Id + "&Status=1&Type=FastFood&IsOrder=@(ViewBag.AutoOrderCount)&MemberCardNo=@(ViewBag.MemberCardNo)&Orderid=@(ViewBag.OrderId)";
             } else if ('@(ViewBag.AutoOrderCount)' != null && '@(ViewBag.AutoOrderCount)' == 1) {
-                str = "<p style=\"float: left;  margin-top: -20px; margin-left: 10px;  color: red;margin-bottom: 0px;\">您已有未消费的订单</p>" +
-        "  <a href=\"/ProductType/Index?SourceAccountId=@(ViewBag.SourceAccountId)&RestaurantId=" + Id + "&Status=1&Type=FastFood&IsOrder=@(ViewBag.AutoOrderCount)&MemberCardNo=@(ViewBag.MemberCardNo)&Orderid=@(ViewBag.OrderId)\" class=\"but\">新预定</a>  " +
-        "<a href=\"/pay/prepareorder/?Orderid=@(ViewBag.OrderId)&SourceAccountId=@(ViewBag.SourceAccountId)&MemberCardNo=@(ViewBag.MemberCardNo)&RstType=FastFood\"  class=\"but\">查看订单</a> ";
+                str = "<p>您已有未消费的订单</p>" +
+        "  <a href=\"/ProductType/Index?SourceAccountId=@(ViewBag.SourceAccountId)&RestaurantId=" + Id + "&Status=1&Type=FastFood&IsOrder=@(ViewBag.AutoOrderCount)&MemberCardNo=@(ViewBag.MemberCardNo)&Orderid=@(ViewBag.OrderId)\" class=\"but yuding\">新预定</a>  " +
+        "<a href=\"/pay/prepareorder/?Orderid=@(ViewBag.OrderId)&SourceAccountId=@(ViewBag.SourceAccountId)&MemberCardNo=@(ViewBag.MemberCardNo)&RstType=FastFood\"  class=\"but chakan\">查看订单</a> ";
                 var unit = "%";
                 sAlert(str, 80, 20, unit);
             }
@@ -154,11 +154,11 @@
 
             var sWidth, sHeight;
             sWidth = document.body.offsetWidth;
-            sHeight = document.body.offsetHeight;
+            sHeight = document.documentElement.clientHeight;
 
             var bgObj = document.createElement("div");
             bgObj.setAttribute('id', 'bgDiv');
-            bgObj.style.position = "absolute";
+            bgObj.style.position = "fixed";
             bgObj.style.top = "0";
             bgObj.style.background = "#777";
             bgObj.style.filter = "progid:DXImageTransform.Microsoft.Alpha(style=3,opacity=25,finishOpacity=75";
@@ -170,13 +170,13 @@
             var msgObj = document.createElement("div")
             msgObj.setAttribute("id", "msgDiv");
             msgObj.setAttribute("align", "center");
-            msgObj.style.position = "absolute";
+            msgObj.style.position = "fixed";
             msgObj.style.background = "white";
             // msgObj.innerHTML = "<img src='/Content/images/tanchu_bg.png' style=' width: 100%;height:100%;'/>  ";
             msgObj.style.font = "12px/1.6em Verdana, Geneva, Arial, Helvetica, sans-serif";
             msgObj.style.border = "1px solid " + bordercolor;
             msgObj.style.width = msgw + unit;
-            msgObj.style.height = msgh + unit;
+            msgObj.style.height = "120px";//msgh + unit;
             //  msgObj.style.top = (document.documentElement.scrollTop + (sHeight - msgh) / 2) + "px";
             //  msgObj.style.left = (sWidth - msgw) / 2 + "px";
             msgObj.style.top = "30" + unit;
@@ -196,7 +196,7 @@
             title.style.color = "white";
             title.style.cursor = "pointer";
             //  title.innerHTML = "关闭";
-            title.innerHTML = "<img src='/Content/images/close.png' style='position: absolute; right: -6%;   top: -8%;  width: 40px;'/>  ";
+            title.innerHTML = "<img src='/Content/images/close.png' style='position: absolute; right: 3%;   top: 4%;  width: 20px;'/>  ";
             title.onclick = function () {
                 document.body.removeChild(bgObj);
                 document.getElementById("msgDiv").removeChild(title);
