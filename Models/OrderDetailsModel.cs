@@ -245,7 +245,7 @@ select od.CreateDate,
             }
             catch(Exception ex)
             {
-                Logger.Log(ex);
+                Logger.Log("Product ID: " + productId + "OrderId: " + orderId + "\r\n" + ex);
                 return 0;
             }
             

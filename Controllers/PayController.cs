@@ -507,7 +507,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 orderDetails = odb.getMyOrderDetailListData(uid, orderId, RstType);
                 order = orderModel.selOrderByOrderId(Guid.Parse(orderId)).FirstOrDefault();
 
-                if (orderDetails != null && orderDetails.Count > 0)
+                if (order != null && orderDetails != null && orderDetails.Count > 0)
                 {
                     var allTodaySpecials = SpecialsModel.GetTodayByRestaurantId(order.RstId);
                     decimal totalPrice = 0;

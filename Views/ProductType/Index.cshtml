@@ -257,11 +257,11 @@
             var num = $("#" + id).val();
             if (num > 0) {
                 $("#" + id).val(parseInt(num) - 1);
-            } else {
-                return;
             }
+
             $.ajaxSetup({ cache: false });
             var num1 = $("#" + id).val();
+
             if (num1 == 0) {
                 $("#" + id).val(0);
                 $("#" + id).parent().hide();
@@ -288,6 +288,7 @@
                                     $("#totalcount").html(parseInt(total) - 1);
                                 }
                                 count(0 - price);
+                                $(loading).remove();
                             }
                             else {
                                 alert("更新购物车失败");

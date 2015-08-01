@@ -34,8 +34,9 @@ namespace WitBird.XiaoChangHe.Models.Specials
                     result =  select.QueryMany<SpecialsEntity>();
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                Logger.Log(exception);
                 //TODO
             }
             if (result == null)

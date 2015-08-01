@@ -17,7 +17,7 @@
                     <div class="content_img">
                         <img src="/Order/GetImages/@(item.Id)" imgid="@(item.Id)">
                     </div>
-                    @if(item.Popular)
+                    @if (item.Popular)
                     {
                         <div class="zan"><img src="~/NewContent/images/zan.png" width="30px"></div>
                     }
@@ -46,6 +46,9 @@
                                         <span class="s_left" data-pid="@item.Id">-</span>
                                         <input type="text" id="@item.Id" value="@item1.ProductCount" class="text_box" readonly="readonly" style="outline:none;" />
                                         <span class="s_right" data-pid="@item.Id">+</span>
+                                    </div>
+                                    <div class="yuan-bottom" data-pid="@item.Id" style="display: none;">
+                                        <img src="~/NewContent/images/yj.png" width="33" height="34">
                                     </div>
                                     {
                                         hadOrder = true;
