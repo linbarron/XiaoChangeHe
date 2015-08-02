@@ -36,9 +36,9 @@
                                 if (item.ProductId.Equals(item1.ProductId) && item1.ProductCount > 0)
                                 {
                                     <div class="right_q">
-                                        <span class="s_left" data-pid="@item.Id">-</span>
-                                        <input type="text" id="@item.Id" value="@item1.ProductCount" class="text_box" readonly="readonly" style="outline:none;" />
-                                        <span class="s_right" data-pid="@item.Id">+</span>
+                                        <span class="s_left" data-pid="@item.ProductId">-</span>
+                                        <input type="text" id="@item.ProductId" value="@item1.ProductCount" class="text_box" readonly="readonly" style="outline:none;" />
+                                        <span class="s_right" data-pid="@item.ProductId">+</span>
                                     </div>
                                     <div class="yuan-bottom" data-pid="@item.ProductId" style="display: none;">
                                         <img src="~/NewContent/images/yj.png" width="33" height="34">

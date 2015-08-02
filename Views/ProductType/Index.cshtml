@@ -219,7 +219,7 @@
                                         alert("更新购物车失败");
                                     }
                                 }).error(function (xhr, errorText, errorType) {
-                                    alert("无可用网络数据连接");
+                                    alert("无可用网络数据连接。如多次遇到此问题，请返回公众号，重新开始点餐。");
                                 });
                         }
                         else {
@@ -238,7 +238,7 @@
                             
                         }
                         else {
-                            alert("更新购物车失败");
+                            alert("更新购物车失败。如多次遇到此问题，请返回公众号，重新开始点餐。");
                         }
 
                     }).error(function (xhr, errorText, errorType) {
@@ -291,7 +291,7 @@
                                 $(loading).remove();
                             }
                             else {
-                                alert("更新购物车失败");
+                                alert("更新购物车失败。如多次遇到此问题，请返回公众号，重新开始点餐。");
                             }
 
                         }).error(function (xhr, errorText, errorType) {
@@ -310,7 +310,7 @@
                                 $(loading).remove();
                             }
                             else {
-                                alert("更新购物车失败");
+                                alert("更新购物车失败。如多次遇到此问题，请返回公众号，重新开始点餐。");
                             }
                         }).error(function (xhr, errorText, errorType) {
                             $(loading).remove();
