@@ -31,7 +31,7 @@ namespace WitBird.XiaoChangHe.Controllers
                     ViewBag.BookTime = data;
                 }
             }
-            if (!string.IsNullOrEmpty(IsOrder) && IsOrder == "1")
+            if (!string.IsNullOrEmpty(IsOrder) && IsOrder == "1" && !string.IsNullOrEmpty(Orderid))
             {
                 OrderDetailsModel odm = new OrderDetailsModel();
                 OrderModel om = new OrderModel();
