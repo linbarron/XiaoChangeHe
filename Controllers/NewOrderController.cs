@@ -135,6 +135,13 @@ namespace WitBird.XiaoChangHe.Controllers
             return result;
         }
 
+        /// <summary>
+        /// 退款或者取消订单
+        /// </summary>
+        /// <param name="uid"></param>
+        /// <param name="orderId"></param>
+        /// <param name="isEdit"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult CancelOrder(string uid, string orderId, bool isEdit)
         {

@@ -74,22 +74,8 @@
         .mask { height: 100%; width: 100%; background: #000; position: absolute; left: 0px; top: 0px; opacity: 0.5; filter: alpha(opacity=90); /* IE */ -moz-opacity: 0.9; /* Moz + FF */ display: none; z-indent: 9; }
 
         /*.popWindow { height: 240px; width: 240px; position: absolute; left: 0px; top: 0px; background: #fff; z-index: 100; padding-left: 10px; border-radius: 5px 5px; text-align: left; display: none; }*/
-        
-.popWindow{
-	height:240px;
-	width:240px;
-	position:fixed;
-	left:50%;
-	top:50%;
-	margin-left:-120px;
-	margin-top:-120px;
-	background:#fff;
-	z-index:100;
-    padding-left:10px;
-	border-radius:5px 5px;
-	text-align:left;
-	display:none;
-	}
+
+        .popWindow { height: 240px; width: 240px; position: fixed; left: 50%; top: 50%; margin-left: -120px; margin-top: -120px; background: #fff; z-index: 100; padding-left: 10px; border-radius: 5px 5px; text-align: left; display: none; }
 
         .dqye { line-height: 40px; text-align: left; font-size: 16px; color: #ed3a2e; }
 
@@ -156,7 +142,10 @@
                         <div class="huise"></div>
                             <!-- 菜品清单标题-->
                         <div class="header3" style="font-weight: bold; margin-bottom: 10px;">
-                            <span style="color: red; font-size: 15px;">|</span> 菜品清单
+                            <div style="width:45%;float:left;">
+                                <span style="color: red; font-size: 15px;">|</span> 菜品清单
+                            </div>
+                            <div style="width: 40%;float: right;text-align: right; padding-right: 40px;">修改<span class="header_r" style="line-height: 27px;">></span></div>
                         </div>
 
                         totalprice = ViewBag.TotalPrice;
@@ -378,9 +367,9 @@
         //    'top': positionTop + 'px'
         //}, 500);
 
-        popWindow=$(".popWindow");
+        popWindow = $(".popWindow");
         $('.mask').fadeIn().width(maskWidth).height(maskHeight);
-        popWindow.show(); 
+        popWindow.show();
 
     }
 
