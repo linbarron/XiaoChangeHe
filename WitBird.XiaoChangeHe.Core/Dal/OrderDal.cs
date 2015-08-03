@@ -19,19 +19,28 @@ namespace WitBird.XiaoChangeHe.Core.Dal
                 SqlCmd.Connection = SqlConn;
                 SqlCmd.CommandText = @"
 select o.Id AS OrderId,o.ContactName,o.ContactPhone,o.DiningDate,o.DiningDate,o.CreateDate,
-o.Status,o.RstId AS RestaurantId,o.PersonCount, os.OrderStatus, os.LastUpdateTime, pr.PrepayMoney as TotalMoney
+o.Status,o.RstId AS RestaurantId,o.PersonCount, os.OrderStatus, os.LastUpdateTime, 
+-- Caculates order total price
+case when pr.PrepayMoney is NULL then
+(select SUM(od.ProductCount * od.UnitPrice) from OrderDetails od where od.OrderId=o.Id)
+else pr.PrepayMoney end as TotalMoney
 from orders o
 left join OrderStatus os on os.OrderId = o.Id
 left join PrepayRecord pr on pr.SId = convert(nvarchar(50), o.Id)
-where pr.AddMoney = pr.PrepayMoney
+where 
+((pr.AddMoney = pr.PrepayMoney and pr.AddMoney <= 0) or (pr.AddMoney is null and pr.PrepayMoney is null))
 and o.MemberCardNo=@MemberCardNo
-order by o.CreateDate desc;";
+order by o.CreateDate desc;
+";
 
                 SqlCmd.Parameters.AddWithValue(@"MemberCardNo", memberCardNo);
 
                 var reader = SqlCmd.ExecuteReader();
                 while (reader.Read())
                 {
+                    if (reader["TotalMoney"] == DBNull.Value)
+                    { continue; }
+
                     var summary = new OrderSummary();
 
                     summary.OrderId = Guid.Parse(reader["OrderId"].ToString());
@@ -55,14 +64,6 @@ order by o.CreateDate desc;";
                     if (reader["TotalMoney"] != DBNull.Value)
                     {
                         summary.TotalMoney = Math.Abs(Convert.ToDecimal(reader["TotalMoney"]));
-                    }
-                    else
-                    {
-                        var details = this.GetOrderDetails(summary.OrderId);
-                        if (details != null && details.Count > 0)
-                        {
-                            summary.TotalMoney = details.Sum(v => v.TotalPrice);
-                        }
                     }
                     summary.RestaurantId = Guid.Parse(reader["RestaurantId"].ToString());
 
@@ -96,11 +97,15 @@ order by o.CreateDate desc;";
                 SqlCmd.Connection = SqlConn;
                 SqlCmd.CommandText = @"
 select o.Id AS OrderId,o.ContactName,o.ContactPhone,o.DiningDate,o.DiningDate,o.CreateDate,
-o.Status,o.RstId AS RestaurantId,o.PersonCount, os.OrderStatus, os.LastUpdateTime, o.Sex, pr.PrepayMoney as TotalMoney
+o.Status,o.RstId AS RestaurantId,o.PersonCount, os.OrderStatus, os.LastUpdateTime, o.Sex, 
+-- Caculates order total price
+case when pr.PrepayMoney is NULL then
+(select SUM(od.ProductCount * od.UnitPrice) from OrderDetails od where od.OrderId=o.Id)
+else pr.PrepayMoney end as TotalMoney
 from orders o
 left join OrderStatus os on os.OrderId = o.Id
 left join PrepayRecord pr on pr.SId = convert(nvarchar(50), o.Id)
-where pr.AddMoney = pr.PrepayMoney
+where ((pr.AddMoney = pr.PrepayMoney and pr.AddMoney <= 0) or (pr.AddMoney is null and pr.PrepayMoney is null))
 and o.Id=@OrderId";
 
                 SqlCmd.Parameters.AddWithValue(@"OrderId", orderId);
@@ -148,11 +153,7 @@ and o.Id=@OrderId";
                         }
                         else
                         {
-                            var details = this.GetOrderDetails(summary.OrderId);
-                            if (details != null && details.Count > 0)
-                            {
-                                summary.TotalMoney = details.Sum(v => v.TotalPrice);
-                            }
+                            summary.TotalMoney = GetOrderDetails(summary.OrderId).First().TotalPrice;
                         }
                         summary.CreateTime = Convert.ToDateTime(reader["CreateDate"]);
                         summary.Backlog = "无";
@@ -172,11 +173,14 @@ and o.Id=@OrderId";
                 var SqlCmd = new SqlCommand();
                 SqlCmd.Connection = SqlConn;
                 SqlCmd.CommandText = @"
-select o.ProductId, o.ProductCount, o.UnitPrice, o.TotalPrice, pr.PrepayMoney as TotalMoney
+select o.ProductId, o.ProductCount, o.UnitPrice, o.TotalPrice, 
+case when pr.PrepayMoney is NULL then
+(select SUM(od.ProductCount * od.UnitPrice) from OrderDetails od where od.OrderId=o.OrderId)
+else pr.PrepayMoney end as TotalMoney
 from OrderDetails o
 left join PrepayRecord pr on pr.SId = convert(nvarchar(50), o.OrderId)
-left join BillPay bp on bp.PayId = pr.BillPayId
-where pr.AddMoney = pr.PrepayMoney
+where 
+((pr.AddMoney = pr.PrepayMoney and pr.AddMoney <= 0) or (pr.AddMoney is null and pr.PrepayMoney is null))
 and o.OrderId=@OrderId";
 
                 SqlCmd.Parameters.AddWithValue(@"OrderId", orderId);

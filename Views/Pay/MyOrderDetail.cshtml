@@ -181,7 +181,8 @@
                     }
                     <!-- 合计价格-->
                     <span class="heji">合计：@totalprice ¥</span>
-                    <div class="fukuan" onclick="SubmitOrder();">确认付款</div>
+                    <div class="fukuan"  onclick="OnlinePay();">立即支付</div>
+                    <div class="fukuan" style="margin-right:20px;background:none;color:red;border:1px solid red;" onclick="OfflinePay();">到店支付</div>
                 </div>
             }
 
@@ -293,7 +294,24 @@
         });
     }
 
+    function OfflinePay() {
+        var valid = SubmitOrder();
+        if (valid) {
+            window.location.href = '/NewOrder/Detail/@ViewBag.CompanyId/@ViewBag.SourceAccountId?orderId=@(ViewBag.OrderId)';
+        }
+    }
+
+    function OnlinePay() {
+        var valid = SubmitOrder();
+        if (valid) {
+            // 更新订单成功，弹出支付窗口
+            popPayDialog();
+        }
+    }
+
     function SubmitOrder() {
+        var result = false;
+
         var date = $("#endTime").val();
         var name = $("#ContactName").val();
         var phone = $("#ContactPhone").val();
@@ -314,13 +332,20 @@
                 sex: sex
             }, function (msg) {
                 if (msg == '') {
-                    // 更新订单成功，弹出支付窗口
-                    popPayDialog();
+                    result = true;
                 } else {
                     alert(msg);
+                    result = false;
                 }
-            });
+            }).error(function () { result = false; });
+
+            result = true;
         }
+        else {
+            result = false;
+        }
+
+        return result;
     }
 
     function IsEmpty(name, value) {
