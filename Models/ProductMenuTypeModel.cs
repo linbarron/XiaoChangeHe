@@ -56,6 +56,7 @@ from ProductMenuType p where IsServiceType='0' order by p.OrderNo ";
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 return null;
             }
         }

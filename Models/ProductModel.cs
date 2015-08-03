@@ -74,6 +74,7 @@ namespace WitBird.XiaoChangHe.Models.Info
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 return null;
             }
         }
@@ -117,6 +118,7 @@ namespace WitBird.XiaoChangHe.Models.Info
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 return null;
             }
         #endregion
@@ -173,6 +175,7 @@ namespace WitBird.XiaoChangHe.Models.Info
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 return null;
             }
        
@@ -212,6 +215,7 @@ namespace WitBird.XiaoChangHe.Models.Info
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 return null;
             }
         }
@@ -235,6 +239,7 @@ namespace WitBird.XiaoChangHe.Models.Info
                }
                catch (Exception ex)
                {
+                   Logger.Log(ex);
                    return null;
                }
            }

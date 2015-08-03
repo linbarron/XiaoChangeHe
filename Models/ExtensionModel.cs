@@ -54,6 +54,7 @@ from extension  e , Company p where  e.CompanyId=p.id   and  e.EId=@EId ";
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 return null;
             }
         }
@@ -79,6 +80,7 @@ from extension  e , Company p where  e.CompanyId=p.id   and  e.EId=@EId ";
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 return null;
             }
         }

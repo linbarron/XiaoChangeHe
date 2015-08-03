@@ -142,6 +142,7 @@ and os.OrderStatus='New'  and r.RstType='01' and r.Id=o.RstId order by p.Code as
         }
         catch (Exception ex)
         {
+            Logger.Log(ex);
             return null;
         }
     }
@@ -188,6 +189,7 @@ and os.OrderStatus='New'  and r.RstType='01' and r.Id=o.RstId order by p.Code as
         }
         catch (Exception ex)
         {
+            Logger.Log(ex);
             return null;
         }
     }
