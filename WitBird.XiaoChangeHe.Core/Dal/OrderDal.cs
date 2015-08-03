@@ -23,7 +23,8 @@ o.Status,o.RstId AS RestaurantId,o.PersonCount, os.OrderStatus, os.LastUpdateTim
 from orders o
 left join OrderStatus os on os.OrderId = o.Id
 left join PrepayRecord pr on pr.SId = convert(nvarchar(50), o.Id)
-where o.MemberCardNo=@MemberCardNo
+where pr.AddMoney = pr.PrepayMoney
+and o.MemberCardNo=@MemberCardNo
 order by o.CreateDate desc;";
 
                 SqlCmd.Parameters.AddWithValue(@"MemberCardNo", memberCardNo);
@@ -99,7 +100,8 @@ o.Status,o.RstId AS RestaurantId,o.PersonCount, os.OrderStatus, os.LastUpdateTim
 from orders o
 left join OrderStatus os on os.OrderId = o.Id
 left join PrepayRecord pr on pr.SId = convert(nvarchar(50), o.Id)
-where o.Id=@OrderId";
+where pr.AddMoney = pr.PrepayMoney
+and o.Id=@OrderId";
 
                 SqlCmd.Parameters.AddWithValue(@"OrderId", orderId);
 
@@ -174,7 +176,7 @@ select o.ProductId, o.ProductCount, o.UnitPrice, o.TotalPrice, pr.PrepayMoney as
 from OrderDetails o
 left join PrepayRecord pr on pr.SId = convert(nvarchar(50), o.OrderId)
 left join BillPay bp on bp.PayId = pr.BillPayId
-where (bp.PayState = '0x01' or bp.PayState is null)
+where pr.AddMoney = pr.PrepayMoney
 and o.OrderId=@OrderId";
 
                 SqlCmd.Parameters.AddWithValue(@"OrderId", orderId);
