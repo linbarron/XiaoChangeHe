@@ -61,6 +61,7 @@ namespace WitBird.XiaoChangHe.Controllers
             ViewBag.FastFood = Type;
             ViewBag.RestaurantId = RestaurantId;
             ViewBag.MemberCardNo = MemberCardNo;
+            ViewBag.OrderId = Orderid;
             return View(pt);
         }
 

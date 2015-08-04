@@ -58,6 +58,7 @@ and o.RstId=s.RstId)) as total from ReceiveOrder s
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 return null;
             }
         }
@@ -86,6 +87,7 @@ and o.RstId=s.RstId)) as total from ReceiveOrder s
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 return null;
             }
         }

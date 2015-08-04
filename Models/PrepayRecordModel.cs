@@ -72,6 +72,7 @@ namespace WitBird.XiaoChangHe.Models
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 return null;
             }
         }
@@ -116,6 +117,7 @@ namespace WitBird.XiaoChangHe.Models
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 throw;
             }
         }

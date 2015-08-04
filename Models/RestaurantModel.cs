@@ -93,6 +93,7 @@ rst.BusinessEndtDate,rst.RstType,ro.MapUrl,ro.VirtualUrl, null as Photo ,p.Name,
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 return null;
             }
         }
@@ -185,6 +186,7 @@ rst.BusinessEndtDate,rst.RstType,ro.MapUrl,ro.VirtualUrl, null as Photo ,p.Name,
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 return null;
             }
         }

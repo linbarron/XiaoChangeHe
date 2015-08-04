@@ -74,6 +74,10 @@ namespace WitBird.XiaoChangeHe.Core
 
                 if (details != null)
                 {
+                    if (detail.TotalMoney == null)
+                    {
+                        detail.TotalMoney = details.First().TotalPrice;
+                    }
                     var productIds = details.Select(v => v.ProductId).ToList();
                     var products = orderDal.GetProducts(productIds);
 

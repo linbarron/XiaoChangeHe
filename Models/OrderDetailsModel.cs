@@ -75,6 +75,7 @@ namespace WitBird.XiaoChangHe.Models
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 return null;
             }
         }
@@ -139,6 +140,7 @@ select od.CreateDate,
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 return null;
             }
         }
