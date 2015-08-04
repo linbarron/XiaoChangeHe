@@ -118,10 +118,10 @@ namespace WitBird.XiaoChangHe.Controllers
 
                 PrepayRecordModel prepayRecordModel = new PrepayRecordModel();
                 CrmMemberModel crmMemberModel = new CrmMemberModel();
-                BillPayModel billPayModel = new BillPayModel();
+                OrderBillPayModel billPayModel = new OrderBillPayModel();
 
                 Models.Info.PrepayRecord prepayRecord = null;
-                Models.Info.BillPay billPay = null;
+                Models.Info.OrderBillPay billPay = null;
 
                 decimal totalPrice = 0;
                 decimal presentMoney = 0;
@@ -173,7 +173,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 prepayRecord.Uid = uid;
                 prepayRecord.UserId = "System";
 
-                billPay = new BillPay();
+                billPay = new OrderBillPay();
                 billPay.Cash = 0;
                 billPay.Change = 0;
                 billPay.Coupons = 0;
@@ -296,8 +296,8 @@ namespace WitBird.XiaoChangHe.Controllers
                     //支付完成时间
                     string time_end = resHandler.GetParameter("time_end");
 
-                    BillPay billPay = null;
-                    BillPayModel billPayModel = new BillPayModel();
+                    OrderBillPay billPay = null;
+                    OrderBillPayModel billPayModel = new OrderBillPayModel();
 
                     Guid billPayId = Guid.Parse(out_trade_no);
                     billPay = billPayModel.GetBillPayById(billPayId);
@@ -493,14 +493,14 @@ namespace WitBird.XiaoChangHe.Controllers
 
                 PrepayRecordModel prepayRecordModel = new PrepayRecordModel();
                 CrmMemberModel crmMemberModel = new CrmMemberModel();
-                BillPayModel billPayModel = new BillPayModel();
+                OrderBillPayModel billPayModel = new OrderBillPayModel();
                 MyMenuModel odb = new MyMenuModel();
                 OrderModel orderModel = new OrderModel();
                 OrderDetailsModel orderDetaisModel = new OrderDetailsModel();
 
                 List<MyOrderDetail> orderDetails = null;
                 Models.Info.PrepayRecord prepayRecord = null;
-                Models.Info.BillPay billPay = null;
+                Models.Info.OrderBillPay billPay = null;
                 Models.Info.PrepayAccount prepayAccount = null;
                 Models.Info.Order order = null;
 
@@ -585,7 +585,7 @@ namespace WitBird.XiaoChangHe.Controllers
                     decimal creditCard = totalPrice - (prepayAccount.AccountMoney + prepayAccount.PresentMoney);
                     if (creditCard < 0) creditCard = 0;
 
-                    billPay = new BillPay();
+                    billPay = new OrderBillPay();
                     //余额支付金额
                     billPay.Cash = totalPrice - creditCard;
                     billPay.Change = 0;
@@ -776,8 +776,8 @@ namespace WitBird.XiaoChangHe.Controllers
                     //支付完成时间
                     string time_end = resHandler.GetParameter("time_end");
 
-                    BillPay billPay = null;
-                    BillPayModel billPayModel = new BillPayModel();
+                    OrderBillPay billPay = null;
+                    OrderBillPayModel billPayModel = new OrderBillPayModel();
 
                     Guid billPayId = Guid.Parse(out_trade_no);
                     billPay = billPayModel.GetBillPayById(billPayId);
@@ -911,11 +911,11 @@ namespace WitBird.XiaoChangHe.Controllers
             {
                 int recid = int.Parse(arrrec[0]);
                 PrepayRecordModel prepayRecordModel = new PrepayRecordModel();
-                BillPayModel billPayModel = new BillPayModel();
+                OrderBillPayModel billPayModel = new OrderBillPayModel();
                 CrmMemberModel crmMemberModel = new CrmMemberModel();
 
                 PrepayRecord rec = prepayRecordModel.GetPrepayRecordByRecordIdAndSourceAccountId(recid, id);
-                BillPay billPay = billPayModel.GetBillPayById(rec.BillPayId.Value);
+                OrderBillPay billPay = billPayModel.GetBillPayById(rec.BillPayId.Value);
                 PrepayAccount acc = crmMemberModel.GetPrepayAccount(rec.Uid);
 
                 if (rec == null || rec.AddMoney > 0)
@@ -929,7 +929,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 {
                     decimal cash = Math.Abs(rec.PrepayMoney.Value + rec.PresentMoney.Value);
 
-                    billPay = new BillPay();
+                    billPay = new OrderBillPay();
                     //余额支付金额
                     billPay.Cash = cash;
                     billPay.Change = 0;
@@ -1015,12 +1015,12 @@ namespace WitBird.XiaoChangHe.Controllers
             try
             {
                 PrepayRecordModel prepayRecordModel = new PrepayRecordModel();
-                BillPayModel billPayModel = new BillPayModel();
+                OrderBillPayModel billPayModel = new OrderBillPayModel();
                 CrmMemberModel crmMemberModel = new CrmMemberModel();
                 OrderModel orderModel = new OrderModel();
 
                 PrepayRecord rec = prepayRecordModel.GetPrepayRecordByRecordIdAndSourceAccountId(recid, id);
-                BillPay billPay = billPayModel.GetBillPayById(rec.BillPayId.Value);
+                OrderBillPay billPay = billPayModel.GetBillPayById(rec.BillPayId.Value);
                 PrepayAccount acc = crmMemberModel.GetPrepayAccount(rec.Uid);
                 Models.Info.Order order = orderModel.selOrderByOrderId(Guid.Parse(rec.SId)).FirstOrDefault();
 
@@ -1059,7 +1059,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 {
                     decimal totalPrice = cash;
 
-                    billPay = new BillPay();
+                    billPay = new OrderBillPay();
                     //余额支付金额
                     billPay.Cash = cash;
                     billPay.Change = 0;

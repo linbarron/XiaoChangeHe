@@ -173,7 +173,7 @@ where o.Id=@OrderId";
 select o.ProductId, o.ProductCount, o.UnitPrice, o.TotalPrice, pr.PrepayMoney as TotalMoney
 from OrderDetails o
 left join PrepayRecord pr on pr.SId = convert(nvarchar(50), o.OrderId)
-left join BillPay bp on bp.PayId = pr.BillPayId
+left join OrderBillPay bp on bp.PayId = pr.BillPayId
 where (bp.PayState = '0x01' or bp.PayState is null)
 and o.OrderId=@OrderId";
 
