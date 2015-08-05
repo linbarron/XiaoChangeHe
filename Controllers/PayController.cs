@@ -565,49 +565,47 @@ namespace WitBird.XiaoChangHe.Controllers
                     }
 
                     prepayRecord = new PrepayRecord();
-                    prepayRecord.AddMoney = -totalPrice;
-                    prepayRecord.AsureDate = DateTime.Now;
-                    prepayRecord.BillPayId = Guid.NewGuid();
-                    prepayRecord.DiscountlMoeny = 0;
-                    prepayRecord.PayByScore = 0;
-                    prepayRecord.PayModel = "02";
-                    prepayRecord.PrepayDate = DateTime.Now;
-                    prepayRecord.PrepayMoney = -totalPrice;
-                    prepayRecord.PresentMoney = 0;
-                    prepayRecord.PromotionId = 0;
-                    prepayRecord.RecMoney = 0;
-                    prepayRecord.RecordId = -1;
-                    prepayRecord.RState = "00";
-                    prepayRecord.RstId = Constants.CompanyId;
-                    prepayRecord.ScoreVip = 0;
-                    prepayRecord.SId = orderId;
-                    prepayRecord.Uid = uid;
-                    prepayRecord.UserId = "System";
+                    prepayRecord.AddMoney = -totalPrice;//总共订单消费金额
+                    prepayRecord.AsureDate = DateTime.Now;//确认时间
+                    prepayRecord.BillPayId = Guid.NewGuid();//支付记录编号
+                    prepayRecord.DiscountlMoeny = 0;//未启用
+                    prepayRecord.PayByScore = 0;//未启用
+                    prepayRecord.PayModel = "02";//微信支付
+                    prepayRecord.PrepayDate = DateTime.Now;//消费记录生成时间
+                    prepayRecord.PrepayMoney = -totalPrice;//总共订单消费金额，同AddMoney使用
+                    prepayRecord.PresentMoney = 0;//未启用
+                    prepayRecord.PromotionId = 0;//未启用
+                    prepayRecord.RecMoney = 0;//未启用
+                    prepayRecord.RecordId = -1;//主键，自动生成的ID
+                    prepayRecord.RState = "00";//支付状态，未支付。支付成功后更新为01
+                    prepayRecord.RstId = Constants.CompanyId;//未启用
+                    prepayRecord.ScoreVip = 0;//未启用
+                    prepayRecord.SId = orderId;//消费的订单ID
+                    prepayRecord.Uid = uid;//用户ID
+                    prepayRecord.UserId = "System";//未启用
 
                     decimal creditCard = totalPrice - (prepayAccount.AccountMoney + prepayAccount.PresentMoney);
                     if (creditCard < 0) creditCard = 0;
 
                     billPay = new OrderBillPay();
-                    //余额支付金额
-                    billPay.Cash = totalPrice - creditCard;
-                    billPay.Change = 0;
-                    billPay.Coupons = 0;
-                    billPay.CouponsNo = "";
-                    billPay.CreateDate = DateTime.Now;
-                    //在线支付金额
-                    billPay.CreditCard = creditCard;
-                    billPay.Discount = 0;
-                    billPay.MemberCard = 0;
-                    billPay.MemberCardNo = "";
-                    billPay.PaidIn = totalPrice;
-                    billPay.PayId = prepayRecord.BillPayId.Value;
-                    billPay.PayState = BillPayState.NotPaid;
-                    billPay.Receivable = totalPrice;
-                    billPay.Remark = "消费订单：" + orderId;
-                    billPay.Remove = 0;
-                    billPay.RstId = Constants.CompanyId;
-                    billPay.UserId = Guid.Empty;
-                    billPay.UserName = orderDetails.First().ContactName;
+                    billPay.Cash = totalPrice - creditCard; //余额支付金额
+                    billPay.Change = 0; // 未启用
+                    billPay.Coupons = 0; // 未启用
+                    billPay.CouponsNo = ""; // 未启用
+                    billPay.CreateDate = DateTime.Now;//创建时间
+                    billPay.CreditCard = creditCard;//在线支付金额
+                    billPay.Discount = 0; // 未启用
+                    billPay.MemberCard = 0; // 未启用
+                    billPay.MemberCardNo = ""; // 未启用
+                    billPay.PaidIn = totalPrice; // 未启用
+                    billPay.PayId = prepayRecord.BillPayId.Value;//消费记录编号
+                    billPay.PayState = BillPayState.NotPaid;//未支付
+                    billPay.Receivable = totalPrice; // 未启用
+                    billPay.Remark = "消费订单：" + orderId;//备注信息
+                    billPay.Remove = 0; // 未启用
+                    billPay.RstId = Constants.CompanyId;//未启用
+                    billPay.UserId = Guid.Empty; // 未启用
+                    billPay.UserName = orderDetails.First().ContactName;//用户姓名
 
                     using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
                     {
