@@ -166,7 +166,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 prepayRecord.PromotionId = 0;
                 prepayRecord.RecMoney = 0;
                 prepayRecord.RecordId = -1;
-                prepayRecord.RState = "";
+                prepayRecord.RState = "00";
                 prepayRecord.RstId = Constants.CompanyId;
                 prepayRecord.ScoreVip = 0;
                 prepayRecord.SId = Guid.NewGuid().ToString();//DateTime.Now.ToString("HHmmss") + TenPayV3Util.BuildRandomStr(28);
@@ -349,10 +349,12 @@ namespace WitBird.XiaoChangHe.Controllers
                                         prepayAccount.TotalPresent = prepayAccount.PresentMoney;
                                         prepayAccount.TotalMoney = prepayAccount.AccountMoney + prepayAccount.PresentMoney;
 
-                                        //更新支付时间
-                                        //prepayRecord.AsureDate = DateTime.Now;
+                                        //更新支付时间及状态
+                                        prepayRecord.AsureDate = DateTime.Now;
+                                        prepayRecord.RState = "01";
 
-                                        if (crmMemberModel.UpdatePrepayAccount(prepayAccount))
+                                        if (crmMemberModel.UpdatePrepayAccount(prepayAccount) && 
+                                            prepayRecordModel.UpdatePrepayRecord(prepayRecord))
                                         {
                                             //提交事务
                                             scope.Complete();
@@ -575,7 +577,7 @@ namespace WitBird.XiaoChangHe.Controllers
                     prepayRecord.PromotionId = 0;
                     prepayRecord.RecMoney = 0;
                     prepayRecord.RecordId = -1;
-                    prepayRecord.RState = "";
+                    prepayRecord.RState = "00";
                     prepayRecord.RstId = Constants.CompanyId;
                     prepayRecord.ScoreVip = 0;
                     prepayRecord.SId = orderId;
@@ -784,12 +786,12 @@ namespace WitBird.XiaoChangHe.Controllers
 
                     if (billPay == null)
                     {
-                        res = "订单:" + billPayId + "不存在";
+                        res += "订单:" + billPayId + "不存在";
                         return_msg = res;
                     }
                     else if (billPay.CreditCard != (decimal)(Convert.ToDecimal(total_fee) / 100))
                     {
-                        res = "订单金额不符合";
+                        res += "订单金额不符合";
                         return_msg = res;
                     }
                     else if (!billPay.PayState.Equals(BillPayState.Paid)) //没有处理过该订单
@@ -808,7 +810,7 @@ namespace WitBird.XiaoChangHe.Controllers
 
                                 if (prepayRecord == null)
                                 {
-                                    res = "查询不到对应的消费记录";
+                                    res += "查询不到对应的消费记录";
                                     return_msg = res;
                                 }
                                 else
@@ -819,7 +821,7 @@ namespace WitBird.XiaoChangHe.Controllers
 
                                     if (prepayAccount == null)
                                     {
-                                        res = "查询不到用户账户记录";
+                                        res += "查询不到用户账户记录";
                                         return_msg = res;
                                     }
                                     else
@@ -833,13 +835,21 @@ namespace WitBird.XiaoChangHe.Controllers
                                         prepayAccount.LastConsumeDate = DateTime.Now;
                                         prepayAccount.LastConsumeMoney = billPay.Cash;
 
-                                        if (!crmMemberModel.UpdatePrepayAccount(prepayAccount))
+                                        //更新支付时间和状态
+                                        prepayRecord.RState = "01";
+                                        prepayRecord.AsureDate = DateTime.Now;
+
+                                        if (!prepayRecordModel.UpdatePrepayRecord(prepayRecord))
                                         {
-                                            res = "更新用户账户信息未成功";
+                                            res += "更新消费记录失败";
+                                        }
+                                        else if (!crmMemberModel.UpdatePrepayAccount(prepayAccount))
+                                        {
+                                            res += "更新用户账户信息未成功";
                                         }
                                         else if (!orderModel.UpdateOrderStatus(Guid.Parse(prepayRecord.SId), OrderStatus.Paid))
                                         {
-                                            res = "更新订单状态为已支付失败";
+                                            res += "更新订单状态为已支付失败";
                                         }
                                         else
                                         {
@@ -923,8 +933,8 @@ namespace WitBird.XiaoChangHe.Controllers
                     ViewBag.Content = "记录无效！";
                     return View("Error");
                 }
-                // rec.RState = "01";
-                //rec.AsureDate = DateTime.Now;
+                rec.RState = "01";
+                rec.AsureDate = DateTime.Now;
                 if (billPay == null)
                 {
                     decimal cash = Math.Abs(rec.PrepayMoney.Value + rec.PresentMoney.Value);
