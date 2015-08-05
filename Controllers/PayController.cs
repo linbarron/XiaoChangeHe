@@ -22,6 +22,9 @@ namespace WitBird.XiaoChangHe.Controllers
         #region Recharge
 
         private static TenPayV3Info _tenPayV3Info;
+        /// <summary>
+        /// 微信支付相关配置信息
+        /// </summary>
         public static TenPayV3Info TenPayV3Info
         {
             get
@@ -34,7 +37,13 @@ namespace WitBird.XiaoChangHe.Controllers
                 return _tenPayV3Info;
             }
         }
-
+        
+        /// <summary>
+        /// 充值前准备参数方法，微信登录验证
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public ActionResult PreRecharge(string id, string name)
         {
             var returnUrl = Constants.HostDomain + "/pay/recharge?name=" + name + "&showwxpaytitle=1";
@@ -94,6 +103,16 @@ namespace WitBird.XiaoChangHe.Controllers
             return View(crmMember);
         }
 
+        /// <summary>
+        /// Handles user recharging request.
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="uid"></param>
+        /// <param name="name"></param>
+        /// <param name="tel"></param>
+        /// <param name="amount"></param>
+        /// <param name="isFirstRecharge"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Recharge(string code, string uid, string name, string tel, string amount, bool isFirstRecharge)
         {
@@ -269,6 +288,10 @@ namespace WitBird.XiaoChangHe.Controllers
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// 用户微信充值成功异步回调方法
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult RechargePayNotifyUrl()
         {
@@ -406,6 +429,18 @@ namespace WitBird.XiaoChangHe.Controllers
         #endregion Recharge
 
         #region Order
+        /// <summary>
+        /// 我的订单确认支付页面
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="state"></param>
+        /// <param name="MemberCardNo"></param>
+        /// <param name="OrderId"></param>
+        /// <param name="SourceAccountId"></param>
+        /// <param name="CompanyId"></param>
+        /// <param name="Type"></param>
+        /// <param name="RstType"></param>
+        /// <returns></returns>
         public ActionResult MyOrderDetail(string code, string state, string MemberCardNo, string OrderId, string SourceAccountId,
             string CompanyId = null, string Type = null, string RstType = null)
         {
@@ -471,6 +506,16 @@ namespace WitBird.XiaoChangHe.Controllers
             }
         }
 
+        /// <summary>
+        /// 准备查看我的订单确认支付页面，微信登录验证
+        /// </summary>
+        /// <param name="MemberCardNo"></param>
+        /// <param name="OrderId"></param>
+        /// <param name="SourceAccountId"></param>
+        /// <param name="CompanyId"></param>
+        /// <param name="Type"></param>
+        /// <param name="RstType"></param>
+        /// <returns></returns>
         public ActionResult PrepareOrder(string MemberCardNo, string OrderId, string SourceAccountId,
             string CompanyId = null, string Type = null, string RstType = null)
         {
@@ -483,6 +528,15 @@ namespace WitBird.XiaoChangHe.Controllers
             return Redirect(url);
         }
 
+        /// <summary>
+        /// 1. 微信在线支付参数准备
+        /// 2. 余额全额支付
+        /// </summary>
+        /// <param name="uid"></param>
+        /// <param name="orderId"></param>
+        /// <param name="RstType"></param>
+        /// <param name="code"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult PreparePay(string uid, string orderId, string RstType, string code)
         {
@@ -750,6 +804,10 @@ namespace WitBird.XiaoChangHe.Controllers
             }
         }
 
+        /// <summary>
+        /// 微信在线支付订单异步回调处理方法
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult ComsumingPayNotifyUrl()
         {
@@ -895,6 +953,12 @@ namespace WitBird.XiaoChangHe.Controllers
 
         }
 
+        /// <summary>
+        /// 会员支付功能页面
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public ActionResult PayView(string id, string value)
         {
             Logger.Log(LoggingLevel.WxPay, "PayView Enter. Id=" + id + "; value=" + value);
@@ -1005,6 +1069,13 @@ namespace WitBird.XiaoChangHe.Controllers
             }
         }
 
+        /// <summary>
+        /// 会员支付页面处理方法
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="recid"></param>
+        /// <param name="dateTimeTicks"></param>
+        /// <returns></returns>
         public ActionResult PayAsure(string id, int recid, long dateTimeTicks)
         {
             Logger.Log(LoggingLevel.WxPay, "PayAsure Enter. Id=" + id + "; value=" + recid + "|" +dateTimeTicks.ToString());
