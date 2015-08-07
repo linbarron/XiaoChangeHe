@@ -9,20 +9,20 @@ using WitBird.XiaoChangHe.Models.Info;
 
 namespace WitBird.XiaoChangHe.Models
 {
-    public class BillPayModel : DbHelper
+    public class OrderBillPayModel : DbHelper
     {
         /// <summary>
         /// 查询支付订单
         /// </summary>
         /// <param name="payId"></param>
         /// <returns></returns>
-        public BillPay GetBillPayById(Guid payId)
+        public OrderBillPay GetBillPayById(Guid payId)
         {
-            BillPay billPay = null;
+            OrderBillPay billPay = null;
 
             try
             {
-                string sql = @"select top 1 * from BillPay where PayId = @PayId";
+                string sql = @"select top 1 * from OrderBillPay where PayId = @PayId";
                 DbCommand cmd = db.GetSqlStringCommand(sql);
 
                 db.AddInParameter(cmd, "PayId", DbType.Guid, payId);
@@ -31,7 +31,7 @@ namespace WitBird.XiaoChangHe.Models
                 {
                     while (reader.Read())
                     {
-                        billPay = new BillPay()
+                        billPay = new OrderBillPay()
                         {
                             PayId = payId,
                             Cash = reader.TryGetValue<Decimal>("Cash"),
@@ -68,7 +68,7 @@ namespace WitBird.XiaoChangHe.Models
         /// </summary>
         /// <param name="billPay"></param>
         /// <returns></returns>
-        public bool AddBillPay(BillPay billPay)
+        public bool AddBillPay(OrderBillPay billPay)
         {
             bool result = false;
 
@@ -76,7 +76,7 @@ namespace WitBird.XiaoChangHe.Models
             {
                 DbCommand cmd = null;
                 string sql = @"
-                            INSERT INTO [CrmRstCloud].[dbo].[BillPay]
+                            INSERT INTO [CrmRstCloud].[dbo].[OrderBillPay]
                                 ([PayId]
                                 ,[Receivable]
                                 ,[PaidIn]
@@ -156,7 +156,7 @@ namespace WitBird.XiaoChangHe.Models
             {
                 DbCommand cmd = null;
                 string remark = "微信支付订单流水号： " + payTransactionId;
-                string sql = @"UPDATE [CrmRstCloud].[dbo].[BillPay] SET PayState = @PayState, Remark = Remark+@Remark WHERE PayId = @PayId;";
+                string sql = @"UPDATE [CrmRstCloud].[dbo].[OrderBillPay] SET PayState = @PayState, Remark = Remark+@Remark WHERE PayId = @PayId;";
 
                 cmd = db.GetSqlStringCommand(sql);
 

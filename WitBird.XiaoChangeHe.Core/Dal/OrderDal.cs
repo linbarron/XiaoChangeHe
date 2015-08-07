@@ -179,8 +179,8 @@ case when pr.PrepayMoney is NULL then
 else pr.PrepayMoney end as TotalMoney
 from OrderDetails o
 left join PrepayRecord pr on pr.SId = convert(nvarchar(50), o.OrderId)
-where 
-((pr.AddMoney = pr.PrepayMoney and pr.AddMoney <= 0) or (pr.AddMoney is null and pr.PrepayMoney is null))
+left join OrderBillPay bp on bp.PayId = pr.BillPayId
+where (bp.PayState = '0x01' or bp.PayState is null)
 and o.OrderId=@OrderId";
 
                 SqlCmd.Parameters.AddWithValue(@"OrderId", orderId);

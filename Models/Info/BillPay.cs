@@ -5,7 +5,7 @@ using System.Text;
 
 namespace WitBird.XiaoChangHe.Models.Info
 {
-    public class BillPay
+    public class OrderBillPay
     {
         /// <summary>
         /// 支付ID

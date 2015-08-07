@@ -49,7 +49,7 @@ namespace WitBird.XiaoChangHe.Models
                 string strSql = @"
                                 select top 10 *
                                 from PrepayRecord p
-                                left join BillPay b on b.PayId = p.BillPayId
+                                left join OrderBillPay b on b.PayId = p.BillPayId
                                 where p.Uid=@Uid and  p.PrepayMoney<=0 and b.PayState = '0x01'--0x01:支付成功 
                                 order by p.PrepayDate desc";
                 tableAccessor = db.CreateSqlStringAccessor(strSql, ipmapper, MapBuilder<PrepayRecord>.MapAllProperties()
@@ -93,7 +93,7 @@ namespace WitBird.XiaoChangHe.Models
 
                 string strSql = @"
                                 select top 10 p.* from PrepayRecord p
-                                left join BillPay b on b.PayId = p.BillPayId
+                                left join OrderBillPay b on b.PayId = p.BillPayId
                                 where p.Uid=@Uid and  p.PrepayMoney>0  and b.PayState = '0x01'--0x01:支付成功
                                 order by p.PrepayDate desc";
 
@@ -363,7 +363,7 @@ namespace WitBird.XiaoChangHe.Models
             {
                 string sql = @"select top 1 * from PrepayRecord pr 
                                 left join CrmMember c on c.Uid = pr.Uid 
-                                left join BillPay bp on bp.PayId = pr.BillPayId
+                                left join OrderBillPay bp on bp.PayId = pr.BillPayId
                                 where c.SourceAccountId = @SourceAccountId
                                 and pr.PrepayDate > dateadd (MINUTE,-5,GETDATE())
                                 and pr.PrepayMoney <= 0

@@ -22,6 +22,9 @@ namespace WitBird.XiaoChangHe.Controllers
         #region Recharge
 
         private static TenPayV3Info _tenPayV3Info;
+        /// <summary>
+        /// 微信支付相关配置信息
+        /// </summary>
         public static TenPayV3Info TenPayV3Info
         {
             get
@@ -34,7 +37,13 @@ namespace WitBird.XiaoChangHe.Controllers
                 return _tenPayV3Info;
             }
         }
-
+        
+        /// <summary>
+        /// 充值前准备参数方法，微信登录验证
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public ActionResult PreRecharge(string id, string name)
         {
             var returnUrl = Constants.HostDomain + "/pay/recharge?name=" + name + "&showwxpaytitle=1";
@@ -94,6 +103,16 @@ namespace WitBird.XiaoChangHe.Controllers
             return View(crmMember);
         }
 
+        /// <summary>
+        /// Handles user recharging request.
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="uid"></param>
+        /// <param name="name"></param>
+        /// <param name="tel"></param>
+        /// <param name="amount"></param>
+        /// <param name="isFirstRecharge"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Recharge(string code, string uid, string name, string tel, string amount, bool isFirstRecharge)
         {
@@ -118,10 +137,10 @@ namespace WitBird.XiaoChangHe.Controllers
 
                 PrepayRecordModel prepayRecordModel = new PrepayRecordModel();
                 CrmMemberModel crmMemberModel = new CrmMemberModel();
-                BillPayModel billPayModel = new BillPayModel();
+                OrderBillPayModel billPayModel = new OrderBillPayModel();
 
                 Models.Info.PrepayRecord prepayRecord = null;
-                Models.Info.BillPay billPay = null;
+                Models.Info.OrderBillPay billPay = null;
 
                 decimal totalPrice = 0;
                 decimal presentMoney = 0;
@@ -166,14 +185,14 @@ namespace WitBird.XiaoChangHe.Controllers
                 prepayRecord.PromotionId = 0;
                 prepayRecord.RecMoney = 0;
                 prepayRecord.RecordId = -1;
-                prepayRecord.RState = "";
+                prepayRecord.RState = "00";
                 prepayRecord.RstId = Constants.CompanyId;
                 prepayRecord.ScoreVip = 0;
                 prepayRecord.SId = Guid.NewGuid().ToString();//DateTime.Now.ToString("HHmmss") + TenPayV3Util.BuildRandomStr(28);
                 prepayRecord.Uid = uid;
                 prepayRecord.UserId = "System";
 
-                billPay = new BillPay();
+                billPay = new OrderBillPay();
                 billPay.Cash = 0;
                 billPay.Change = 0;
                 billPay.Coupons = 0;
@@ -269,6 +288,10 @@ namespace WitBird.XiaoChangHe.Controllers
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// 用户微信充值成功异步回调方法
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult RechargePayNotifyUrl()
         {
@@ -296,8 +319,8 @@ namespace WitBird.XiaoChangHe.Controllers
                     //支付完成时间
                     string time_end = resHandler.GetParameter("time_end");
 
-                    BillPay billPay = null;
-                    BillPayModel billPayModel = new BillPayModel();
+                    OrderBillPay billPay = null;
+                    OrderBillPayModel billPayModel = new OrderBillPayModel();
 
                     Guid billPayId = Guid.Parse(out_trade_no);
                     billPay = billPayModel.GetBillPayById(billPayId);
@@ -349,10 +372,12 @@ namespace WitBird.XiaoChangHe.Controllers
                                         prepayAccount.TotalPresent = prepayAccount.PresentMoney;
                                         prepayAccount.TotalMoney = prepayAccount.AccountMoney + prepayAccount.PresentMoney;
 
-                                        //更新支付时间
-                                        //prepayRecord.AsureDate = DateTime.Now;
+                                        //更新支付时间及状态
+                                        prepayRecord.AsureDate = DateTime.Now;
+                                        prepayRecord.RState = "01";
 
-                                        if (crmMemberModel.UpdatePrepayAccount(prepayAccount))
+                                        if (crmMemberModel.UpdatePrepayAccount(prepayAccount) && 
+                                            prepayRecordModel.UpdatePrepayRecord(prepayRecord))
                                         {
                                             //提交事务
                                             scope.Complete();
@@ -404,6 +429,18 @@ namespace WitBird.XiaoChangHe.Controllers
         #endregion Recharge
 
         #region Order
+        /// <summary>
+        /// 我的订单确认支付页面
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="state"></param>
+        /// <param name="MemberCardNo"></param>
+        /// <param name="OrderId"></param>
+        /// <param name="SourceAccountId"></param>
+        /// <param name="CompanyId"></param>
+        /// <param name="Type"></param>
+        /// <param name="RstType"></param>
+        /// <returns></returns>
         public ActionResult MyOrderDetail(string code, string state, string MemberCardNo, string OrderId, string SourceAccountId,
             string CompanyId = null, string Type = null, string RstType = null)
         {
@@ -469,6 +506,16 @@ namespace WitBird.XiaoChangHe.Controllers
             }
         }
 
+        /// <summary>
+        /// 准备查看我的订单确认支付页面，微信登录验证
+        /// </summary>
+        /// <param name="MemberCardNo"></param>
+        /// <param name="OrderId"></param>
+        /// <param name="SourceAccountId"></param>
+        /// <param name="CompanyId"></param>
+        /// <param name="Type"></param>
+        /// <param name="RstType"></param>
+        /// <returns></returns>
         public ActionResult PrepareOrder(string MemberCardNo, string OrderId, string SourceAccountId,
             string CompanyId = null, string Type = null, string RstType = null)
         {
@@ -481,6 +528,15 @@ namespace WitBird.XiaoChangHe.Controllers
             return Redirect(url);
         }
 
+        /// <summary>
+        /// 1. 微信在线支付参数准备
+        /// 2. 余额全额支付
+        /// </summary>
+        /// <param name="uid"></param>
+        /// <param name="orderId"></param>
+        /// <param name="RstType"></param>
+        /// <param name="code"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult PreparePay(string uid, string orderId, string RstType, string code)
         {
@@ -493,14 +549,14 @@ namespace WitBird.XiaoChangHe.Controllers
 
                 PrepayRecordModel prepayRecordModel = new PrepayRecordModel();
                 CrmMemberModel crmMemberModel = new CrmMemberModel();
-                BillPayModel billPayModel = new BillPayModel();
+                OrderBillPayModel billPayModel = new OrderBillPayModel();
                 MyMenuModel odb = new MyMenuModel();
                 OrderModel orderModel = new OrderModel();
                 OrderDetailsModel orderDetaisModel = new OrderDetailsModel();
 
                 List<MyOrderDetail> orderDetails = null;
                 Models.Info.PrepayRecord prepayRecord = null;
-                Models.Info.BillPay billPay = null;
+                Models.Info.OrderBillPay billPay = null;
                 Models.Info.PrepayAccount prepayAccount = null;
                 Models.Info.Order order = null;
 
@@ -563,49 +619,47 @@ namespace WitBird.XiaoChangHe.Controllers
                     }
 
                     prepayRecord = new PrepayRecord();
-                    prepayRecord.AddMoney = -totalPrice;
-                    prepayRecord.AsureDate = DateTime.Now;
-                    prepayRecord.BillPayId = Guid.NewGuid();
-                    prepayRecord.DiscountlMoeny = 0;
-                    prepayRecord.PayByScore = 0;
-                    prepayRecord.PayModel = "02";
-                    prepayRecord.PrepayDate = DateTime.Now;
-                    prepayRecord.PrepayMoney = -totalPrice;
-                    prepayRecord.PresentMoney = 0;
-                    prepayRecord.PromotionId = 0;
-                    prepayRecord.RecMoney = 0;
-                    prepayRecord.RecordId = -1;
-                    prepayRecord.RState = "";
-                    prepayRecord.RstId = Constants.CompanyId;
-                    prepayRecord.ScoreVip = 0;
-                    prepayRecord.SId = orderId;
-                    prepayRecord.Uid = uid;
-                    prepayRecord.UserId = "System";
+                    prepayRecord.AddMoney = -totalPrice;//总共订单消费金额
+                    prepayRecord.AsureDate = DateTime.Now;//确认时间
+                    prepayRecord.BillPayId = Guid.NewGuid();//支付记录编号
+                    prepayRecord.DiscountlMoeny = 0;//未启用
+                    prepayRecord.PayByScore = 0;//未启用
+                    prepayRecord.PayModel = "02";//微信支付
+                    prepayRecord.PrepayDate = DateTime.Now;//消费记录生成时间
+                    prepayRecord.PrepayMoney = -totalPrice;//总共订单消费金额，同AddMoney使用
+                    prepayRecord.PresentMoney = 0;//未启用
+                    prepayRecord.PromotionId = 0;//未启用
+                    prepayRecord.RecMoney = 0;//未启用
+                    prepayRecord.RecordId = -1;//主键，自动生成的ID
+                    prepayRecord.RState = "00";//支付状态，未支付。支付成功后更新为01
+                    prepayRecord.RstId = Constants.CompanyId;//未启用
+                    prepayRecord.ScoreVip = 0;//未启用
+                    prepayRecord.SId = orderId;//消费的订单ID
+                    prepayRecord.Uid = uid;//用户ID
+                    prepayRecord.UserId = "System";//未启用
 
                     decimal creditCard = totalPrice - (prepayAccount.AccountMoney + prepayAccount.PresentMoney);
                     if (creditCard < 0) creditCard = 0;
 
-                    billPay = new BillPay();
-                    //余额支付金额
-                    billPay.Cash = totalPrice - creditCard;
-                    billPay.Change = 0;
-                    billPay.Coupons = 0;
-                    billPay.CouponsNo = "";
-                    billPay.CreateDate = DateTime.Now;
-                    //在线支付金额
-                    billPay.CreditCard = creditCard;
-                    billPay.Discount = 0;
-                    billPay.MemberCard = 0;
-                    billPay.MemberCardNo = "";
-                    billPay.PaidIn = totalPrice;
-                    billPay.PayId = prepayRecord.BillPayId.Value;
-                    billPay.PayState = BillPayState.NotPaid;
-                    billPay.Receivable = totalPrice;
-                    billPay.Remark = "消费订单：" + orderId;
-                    billPay.Remove = 0;
-                    billPay.RstId = Constants.CompanyId;
-                    billPay.UserId = Guid.Empty;
-                    billPay.UserName = orderDetails.First().ContactName;
+                    billPay = new OrderBillPay();
+                    billPay.Cash = totalPrice - creditCard; //余额支付金额
+                    billPay.Change = 0; // 未启用
+                    billPay.Coupons = 0; // 未启用
+                    billPay.CouponsNo = ""; // 未启用
+                    billPay.CreateDate = DateTime.Now;//创建时间
+                    billPay.CreditCard = creditCard;//在线支付金额
+                    billPay.Discount = 0; // 未启用
+                    billPay.MemberCard = 0; // 未启用
+                    billPay.MemberCardNo = ""; // 未启用
+                    billPay.PaidIn = totalPrice; // 未启用
+                    billPay.PayId = prepayRecord.BillPayId.Value;//消费记录编号
+                    billPay.PayState = BillPayState.NotPaid;//未支付
+                    billPay.Receivable = totalPrice; // 未启用
+                    billPay.Remark = "消费订单：" + orderId;//备注信息
+                    billPay.Remove = 0; // 未启用
+                    billPay.RstId = Constants.CompanyId;//未启用
+                    billPay.UserId = Guid.Empty; // 未启用
+                    billPay.UserName = orderDetails.First().ContactName;//用户姓名
 
                     using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
                     {
@@ -750,6 +804,10 @@ namespace WitBird.XiaoChangHe.Controllers
             }
         }
 
+        /// <summary>
+        /// 微信在线支付订单异步回调处理方法
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult ComsumingPayNotifyUrl()
         {
@@ -776,20 +834,20 @@ namespace WitBird.XiaoChangHe.Controllers
                     //支付完成时间
                     string time_end = resHandler.GetParameter("time_end");
 
-                    BillPay billPay = null;
-                    BillPayModel billPayModel = new BillPayModel();
+                    OrderBillPay billPay = null;
+                    OrderBillPayModel billPayModel = new OrderBillPayModel();
 
                     Guid billPayId = Guid.Parse(out_trade_no);
                     billPay = billPayModel.GetBillPayById(billPayId);
 
                     if (billPay == null)
                     {
-                        res = "订单:" + billPayId + "不存在";
+                        res += "订单:" + billPayId + "不存在";
                         return_msg = res;
                     }
                     else if (billPay.CreditCard != (decimal)(Convert.ToDecimal(total_fee) / 100))
                     {
-                        res = "订单金额不符合";
+                        res += "订单金额不符合";
                         return_msg = res;
                     }
                     else if (!billPay.PayState.Equals(BillPayState.Paid)) //没有处理过该订单
@@ -808,7 +866,7 @@ namespace WitBird.XiaoChangHe.Controllers
 
                                 if (prepayRecord == null)
                                 {
-                                    res = "查询不到对应的消费记录";
+                                    res += "查询不到对应的消费记录";
                                     return_msg = res;
                                 }
                                 else
@@ -819,7 +877,7 @@ namespace WitBird.XiaoChangHe.Controllers
 
                                     if (prepayAccount == null)
                                     {
-                                        res = "查询不到用户账户记录";
+                                        res += "查询不到用户账户记录";
                                         return_msg = res;
                                     }
                                     else
@@ -833,13 +891,21 @@ namespace WitBird.XiaoChangHe.Controllers
                                         prepayAccount.LastConsumeDate = DateTime.Now;
                                         prepayAccount.LastConsumeMoney = billPay.Cash;
 
-                                        if (!crmMemberModel.UpdatePrepayAccount(prepayAccount))
+                                        //更新支付时间和状态
+                                        prepayRecord.RState = "01";
+                                        prepayRecord.AsureDate = DateTime.Now;
+
+                                        if (!prepayRecordModel.UpdatePrepayRecord(prepayRecord))
                                         {
-                                            res = "更新用户账户信息未成功";
+                                            res += "更新消费记录失败";
+                                        }
+                                        else if (!crmMemberModel.UpdatePrepayAccount(prepayAccount))
+                                        {
+                                            res += "更新用户账户信息未成功";
                                         }
                                         else if (!orderModel.UpdateOrderStatus(Guid.Parse(prepayRecord.SId), OrderStatus.Paid))
                                         {
-                                            res = "更新订单状态为已支付失败";
+                                            res += "更新订单状态为已支付失败";
                                         }
                                         else
                                         {
@@ -887,6 +953,12 @@ namespace WitBird.XiaoChangHe.Controllers
 
         }
 
+        /// <summary>
+        /// 会员支付功能页面
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public ActionResult PayView(string id, string value)
         {
             Logger.Log(LoggingLevel.WxPay, "PayView Enter. Id=" + id + "; value=" + value);
@@ -911,11 +983,11 @@ namespace WitBird.XiaoChangHe.Controllers
             {
                 int recid = int.Parse(arrrec[0]);
                 PrepayRecordModel prepayRecordModel = new PrepayRecordModel();
-                BillPayModel billPayModel = new BillPayModel();
+                OrderBillPayModel billPayModel = new OrderBillPayModel();
                 CrmMemberModel crmMemberModel = new CrmMemberModel();
 
                 PrepayRecord rec = prepayRecordModel.GetPrepayRecordByRecordIdAndSourceAccountId(recid, id);
-                BillPay billPay = billPayModel.GetBillPayById(rec.BillPayId.Value);
+                OrderBillPay billPay = billPayModel.GetBillPayById(rec.BillPayId.Value);
                 PrepayAccount acc = crmMemberModel.GetPrepayAccount(rec.Uid);
 
                 if (rec == null || rec.AddMoney > 0)
@@ -923,13 +995,13 @@ namespace WitBird.XiaoChangHe.Controllers
                     ViewBag.Content = "记录无效！";
                     return View("Error");
                 }
-                // rec.RState = "01";
-                //rec.AsureDate = DateTime.Now;
+                rec.RState = "01";
+                rec.AsureDate = DateTime.Now;
                 if (billPay == null)
                 {
                     decimal cash = Math.Abs(rec.PrepayMoney.Value + rec.PresentMoney.Value);
 
-                    billPay = new BillPay();
+                    billPay = new OrderBillPay();
                     //余额支付金额
                     billPay.Cash = cash;
                     billPay.Change = 0;
@@ -997,6 +1069,13 @@ namespace WitBird.XiaoChangHe.Controllers
             }
         }
 
+        /// <summary>
+        /// 会员支付页面处理方法
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="recid"></param>
+        /// <param name="dateTimeTicks"></param>
+        /// <returns></returns>
         public ActionResult PayAsure(string id, int recid, long dateTimeTicks)
         {
             Logger.Log(LoggingLevel.WxPay, "PayAsure Enter. Id=" + id + "; value=" + recid + "|" +dateTimeTicks.ToString());
@@ -1015,12 +1094,12 @@ namespace WitBird.XiaoChangHe.Controllers
             try
             {
                 PrepayRecordModel prepayRecordModel = new PrepayRecordModel();
-                BillPayModel billPayModel = new BillPayModel();
+                OrderBillPayModel billPayModel = new OrderBillPayModel();
                 CrmMemberModel crmMemberModel = new CrmMemberModel();
                 OrderModel orderModel = new OrderModel();
 
                 PrepayRecord rec = prepayRecordModel.GetPrepayRecordByRecordIdAndSourceAccountId(recid, id);
-                BillPay billPay = billPayModel.GetBillPayById(rec.BillPayId.Value);
+                OrderBillPay billPay = billPayModel.GetBillPayById(rec.BillPayId.Value);
                 PrepayAccount acc = crmMemberModel.GetPrepayAccount(rec.Uid);
                 Models.Info.Order order = orderModel.selOrderByOrderId(Guid.Parse(rec.SId)).FirstOrDefault();
 
@@ -1059,7 +1138,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 {
                     decimal totalPrice = cash;
 
-                    billPay = new BillPay();
+                    billPay = new OrderBillPay();
                     //余额支付金额
                     billPay.Cash = cash;
                     billPay.Change = 0;
