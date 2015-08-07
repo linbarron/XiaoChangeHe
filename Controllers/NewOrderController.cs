@@ -199,7 +199,7 @@ namespace WitBird.XiaoChangHe.Controllers
                                 newPrepayRecord.RecMoney = 0;
                                 newPrepayRecord.RecordId = -1;
                                 newPrepayRecord.RState = "";
-                                newPrepayRecord.RstId = Constants.CompanyId;
+                                newPrepayRecord.RstId = order.RestaurantId;
                                 newPrepayRecord.ScoreVip = 0;
                                 newPrepayRecord.SId = orderId;
                                 newPrepayRecord.Uid = uid;

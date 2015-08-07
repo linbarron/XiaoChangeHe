@@ -186,7 +186,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 prepayRecord.RecMoney = 0;
                 prepayRecord.RecordId = -1;
                 prepayRecord.RState = "00";
-                prepayRecord.RstId = Constants.CompanyId;
+                prepayRecord.RstId = Guid.Empty;
                 prepayRecord.ScoreVip = 0;
                 prepayRecord.SId = Guid.NewGuid().ToString();//DateTime.Now.ToString("HHmmss") + TenPayV3Util.BuildRandomStr(28);
                 prepayRecord.Uid = uid;
@@ -632,7 +632,7 @@ namespace WitBird.XiaoChangHe.Controllers
                     prepayRecord.RecMoney = 0;//未启用
                     prepayRecord.RecordId = -1;//主键，自动生成的ID
                     prepayRecord.RState = "00";//支付状态，未支付。支付成功后更新为01
-                    prepayRecord.RstId = Constants.CompanyId;//未启用
+                    prepayRecord.RstId = order.RstId;//未启用
                     prepayRecord.ScoreVip = 0;//未启用
                     prepayRecord.SId = orderId;//消费的订单ID
                     prepayRecord.Uid = uid;//用户ID
