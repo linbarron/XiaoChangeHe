@@ -437,10 +437,10 @@ LastConsumeMoney = @LastConsumeMoney WHERE Uid = @Uid;";
                 prepayRecord.PromotionId = 0;
                 prepayRecord.RecMoney = 0;
                 prepayRecord.RecordId = -1;
-                prepayRecord.RState = "";
+                prepayRecord.RState = "01";
                 prepayRecord.RstId = Guid.Empty;
                 prepayRecord.ScoreVip = 0;
-                prepayRecord.SId = verifyCode;
+                prepayRecord.SId = "邀请码：" + verifyCode;
                 prepayRecord.Uid = uid;
                 prepayRecord.UserId = "JoinVipGroup";
 

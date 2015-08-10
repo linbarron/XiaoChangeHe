@@ -188,7 +188,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 prepayRecord.RState = "00";
                 prepayRecord.RstId = Guid.Empty;
                 prepayRecord.ScoreVip = 0;
-                prepayRecord.SId = Guid.NewGuid().ToString();//DateTime.Now.ToString("HHmmss") + TenPayV3Util.BuildRandomStr(28);
+                prepayRecord.SId = "";//DateTime.Now.ToString("HHmmss") + TenPayV3Util.BuildRandomStr(28);
                 prepayRecord.Uid = uid;
                 prepayRecord.UserId = "System";
 

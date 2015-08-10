@@ -166,7 +166,14 @@ namespace WitBird.XiaoChangHe.Controllers
                         {
                             if (order.Status == OrderStatus.New)
                             {
+                                var prepayRecord = prepayRecordModel.GetPrepayRecordByOrderId(orderId);
+
+                                //取消订单，支付失败
+                                prepayRecord.AsureDate = DateTime.Now;
+                                prepayRecord.RState = "99";
+
                                 success = orderModel.UpdateOrderStatus(Guid.Parse(orderId), OrderStatus.Cancelled);
+                                success = success && prepayRecordModel.UpdatePrepayRecord(prepayRecord);
                             }
                             else
                             {
@@ -183,6 +190,10 @@ namespace WitBird.XiaoChangHe.Controllers
 
                                 prepayAccount = crmMemberModel.GetPrepayAccount(uid);
                                 prepayRecord = prepayRecordModel.GetPrepayRecordByOrderId(orderId);
+
+                                //已退款
+                                prepayRecord.RState = "02";
+                                prepayRecord.AsureDate = DateTime.Now;
 
                                 newPrepayRecord = new PrepayRecord();
 
@@ -201,7 +212,7 @@ namespace WitBird.XiaoChangHe.Controllers
                                 newPrepayRecord.RState = "";
                                 newPrepayRecord.RstId = order.RestaurantId;
                                 newPrepayRecord.ScoreVip = 0;
-                                newPrepayRecord.SId = orderId;
+                                newPrepayRecord.SId = "";
                                 newPrepayRecord.Uid = uid;
                                 newPrepayRecord.UserId = "System";
 
@@ -212,6 +223,7 @@ namespace WitBird.XiaoChangHe.Controllers
                                 success = orderModel.UpdateOrderStatus(Guid.Parse(orderId), OrderStatus.Refunded);
                                 success = success && prepayRecordModel.AddPrepayRecord(newPrepayRecord);
                                 success = success && crmMemberModel.UpdatePrepayAccount(prepayAccount);
+                                success = success && prepayRecordModel.UpdatePrepayRecord(prepayRecord);
                             }
                             else
                             {
