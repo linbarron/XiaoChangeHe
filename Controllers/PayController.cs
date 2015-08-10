@@ -631,7 +631,7 @@ namespace WitBird.XiaoChangHe.Controllers
                     prepayRecord.PromotionId = 0;//未启用
                     prepayRecord.RecMoney = 0;//未启用
                     prepayRecord.RecordId = -1;//主键，自动生成的ID
-                    prepayRecord.RState = "00";//支付状态，未支付。支付成功后更新为01
+                    prepayRecord.RState = isOnlinePay ? "00" : "01";//支付状态，未支付。支付成功后更新为01
                     prepayRecord.RstId = order.RstId;//未启用
                     prepayRecord.ScoreVip = 0;//未启用
                     prepayRecord.SId = orderId;//消费的订单ID
