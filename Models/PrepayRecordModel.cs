@@ -312,7 +312,7 @@ namespace WitBird.XiaoChangHe.Models
 
             try
             {
-                string sql = @"select top 1 * from PrepayRecord pr left join CrmMember c on c.Uid = pr.Uid where RecordId=@RecordId and c.SourceAccountId = @SourceAccountId;";
+                string sql = @"select top 1 * from PrepayRecord pr left join CrmMember c on c.Uid = pr.Uid where RecordId=@RecordId and c.SourceAccountId = @SourceAccountId and pr.RState='00';";
                 DbCommand cmd = db.GetSqlStringCommand(sql);
 
                 db.AddInParameter(cmd, "RecordId", DbType.Int32, recordId);
@@ -363,11 +363,10 @@ namespace WitBird.XiaoChangHe.Models
             {
                 string sql = @"select top 1 * from PrepayRecord pr 
                                 left join CrmMember c on c.Uid = pr.Uid 
-                                left join OrderBillPay bp on bp.PayId = pr.BillPayId
                                 where c.SourceAccountId = @SourceAccountId
                                 and pr.PrepayDate > dateadd (MINUTE,-5,GETDATE())
-                                and pr.PrepayMoney <= 0
-                                and (bp.PayState = '0x02' or bp.PayState is null)
+                                and pr.PrepayMoney < 0
+                                and pr.RState = '00'
                                 order by RecordId desc";
                 DbCommand cmd = db.GetSqlStringCommand(sql);
 

@@ -974,11 +974,12 @@ namespace WitBird.XiaoChangHe.Controllers
                 ViewBag.Content = "非法链接！";
                 return View("Error");
             }
-            //DateTime dt = new DateTime(long.Parse(arrrec[1]));
-            //if ((DateTime.Now - dt).TotalSeconds > 300) {
-            //    ViewBag.Content = "链接超时无效！";
-            //    return View("Error");
-            //} 
+            DateTime dt = new DateTime(long.Parse(arrrec[1]));
+            if ((DateTime.Now - dt).TotalSeconds > 300)
+            {
+                ViewBag.Content = "链接超时无效！";
+                return View("Error");
+            } 
             try
             {
                 int recid = int.Parse(arrrec[0]);
@@ -999,7 +1000,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 rec.AsureDate = DateTime.Now;
                 if (billPay == null)
                 {
-                    decimal cash = Math.Abs(rec.PrepayMoney.Value + rec.PresentMoney.Value);
+                    decimal cash = Math.Abs(rec.PrepayMoney.Value);
 
                     billPay = new OrderBillPay();
                     //余额支付金额
@@ -1101,14 +1102,21 @@ namespace WitBird.XiaoChangHe.Controllers
                 PrepayRecord rec = prepayRecordModel.GetPrepayRecordByRecordIdAndSourceAccountId(recid, id);
                 OrderBillPay billPay = billPayModel.GetBillPayById(rec.BillPayId.Value);
                 PrepayAccount acc = crmMemberModel.GetPrepayAccount(rec.Uid);
-                Models.Info.Order order = orderModel.selOrderByOrderId(Guid.Parse(rec.SId)).FirstOrDefault();
 
-                if (rec == null || rec.AddMoney > 0 || order == null)
+                Guid orderId;
+                Models.Info.Order order = null;
+
+                if (Guid.TryParse(rec.SId, out orderId))
+                {
+                    order = orderModel.selOrderByOrderId(Guid.Parse(rec.SId)).FirstOrDefault();
+                }
+
+                if (rec == null || rec.AddMoney > 0)
                 {
                     return Content("记录无效！");
                 }
 
-                if ((billPay != null && billPay.PayState == BillPayState.Paid) || order.Status == OrderStatus.Paid)
+                if ((billPay != null && billPay.PayState == BillPayState.Paid) || (order != null && order.Status == OrderStatus.Paid))
                 {
                     return Content("该账单已支付！");
                 }
@@ -1123,7 +1131,7 @@ namespace WitBird.XiaoChangHe.Controllers
 
                 if (acc.AccountMoney + rec.PrepayMoney < 0 || acc.PresentMoney + rec.PresentMoney < 0)
                 {
-                    return Content("余额不足");
+                    return Content("账户余额不足");
                 }
 
                 //acc.AccountMoney = acc.AccountMoney + rec.PrepayMoney.Value;
@@ -1131,7 +1139,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 //acc.PresentMoney = acc.PresentMoney + rec.PresentMoney.Value;
                 //acc.LastConsumeDate = DateTime.Now;
 
-                decimal cash = Math.Abs(rec.PrepayMoney.Value + rec.PresentMoney.Value);
+                decimal cash = Math.Abs(rec.PrepayMoney.Value);
 
                 bool result = true;
                 if (billPay == null)
@@ -1166,7 +1174,6 @@ namespace WitBird.XiaoChangHe.Controllers
                     result = billPayModel.AddBillPay(billPay);
                 }
 
-                Logger.Log(LoggingLevel.WxPay, "余额支付订单：" + order.Id);
                 //余额支付
                 decimal accountMoney = acc.AccountMoney;
                 decimal presentMoney = acc.PresentMoney;
@@ -1194,7 +1201,11 @@ namespace WitBird.XiaoChangHe.Controllers
                 result = result && prepayRecordModel.UpdatePrepayRecord(rec);
                 result = result && crmMemberModel.UpdatePrepayAccount(acc);
                 result = result && billPayModel.UpdateBillStateAsPaid(billPay.PayId, "");
-                result = result && orderModel.UpdateOrderStatus(order.Id, OrderStatus.Paid);
+
+                if (order != null)
+                {
+                    result = result && orderModel.UpdateOrderStatus(order.Id, OrderStatus.Paid);
+                }
 
                 if (result)
                 {
@@ -1215,7 +1226,7 @@ namespace WitBird.XiaoChangHe.Controllers
 
                     ViewBag.SourceAccountId = id;
                     ViewBag.CompanyId = Constants.CompanyId;
-                    ViewBag.OrderId = order.Id;
+                    ViewBag.OrderId = order == null ? Guid.Empty : order.Id;
 
                     return Content("success");
                 }
@@ -1226,7 +1237,7 @@ namespace WitBird.XiaoChangHe.Controllers
             }
             catch (Exception ex)
             {
-                Logger.Log(LoggingLevel.WxPay, "PayAsure, ID=" + id + ", value=" + recid + "\r\n" + dateTimeTicks + "\r\n" + ex);
+                Logger.Log(LoggingLevel.WxPay, "确认支付失败！错误号：9900,PayAsure, ID=" + id + ", value=" + recid + "\r\n" + dateTimeTicks + "\r\n" + ex);
                 return Content("确认支付失败！错误号：9900");
             }
         }

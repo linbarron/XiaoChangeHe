@@ -136,7 +136,7 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                         }
                         var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
 
-                        DateTime dt = DateTime.Now.AddMinutes(-5);
+                        DateTime dt = DateTime.Now.AddMinutes(-15);
                         PrepayRecord rec = new PrepayRecordModel().GetUserLastUnPaidComsumingPrepayRecordWithin5Minutes(requestMessage.FromUserName);
                         string description = string.Empty;
                         string title = string.Empty;
