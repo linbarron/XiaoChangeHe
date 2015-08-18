@@ -365,7 +365,7 @@ namespace WitBird.XiaoChangHe.Models
                                 left join CrmMember c on c.Uid = pr.Uid 
                                 where c.SourceAccountId = @SourceAccountId
                                 and pr.PrepayDate > dateadd (MINUTE,-5,GETDATE())
-                                and pr.PrepayMoney < 0
+                                and pr.AddMoney < 0
                                 and pr.RState = '00'
                                 order by RecordId desc";
                 DbCommand cmd = db.GetSqlStringCommand(sql);
