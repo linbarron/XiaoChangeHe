@@ -494,9 +494,9 @@ namespace WitBird.XiaoChangHe.Controllers
                 ViewBag.MemberPriceTotal = totalVipPrice;
                 //获取该店面的就餐时间
                 ViewBag.Explain = "";
-                ReceiveOrderModel m = new ReceiveOrderModel();
-                List<ReceiveOrder2> list = m.SelReceiveOrder2Info(RestaurantId);
-                if (list != null && list.Count > 0) { ViewBag.Explain = list.First().Explain; }
+                //ReceiveOrderModel m = new ReceiveOrderModel();
+                //List<ReceiveOrder2> list = m.SelReceiveOrder2Info(RestaurantId);
+                //if (list != null && list.Count > 0) { ViewBag.Explain = list.First().Explain; }
                 return View(detail);
             }
             catch (Exception ex)
@@ -563,24 +563,27 @@ namespace WitBird.XiaoChangHe.Controllers
                 orderDetails = odb.getMyOrderDetailListData(uid, orderId, RstType);
                 order = orderModel.selOrderByOrderId(Guid.Parse(orderId)).FirstOrDefault();
 
-                if (order != null && orderDetails != null && orderDetails.Count > 0)
+                if (order != null)
                 {
                     var allTodaySpecials = SpecialsModel.GetTodayByRestaurantId(order.RstId);
                     decimal totalPrice = 0;
                     decimal totalVipPrice = 0;
 
-                    for (int i = 0; i < orderDetails.Count; i++)
+                    if (orderDetails != null && orderDetails.Count > 0)
                     {
-                        if (allTodaySpecials.Any(x => x.ProductId == orderDetails[i].proId))
+                        for (int i = 0; i < orderDetails.Count; i++)
                         {
-                            var special = allTodaySpecials.Where(x => x.ProductId == orderDetails[i].proId).First();
-                            totalPrice += special.SpecPrice.Value * orderDetails[i].ProductCount;
-                            totalVipPrice += special.SpecPrice.Value * orderDetails[i].ProductCount;
-                        }
-                        else
-                        {
-                            totalPrice += orderDetails[i].UnitPrice * orderDetails[i].ProductCount;
-                            totalVipPrice += orderDetails[i].MemberPrice * orderDetails[i].ProductCount;
+                            if (allTodaySpecials.Any(x => x.ProductId == orderDetails[i].proId))
+                            {
+                                var special = allTodaySpecials.Where(x => x.ProductId == orderDetails[i].proId).First();
+                                totalPrice += special.SpecPrice.Value * orderDetails[i].ProductCount;
+                                totalVipPrice += special.SpecPrice.Value * orderDetails[i].ProductCount;
+                            }
+                            else
+                            {
+                                totalPrice += orderDetails[i].UnitPrice * orderDetails[i].ProductCount;
+                                totalVipPrice += orderDetails[i].MemberPrice * orderDetails[i].ProductCount;
+                            }
                         }
                     }
 
@@ -659,7 +662,7 @@ namespace WitBird.XiaoChangHe.Controllers
                     billPay.Remove = 0; // 未启用
                     billPay.RstId = Constants.CompanyId;//未启用
                     billPay.UserId = Guid.Empty; // 未启用
-                    billPay.UserName = orderDetails.First().ContactName;//用户姓名
+                    billPay.UserName = order.ContactName;//用户姓名
 
                     using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
                     {
@@ -793,7 +796,7 @@ namespace WitBird.XiaoChangHe.Controllers
                 }
                 else
                 {
-                    throw new Exception("订单数据获取失败");
+                    throw new Exception("不存在订单记录");
                 }
             }
             catch (Exception ex)
@@ -988,16 +991,26 @@ namespace WitBird.XiaoChangHe.Controllers
                 CrmMemberModel crmMemberModel = new CrmMemberModel();
 
                 PrepayRecord rec = prepayRecordModel.GetPrepayRecordByRecordIdAndSourceAccountId(recid, id);
-                OrderBillPay billPay = billPayModel.GetBillPayById(rec.BillPayId.Value);
-                PrepayAccount acc = crmMemberModel.GetPrepayAccount(rec.Uid);
+                OrderBillPay billPay = null;
+                PrepayAccount acc = null;
+
 
                 if (rec == null || rec.AddMoney > 0)
                 {
                     ViewBag.Content = "记录无效！";
                     return View("Error");
                 }
-                rec.RState = "01";
-                rec.AsureDate = DateTime.Now;
+
+                if (rec.BillPayId.HasValue)
+                {
+                    billPay = billPayModel.GetBillPayById(rec.BillPayId.Value);
+                }
+
+                if (!string.IsNullOrEmpty(rec.Uid))
+                {
+                    acc = crmMemberModel.GetPrepayAccount(rec.Uid);
+                }
+                
                 if (billPay == null)
                 {
                     decimal cash = Math.Abs(rec.PrepayMoney.Value);
@@ -1030,7 +1043,7 @@ namespace WitBird.XiaoChangHe.Controllers
                     prepayRecordModel.UpdatePrepayRecord(rec);
                 }
 
-                if (billPay.PayState == BillPayState.NotPaid)
+                if (billPay.PayState == BillPayState.NotPaid || rec.RState != "01")
                 {
                     if ((DateTime.Now - rec.PrepayDate.Value).TotalSeconds > 300)
                     {
@@ -1100,8 +1113,8 @@ namespace WitBird.XiaoChangHe.Controllers
                 OrderModel orderModel = new OrderModel();
 
                 PrepayRecord rec = prepayRecordModel.GetPrepayRecordByRecordIdAndSourceAccountId(recid, id);
-                OrderBillPay billPay = billPayModel.GetBillPayById(rec.BillPayId.Value);
-                PrepayAccount acc = crmMemberModel.GetPrepayAccount(rec.Uid);
+                OrderBillPay billPay = null;
+                PrepayAccount acc = null;
 
                 Guid orderId;
                 Models.Info.Order order = null;
@@ -1115,8 +1128,18 @@ namespace WitBird.XiaoChangHe.Controllers
                 {
                     return Content("记录无效！");
                 }
+                if (rec.BillPayId.HasValue)
+                {
+                    billPay = billPayModel.GetBillPayById(rec.BillPayId.Value);
+                }
+                if (!string.IsNullOrEmpty(rec.Uid))
+                {
+                    acc = crmMemberModel.GetPrepayAccount(rec.Uid);
+                }
 
-                if ((billPay != null && billPay.PayState == BillPayState.Paid) || (order != null && order.Status == OrderStatus.Paid))
+                if (rec.RState == "01")
+                 //   || (billPay != null && billPay.PayState == BillPayState.Paid) 
+                 //   || (order != null && order.Status == OrderStatus.Paid))
                 {
                     return Content("该账单已支付！");
                 }
@@ -1126,8 +1149,10 @@ namespace WitBird.XiaoChangHe.Controllers
                     return Content("支付记录超时，请联系收银员重新发起结单请求！");
                 }
 
-                rec.RState = "01";
-                rec.AsureDate = DateTime.Now;
+                if (acc == null)
+                {
+                    return Content("用户余额不足");
+                }
 
                 if (acc.AccountMoney + rec.PrepayMoney < 0 || acc.PresentMoney + rec.PresentMoney < 0)
                 {
@@ -1198,6 +1223,10 @@ namespace WitBird.XiaoChangHe.Controllers
                     acc.AccountMoney -= cash - presentMoney;
                 }
 
+
+                rec.RState = "01";
+                rec.AsureDate = DateTime.Now;
+
                 result = result && prepayRecordModel.UpdatePrepayRecord(rec);
                 result = result && crmMemberModel.UpdatePrepayAccount(acc);
                 result = result && billPayModel.UpdateBillStateAsPaid(billPay.PayId, "");
@@ -1238,7 +1267,7 @@ namespace WitBird.XiaoChangHe.Controllers
             catch (Exception ex)
             {
                 Logger.Log(LoggingLevel.WxPay, "确认支付失败！错误号：9900,PayAsure, ID=" + id + ", value=" + recid + "\r\n" + dateTimeTicks + "\r\n" + ex);
-                return Content("确认支付失败！错误号：9900");
+                return Content("确认支付失败！");
             }
         }
 

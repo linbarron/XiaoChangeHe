@@ -166,14 +166,17 @@ namespace WitBird.XiaoChangHe.Controllers
                         {
                             if (order.Status == OrderStatus.New)
                             {
+                                success = orderModel.UpdateOrderStatus(Guid.Parse(orderId), OrderStatus.Cancelled);
+
                                 var prepayRecord = prepayRecordModel.GetPrepayRecordByOrderId(orderId);
 
-                                //取消订单，支付失败
-                                prepayRecord.AsureDate = DateTime.Now;
-                                prepayRecord.RState = "99";
-
-                                success = orderModel.UpdateOrderStatus(Guid.Parse(orderId), OrderStatus.Cancelled);
-                                success = success && prepayRecordModel.UpdatePrepayRecord(prepayRecord);
+                                if (prepayRecord != null)
+                                {
+                                    //取消订单，支付失败
+                                    prepayRecord.AsureDate = DateTime.Now;
+                                    prepayRecord.RState = "99";
+                                    success = success && prepayRecordModel.UpdatePrepayRecord(prepayRecord);
+                                }
                             }
                             else
                             {
