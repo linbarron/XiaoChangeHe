@@ -74,7 +74,7 @@ namespace WitBird.XiaoChangeHe.Core
 
                 if (details != null)
                 {
-                    if (detail.TotalMoney == null)
+                    if (detail.TotalMoney == 0)
                     {
                         detail.TotalMoney = details.First().TotalPrice;
                     }

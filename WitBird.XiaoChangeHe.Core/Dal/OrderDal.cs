@@ -99,13 +99,13 @@ order by o.CreateDate desc;
 select o.Id AS OrderId,o.ContactName,o.ContactPhone,o.DiningDate,o.DiningDate,o.CreateDate,
 o.Status,o.RstId AS RestaurantId,o.PersonCount, os.OrderStatus, os.LastUpdateTime, o.Sex, 
 -- Caculates order total price
-case when pr.PrepayMoney is NULL then
+case when pr.AddMoney is NULL then
 (select SUM(od.ProductCount * od.UnitPrice) from OrderDetails od where od.OrderId=o.Id)
-else pr.PrepayMoney end as TotalMoney
+else pr.AddMoney end as TotalMoney
 from orders o
 left join OrderStatus os on os.OrderId = o.Id
 left join PrepayRecord pr on pr.SId = convert(nvarchar(50), o.Id)
-where ((pr.AddMoney = pr.PrepayMoney and pr.AddMoney <= 0) or (pr.AddMoney is null and pr.PrepayMoney is null))
+where ((pr.AddMoney <= 0) or (pr.AddMoney is null and pr.PrepayMoney is null))
 and o.Id=@OrderId";
 
                 SqlCmd.Parameters.AddWithValue(@"OrderId", orderId);
