@@ -273,7 +273,7 @@ LastConsumeMoney = @LastConsumeMoney WHERE Uid = @Uid;";
                     #region Set user to New
                     DbCommand cmd = null;
                     string sql;
-                    sql = "update CrmMember set UseState=1 where SourceAccountId=@SourceAccountId";
+                    sql = "update CrmMember set UseState='01' where SourceAccountId=@SourceAccountId";
                     cmd = db.GetSqlStringCommand(sql);
                     db.AddInParameter(cmd, "SourceAccountId", DbType.String, wxOpenid);
 
