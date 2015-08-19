@@ -42,17 +42,21 @@ namespace WitBird.XiaoChangHe.Controllers
 
             }
             List<ProductType> pt = null;
-            if (!string.IsNullOrEmpty(RestaurantId) && RestaurantId.ToUpper() == "0E71D411-EFE0-4964-8E3D-2901E0823815")
+            if (!string.IsNullOrEmpty(RestaurantId))
             {
-                List<ProductType> onept = ptm.getOneProductType(RestaurantId);
-                ViewBag.FirstMenus = onept;
-                if (onept != null && onept.Count() > 0)
-                    pt = ptm.getProductTypebyId(RestaurantId, onept.First().TypeId.ToString());
 
-            }
-            else
-            {
-                pt = ptm.getProductType(RestaurantId);
+                if (RestaurantId.ToUpper() == "0E71D411-EFE0-4964-8E3D-2901E0823815")
+                {
+                    List<ProductType> onept = ptm.getOneProductType(RestaurantId);
+                    ViewBag.FirstMenus = onept;
+                    if (onept != null && onept.Count() > 0)
+                        pt = ptm.getProductTypebyId(RestaurantId, onept.First().TypeId.ToString());
+
+                }
+                else
+                {
+                    pt = ptm.getProductType(RestaurantId);
+                }
             }
             Session["begindm"] = RestaurantId;
             string RestaurantId1 = Session["begindm"] != null ? Session["begindm"].ToString() : "";
@@ -62,7 +66,7 @@ namespace WitBird.XiaoChangHe.Controllers
             ViewBag.RestaurantId = RestaurantId;
             ViewBag.MemberCardNo = MemberCardNo;
             ViewBag.OrderId = Orderid;
-            return View(pt);
+            return View(pt ?? new List<ProductType>());
         }
 
 
