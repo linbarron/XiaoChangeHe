@@ -465,39 +465,50 @@ namespace WitBird.XiaoChangHe.Controllers
                 string RestaurantId = Session["begindm"] != null ? Session["begindm"].ToString() : "";
                 ViewBag.RestaurantId = RestaurantId;
 
-                var order = new OrderModel().selOrderByOrderId(Guid.Parse(OrderId)).FirstOrDefault();
-                List<MyOrderDetail> detail = odb.getMyOrderDetailListData(MemberCardNo, OrderId, RstType);
-                // ViewBag.MyOrderDetail = detail;
+                Guid orderId;
 
-                decimal totalPrice = 0;
-                decimal totalVipPrice = 0;
-                if (order != null && detail.Count > 0)
+                if (Guid.TryParse(OrderId, out orderId))
                 {
-                    var allTodaySpecials = SpecialsModel.GetTodayByRestaurantId(order.RstId);
+                    var order = new OrderModel().selOrderByOrderId(orderId).FirstOrDefault();
+                    List<MyOrderDetail> detail = odb.getMyOrderDetailListData(MemberCardNo, OrderId, RstType);
+                    // ViewBag.MyOrderDetail = detail;
 
-                    for (int i = 0; i < detail.Count; i++)
+                    decimal totalPrice = 0;
+                    decimal totalVipPrice = 0;
+                    if (order != null && detail.Count > 0)
                     {
-                        if (allTodaySpecials.Any(x => x.ProductId == detail[i].proId))
+                        var allTodaySpecials = SpecialsModel.GetTodayByRestaurantId(order.RstId);
+
+                        for (int i = 0; i < detail.Count; i++)
                         {
-                            var special = allTodaySpecials.Where(x => x.ProductId == detail[i].proId).First();
-                            totalPrice += special.SpecPrice.Value * detail[i].ProductCount;
-                            totalVipPrice += special.SpecPrice.Value * detail[i].ProductCount;
-                        }
-                        else
-                        {
-                            totalPrice += detail[i].UnitPrice * detail[i].ProductCount;
-                            totalVipPrice += detail[i].MemberPrice * detail[i].ProductCount;
+                            if (allTodaySpecials.Any(x => x.ProductId == detail[i].proId))
+                            {
+                                var special = allTodaySpecials.Where(x => x.ProductId == detail[i].proId).First();
+                                totalPrice += special.SpecPrice.Value * detail[i].ProductCount;
+                                totalVipPrice += special.SpecPrice.Value * detail[i].ProductCount;
+                            }
+                            else
+                            {
+                                totalPrice += detail[i].UnitPrice * detail[i].ProductCount;
+                                totalVipPrice += detail[i].MemberPrice * detail[i].ProductCount;
+                            }
                         }
                     }
+                    ViewBag.TotalPrice = totalPrice;
+                    ViewBag.MemberPriceTotal = totalVipPrice;
+                    //获取该店面的就餐时间
+                    ViewBag.Explain = "";
+                    //ReceiveOrderModel m = new ReceiveOrderModel();
+                    //List<ReceiveOrder2> list = m.SelReceiveOrder2Info(RestaurantId);
+                    //if (list != null && list.Count > 0) { ViewBag.Explain = list.First().Explain; }
+
+
+                    return View(detail);
                 }
-                ViewBag.TotalPrice = totalPrice;
-                ViewBag.MemberPriceTotal = totalVipPrice;
-                //获取该店面的就餐时间
-                ViewBag.Explain = "";
-                //ReceiveOrderModel m = new ReceiveOrderModel();
-                //List<ReceiveOrder2> list = m.SelReceiveOrder2Info(RestaurantId);
-                //if (list != null && list.Count > 0) { ViewBag.Explain = list.First().Explain; }
-                return View(detail);
+                else
+                {
+                    return Content("订单ID无法识别，请重我的订单重新进入该页面。");
+                }
             }
             catch (Exception ex)
             {

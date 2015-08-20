@@ -471,10 +471,13 @@ and r.RstType='01';";
             {
                 IParameterMapper ipmapper = new selOrderIdParameterMapper();
                 DataAccessor<Order> tableAccessor;
-                string strSql = @"select b.ContactName, b.ContactPhone,b.CreateDate,
+                string strSql = @"
+select b.ContactName, b.ContactPhone,b.CreateDate,
 b.DiningDate,b.MemberCardNo,b.Id,b.OperatorId,b.OperatorName,b.PersonCount,b.PrepayPrice,b.Remark,b.ReserveType,
-b.Status, os.OrderStatus, b.TableCount, c.sex ,b.RstId, '01' as RstType from Orders b left join OrderStatus os on os.OrderId = b.Id, crmmember c where b.id=@OrderId and b.Status=0 
-and  dateAdd(hh,5,b.DiningDate)>=getdate() and b.MemberCardNo=c.Uid";
+b.Status, os.OrderStatus, b.TableCount, c.sex ,b.RstId, '01' as RstType 
+from Orders b left join OrderStatus os on os.OrderId = b.Id, crmmember c
+where b.id=@OrderId
+and and b.MemberCardNo=c.Uid";
                 tableAccessor = db.CreateSqlStringAccessor(strSql, ipmapper, MapBuilder<Order>.MapAllProperties()
                      .Map(t => t.Id).ToColumn("Id")
                      .Map(t => t.Status).ToColumn("OrderStatus")
