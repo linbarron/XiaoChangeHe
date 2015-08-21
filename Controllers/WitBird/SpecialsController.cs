@@ -19,7 +19,8 @@ namespace WitBird.XiaoChangHe.Controllers.WitBird
             RestaurantSpecialsViewModel model=new RestaurantSpecialsViewModel();
             try
             {
-                model.SpecialsList = SpecialsModel.GetTodayByRestaurantId(new Guid(RestaurantId));
+                Logger.Log("Get Specials for RestaurantId= " + RestaurantId);
+                model.SpecialsList = SpecialsModel.GetTodayByRestaurantId(new Guid(RestaurantId)) ?? new List<SpecialsEntity>();
 
                 var crmMember =  Session["CrmMember"] as CrmMember;
                 if (crmMember != null)

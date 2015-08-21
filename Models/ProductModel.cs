@@ -40,6 +40,11 @@ namespace WitBird.XiaoChangHe.Models.Info
 
         public List<ProductNew> getProductByProductTypeId(string RestaurantId, string ProductTypeId)
         {
+            if (string.IsNullOrEmpty(RestaurantId) || string.IsNullOrEmpty(ProductTypeId))
+            {
+                Logger.Log("RestaurantId= " + RestaurantId + ",ProductTypeId= " + ProductTypeId);
+            }
+
             List<ProductNew> list = null;
             try
             {

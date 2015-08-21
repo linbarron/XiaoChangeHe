@@ -472,6 +472,7 @@ namespace WitBird.XiaoChangHe.Controllers
                     var order = new OrderModel().selOrderByOrderId(orderId).FirstOrDefault();
                     List<MyOrderDetail> detail = odb.getMyOrderDetailListData(MemberCardNo, OrderId, RstType);
                     // ViewBag.MyOrderDetail = detail;
+                    ViewBag.RestaurantId = order.RstId;
 
                     decimal totalPrice = 0;
                     decimal totalVipPrice = 0;
