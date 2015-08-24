@@ -21,7 +21,6 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
     public partial class CustomMessageHandler
     {
         protected const string ImgUrl = "http://115.29.38.163/images/";
-        protected const string CompanyId = "CB824E58-E2CA-4C95-827A-CA62D528C6A7";
 
         private Article GetWelcomeInfo()
         {
@@ -47,7 +46,7 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                             Title = "开始预定",
                             Description = "通过微信预订点餐",
                             PicUrl = ImgUrl + "wxbeginorder.jpg",
-                            Url = string.Format(Constants.HostDomain + "/order/begin/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}?type=Quick", requestMessage.FromUserName)
+                            Url = string.Format(Constants.HostDomain + "/order/begin/" + Constants.CompanyId + "/{0}?type=Quick", requestMessage.FromUserName)
                         });
                         reponseMessage = strongResponseMessage;
                     }
@@ -110,7 +109,7 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                             Title = "会员信息",
                             Description = "您的会员号：" + uid,
                             PicUrl = picUrl,
-                            Url = string.Format(Constants.HostDomain + "/Member/Info/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}", requestMessage.FromUserName)
+                            Url = string.Format(Constants.HostDomain + "/Member/Info/" + Constants.CompanyId + "/{0}", requestMessage.FromUserName)
                         });
                         reponseMessage = strongResponseMessage;
                     }
@@ -174,7 +173,6 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                     break;
                 case "MyOrder"://我的订单
                     {
-                        //NewOrder/My/CB824E58-E2CA-4C95-827A-CA62D528C6A7/ovYq8vgkV-hK11i_ftjaoRBM_IMM
                         var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
                         string picUrl = Constants.HostDomain + "/NewContent/images/w.png";
                         string uid = "";
@@ -200,7 +198,7 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
                             Title = "我的订单",
                             Description = "我的订单：",
                             PicUrl = picUrl,
-                            Url = string.Format(Constants.HostDomain + "/NewOrder/My/CB824E58-E2CA-4C95-827A-CA62D528C6A7/{0}", requestMessage.FromUserName)
+                            Url = string.Format(Constants.HostDomain + "/NewOrder/My/" + Constants.CompanyId + "/{0}", requestMessage.FromUserName)
                         });
                         reponseMessage = strongResponseMessage;
                     }
@@ -252,7 +250,7 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
             try
             {
                 CrmMemberModel cdb = new CrmMemberModel();
-                cdb.SaveMember(requestMessage.FromUserName, CompanyId);
+                cdb.SaveMember(requestMessage.FromUserName, Constants.CompanyId.ToString());
             }
             catch (Exception ex)
             {
@@ -272,7 +270,7 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
             try
             {
                 CrmMemberModel cdb = new CrmMemberModel();
-                cdb.SaveMember(requestMessage.FromUserName, CompanyId);
+                cdb.SaveMember(requestMessage.FromUserName, Constants.CompanyId.ToString());
             }
             catch (Exception ex)
             {
@@ -288,7 +286,7 @@ namespace WitBird.XiaoChangHe.Areas.WeChat.MessageHandlers.CustomMessageHandler
             try
             {
                 CrmMemberModel cdb = new CrmMemberModel();
-                cdb.DiscardMember(requestMessage.FromUserName, CompanyId);
+                cdb.DiscardMember(requestMessage.FromUserName, Constants.CompanyId.ToString());
             }
             catch (Exception ex)
             {

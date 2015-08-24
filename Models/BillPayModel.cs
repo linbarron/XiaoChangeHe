@@ -76,7 +76,7 @@ namespace WitBird.XiaoChangHe.Models
             {
                 DbCommand cmd = null;
                 string sql = @"
-                            INSERT INTO [CrmRstCloud].[dbo].[OrderBillPay]
+                            INSERT INTO [dbo].[OrderBillPay]
                                 ([PayId]
                                 ,[Receivable]
                                 ,[PaidIn]
@@ -156,7 +156,7 @@ namespace WitBird.XiaoChangHe.Models
             {
                 DbCommand cmd = null;
                 string remark = "微信支付订单流水号： " + payTransactionId;
-                string sql = @"UPDATE [CrmRstCloud].[dbo].[OrderBillPay] SET PayState = @PayState, Remark = Remark+@Remark WHERE PayId = @PayId;";
+                string sql = @"UPDATE [dbo].[OrderBillPay] SET PayState = @PayState, Remark = Remark+@Remark WHERE PayId = @PayId;";
 
                 cmd = db.GetSqlStringCommand(sql);
 

@@ -639,7 +639,7 @@ where b.id=@OrderId and b.MemberCardNo=c.Uid";
             {
                 //Logger.Log(LoggingLevel.WxPay, "订单ID：" + orderId + ", 更新状态：" + orderStatus);
                 DbCommand cmd = null;
-                string sql = @"UPDATE [CrmRstCloud].[dbo].[OrderStatus] SET OrderStatus = @orderStatus WHERE OrderId = @orderId;";
+                string sql = @"UPDATE [dbo].[OrderStatus] SET OrderStatus = @orderStatus WHERE OrderId = @orderId;";
 
                 cmd = db.GetSqlStringCommand(sql);
 

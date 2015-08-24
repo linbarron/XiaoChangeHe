@@ -735,7 +735,6 @@
     <Content Include="NewUI\_notes\ydxx.html.mno" />
     <Content Include="Areas\WeChat\Views\Web.config" />
     <Content Include="Areas\WeChat\Views\Auth\CreateMenu.cshtml" />
-    <None Include="Properties\PublishProfiles\HarrisServer.pubxml" />
     <None Include="Properties\PublishProfiles\mobile.pubxml" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="NewUI\01储值会员.png" />
@@ -859,15 +858,24 @@
     <Content Include="Scripts\Untitled-4_edge.js" />
     <Content Include="Scripts\Untitled-4_edgeActions.js" />
     <Content Include="Scripts\Untitled-4_edgePreload.js" />
-    <Content Include="Web.config">
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.config">
       <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
+    </None>
+    <None Include="Web.config.模板">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web.config.Debug.模板">
+      <DependentUpon>Web.config.模板</DependentUpon>
+    </None>
+    <None Include="Web.config.Release.模板">
+      <DependentUpon>Web.config.模板</DependentUpon>
+    </None>
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\_ViewStart.cshtml" />

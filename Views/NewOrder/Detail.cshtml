@@ -135,21 +135,6 @@
                 });
             }
         }
-
-        @*function EditOrder() {
-
-        $.post("/neworder/CancelOrder", {
-            Uid: @ViewBag.Uid,
-            SourceAccountId: @ViewBag.SourceAccountId,
-            IsEdit: true
-        }, function (msg) {
-            if (msg == 'SUCCESS') {
-                window.location = "/order/begin/CB824E58-E2CA-4C95-827A-CA62D528C6A7/@ViewBag.SourceAccountId?type=Quick";
-            } else {
-                alert("订单修改失败");
-            }
-        });
-    }*@
     </script>
 </body>
 </html>

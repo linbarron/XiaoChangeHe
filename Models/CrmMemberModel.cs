@@ -41,9 +41,12 @@ namespace WitBird.XiaoChangHe.Models
                 }
                 IParameterMapper ipmapper = new getCrmMemberListInfoDataParameterMapper();
                 DataAccessor<CrmMember> tableAccessor;
-                string strSql = @"select a.Uid,a.MemberName,a.Addr,a.Tel,a.MemberSource,a.SourceAccountId,
+                string strSql = @"
+select top 1 a.Uid,a.MemberName,a.Addr,a.Tel,a.MemberSource,a.SourceAccountId,
 a.Password,a.Idcard,a.Birthday,a.TypeId,a.RegDate,a.ExpiredDate,a.UseState,a.Sex
-,a.CompanyId,b.TypeName from CrmMember a,CrmMemberType b where a.TypeId=b.TypeId and a.SourceAccountId=@SourceAccountId";
+,a.CompanyId,b.TypeName from CrmMember a
+left join CrmMemberType b on a.TypeId=b.TypeId
+where a.SourceAccountId=@SourceAccountId";
                 tableAccessor = db.CreateSqlStringAccessor(strSql, ipmapper, MapBuilder<CrmMember>.MapAllProperties()
                      .Map(t => t.Uid).ToColumn("Uid")
                      .Map(t => t.MemberName).ToColumn("MemberName")
@@ -120,7 +123,7 @@ a.Password,a.Idcard,a.Birthday,a.TypeId,a.RegDate,a.ExpiredDate,a.UseState,a.Sex
             {
                 DbCommand cmd = null; 
 
-                string sql = @"UPDATE [CrmRstCloud].[dbo].[PrepayAccount] SET AccountMoney = @AccountMoney, 
+                string sql = @"UPDATE [dbo].[PrepayAccount] SET AccountMoney = @AccountMoney, 
 PresentMoney = @PresentMoney, TotalPresent = @TotalPresent, TotalMoney=@TotalMoney, LastPresentMoney=@LastPresentMoney, 
 LastConsumeMoney = @LastConsumeMoney WHERE Uid = @Uid;";
 
@@ -347,7 +350,7 @@ LastConsumeMoney = @LastConsumeMoney WHERE Uid = @Uid;";
                 sql = "select max(uid) from CrmMember;";
                 cmd = db.GetSqlStringCommand(sql);
                 var result = ExecuteScalar(cmd);
-                if (result != null)
+                if (result != DBNull.Value)
                 {
                     uId = Convert.ToInt64(result);
                     uId++;
@@ -355,7 +358,7 @@ LastConsumeMoney = @LastConsumeMoney WHERE Uid = @Uid;";
             }
             catch (Exception ex)
             {
-                throw ex;
+                Logger.Log(ex);
             }
             return uId;
         }

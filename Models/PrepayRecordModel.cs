@@ -130,7 +130,7 @@ namespace WitBird.XiaoChangHe.Models
             {
                 DbCommand cmd = null;
                 string sql = @"
-                INSERT INTO [CrmRstCloud].[dbo].[PrepayRecord]
+                INSERT INTO [dbo].[PrepayRecord]
                            ([Uid]
                            ,[PrepayMoney]
                            ,[PresentMoney]
