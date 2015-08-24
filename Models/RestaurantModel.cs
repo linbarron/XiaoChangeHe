@@ -64,31 +64,27 @@ namespace WitBird.XiaoChangHe.Models
                 ps0.DbType = DbType.String;
                 ps0.Value = parameterValues[0];
                 command.Parameters.Add(ps0);
-                DbParameter ps1 = command.CreateParameter();
-                ps1.ParameterName = SqlPara + "CityId";
-                ps1.DbType = DbType.String;
-                ps1.Value = parameterValues[1];
-                command.Parameters.Add(ps1);
             }
             #endregion
 
         }
-        public List<RestaurantAbstract> getRestaurentState(string CompanyId,string CityId)
+        public List<RestaurantAbstract> getRestaurentState(string CompanyId)
         {
             try
             {
                 IParameterMapper ipmapper = new getRestaurentStateParameterMapper();
                 DataAccessor<RestaurantAbstract> tableAccessor;
-                string strSql = @"select rst.Id,rst.Name,rst.ContactPhone,rst.Address,rst.BusinessStartDate,
+                string strSql = @"
+ select rst.Id,rst.Name,rst.ContactPhone,rst.Address,rst.BusinessStartDate,
 rst.BusinessEndtDate,rst.RstType,ro.MapUrl,ro.VirtualUrl, null as Photo ,p.Name,
  isnull(ro.MaxTime,0) as MaxTime ,case when (ro.Reven=1 or ro.Rnoon=1)  then 1 else 0 end as isAcceptOrder
  from Restaurant rst left join ReceiveOrder ro on rst.Id=ro.RstId ,Province p
  where rst.CompanyId=@CompanyId and rst.usestate='01'  
- and rst.CityId=@CityId and rst.CityId=p.Id and p.IsUse='1'";
+ and rst.CityId=p.Id and p.IsUse='1'";
 
                 tableAccessor = db.CreateSqlStringAccessor(strSql, ipmapper,MapBuilder<RestaurantAbstract>.MapAllProperties()
                         .Build());
-                return tableAccessor.Execute(new string[] { CompanyId, CityId }).ToList(); ;
+                return tableAccessor.Execute(new string[] { CompanyId }).ToList(); ;
 
             }
             catch (Exception ex)

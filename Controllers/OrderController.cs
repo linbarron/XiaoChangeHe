@@ -158,8 +158,8 @@ namespace WitBird.XiaoChangHe.Controllers
                 // if (p == null)
                 // {
                 RestaurantModel rdb = new RestaurantModel();
-                CityId = string.IsNullOrEmpty(CityId) ? "510100" : CityId;
-                List<RestaurantAbstract> p = rdb.getRestaurentState(id, CityId);//rdb.getRestaurantListInfoData(id);
+                //CityId = string.IsNullOrEmpty(CityId) ? "510100" : CityId;
+                List<RestaurantAbstract> p = rdb.getRestaurentState(id);
                 // System.Web.HttpRuntime.Cache.Add("id" + id, p, null, DateTime.Now.AddHours(2),
                 // TimeSpan.Zero, CacheItemPriority.Normal, null);
                 //  }
