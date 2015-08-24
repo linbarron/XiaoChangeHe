@@ -858,23 +858,14 @@
     <Content Include="Scripts\Untitled-4_edge.js" />
     <Content Include="Scripts\Untitled-4_edgeActions.js" />
     <Content Include="Scripts\Untitled-4_edgePreload.js" />
+    <None Include="Web.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
-    </None>
-    <None Include="Web.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Web.config.模板">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Web.config.Debug.模板">
-      <DependentUpon>Web.config.模板</DependentUpon>
-    </None>
-    <None Include="Web.config.Release.模板">
-      <DependentUpon>Web.config.模板</DependentUpon>
     </None>
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\_references.js" />

@@ -342,7 +342,7 @@ LastConsumeMoney = @LastConsumeMoney WHERE Uid = @Uid;";
         /// <returns></returns>
         public long GetNewUserId()
         {
-            long uId = 1;
+            long uId = 6672706;
             try
             {
                 DbCommand cmd = null;
